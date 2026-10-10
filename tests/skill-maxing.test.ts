@@ -80,8 +80,16 @@ it("enforces Zero Build, device restrictions and short user budgets", () => {
         seed.exercises.find((e) => e.id === st.exercise_id)?.mode,
       ).not.toBe("build");
   }
-  const kbmOnly = { ...seed, exercises: seed.exercises.map(e => ({ ...e, tags: [...(e.tags || []), "kbm-only"] })) };
-  expect(generateEvolution(config, data, kbmOnly, "2026-10-12", 1, now).sessions).toHaveLength(0);
+  const kbmOnly = {
+    ...seed,
+    exercises: seed.exercises.map((e) => ({
+      ...e,
+      tags: [...(e.tags || []), "kbm-only"],
+    })),
+  };
+  expect(
+    generateEvolution(config, data, kbmOnly, "2026-10-12", 1, now).sessions,
+  ).toHaveLength(0);
   expect(
     evolutionConfigSchema.safeParse({
       ...config,
@@ -99,6 +107,11 @@ it("respects reserved commitments, recurring conflicts and disallows stale sourc
   const bad = structuredClone(p);
   bad.sessions[0].plan.user_id = "other";
   expect(proposalIssues(bad, data, seed, now).length).toBeGreaterThan(0);
+  bad.sessions[0].plan.user_id = data.profile!.id;
+  bad.sessions[0].plan.level = "advanced";
+  expect(proposalIssues(bad, data, seed, now)).toContain(
+    "Proprietário, modalidade ou nível da rotina inválidos.",
+  );
   const stale = {
     ...seed,
     exercises: seed.exercises.map((e) => ({

@@ -183,8 +183,12 @@ export function proposalIssues(
       )
         errors.push("Exercício incompatível com o dispositivo escolhido.");
     }
-    if (s.plan.user_id !== owner || s.plan.mode !== proposal.config.mode)
-      errors.push("Proprietário ou modalidade da rotina inválidos.");
+    if (
+      s.plan.user_id !== owner ||
+      s.plan.mode !== proposal.config.mode ||
+      s.plan.level !== proposal.config.level
+    )
+      errors.push("Proprietário, modalidade ou nível da rotina inválidos.");
     if (s.date < proposal.from || s.date > shiftDate(proposal.from, 6))
       errors.push("A sessão precisa pertencer à primeira semana da proposta.");
   }

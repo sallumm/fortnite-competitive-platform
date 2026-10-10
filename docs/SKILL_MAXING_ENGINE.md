@@ -23,7 +23,7 @@ A prévia permite alterar horário e abrir o builder real: repetir, duplicar, mo
 
 Salvar preferências não altera a agenda. Uma segunda tela mostra datas, duração, fuso e séries e exige **Confirmar e salvar plano na agenda**. A migration incremental `202610100020_skill_maxing.sql` adiciona somente configurações e recibos de aprovação.
 
-A RPC autenticada valida esquema fechado, limites, competências, catálogo, customizações pelo validador existente, disponibilidade, reservas, datas, fuso e conflitos antes de persistir. Ela reutiliza o bloqueio das três tabelas de agenda do Coach, impedindo inserções concorrentes entre consulta e confirmação. Todas as rotinas, séries, configuração e recibo são uma transação: falha desfaz tudo. Token idempotente evita duplicação; reuso com payload diferente é rejeitado. Limite de 20 confirmações por conta a cada 24 horas. RLS permite leitura apenas do proprietário; escrita nessas duas tabelas ocorre somente pelas RPCs. Exclusão de perfil remove os dados por cascade.
+A RPC autenticada valida esquema fechado, limites, competências, catálogo, customizações pelo validador existente, disponibilidade, reservas, datas, fuso e conflitos antes de persistir. Ela reutiliza o bloqueio das três tabelas de agenda do Coach, impedindo inserções concorrentes entre consulta e confirmação. Todas as rotinas, séries, configuração e recibo são uma transação: falha desfaz tudo. Token idempotente evita duplicação; reuso com payload diferente é rejeitado. Limite de 20 confirmações por conta a cada 24 horas. RLS permite leitura apenas do proprietário; escrita nessas duas tabelas ocorre somente pelas RPCs. Exclusão de perfil remove os dados por cascade. A prévia também rejeita divergência de nível entre a rotina editada e a configuração confirmada, alinhada à validação do servidor.
 
 O fuso é IANA, independente do fuso do dispositivo. Horários repetidos em DST escolhem a primeira ocorrência; horários inexistentes são rejeitados, alinhados ao calendário. Novas séries usam os mecanismos já existentes de edição de ocorrência, cancelamento e revisão de série. Após salvar, rotinas podem ser duplicadas, arquivadas e editadas pelo planejador. Repetir por 1–4 semanas copia a organização; ajustes de semanas futuras exigem nova prévia ou edição explícita de série.
 
@@ -56,7 +56,7 @@ Antes de disponibilizar contas reais: aplicar migration 020 após 001–019 em a
 - `npm test`: 222 testes, 38 arquivos, aprovados.
 - `npm run test:e2e -- --workers=2`: 51 testes aprovados em desktop/tablet/mobile.
 - Após adicionar o registro numérico com configuração comparável e refinar checkboxes, repetidos os seis cenários do novo planejador: todos aprovados, incluindo axe na prévia e ausência de erros de página.
-- `npm run build`: aprovado; rota lazy do planejador 35,67 kB (12,13 kB gzip), sem biblioteca adicional. Sitemap omitido porque domínio de produção não está definido; pré-renderização editorial opcional não habilitada.
+- `npm run build`: aprovado; rota lazy do planejador 35,71 kB (12,14 kB gzip), sem biblioteca adicional. Sitemap omitido porque domínio de produção não está definido; pré-renderização editorial opcional não habilitada.
 - Smoke do bundle de produção com Chromium: nova rota privada em demonstração, competências e disponibilidade em desktop e mobile, zero erros de console e sem overflow horizontal.
 - `npm audit --audit-level=high`: nenhuma vulnerabilidade reportada. Não equivale a certificação de segurança.
 
