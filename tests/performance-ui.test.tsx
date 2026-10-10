@@ -62,7 +62,8 @@ describe("Fluxos pessoais 2.0 e persistência em DOM", () => {
   it("cria série, move somente uma ocorrência e vincula conclusão ao calendário", async () => {
     const user = await demo();
     await user.click(screen.getByRole("link", { name: "Planejador" }));
-    await screen.findByRole("heading", { name: "Seu treino, com direção." });
+    // The lazy route may compile alongside PostgreSQL/DOM workers in CI.
+    await screen.findByRole("heading", { name: "Seu treino, com direção." }, { timeout: 5000 });
     await user.click(screen.getByRole("button", { name: "Agendar" }));
     const day = dateInZone(new Date(), "America/Sao_Paulo");
     await user.click(screen.getByLabelText("Repetir semanalmente"));
