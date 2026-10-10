@@ -45,6 +45,9 @@ export default function Planner() {
           </button>
         }
       />
+      <Link className="button primary" to="/app/evolution-plan">
+        Criar meu plano de evolução
+      </Link>
       <PlanningAssistant onSchedule={schedule} />
       <div className="template-strip panel">
         <div>

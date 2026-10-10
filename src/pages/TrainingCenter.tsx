@@ -57,6 +57,9 @@ export default function TrainingCenter() {
           </Link>
         }
       />
+      <Link className="button primary" to="/app/evolution-plan">
+        Criar meu plano de evolução
+      </Link>
       <div className="three-grid">
         <article className="panel">
           <h2>Seu próximo passo</h2>
