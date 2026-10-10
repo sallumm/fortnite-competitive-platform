@@ -217,8 +217,10 @@ function BuilderStep({
 export function TrainingBuilder({
   plan,
   onClose,
+  onCommit,
 }: {
   plan: Plan;
+  onCommit?: (plan: Plan) => Promise<void>;
   onClose: () => void;
 }) {
   const s = useStore();
@@ -227,7 +229,7 @@ export function TrainingBuilder({
     "clutchfolio-plan-draft:" +
     plan.user_id +
     ":" +
-    (existing ? plan.id : "new");
+    (onCommit || existing ? plan.id : "new");
   const saved = useRef(false);
   const [draft, setDraft] = useState(() => ({
     ...structuredClone(plan),
@@ -319,14 +321,20 @@ export function TrainingBuilder({
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          s.run(async () => {
-            if (errors.length)
-              throw new Error("Clutchfolio: " + errors.join(" "));
-            await s.save("plans", draft);
-            saved.current = true;
-            localStorage.removeItem(key);
-            onClose();
-          }, "Rotina salva.");
+          s.run(
+            async () => {
+              if (errors.length)
+                throw new Error("Clutchfolio: " + errors.join(" "));
+              if (onCommit) await onCommit(draft);
+              else await s.save("plans", draft);
+              saved.current = true;
+              localStorage.removeItem(key);
+              onClose();
+            },
+            onCommit
+              ? "Prévia atualizada; agenda ainda não alterada."
+              : "Rotina salva.",
+          );
         }}
       >
         <label>

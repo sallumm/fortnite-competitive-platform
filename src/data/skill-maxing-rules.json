@@ -1,0 +1,18 @@
+{
+  "version": "skill-maxing-2026-10-10.1",
+  "max_steps": 3,
+  "step_minimum": 5,
+  "short_cap": 20,
+  "slot_increment": 5,
+  "recent_days": 30,
+  "weights": {
+    "skill": 10,
+    "goal": 8,
+    "difficulty": 4,
+    "same_level": 3,
+    "baseline": 3,
+    "opposition": 2,
+    "purpose_variety": 2,
+    "recent_use": 1
+  }
+}

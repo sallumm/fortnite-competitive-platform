@@ -27,6 +27,7 @@ const MetaAdmin = lazy(() => import("./pages/MetaAdmin"));
 const MetaDetail = lazy(() => import("./pages/MetaDetail"));
 const MetaCenter = lazy(() => import("./pages/MetaCenter"));
 const Competitive = lazy(() => import("./pages/Competitive"));
+const EvolutionPlanner = lazy(() => import("./pages/EvolutionPlanner"));
 const AcademyAdmin = lazy(() => import("./pages/AcademyAdmin"));
 const Academy = lazy(() => import("./pages/Academy"));
 const Curriculum = lazy(() => import("./pages/Curriculum"));
@@ -162,6 +163,14 @@ function Application() {
               element={
                 <Guard>
                   <TrainingCenter />
+                </Guard>
+              }
+            />
+            <Route
+              path="/app/evolution-plan"
+              element={
+                <Guard>
+                  <EvolutionPlanner />
                 </Guard>
               }
             />

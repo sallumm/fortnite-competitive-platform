@@ -233,6 +233,7 @@ export interface Catalog {
   articles: Article[];
 }
 export interface PlayerData {
+  evolution?: import("./skill-maxing/service").EvolutionState;
   profile: Profile | null;
   plans: Plan[];
   schedules: Schedule[];

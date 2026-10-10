@@ -189,3 +189,7 @@ A Academy inclui `/academy/research`, com taxonomia, glossário, referências cl
 Pesquisa, arquitetura, mapa de dependências e lacunas: [docs/mastery/RESEARCH.md](docs/mastery/RESEARCH.md), [ARCHITECTURE.md](docs/mastery/ARCHITECTURE.md) e [COVERAGE.md](docs/mastery/COVERAGE.md). Aplicação incremental: migrations 012–013, depois de 001–011, primeiro em staging. Conferir seed com `node scripts/mastery-seed.mjs --check`.
 
 Base de meta contextual: [pesquisa e implementação](docs/meta/CURRENT_META_RESEARCH.md), [arquitetura](docs/meta/IMPLEMENTATION.md) e [lacunas](docs/meta/META_KNOWLEDGE_GAPS.md). Acesso público em `/competitive/meta`.
+
+### Intelligent Skill Maxing Engine
+
+`/app/evolution-plan` combina competências, disponibilidade semanal, catálogo verificado e histórico em uma proposta explicada e editável. Modos assistido/manual, confirmação transacional, recorrência existente e revisão semanal; sem API de IA ou custos adicionais de modelo. Consulte [regras, segurança, fontes e limites](docs/SKILL_MAXING_ENGINE.md). Aplicar migration 020 após 001–019 em homologação, antes de habilitar contas reais. Nenhum deploy foi realizado.
