@@ -33,3 +33,7 @@ Nenhum serviço pago ativado, deploy realizado ou migration remota aplicada.
 ## Execução integral final
 
 `PLAYWRIGHT_EXECUTABLE_PATH=/tmp/chromium npm run test:e2e -- --workers=1 --output=/tmp/mastery-full-e2e`: **36 cenários passaram em 4,1 minutos**, numa execução completa. Desktop, tablet e mobile. Inclui os 33 cenários anteriores de planejamento/execução/recuperação/relatórios/Coach, rotinas mistas e atividades repetidas, além dos 3 novos cenários curriculares. Nenhuma falha foi omitida no resultado final.
+
+## Ajuste confirmado pelo CI
+
+A primeira execução no GitHub encontrou um teste anterior de calendário dependente do relógio: ele usava a data corrente às 18h, mas após esse horário o produto corretamente apresenta “Reagendar”, em vez de “Detalhes / editar”. A investigação local confirmou a mesma falha. O teste agora define explicitamente o dia seguinte no fuso do perfil, mantendo os dois compromissos em conflito, e aguarda o controle renderizado com `findAllByRole`. Não houve atraso artificial, retirada de asserções nem mudança do comportamento do calendário. A suíte local foi repetida após o ajuste; os resultados finais de CI constam no PR.
