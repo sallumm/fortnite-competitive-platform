@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { beforeEach, afterEach, describe, it, expect, vi } from "vitest";
 import {
+  configure,
   render,
   screen,
   waitFor,
@@ -8,6 +9,8 @@ import {
   within,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+// Lazy routes also compile under Vitest; allow CI startup without weakening assertions.
+configure({ asyncUtilTimeout: 5000 });
 import App from "../src/App";
 import { demoPlayer, seed, uid } from "../src/lib/seed";
 vi.stubGlobal(
