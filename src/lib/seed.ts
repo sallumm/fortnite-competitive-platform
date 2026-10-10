@@ -311,6 +311,12 @@ export function emptyPlayer(): PlayerData {
     goals: [],
     xp: [],
     bookmarks: [],
+    series: [],
+    exceptions: [],
+    journals: [],
+    skillReviews: [],
+    planningPreferences: [],
+    weeklyReports: [],
   };
 }
 export function demoPlayer(): PlayerData {

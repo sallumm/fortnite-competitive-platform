@@ -1,3 +1,11 @@
+import type {
+  Series,
+  Exception,
+  Journal,
+  SkillReview,
+  PlanningPreference,
+  WeeklyReport,
+} from "./performance-types";
 export type Mode = "build" | "zero";
 export type Level = "beginner" | "intermediate" | "advanced";
 export type Category =
@@ -49,7 +57,11 @@ export interface Plan {
 export interface Schedule {
   id: string;
   user_id: string;
-  plan_id: string;
+  plan_id: string | null;
+  title?: string;
+  kind?: "training" | "personal" | "rest";
+  duration_minutes?: number;
+  status?: "planned" | "cancelled" | "done";
   starts_at: string;
   tournament_id: string | null;
 }
@@ -57,8 +69,12 @@ export interface Result {
   exercise_id: string;
   value: number | null;
   note: string;
+  configuration?: string;
 }
 export interface Training {
+  schedule_id?: string | null;
+  series_id?: string | null;
+  occurrence_date?: string | null;
   id: string;
   user_id: string;
   plan_id: string | null;
@@ -140,6 +156,12 @@ export interface PlayerData {
   goals: Goal[];
   xp: Xp[];
   bookmarks: Bookmark[];
+  series: Series[];
+  exceptions: Exception[];
+  journals: Journal[];
+  skillReviews: SkillReview[];
+  planningPreferences: PlanningPreference[];
+  weeklyReports: WeeklyReport[];
 }
 export const labels: Record<string, string> = {
   build: "Construção",
