@@ -46,6 +46,7 @@ const nav = [
   ["/app/planner", "Planejador", CalendarDays],
   ["/library", "Exercícios", Target],
   ["/competitive", "Competitivo", Trophy],
+  ["/competitive/meta", "Meta", Compass],
   ["/news", "Notícias e análises", Compass],
   ["/academy", "Academy", GraduationCap],
   ["/app/evolution", "Minha Evolução", BarChart3],
@@ -193,6 +194,7 @@ export function Layout() {
           </Link>
           <nav aria-label="Menu público">
             <Link to="/competitive">Competitivo</Link>
+            <Link to="/competitive/meta">Meta</Link>
             <Link to="/library">Treinamento</Link>
             <Link to="/academy">Academy</Link>
             <Link to="/news">Notícias</Link>
@@ -229,8 +231,8 @@ export function Layout() {
                       0: "Meu espaço",
                       2: "Treinamento",
                       5: "Explorar",
-                      8: "Minha evolução",
-                      14: "Ajuda",
+                      9: "Minha evolução",
+                      15: "Ajuda",
                     } as Record<number, string>
                   )[index] && (
                     <span className="nav-group">
@@ -240,15 +242,15 @@ export function Layout() {
                             0: "Meu espaço",
                             2: "Treinamento",
                             5: "Explorar",
-                            8: "Minha evolução",
-                            14: "Ajuda",
+                            9: "Minha evolução",
+                            15: "Ajuda",
                           } as Record<number, string>
                         )[index]
                       }
                     </span>
                   )}
                   <NavLink
-                    end
+                    end={to !== "/competitive/meta"}
                     to={to}
                     key={to}
                     aria-label={title}

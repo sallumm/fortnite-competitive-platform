@@ -219,8 +219,8 @@ export default function Admin() {
           </button>
         }
       />
-      <Link className="button" to="/competitive/meta">
-        Revisar base de meta
+      <Link className="button" to="/admin/meta">
+        Gerenciar Meta
       </Link>
       <div className="tabs page-tabs">
         {(["exercises", "articles", "tournaments"] as Table[]).map((t) => (

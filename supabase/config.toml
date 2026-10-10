@@ -6,3 +6,7 @@ verify_jwt = false
 [functions.clutch-coach]
 verify_jwt = false
 # The handler verifies every token using Auth.getUser; database access keeps that JWT.
+
+[functions.meta-media]
+verify_jwt = false
+# Auth.getUser and is_admin are verified inside the handler before any service-role storage operation.
