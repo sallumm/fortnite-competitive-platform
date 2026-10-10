@@ -65,6 +65,13 @@ test("builder keyboard reorder, undo, preview, persistence and session resume", 
   await grip.focus();
   await page.keyboard.press("Space");
   await expect(dialog.locator(".builder-step.dragging")).toHaveCount(1);
+  // KeyboardSensor attaches its listener and measures sortable coordinates after activation.
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  );
   await page.keyboard.press("ArrowDown");
   await expect(
     page.getByText(`Destino: ${seed.exercises[1].title}.`, { exact: true }),
@@ -107,7 +114,7 @@ test("builder keyboard reorder, undo, preview, persistence and session resume", 
     .getByRole("button", { name: "Próximo exercício", exact: true })
     .click();
   await page.getByLabel("Observação ou erro recorrente").fill("Segunda etapa");
-  await navigate(page, "Minha evolução");
+  await navigate(page, "Relatórios");
   await navigate(page, "Meu Dia");
   await page.getByRole("button", { name: /Retomar/ }).click();
   await expect(page.getByLabel("Observação ou erro recorrente")).toHaveValue(
@@ -211,7 +218,7 @@ test("public and private page coverage, search, light theme and reduced motion",
     "Planejador",
     "Minhas Habilidades",
     "Minha Semana",
-    "Minha evolução",
+    "Relatórios",
     "Progressão",
     "Clutch Coach",
     "Exercícios",

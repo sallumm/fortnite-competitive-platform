@@ -1,3 +1,4 @@
+import { SessionReadiness } from "../components/SessionReadiness";
 import { TrainingStepTransition } from "../components/experience/primitives";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -264,6 +265,7 @@ export default function Training() {
           <Progress value={done} max={session.steps.length} />
         </div>
       </section>
+      <SessionReadiness sessionId={session.id} />
       <nav className="session-navigation panel" aria-label="Etapas da sessão">
         <div className="row between">
           <h2>Seu percurso</h2>

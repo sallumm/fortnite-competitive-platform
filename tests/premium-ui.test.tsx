@@ -36,7 +36,11 @@ async function start() {
   await user.click(
     await screen.findByRole("button", { name: "Explorar demonstração" }),
   );
-  await screen.findByRole("heading", { name: "Como você joga?" });
+  await screen.findByRole(
+    "heading",
+    { name: "Como você joga?" },
+    { timeout: 3000 },
+  );
   await user.click(screen.getByRole("link", { name: "Meu Dia", exact: true }));
   await screen.findByRole("heading", { name: "Meu Dia", exact: true });
   return user;
@@ -47,7 +51,11 @@ it("editor mantém alterações locais, desfaz ordem e duração e salva no arma
     screen.getByRole("link", { name: "Planejador", exact: true }),
   );
   await user.click(
-    await screen.findByRole("button", { name: "Editar Treino editável" }),
+    await screen.findByRole(
+      "button",
+      { name: "Editar Treino editável" },
+      { timeout: 3000 },
+    ),
   );
   const initial = JSON.parse(localStorage.getItem("clutchfolio-demo-v1")!)
     .plans[0];

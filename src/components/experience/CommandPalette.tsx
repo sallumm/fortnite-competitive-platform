@@ -31,7 +31,9 @@ export function CommandPalette() {
           ["Planejador", "/app/planner"],
           ["Training Center", "/app/training"],
           ["Clutch Coach", "/app/coach"],
-          ["Minha evolução", "/app/reports"],
+          ["Minha Evolução", "/app/evolution"],
+          ["Relatórios", "/app/reports"],
+          ["VOD Review", "/app/vod"],
           ["Perfil", "/app/profile"],
         ].map(([title, url]) => ({ title, url, kind: "Meu espaço" }))
       : []),

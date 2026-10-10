@@ -1,3 +1,18 @@
+export const skillNames = {
+  aim: "Mira (Aim)",
+  tracking: "Tracking",
+  shotgun: "Shotgun accuracy",
+  building: "Construção",
+  editing: "Editing",
+  piece: "Piece Control",
+  movement: "Movimentação",
+  decisions: "Noção de Jogo",
+  rotations: "Rotações",
+  endgame: "Endgame",
+  vod: "VOD Review",
+  box_fighting: "Box Fighting",
+  positioning: "Posicionamento",
+} as const;
 /** Portable domain shared by Edge and demo. It has no credentials or database access. */
 export type Intent =
   "report" | "agenda" | "exercise" | "competition" | "knowledge";
@@ -34,6 +49,20 @@ export type Answer = {
   planning?: boolean;
 };
 export type Context = {
+  focus?: {
+    primary_skill: string | null;
+    secondary_skills: string[];
+    assessments: {
+      skill: string;
+      goal: string;
+      assessment: string;
+      created_at: string;
+    }[];
+  };
+  vod_summary?: {
+    reviews: number;
+    mistakes: { category: string; count: number }[];
+  };
   profile?: {
     mode: string;
     level: string;
@@ -73,7 +102,7 @@ export type Context = {
     }[];
   }[];
   total?: number;
-  goals?: { title: string; completed: boolean }[];
+  goals?: { title: string; completed: boolean; status?: string }[];
   journals?: {
     session_id: string;
     difficulties: string[];
@@ -171,7 +200,7 @@ export function classify(message: string, exercise_id?: string): Query {
     ? "exercise"
     : tournament && !calendarChange
       ? "competition"
-      : /evolu|resultad|ultima semana|ultimos|oscil|relatorio|melhorando/.test(
+      : /evolu|resultad|ultima semana|minha semana|ultimos|oscil|relatorio|melhorando|dificuldades.*registr|treinos de tracking|qual habilidade.*acompan/.test(
             t,
           )
         ? "report"
@@ -347,9 +376,30 @@ export function rulesAnswer(
         "Metas atuais",
         c.goals.map(
           (g) =>
-            `${g.title}: ${g.completed ? "concluída (autodeclarada)" : "em andamento"}. A data de conclusão não está registrada.`,
+            `${g.title}: ${g.status === "paused" ? "pausada" : g.status === "archived" ? "arquivada" : g.completed ? "concluída (autodeclarada)" : "em andamento"}. A data de conclusão não está registrada.`,
         ),
       );
+    if (c.focus) {
+      add("Habilidade acompanhada", [
+        c.focus.primary_skill
+          ? `Prioridade salva: ${skillNames[c.focus.primary_skill as keyof typeof skillNames] || c.focus.primary_skill}.`
+          : "Nenhuma habilidade prioritária salva no planejamento.",
+        ...c.focus.assessments
+          .slice(0, 3)
+          .map(
+            (r) =>
+              `${skillNames[r.skill as keyof typeof skillNames] || r.skill}: ${r.goal || "objetivo não informado"}. Avaliação pessoal registrada em ${r.created_at.slice(0, 10)}, sem nota científica.`,
+          ),
+      ]);
+      ref("skills", "Avaliações e objetivos", "/app/skills");
+    }
+    if (c.vod_summary) {
+      add("Revisões manuais de VOD", [
+        `${c.vod_summary.reviews} revisões registradas no intervalo. Não representam análise automática nem comprovam melhoria.`,
+      ]);
+      ref("vod", "Consultar revisões privadas", "/app/vod");
+    }
+    ref("evolution", "Minha Evolução", "/app/evolution");
     add("Próximo passo", [
       "Repita um teste com arma, cenário e sensibilidade constantes. Revise uma dificuldade do diário e registre o próximo foco. Oscilações podem ter várias causas; estes registros não identificam a causa.",
     ]);

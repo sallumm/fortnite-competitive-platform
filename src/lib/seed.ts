@@ -362,6 +362,9 @@ export function emptyPlayer(): PlayerData {
     skillReviews: [],
     planningPreferences: [],
     weeklyReports: [],
+    vodReviews: [],
+    goalRevisions: [],
+    readiness: [],
   };
 }
 export function demoPlayer(): PlayerData {

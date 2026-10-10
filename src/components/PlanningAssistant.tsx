@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useStore } from "../lib/store";
 import { labels, type Category, type Plan } from "../lib/types";
 import type { PlanningPreference } from "../lib/performance-types";
-import { difficulties } from "../lib/performance-types";
+import { skills, type Skill, difficulties } from "../lib/performance-types";
 import { personalPlan } from "../lib/performance";
 import { Badge } from "./ui";
 export function PlanningAssistant({
@@ -87,10 +87,76 @@ export function PlanningAssistant({
               type="time"
               required
               value={pref.local_time.slice(0, 5)}
-              onChange={(e) => setPref({ ...pref, local_time: e.target.value })}
+              onChange={(e) => {
+                setPreview(false);
+                setPref({ ...pref, local_time: e.target.value });
+              }}
             />
           </label>
         </div>
+        <label>
+          Habilidade principal do planejamento
+          <select
+            value={pref.primary_skill || ""}
+            onChange={(e) => {
+              setPreview(false);
+              setPref({
+                ...pref,
+                primary_skill: (e.target.value as Skill) || null,
+              });
+            }}
+          >
+            <option value="">Usar categorias escolhidas</option>
+            {Object.entries(skills)
+              .filter(
+                ([key]) =>
+                  p.mode === "build" ||
+                  !["building", "editing", "piece", "box_fighting"].includes(
+                    key,
+                  ),
+              )
+              .map(([key, label]) => (
+                <option key={key} value={key}>
+                  {label}
+                </option>
+              ))}
+          </select>
+        </label>
+        <fieldset>
+          <legend>Habilidades secundárias (opcional)</legend>
+          <div className="weekday-picker">
+            {Object.entries(skills)
+              .filter(
+                ([key]) =>
+                  p.mode === "build" ||
+                  !["building", "editing", "piece", "box_fighting"].includes(
+                    key,
+                  ),
+              )
+              .map(([key, label]) => (
+                <label className="checkbox-label" key={key}>
+                  <input
+                    type="checkbox"
+                    checked={
+                      pref.secondary_skills?.includes(key as Skill) || false
+                    }
+                    onChange={(e) => {
+                      setPreview(false);
+                      setPref({
+                        ...pref,
+                        secondary_skills: e.target.checked
+                          ? [...(pref.secondary_skills || []), key as Skill]
+                          : (pref.secondary_skills || []).filter(
+                              (k) => k !== key,
+                            ),
+                      });
+                    }}
+                  />
+                  {label}
+                </label>
+              ))}
+          </div>
+        </fieldset>
         <fieldset>
           <legend>Disponibilidade semanal</legend>
           <div className="weekday-picker">
@@ -99,14 +165,15 @@ export function PlanningAssistant({
                 <input
                   type="checkbox"
                   checked={pref.weekdays.includes(i)}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    setPreview(false);
                     setPref({
                       ...pref,
                       weekdays: e.target.checked
                         ? [...pref.weekdays, i]
                         : pref.weekdays.filter((d) => d !== i),
-                    })
-                  }
+                    });
+                  }}
                 />
                 {day}
               </label>

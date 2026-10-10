@@ -33,6 +33,7 @@ export async function exportPlayerData(
       );
     for (const table of [
       "training_result_revisions",
+      "goal_revisions",
       "coach_preferences",
       "coach_conversations",
       "coach_messages",

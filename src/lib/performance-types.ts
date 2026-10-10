@@ -1,17 +1,6 @@
 import type { Category, PlayerData } from "./types";
-export const skills = {
-  aim: "Aim",
-  tracking: "Tracking",
-  shotgun: "Shotgun accuracy",
-  building: "Building",
-  editing: "Editing",
-  piece: "Piece Control",
-  movement: "Movement",
-  decisions: "Noção de Jogo",
-  rotations: "Rotations",
-  endgame: "Endgame",
-  vod: "VOD Review",
-} as const;
+export { skillNames as skills } from "../../supabase/functions/_shared/coach/domain";
+import { skillNames as skills } from "../../supabase/functions/_shared/coach/domain";
 export type Skill = keyof typeof skills;
 export const difficulties = {
   tracking: "Tracking",
@@ -78,6 +67,8 @@ export interface PlanningPreference {
   local_time: string;
   minutes: number;
   focuses: Category[];
+  primary_skill?: Skill | null;
+  secondary_skills?: Skill[];
 }
 export interface WeeklyReport {
   id: string;
@@ -88,6 +79,7 @@ export interface WeeklyReport {
   summary: ReportSummary;
 }
 export interface ReportSummary {
+  evidence?: import("./intelligence-report").ReportEvidenceData;
   from: string;
   to: string;
   completed: number;
@@ -131,6 +123,9 @@ export function normalizePlayer(data: Partial<PlayerData>): PlayerData {
     skillReviews: [],
     planningPreferences: [],
     weeklyReports: [],
+    vodReviews: [],
+    goalRevisions: [],
+    readiness: [],
     ...data,
   };
   for (const key of [
@@ -146,6 +141,9 @@ export function normalizePlayer(data: Partial<PlayerData>): PlayerData {
     "skillReviews",
     "planningPreferences",
     "weeklyReports",
+    "vodReviews",
+    "goalRevisions",
+    "readiness",
   ] as const)
     if (!Array.isArray(result[key]))
       (result as unknown as Record<string, unknown>)[key] = [];

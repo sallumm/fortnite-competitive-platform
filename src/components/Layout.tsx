@@ -48,9 +48,11 @@ const nav = [
   ["/competitive", "Competitivo", Trophy],
   ["/news", "Notícias e análises", Compass],
   ["/academy", "Academy", GraduationCap],
+  ["/app/evolution", "Minha Evolução", BarChart3],
+  ["/app/vod", "VOD Review", Target],
   ["/app/skills", "Minhas Habilidades", Target],
   ["/app/week", "Minha Semana", CalendarDays],
-  ["/app/reports", "Minha evolução", BarChart3],
+  ["/app/reports", "Relatórios", BarChart3],
   ["/app/progression", "Progressão", Layers],
   ["/help", "Central de ajuda", HelpCircle],
   ["/community", "Comunidade", Users],
@@ -228,7 +230,7 @@ export function Layout() {
                       2: "Treinamento",
                       5: "Explorar",
                       8: "Minha evolução",
-                      12: "Ajuda",
+                      14: "Ajuda",
                     } as Record<number, string>
                   )[index] && (
                     <span className="nav-group">
@@ -239,7 +241,7 @@ export function Layout() {
                             2: "Treinamento",
                             5: "Explorar",
                             8: "Minha evolução",
-                            12: "Ajuda",
+                            14: "Ajuda",
                           } as Record<number, string>
                         )[index]
                       }
