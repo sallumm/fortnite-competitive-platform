@@ -15,6 +15,9 @@ export async function exportPlayerData(
       (key) =>
         key.startsWith("clutchfolio-coach-demo:") ||
         key.startsWith("clutchfolio-preparation-demo:") ||
+        key.startsWith("clutchfolio-result-revisions:" + owner) ||
+        key.startsWith("clutchfolio-plan-draft:" + owner + ":") ||
+        key.startsWith("clutchfolio-session-" + owner + ":") ||
         key === "clutchfolio-competitive-demo",
     )) {
       try {
@@ -29,6 +32,7 @@ export async function exportPlayerData(
         "Clutchfolio: a exportação está indisponível. Tente novamente.",
       );
     for (const table of [
+      "training_result_revisions",
       "coach_preferences",
       "coach_conversations",
       "coach_messages",

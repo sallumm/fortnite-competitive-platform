@@ -44,6 +44,8 @@ export function resultGroups(sessions: Training[], exerciseId: string) {
       key: string;
       configuration: string;
       metric: string;
+      unit?: string;
+      version?: string;
       points: { date: string; value: number }[];
     }
   >();
@@ -53,16 +55,38 @@ export function resultGroups(sessions: Training[], exerciseId: string) {
     for (const result of session.results.filter(
       (r) =>
         r.exercise_id === exerciseId &&
+        r.status !== "skipped" &&
         r.value !== null &&
         !!r.configuration?.trim(),
     )) {
-      if (!metric) continue;
+      if (
+        !metric ||
+        session.steps.find((st) => st.exercise_id === exerciseId)?.exercise
+          ?.published === false
+      )
+        continue;
       const configuration = result.configuration!.trim();
-      const key = JSON.stringify([exerciseId, metric, configuration]);
+      const key = JSON.stringify([
+        exerciseId,
+        metric,
+        configuration,
+        result.unit || "legacy",
+        result.version || "legacy",
+        result.conditions
+          ? [
+              result.conditions.scenario,
+              result.conditions.device,
+              result.conditions.sensitivity,
+              result.conditions.test_seconds,
+            ]
+          : null,
+      ]);
       const group = groups.get(key) || {
         key,
         configuration,
         metric,
+        unit: result.unit,
+        version: result.version,
         points: [],
       };
       group.points.push({ date: session.completed_at!, value: result.value! });

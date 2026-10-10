@@ -1,5 +1,7 @@
 # Clutchfolio — experiência interativa
 
+> Registro histórico da PR premium. Exercícios repetidos, limites de etapas e recuperação de sessões foram ampliados em [Training Maxing](TRAINING-MAXING.md).
+
 ## Escopo e inspeção
 
 Implementação incremental sobre `feat/product-excellence` (541a4c8), preservando as versões anteriores. As PRs anteriores precisam ser integradas na ordem de dependência. Não houve substituição da arquitetura, mudanças de schema, migração de autenticação ou publicação em produção.

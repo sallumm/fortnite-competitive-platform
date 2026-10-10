@@ -29,6 +29,7 @@ export function CommandPalette() {
       ? [
           ["Meu Dia", "/app"],
           ["Planejador", "/app/planner"],
+          ["Training Center", "/app/training"],
           ["Clutch Coach", "/app/coach"],
           ["Minha evolução", "/app/reports"],
           ["Perfil", "/app/profile"],

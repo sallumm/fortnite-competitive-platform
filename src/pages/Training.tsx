@@ -1,5 +1,5 @@
 import { TrainingStepTransition } from "../components/experience/primitives";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Check, Pause, Play, Square } from "lucide-react";
 import { useStore } from "../lib/store";
@@ -18,6 +18,9 @@ interface Draft {
   since: number | null;
   done: boolean[];
   results: Result[];
+  activeStep?: number;
+  stepElapsed?: number[];
+  stepSince?: number | null;
 }
 export default function Training() {
   const { id } = useParams();
@@ -27,26 +30,63 @@ export default function Training() {
   const key = "clutchfolio-session-" + store.data.profile?.id + ":" + id;
   const [draft, setDraft] = useState<Draft>(() => {
     try {
-      const saved = JSON.parse(sessionStorage.getItem(key) || "null");
+      const saved = JSON.parse(localStorage.getItem(key) || "null");
       if (
         validSessionDraft(saved, session?.steps.map((x) => x.exercise_id) || [])
       )
         return saved;
+      if (
+        validSessionDraft(
+          session?.checkpoint,
+          session?.steps.map((x) => x.exercise_id) || [],
+        )
+      )
+        return session!.checkpoint!;
     } catch {}
     return {
+      stepElapsed: session?.steps.map(() => 0) || [],
+      stepSince: Date.now(),
       elapsed: 0,
       since: Date.now(),
       done: session?.steps.map(() => false) || [],
       results:
         session?.steps.map((x) => ({
           exercise_id: x.exercise_id,
+          step_id: x.id,
+          unit: x.exercise?.measurement?.unit,
+          version: x.exercise?.measurement?.version,
           value: null,
           note: "",
         })) || [],
     };
   });
+  const revision = useRef(session?.checkpoint_version || 0);
+  const syncing = useRef(false);
+  const [syncState, setSyncState] = useState("Rascunho salvo neste navegador.");
   const [tick, setTick] = useState(Date.now());
-  const [activeStep, setActiveStep] = useState(0);
+  const activeStep =
+    draft.activeStep && draft.activeStep < (session?.steps.length || 0)
+      ? draft.activeStep
+      : 0;
+  const setActiveStep = (value: number | ((i: number) => number)) =>
+    setDraft((d) => {
+      const next = typeof value === "number" ? value : value(activeStep);
+      const elapsed = d.stepElapsed || session!.steps.map(() => 0);
+      return {
+        ...d,
+        activeStep: next,
+        stepElapsed: elapsed.map((n, i) =>
+          i === activeStep
+            ? n +
+              Math.max(
+                0,
+                Math.floor((Date.now() - (d.stepSince || Date.now())) / 1000),
+              )
+            : n,
+        ),
+        stepSince: d.since ? Date.now() : null,
+      };
+    });
   const [allSteps, setAllSteps] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [openJournal, setOpenJournal] = useState(false);
@@ -56,10 +96,36 @@ export default function Training() {
   }, []);
   useEffect(() => {
     try {
-      sessionStorage.setItem(key, JSON.stringify(draft));
+      localStorage.setItem(key, JSON.stringify(draft));
     } catch {
       /* Session remains usable if browser storage is unavailable. */
     }
+  }, [draft, key]);
+  useEffect(() => {
+    if (!session || session.status !== "active") return;
+    const timer = setTimeout(async () => {
+      if (syncing.current) return;
+      syncing.current = true;
+      try {
+        revision.current = await store.checkpoint(
+          session,
+          draft,
+          revision.current,
+        );
+        setSyncState(
+          store.demo
+            ? "Sessão recuperável neste navegador (demonstração)."
+            : "Sessão sincronizada com sua conta.",
+        );
+      } catch {
+        setSyncState(
+          "Não foi possível sincronizar. O rascunho está neste navegador; recarregue se a sessão estiver aberta em outra aba.",
+        );
+      } finally {
+        syncing.current = false;
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
   }, [draft, key]);
   if (!session)
     return (
@@ -87,6 +153,19 @@ export default function Training() {
       ...draft,
       elapsed: seconds,
       since: draft.since ? null : Date.now(),
+      stepElapsed: (draft.stepElapsed || session.steps.map(() => 0)).map(
+        (n, i) =>
+          i === activeStep
+            ? n +
+              Math.max(
+                0,
+                Math.floor(
+                  (Date.now() - (draft.stepSince || Date.now())) / 1000,
+                ),
+              )
+            : n,
+      ),
+      stepSince: draft.since ? null : Date.now(),
     });
   const change = (
     i: number,
@@ -99,10 +178,43 @@ export default function Training() {
         n === i ? { ...r, [key]: value } : r,
       ),
     });
+  const conditions = (
+    i: number,
+    patch: Partial<NonNullable<Result["conditions"]>>,
+  ) =>
+    setDraft((d) => ({
+      ...d,
+      results: d.results.map((r, n) =>
+        n === i
+          ? {
+              ...r,
+              conditions: {
+                scenario: "",
+                device: store.data.profile?.input || "",
+                sensitivity: "",
+                test_seconds: null,
+                ...r.conditions,
+                ...patch,
+              },
+            }
+          : r,
+      ),
+    }));
   const finish = (abandon = false) =>
     store.run(async () => {
-      await store.finish(session, draft.results, seconds, abandon);
-      sessionStorage.removeItem(key);
+      await store.finish(
+        session,
+        draft.results.map((r, i) => ({
+          ...r,
+          step_id: session.steps[i].id,
+          unit: session.steps[i].exercise?.measurement?.unit,
+          version: session.steps[i].exercise?.measurement?.version,
+          status: draft.done[i] ? "completed" : "skipped",
+        })),
+        Math.min(seconds, 86400),
+        abandon,
+      );
+      localStorage.removeItem(key);
       navigate(
         openJournal && !abandon ? "/app/journal/" + session.id : "/app/reports",
       );
@@ -114,6 +226,12 @@ export default function Training() {
         title={session.title}
         description="Conclua as etapas, registre observações e ajuste o ritmo quando precisar."
       />
+      {session.plan_snapshot?.objective && (
+        <p>Objetivo: {session.plan_snapshot.objective}</p>
+      )}
+      <p role="status" className="muted">
+        {syncState}
+      </p>
       <section className="session-toolbar panel">
         <div>
           <span className="eyebrow">TEMPO ATIVO REGISTRADO</span>
@@ -133,6 +251,13 @@ export default function Training() {
           </button>
         </div>
         <div>
+          <p className="muted">
+            {Math.max(
+              0,
+              session.steps.reduce((n, st) => n + st.minutes * 60, 0) - seconds,
+            )}{" "}
+            segundos restantes planejados (estimativa global)
+          </p>
           <span className="muted">
             {done} de {session.steps.length} etapas
           </span>
@@ -178,6 +303,23 @@ export default function Training() {
                 />
                 Etapa concluída
               </label>
+              <button
+                className="button small"
+                onClick={() =>
+                  setDraft((d) => ({
+                    ...d,
+                    done: d.done.map((v, n) => (n === i ? false : v)),
+                    results: d.results.map((r, n) =>
+                      n === i ? { ...r, status: "skipped", value: null } : r,
+                    ),
+                  }))
+                }
+              >
+                Pular etapa
+              </button>
+              {draft.results[i]?.status === "skipped" && (
+                <span className="muted">Etapa pulada</span>
+              )}
             </div>
           ))}
         </div>
@@ -219,13 +361,54 @@ export default function Training() {
                       </a>
                     </div>
                   )}
+                  <p className="muted">
+                    Nesta etapa:{" "}
+                    {(draft.stepElapsed?.[i] || 0) +
+                      (draft.stepSince && i === activeStep
+                        ? Math.max(
+                            0,
+                            Math.floor((tick - draft.stepSince) / 1000),
+                          )
+                        : 0)}{" "}
+                    segundos ativos · tempo restante planejado:{" "}
+                    {Math.max(
+                      0,
+                      step.minutes * 60 -
+                        (draft.stepElapsed?.[i] || 0) -
+                        (draft.stepSince && i === activeStep
+                          ? Math.max(
+                              0,
+                              Math.floor((tick - draft.stepSince) / 1000),
+                            )
+                          : 0),
+                    )}{" "}
+                    segundos. O timer não conclui a etapa automaticamente.
+                  </p>
+                  {step.block && <Badge>{step.block}</Badge>}
+                  {step.notes && <p>Notas do plano: {step.notes}</p>}
+                  {step.repetitions && (
+                    <p>{step.repetitions} repetições planejadas</p>
+                  )}
+                  {e?.measurement && (
+                    <p className="muted">{e.measurement.procedure}</p>
+                  )}
+                  {step.resource_url && (
+                    <a
+                      className="text-link"
+                      href={step.resource_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Abrir link de apoio
+                    </a>
+                  )}
                   <div className="form-grid">
                     <label>
                       {e?.metric || "Resultado observado"}
                       <input
                         type="number"
                         min={0}
-                        max={1000000}
+                        max={e?.measurement?.max ?? 1000000}
                         step="any"
                         placeholder="Opcional"
                         value={draft.results[i]?.value ?? ""}
@@ -255,6 +438,53 @@ export default function Training() {
                         equivalentes. Resultados sem configuração não geram
                         tendência automática.
                       </small>
+                    </label>
+                    <label>
+                      Cenário do teste
+                      <input
+                        maxLength={120}
+                        value={draft.results[i]?.conditions?.scenario || ""}
+                        onChange={(ev) =>
+                          conditions(i, { scenario: ev.target.value })
+                        }
+                      />
+                    </label>
+                    <label>
+                      Dispositivo declarado
+                      <input
+                        maxLength={80}
+                        value={draft.results[i]?.conditions?.device || ""}
+                        onChange={(ev) =>
+                          conditions(i, { device: ev.target.value })
+                        }
+                        placeholder="Teclado e mouse ou controle"
+                      />
+                    </label>
+                    <label>
+                      Sensibilidade declarada
+                      <input
+                        maxLength={80}
+                        value={draft.results[i]?.conditions?.sensitivity || ""}
+                        onChange={(ev) =>
+                          conditions(i, { sensitivity: ev.target.value })
+                        }
+                      />
+                    </label>
+                    <label>
+                      Duração do teste (segundos)
+                      <input
+                        type="number"
+                        min={1}
+                        max={7200}
+                        value={draft.results[i]?.conditions?.test_seconds ?? ""}
+                        onChange={(ev) =>
+                          conditions(i, {
+                            test_seconds: ev.target.value
+                              ? Number(ev.target.value)
+                              : null,
+                          })
+                        }
+                      />
                     </label>
                     <label>
                       Observação ou erro recorrente
@@ -312,7 +542,11 @@ export default function Training() {
         </p>
         <button
           className="button primary"
-          disabled={done !== session.steps.length || store.busy}
+          disabled={
+            draft.done.some(
+              (v, i) => !v && draft.results[i]?.status !== "skipped",
+            ) || store.busy
+          }
           onClick={() => finish()}
         >
           <Check size={17} />

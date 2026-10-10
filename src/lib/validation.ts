@@ -52,6 +52,21 @@ export const exerciseSchema = z.object({
   ...base,
   title,
   skills: tags.optional(),
+  video_url: https.nullable().optional(),
+  categories: tags.optional(),
+  tags: tags.optional(),
+  measurement: z
+    .object({
+      unit: z.string().min(1).max(80),
+      min: z.number().min(0),
+      max: z.number().max(1000000),
+      direction: z.enum(["higher", "lower"]),
+      procedure: z.string().min(20).max(1000),
+      version: z.string().min(1).max(80),
+    })
+    .refine((m) => m.max >= m.min)
+    .nullable()
+    .optional(),
   competitive_goal: z.string().max(500).optional(),
   map_type: z.string().max(80).optional(),
   requirements: z.string().max(500).optional(),

@@ -81,12 +81,13 @@ export function Source({
     </div>
   );
 }
-export function CopyCode({ code }: { code: string }) {
+export function CopyCode({ code, label }: { code: string; label?: string }) {
   const { run } = useStore();
   return (
     <button
       type="button"
       className="button small"
+      aria-label={label}
       onClick={() =>
         run(async () => {
           await navigator.clipboard.writeText(code);

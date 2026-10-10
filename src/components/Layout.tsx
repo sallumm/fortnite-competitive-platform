@@ -42,6 +42,7 @@ import { supabase } from "../lib/client";
 const nav = [
   ["/app", "Meu Dia", Home],
   ["/app/coach", "Clutch Coach", MessageSquare],
+  ["/app/training", "Training Center", Target],
   ["/app/planner", "Planejador", CalendarDays],
   ["/library", "Exercícios", Target],
   ["/competitive", "Competitivo", Trophy],
@@ -221,18 +222,27 @@ export function Layout() {
             <nav aria-label="Navegação principal">
               {nav.map(([to, title, Icon], index) => (
                 <div key={to}>
-                  {(index === 0 ||
-                    index === 3 ||
-                    index === 7 ||
-                    index === 11) && (
+                  {(
+                    {
+                      0: "Meu espaço",
+                      2: "Treinamento",
+                      5: "Explorar",
+                      8: "Minha evolução",
+                      12: "Ajuda",
+                    } as Record<number, string>
+                  )[index] && (
                     <span className="nav-group">
-                      {index === 0
-                        ? "Meu espaço"
-                        : index === 3
-                          ? "Explorar"
-                          : index === 7
-                            ? "Minha evolução"
-                            : "Ajuda"}
+                      {
+                        (
+                          {
+                            0: "Meu espaço",
+                            2: "Treinamento",
+                            5: "Explorar",
+                            8: "Minha evolução",
+                            12: "Ajuda",
+                          } as Record<number, string>
+                        )[index]
+                      }
                     </span>
                   )}
                   <NavLink

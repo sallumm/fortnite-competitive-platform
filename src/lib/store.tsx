@@ -35,6 +35,20 @@ import type {
 } from "./performance-types";
 import { normalizePlayer } from "./performance-types";
 import { validOccurrence } from "./calendar";
+import {
+  validatePlan,
+  validateResults,
+  stepExercise,
+  identifySteps,
+} from "./training";
+const DEMO_ACTIVE = "clutchfolio-demo-active";
+function demoEnabled() {
+  try {
+    return localStorage.getItem(DEMO_ACTIVE) === "true";
+  } catch {
+    return false;
+  }
+}
 const entityNames = {
   plans: "training_plans",
   schedules: "scheduled_sessions",
@@ -118,6 +132,16 @@ interface Store {
     date: string,
     replacement: Series,
   ) => Promise<void>;
+  checkpoint: (
+    session: Training,
+    draft: import("./local-data").SessionDraft,
+    version: number,
+  ) => Promise<number>;
+  correctResult: (
+    session: Training,
+    index: number,
+    result: Result,
+  ) => Promise<void>;
   finish: (
     s: Training,
     results: Result[],
@@ -138,9 +162,11 @@ export function Provider({ children }: { children: ReactNode }) {
   const [catalog, setCatalog] = useState<Catalog>(
     supabase ? { exercises: [], tournaments: [], articles: [] } : seed,
   );
-  const [data, setData] = useState<PlayerData>(emptyPlayer());
+  const [data, setData] = useState<PlayerData>(() =>
+    demoEnabled() ? restore() : emptyPlayer(),
+  );
   const [session, setSession] = useState<Session | null>(null);
-  const [demo, setDemo] = useState(false);
+  const [demo, setDemo] = useState(demoEnabled);
   const [loading, setLoading] = useState(Boolean(supabase));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -336,6 +362,10 @@ export function Provider({ children }: { children: ReactNode }) {
     }
   };
   const save = async (table: Entity, row: Row) => {
+    if (table === "plans") {
+      const errors = validatePlan(row as Plan, catalog.exercises);
+      if (errors.length) throw new Error("Clutchfolio: " + errors.join(" "));
+    }
     if (demo) {
       const current = restore();
       if (row.user_id !== current.profile?.id)
@@ -393,19 +423,19 @@ export function Provider({ children }: { children: ReactNode }) {
           series: next.series.filter((x) => x.plan_id !== id),
           exceptions: next.exceptions.filter(
             (e) =>
-              !next.series.some(
+              !current.series.some(
                 (r) => r.id === e.series_id && r.plan_id === id,
               ),
           ),
           sessions: next.sessions.map((s) => ({
             ...s,
             plan_id: s.plan_id === id ? null : s.plan_id,
-            schedule_id: next.schedules.some(
+            schedule_id: current.schedules.some(
               (a) => a.id === s.schedule_id && a.plan_id === id,
             )
               ? null
               : s.schedule_id,
-            series_id: next.series.some(
+            series_id: current.series.some(
               (r) => r.id === s.series_id && r.plan_id === id,
             )
               ? null
@@ -455,6 +485,12 @@ export function Provider({ children }: { children: ReactNode }) {
           ))
       )
         throw new Error("Clutchfolio: atividade já iniciada ou indisponível.");
+      const owned = current.plans.find(
+        (x) => x.id === p.id && x.user_id === current.profile?.id,
+      );
+      if (!owned || validatePlan(owned, catalog.exercises).length)
+        throw new Error("Clutchfolio: rotina indisponível.");
+      p = { ...owned, steps: identifySteps(owned.steps) };
       const s: Training = {
         schedule_id: occurrence?.schedule_id || null,
         series_id: occurrence?.series_id || null,
@@ -465,9 +501,16 @@ export function Provider({ children }: { children: ReactNode }) {
         user_id: "demo",
         plan_id: p.id,
         title: p.title,
+        plan_snapshot: {
+          title: p.title,
+          description: p.description,
+          objective: p.objective,
+          mode: p.mode,
+          level: p.level,
+        },
         steps: p.steps.map((step) => ({
           ...step,
-          exercise: catalog.exercises.find((e) => e.id === step.exercise_id),
+          exercise: structuredClone(stepExercise(step, catalog.exercises)),
         })),
         started_at: new Date().toISOString(),
         completed_at: null,
@@ -476,7 +519,11 @@ export function Provider({ children }: { children: ReactNode }) {
         status: "active",
         xp: 0,
       };
-      persist({ ...current, sessions: [s, ...current.sessions] });
+      persist({
+        ...current,
+        plans: current.plans.map((plan) => (plan.id === p.id ? p : plan)),
+        sessions: [s, ...current.sessions],
+      });
       return s;
     }
     const s = await check(
@@ -559,11 +606,26 @@ export function Provider({ children }: { children: ReactNode }) {
       const current = restore();
       if (current.sessions.find((x) => x.id === s.id)?.status !== "active")
         return;
+      const authoritative = current.sessions.find((x) => x.id === s.id)!;
+      if (
+        !validateResults(authoritative.steps, results, abandon) ||
+        !Number.isInteger(seconds) ||
+        seconds < 0 ||
+        seconds > 86400 ||
+        seconds > (Date.now() - Date.parse(authoritative.started_at)) / 1000 + 2
+      )
+        throw new Error("Clutchfolio: resultados ou duração inválidos.");
+      s = authoritative;
       const now = new Date().toISOString();
       const completed = current.sessions.filter(
         (x) => x.completed_at?.slice(0, 10) === now.slice(0, 10) && x.xp > 0,
       ).length;
-      const xp = abandon || completed >= 2 ? 0 : 100;
+      const xp =
+        abandon ||
+        completed >= 2 ||
+        results.every((r) => r.status === "skipped")
+          ? 0
+          : 100;
       const next = {
         ...s,
         completed_at: now,
@@ -595,6 +657,108 @@ export function Provider({ children }: { children: ReactNode }) {
           p_results: results,
           p_seconds: seconds,
           p_abandon: abandon,
+        }),
+      );
+      await refresh();
+    }
+  };
+  const checkpoint = async (
+    session: Training,
+    draft: import("./local-data").SessionDraft,
+    version: number,
+  ) => {
+    if (demo) {
+      const current = restore(),
+        active = current.sessions.find((x) => x.id === session.id);
+      if (
+        !active ||
+        active.status !== "active" ||
+        (active.checkpoint_version || 0) !== version
+      )
+        throw new Error(
+          "Clutchfolio: a sessão mudou em outra aba. Recarregue antes de continuar.",
+        );
+      persist({
+        ...current,
+        sessions: current.sessions.map((x) =>
+          x.id === active.id
+            ? { ...x, checkpoint: draft, checkpoint_version: version + 1 }
+            : x,
+        ),
+      });
+      return version + 1;
+    }
+    const updated = (await check(
+      supabase!.rpc("save_training_checkpoint", {
+        p_session: session.id,
+        p_checkpoint: draft,
+        p_version: version,
+      }),
+    )) as Training;
+    setData((current) => ({
+      ...current,
+      sessions: current.sessions.map((x) =>
+        x.id === updated.id ? updated : x,
+      ),
+    }));
+    return updated.checkpoint_version!;
+  };
+  const correctResult = async (
+    session: Training,
+    index: number,
+    result: Result,
+  ) => {
+    if (
+      !Number.isInteger(index) ||
+      index < 0 ||
+      index >= session.steps.length ||
+      session.status === "active"
+    )
+      throw new Error("Clutchfolio: registro indisponível.");
+    const results = session.results.map((r, n) => (n === index ? result : r));
+    if (
+      !validateResults(session.steps, results, session.status === "abandoned")
+    )
+      throw new Error("Clutchfolio: resultado inválido.");
+    if (demo) {
+      const current = restore(),
+        stored = current.sessions.find((x) => x.id === session.id);
+      if (
+        !stored ||
+        (stored.result_revision || 0) !== (session.result_revision || 0)
+      )
+        throw new Error(
+          "Clutchfolio: o registro mudou. Atualize antes de corrigir.",
+        );
+      const key = "clutchfolio-result-revisions:" + session.user_id;
+      const revisions = JSON.parse(localStorage.getItem(key) || "[]");
+      revisions.push({
+        session_id: session.id,
+        step_index: index,
+        before_result: stored.results[index],
+        after_result: result,
+        changed_at: new Date().toISOString(),
+      });
+      localStorage.setItem(key, JSON.stringify(revisions));
+      persist({
+        ...current,
+        sessions: current.sessions.map((x) =>
+          x.id === session.id
+            ? {
+                ...stored,
+                results,
+                result_revision: (stored.result_revision || 0) + 1,
+              }
+            : x,
+        ),
+      });
+    } else {
+      await check(
+        supabase!.rpc("correct_training_result", {
+          p_session: session.id,
+          p_index: index,
+          p_result: result,
+          p_revision: session.result_revision || 0,
         }),
       );
       await refresh();
@@ -644,10 +808,12 @@ export function Provider({ children }: { children: ReactNode }) {
         admin,
         run,
         enterDemo: () => {
+          localStorage.setItem(DEMO_ACTIVE, "true");
           setDemo(true);
           setData(restore());
         },
         exitDemo: () => {
+          localStorage.removeItem(DEMO_ACTIVE);
           setDemo(false);
           setData(emptyPlayer());
         },
@@ -658,6 +824,8 @@ export function Provider({ children }: { children: ReactNode }) {
         start,
         reviseSeries,
         finish,
+        checkpoint,
+        correctResult,
         saveEditorial,
         deleteEditorial,
       }}
