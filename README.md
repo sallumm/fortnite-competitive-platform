@@ -1,10 +1,22 @@
-# Clutchfolio — MVP de treinamento e informação competitiva
+# Clutchfolio 2.0 — espaço pessoal de treinamento competitivo
 
 Projeto novo, independente, em português brasileiro. Nome de trabalho sujeito a pesquisa formal de marca. Interface carvão/verde-lima/violeta, modo claro, layouts responsivos, foco visível e suporte a movimento reduzido. Nenhum repositório existente foi alterado.
 
 ## Estado da entrega
 
-Código versionado no GitHub, 20 testes locais aprovados e workflow de testes/build aprovado no GitHub Actions, sem publicação do site ou Supabase hospedado configurado. A demonstração funciona sem serviços externos, explicitamente no navegador. As contas reais e a editoria persistente exigem configurar Supabase. Não há credenciais privadas, pagamentos, resultados inventados ou servidor Discord fictício.
+A evolução 2.0 está na branch `feat/personal-performance-2`, preparada para revisão por Pull Request. A demonstração continua independente do Supabase e armazena apenas seus testes neste navegador. Site e serviços hospedados serão configurados em uma etapa posterior.
+
+## Organização pessoal 2.0
+
+- **Meu Dia:** objetivo, treino principal, atividades de hoje, pendências, metas, próxima competição salva, última sessão e próximos passos por regras.
+- **Calendário:** eventos únicos, séries semanais por dias selecionados, exceções, conflitos, reagendamento, cancelamento, histórico, estudos/descanso e exportação ICS do período visível.
+- **Planejamento:** proposta ajustável com modalidade, nível, dispositivo, focos, disponibilidade, frequência recente, dificuldades do diário e contexto de competição salva. Criar uma proposta não altera a agenda sem confirmação.
+- **Minhas Habilidades:** 11 áreas com objetivos, avaliações qualitativas pessoais, observações e exercícios associados por categoria editorial. Não atribui uma nota de habilidade.
+- **Diário opcional:** revisão em quatro perguntas e categorias de dificuldades. Pode ser ignorado, editado ou excluído sem alterar resultados/XP.
+- **Minha Semana:** prévia calculada, geração/atualização de resumo salvo, semanas anteriores e exportação TXT. Usa registros reais e explica as regras.
+- **Relatórios:** 7/30/90 dias locais, dias de prática, comparação de contagem com período anterior, dificuldades, agenda e grupos de resultados comparáveis. Resultados antigos continuam no histórico.
+
+Veja o roteiro completo em [VALIDATION-V2.md](VALIDATION-V2.md).
 
 | Implementado | Observação |
 | --- | --- |
@@ -67,7 +79,7 @@ npm run preview
 ## Ativar Supabase
 
 1. Crie um projeto Supabase próprio. Escolha uma região adequada e guarde a senha do banco fora do frontend.
-2. Execute, na ordem, os dois arquivos de `supabase/migrations` no SQL Editor. São migrations de um projeto novo; não aplique sobre banco alheio ou produção existente. A segunda insere o catálogo inicial.
+2. Execute, na ordem do nome, todos os arquivos de `supabase/migrations` no SQL Editor. São migrations de um projeto novo; não aplique sobre banco alheio ou produção existente. A segunda insere o catálogo inicial. A terceira adiciona os recursos pessoais 2.0 sem substituir dados existentes. Se já aplicou as duas primeiras, execute somente `202610100003_performance.sql` após backup; nunca reaplique a seed sobre conteúdo editado.
 3. Copie `.env.example` para `.env.local`. Preencha somente a URL pública e a chave publicável/anon do projeto:
 
 ```dotenv
@@ -141,9 +153,9 @@ Os registros de revisão ficam em `content_revision_history` e são legíveis so
 - Supabase hospedado, e-mails, função de exclusão, Cloudflare não foram configurados nesta sessão. Não há URL publicada.
 - QA visual em desktop/mobile, auditoria WCAG, Lighthouse e testes de navegadores reais não foram executados. Os testes de interface usam DOM simulado.
 - Base editorial inicial reduzida. Não há resultados atuais, classificação, profissionais, organizações, meta completo, transmissão incorporada ou sincronização automática.
-- Calendário pessoal tem agendamentos individuais; não há recorrência automática semanal nem reagendamento inteligente de vários treinos.
+- Recorrência inicialmente semanal por dias, com horário local e fuso IANA. Não há regras mensais, múltiplos fusos por formulário ou sincronização bidirecional com Google/Outlook. A exportação ICS é uma cópia do intervalo visível, não uma assinatura automática.
 - Rascunhos do treino ficam neste navegador; ao trocar dispositivo, a sessão ativa permanece, mas timer e resultados em preenchimento precisam ser retomados manualmente. Limite atual de tempo ativo: 24 horas por sessão.
-- Tendências exigem mesma definição de métrica. Cenário/arma/configuração ainda são responsabilidade do registro do usuário; IDs estruturados de configuração são a próxima melhoria.
+- Comparações exigem exercício, métrica do snapshot e identificação de configuração iguais. A identificação ainda é texto autodeclarado; equivalência real de cenário/arma/sensibilidade não é verificada automaticamente. Não se presume que aumentar um valor seja melhorar.
 - Notificações são avisos ao abrir o site, sem push, e-mail ou monitoramento de fundo. Não há assistente generativo, pagamentos ou coaching humano.
 - Termos e privacidade são preliminares. Identifique operador e canal de direitos, revise proteção de adolescentes e condições de IP antes de operação pública/comercial.
 - SPA limita SEO de crawlers sem JavaScript e cartões sociais por artigo. Próxima etapa: SSR/prerender de conteúdo público e sitemap vinculado ao banco.

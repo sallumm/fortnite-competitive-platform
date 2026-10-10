@@ -24,6 +24,7 @@ vi.mock("../src/lib/client", () => ({
         select: () => chain,
         eq: () => chain,
         order: () => chain,
+        range: () => chain,
         maybeSingle: () => {
           single = true;
           return chain;
@@ -63,7 +64,7 @@ describe("Integração Auth com adaptador simulado", () => {
     render(<App />);
     expect(
       await screen.findByRole("heading", {
-        name: "Vamos ao próximo passo, Conta existente.",
+        name: "Meu Dia",
       }),
     ).toBeTruthy();
     expect(

@@ -69,13 +69,13 @@ describe("Fluxos funcionais do MVP em DOM simulado", () => {
     );
     await user.click(screen.getByRole("button", { name: "Criar meu plano" }));
     await screen.findByRole("heading", {
-      name: "Vamos ao próximo passo, Rafael.",
+      name: "Meu Dia",
     });
     const stored = JSON.parse(localStorage.getItem("clutchfolio-demo-v1")!);
     expect(stored.profile.onboarded).toBe(true);
     expect(stored.plans).toHaveLength(1);
     await user.click(
-      screen.getByRole("button", { name: "Iniciar meu treino" }),
+      screen.getByRole("button", { name: "Começar meu treino" }),
     );
     await screen.findByRole("heading", { name: "Meu primeiro plano" });
     for (const checkbox of await screen.findAllByRole("checkbox", {
@@ -128,6 +128,7 @@ describe("Fluxos funcionais do MVP em DOM simulado", () => {
     await screen.findByRole("heading", { name: "Mira precisa (cópia)" });
     await user.click(screen.getAllByRole("button", { name: "Agendar" })[0]);
     await screen.findByRole("dialog");
+    await user.clear(screen.getByLabelText(/^Data e horário/));
     await user.type(
       screen.getByLabelText(/^Data e horário/),
       "2026-10-12T17:00",

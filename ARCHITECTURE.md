@@ -42,3 +42,28 @@ Resultados de torneios, rodadas, temporadas, jogadores e organizações precisam
 ## Operação
 
 Auth usa limites do provedor; o RPC limita inícios a 60 em 24 horas. Isso não substitui controle de abuso em escala. Configure CAPTCHA/SMTP/limites de Auth antes de abrir cadastro. A função de exclusão valida o token no Auth, a origem e login recente, e usa a chave administrativa apenas no servidor. RLS não fornece proteção contra roubo de sessão por extensões ou dispositivo comprometido; CSP, tratamento de texto por React e ausência de HTML arbitrário reduzem a superfície web.
+
+## Personal Performance 2.0
+
+`calendar.ts` é o núcleo determinístico de datas, conversão de horários locais, expansão sob demanda, conflitos e exportação ICS. Uma série ocupa uma linha, com weekdays, período, horário local, duração e fuso IANA. `calendar_exceptions` guarda apenas alterações ou cancelamentos, identificados pela data original da ocorrência; mover um evento não altera essa identidade. O intervalo de leitura é limitado a 370 dias. A expansão considera as bordas em fusos diferentes e exceções movidas de fora da tela.
+
+Horários inexistentes em transições de DST são rejeitados na entrada e omitidos em séries. Horários ambíguos usam o primeiro instante na expansão do cliente. Formatos Intl são reutilizados, e a cache de conversão é limitada. A regra depende das bases IANA do navegador/servidor: mudanças legais futuras de fuso podem alterar instantes ainda não realizados. A exportação contém ocorrências resolvidas em UTC com identidade estável e folding em bytes; não contém uma assinatura de atualização nem uma RRULE ilimitada.
+
+| Entidade incremental | Responsabilidade |
+| --- | --- |
+| `activity_series` | Recorrência semanal e intenção de treino/compromisso/descanso |
+| `calendar_exceptions` | Alteração de apenas uma ocorrência, reagendamento/cancelamento/estado |
+| `training_journals` | Revisão opcional de uma sessão encerrada, com FK composta de proprietário |
+| `skill_reviews` | Histórico qualitativo de objetivos e avaliações pessoais |
+| `planning_preferences` | Disponibilidade e escolhas de planejamento, uma linha por perfil |
+| `weekly_reports` | Snapshot revisável de uma semana, um por proprietário/período |
+
+`schedule_id`, `series_id` e `occurrence_date` ligam a execução à intenção. `start_scheduled_training` valida proprietário, plano, regra e cancelamentos antes de delegar ao RPC existente de treinamento. Índices únicos impedem iniciar/concluir novamente a mesma ocorrência; uma interrupção permite nova tentativa. A conclusão continua transacional e aplica as mesmas regras de XP. Resultados agora aceitam uma identificação opcional de configuração de até 200 caracteres.
+
+Alterar a série a partir de uma ocorrência usa `revise_series`: encerra a regra anterior e insere a substituta na mesma transação. O histórico anterior permanece. Havendo exceções ou execuções futuras, o RPC recusa uma substituição silenciosa e pede revisão individual. Triggers também protegem histórico em alterações diretas. A edição de um evento isolado preserva a regra. A exclusão solicitada de uma série remove sua programação/exceções, mantém sessões/diários e limpa a referência; resumos salvos permanecem snapshots.
+
+`performance.ts` calcula contagens, frequência, grupos comparáveis e sugestões. A aderência usa vínculos explícitos ou marcações de atividade. Correspondências de registros antigos por plano e dia são exibidas separadamente como estimativas, sem aumentar a porcentagem explícita. Cancelamentos não contam como compromissos pendentes. Comparações exigem exercício, métrica histórica e texto de configuração iguais; registros sem configuração não geram tendência automática. A direção desejada de cada métrica não é inferida.
+
+Semanas usam datas no fuso do perfil e podem ser parciais. Metas são snapshots do estado na geração, sem data de conclusão inventada. Relatórios salvos são dados privados derivados e editáveis, sem privilégios/XP associados; não substituem os registros de sessão como fonte. O planner prioriza focos, adequação de modalidade/nível e frequência recente, sem inferir déficit de habilidade. Diário e resultados são autodeclarados.
+
+Todas as novas entidades têm RLS por proprietário, constraints e índices de usuário. Não se concede acesso ao esquema `private`; somente a execução da função pré-resolvida usada pela constraint de weekdays. Os RPCs com security definer fixam search_path e validam auth.uid(). Gravações da demonstração continuam em `clutchfolio-demo-v1`, inicializando os novos arrays sem apagar o estado existente. Contas Supabase leem os dados privados por páginas de 500 registros para não truncar histórico no limite padrão de resposta.

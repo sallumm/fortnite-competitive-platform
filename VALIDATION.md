@@ -4,8 +4,8 @@
 
 | Verificação | Resultado | Limite |
 | --- | --- | --- |
-| `npm test` / Vitest | 20 testes passaram em 4 arquivos | Execução local, não substitui homologação hospedada |
-| GitHub Actions | Testes e build aprovados no commit `10a4b8f` | [Execução](https://github.com/sallumm/fortnite-competitive-platform/actions/runs/38021456684); sem serviços hospedados configurados |
+| `npm test` / Vitest | 44 testes passaram em 7 arquivos na evolução 2.0 | Execução local, não substitui homologação hospedada |
+| GitHub Actions (MVP inicial) | Testes e build aprovados no commit `10a4b8f` | [Execução](https://github.com/sallumm/fortnite-competitive-platform/actions/runs/38021456684); sem serviços hospedados configurados |
 | TypeScript em modo strict | Compilação aprovada; inclui verificação de imports/parâmetros não usados | Tipos não validam comportamento dos serviços externos |
 | `npm run build` | Build Vite de produção concluído | Sem variáveis de um Supabase real; saída local em `dist` |
 | `npm audit --omit=dev --json` | 0 vulnerabilidades conhecidas reportadas para produção | Consulta ao registro npm, não auditoria abrangente do aplicativo |
@@ -23,6 +23,16 @@ As políticas RLS foram exercitadas como `anon` e `authenticated`, em contas dif
 **Interface/DOM (4):** landing, alternância de tema e cadastro indisponível sem backend; onboarding completo, rotina inicial, sessão concluída e histórico/XP; edição, duplicação, agendamento e exclusão de rotina; filtro por modalidade e cópia de código. Testes com Testing Library e jsdom, sem browser real.
 
 **Adaptador de Auth simulado (2):** carregamento de perfil de conta existente antes de decidir onboarding; redirecionamento de conta sem perfil, sem exposição da administração. O teste revelou uma corrida entre a consulta pública e a hidratação da identidade; a correção faz a rota privada aguardar o usuário correto.
+
+## Cobertura adicional 2.0
+
+**Lógica/recorrências (13):** weekdays; manutenção de hora local ao atravessar DST; gap e horário ambíguo; exceção movida de fora do intervalo; bordas em fusos diferentes; conflitos e eventos adjacentes; ICS com limites de bytes; normalização de dados legados; grupos de configuração/métrica; vínculo explícito de aderência; estimativas antigas; diário sem inferência de melhora; planos Zero Build e duração.
+
+**Migração PostgreSQL/PGlite (8):** atualização de banco já preenchido; RLS das seis novas entidades; regras de fuso/weekday/proprietário; sessão vinculada, configuração inválida e diário após encerramento; gaps/cancelamentos; revisão transacional da série e rollback; preferências/relatórios privados; cascades.
+
+**Interface/DOM (3):** criar recorrência, alterar uma ocorrência, executar com vínculo e configuração, registrar diário e gerar resumo semanal; avaliação qualitativa persistida após nova montagem; compromissos com confirmação de conflito e cancelamento. Os quatro fluxos anteriores e os dois testes do adaptador Auth também passaram.
+
+A compilação strict e o build de produção passaram após integrar a evolução 2.0. Nenhuma dependência foi acrescentada. Leia [VALIDATION-V2.md](VALIDATION-V2.md) para regras, limitações e roteiro de homologação.
 
 ## Não executado
 
