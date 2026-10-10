@@ -1,5 +1,10 @@
+import { loadEnv } from "vite";
+const env = {
+  ...loadEnv("production", process.cwd(), "VITE_"),
+  ...process.env,
+};
 import { writeFileSync } from "node:fs";
-const raw = process.env.VITE_SITE_URL;
+const raw = env.VITE_SITE_URL;
 if (!raw) {
   console.info("Sitemap omitido: VITE_SITE_URL ainda não definido.");
   process.exit(0);

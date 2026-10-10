@@ -26,6 +26,9 @@ export function useSEO(title: string, description: string, article?: Article) {
       }
       meta.content = value;
     }
+    document
+      .querySelectorAll('link[rel="canonical"]')
+      .forEach((node) => node.remove());
     const canonical = document.createElement("link");
     canonical.rel = "canonical";
     canonical.href = location.origin + location.pathname;

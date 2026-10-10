@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { ArrowRight, LockKeyhole } from "lucide-react";
 import { supabase, configured } from "../lib/client";
 import { useStore } from "../lib/store";
@@ -7,6 +7,12 @@ import { Heading } from "../components/ui";
 export default function Auth() {
   const store = useStore();
   const navigate = useNavigate();
+  const route = useLocation();
+  const requested = route.state?.from;
+  const destination =
+    typeof requested === "string" && /^\/app(?:\/|\?|$)/.test(requested)
+      ? requested
+      : "/app";
   const [mode, setMode] = useState<"login" | "signup" | "reset" | "update">(
     location.hash.includes("type=recovery") ||
       location.search.includes("recovery=1")
@@ -16,7 +22,8 @@ export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  if (store.session && mode !== "update") return <Navigate to="/app" replace />;
+  if (store.session && mode !== "update")
+    return <Navigate to={destination} replace />;
   const submit = (e: FormEvent) => {
     e.preventDefault();
     store.run(async () => {
@@ -33,7 +40,7 @@ export default function Auth() {
           throw new Error(
             "Clutchfolio: não foi possível entrar. Confira os dados e a confirmação de e-mail.",
           );
-        navigate("/app");
+        navigate(destination);
       } else if (mode === "signup") {
         const { error } = await supabase.auth.signUp({
           email,
@@ -59,7 +66,7 @@ export default function Auth() {
         const { error } = await supabase.auth.updateUser({ password });
         if (error) throw error;
         setMessage("Senha atualizada.");
-        navigate("/app");
+        navigate(destination);
       }
     });
   };
@@ -98,7 +105,7 @@ export default function Auth() {
         {!configured && (
           <div className="alert">
             Contas ainda não foram ativadas nesta instalação. Explore a
-            demonstração enquanto o responsável configura o Supabase.
+            demonstração enquanto o acesso é preparado.
           </div>
         )}
         <div className="tabs">

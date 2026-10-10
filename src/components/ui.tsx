@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useId, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, Check, Copy, Target, X } from "lucide-react";
 import { useStore } from "../lib/store";
@@ -105,6 +105,7 @@ export function Modal({
   onClose: () => void;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
   useEffect(() => {
     ref.current?.showModal();
     return () => ref.current?.close();
@@ -116,10 +117,10 @@ export function Modal({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
-      aria-labelledby="modal-title"
+      aria-labelledby={titleId}
     >
       <div className="modal-heading">
-        <h2 id="modal-title">{title}</h2>
+        <h2 id={titleId}>{title}</h2>
         <button
           className="icon-button"
           aria-label="Fechar janela"
@@ -141,9 +142,13 @@ export function Progress({
 }) {
   return (
     <progress
-      max={max}
-      value={value}
-      aria-label={`${Math.round((value / max) * 100)}% concluído`}
+      max={Number.isFinite(max) && max > 0 ? max : 1}
+      value={
+        Number.isFinite(value)
+          ? Math.max(0, Math.min(value, max > 0 ? max : 1))
+          : 0
+      }
+      aria-label={`${max > 0 && Number.isFinite(value) ? Math.round(Math.max(0, Math.min(value / max, 1)) * 100) : 0}% concluído`}
     />
   );
 }

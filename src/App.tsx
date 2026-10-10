@@ -1,8 +1,17 @@
 import { lazy, Suspense, type ReactNode } from "react";
-import { BrowserRouter, Link, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Link,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import { Provider, useStore } from "./lib/store";
 import { Layout } from "./components/Layout";
 import { Empty } from "./components/ui";
+import { currentEvent } from "./lib/competitive";
 import { dateInZone } from "./lib/calendar";
 const Landing = lazy(() => import("./pages/Landing"));
 const Auth = lazy(() => import("./pages/Auth"));
@@ -52,8 +61,22 @@ function Guard({
   onboard?: boolean;
 }) {
   const s = useStore();
+  const location = useLocation();
+  if (s.error && s.loading)
+    return (
+      <Empty title="Seu espaço não pôde ser carregado">
+        Use “Tentar novamente” acima para recuperar seus dados.
+      </Empty>
+    );
   if (s.loading) return <Loading />;
-  if (!s.demo && !s.session) return <Navigate to="/auth" replace />;
+  if (!s.demo && !s.session)
+    return (
+      <Navigate
+        to="/auth"
+        state={{ from: location.pathname + location.search }}
+        replace
+      />
+    );
   if (onboard && !s.data.profile?.onboarded)
     return <Navigate to="/onboarding" replace />;
   return <>{children}</>;
@@ -64,6 +87,7 @@ function Reminders() {
   const now = Date.now();
   const upcoming = s.catalog.tournaments.filter(
     (t) =>
+      currentEvent(t) &&
       s.data.bookmarks.some(
         (b) => b.kind === "tournament" && b.target_id === t.id,
       ) &&
@@ -83,6 +107,11 @@ function Reminders() {
       . Confirme horários na fonte oficial.
     </div>
   ) : null;
+}
+function TrainingRoute() {
+  const { id } = useParams();
+  const s = useStore();
+  return <Training key={`${s.data.profile?.id}:${id}`} />;
 }
 function Application() {
   return (
@@ -129,7 +158,7 @@ function Application() {
               path="/app/session/:id"
               element={
                 <Guard>
-                  <Training />
+                  <TrainingRoute />
                 </Guard>
               }
             />
