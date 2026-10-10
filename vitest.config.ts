@@ -4,6 +4,8 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "node",
+    // Bound concurrent PostgreSQL/DOM workers on development and CI machines.
+    maxWorkers: 4,
     setupFiles: ["tests/motion-setup.ts"],
     testTimeout: 30000,
     hookTimeout: 30000,

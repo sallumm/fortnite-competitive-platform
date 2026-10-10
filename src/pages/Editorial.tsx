@@ -1,3 +1,4 @@
+import { LessonStudy } from "../components/LessonStudy";
 import { LessonContext } from "../components/LessonContext";
 import { CoachAccess } from "../components/CoachAccess";
 import { topics, recentArticles, relatedArticles } from "../lib/competitive";
@@ -120,6 +121,9 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
             articles={s.catalog.articles}
             exercises={s.catalog.exercises}
           />
+          {selected.curriculum && (
+            <LessonStudy key={selected.id} lesson={selected} />
+          )}
           <Source
             url={selected.source_url}
             date={selected.verified_at}

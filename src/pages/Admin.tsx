@@ -1,3 +1,5 @@
+import { AcademyQuestionsEditor } from "../components/AcademyQuestionsEditor";
+import type { Question } from "../lib/academy";
 import { prerequisiteIssues } from "../lib/curriculum";
 import { ExerciseResearchEditor } from "../components/ExerciseResearchEditor";
 import { reviewPending, type ExerciseResearch } from "../lib/training-research";
@@ -120,6 +122,7 @@ export default function Admin() {
         : table === "articles"
           ? {
               curriculum: null,
+              academy_questions: [],
               topic: "competitive",
               tags: [],
               evidence: "official",
@@ -219,6 +222,9 @@ export default function Admin() {
           </button>
         }
       />
+      <Link className="button" to="/admin/academy">
+        Organizar trilhas da Academy
+      </Link>
       <Link className="button" to="/admin/meta">
         Gerenciar Meta
       </Link>
@@ -357,10 +363,24 @@ export default function Admin() {
                 Adicionar estrutura curricular à aula
               </button>
             )}
+            {table === "articles" && Boolean(edit.curriculum) && (
+              <AcademyQuestionsEditor
+                questions={(edit.academy_questions || []) as Question[]}
+                onChange={(academy_questions) =>
+                  setEdit({ ...edit, academy_questions })
+                }
+              />
+            )}
             <div className="form-grid">
               {Object.entries(edit)
                 .filter(
-                  ([key]) => !["id", "published", "research"].includes(key),
+                  ([key]) =>
+                    ![
+                      "id",
+                      "published",
+                      "research",
+                      "academy_questions",
+                    ].includes(key),
                 )
                 .map(([key, value]) => {
                   const choices =

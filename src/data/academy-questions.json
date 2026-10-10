@@ -1,0 +1,54 @@
+{
+  "primeira-partida": [
+    {
+      "id": "objetivo-br",
+      "prompt": "Qual é o objetivo principal de uma partida de Battle Royale?",
+      "options": [
+        "Eliminar todos os adversários a qualquer custo.",
+        "Ser a última pessoa ou equipe sobrevivente.",
+        "Acumular nível de conta durante a partida."
+      ],
+      "answer": 1,
+      "explanation": "A vitória depende de sobreviver ao final. Uma eliminação pode ajudar, mas escolher toda luta não garante esse objetivo."
+    }
+  ],
+  "mid-rotacoes": [
+    {
+      "id": "decisao-rotacao",
+      "prompt": "Ao estudar uma rotação, qual informação deve orientar a análise?",
+      "options": [
+        "Apenas o caminho que um profissional usou em outra partida.",
+        "Zona, exposição, recursos e informações disponíveis naquele momento.",
+        "Somente a quantidade total de eliminações."
+      ],
+      "answer": 1,
+      "explanation": "Rotação é uma decisão contextual. Um caminho não é universalmente correto: zona, informação, recursos e exposição mudam as alternativas."
+    }
+  ],
+  "vod-hipoteses": [
+    {
+      "id": "volume-e-evolucao",
+      "prompt": "O que permite avaliar uma hipótese de melhoria depois de uma VOD Review?",
+      "options": [
+        "Acumular horas, mesmo sem registrar decisões.",
+        "Escolher uma mudança observável e comparar situações equivalentes.",
+        "Concluir a leitura de uma aula."
+      ],
+      "answer": 1,
+      "explanation": "Uma hipótese precisa de aplicação e observação. Volume de treino e leitura não provam transferência para situações reais."
+    }
+  ],
+  "zero-cobertura": [
+    {
+      "id": "cobertura-zero",
+      "prompt": "Qual recurso é coerente com uma análise de defesa em Construção Zero?",
+      "options": [
+        "Cobertura do cenário, exposição e opções de deslocamento.",
+        "Uma sequência de edits em paredes construídas pelo jogador.",
+        "Um retake que depende de construir rampas."
+      ],
+      "answer": 0,
+      "explanation": "Construção Zero não permite depender de estruturas construídas pelo jogador. Analise cobertura disponível, informação e exposição."
+    }
+  ]
+}
