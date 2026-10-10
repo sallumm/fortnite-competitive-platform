@@ -36,10 +36,12 @@ export function demoContext(
   pref: Preferences,
   exercise_id?: string,
   now = new Date(),
+  tournament_id?: string,
 ): Context {
   const q = classify(message, exercise_id),
     p = data.profile,
     c: Context = {};
+  if (tournament_id) q.intent = "competition";
   if (q.category === "auto")
     q.category = pref.context_enabled ? p?.objective || "aim" : "aim";
   if (pref.context_enabled && p) {
@@ -146,6 +148,30 @@ export function demoContext(
           source_url: t.source_url,
         }));
   }
+  if (tournament_id)
+    c.tournaments = catalog.tournaments
+      .filter((t) => t.published && t.id === tournament_id)
+      .slice(0, 1)
+      .map((t) => ({
+        id: t.id,
+        slug: t.slug,
+        title: t.title,
+        starts_at: t.starts_at,
+        start_date: t.start_date,
+        status: t.status,
+        valid_until: t.valid_until,
+        verified_at: t.verified_at,
+        source_url: t.source_url,
+        format: t.format,
+        rules: t.rules.slice(0, 4000),
+        region: t.region,
+        mode: t.mode,
+        confirmation: t.confirmation,
+        phases: t.phases,
+        result_summary: t.result_summary,
+        result_source_url: t.result_source_url,
+        result_verified_at: t.result_verified_at,
+      }));
   if (q.intent === "exercise" || q.intent === "knowledge") {
     c.exercises = catalog.exercises
       .filter(
@@ -193,17 +219,28 @@ export function demoAnswer(
   message: string,
   pref: Preferences,
   exercise_id?: string,
+  tournament_id?: string,
 ) {
-  const q = classify(message, exercise_id),
-    k = retrieve(message);
+  const q = classify(message, exercise_id);
+  if (tournament_id) q.intent = "competition";
+  const k = retrieve(message);
   const answer = rulesAnswer(
     q,
-    demoContext(data, catalog, message, pref, exercise_id),
+    demoContext(
+      data,
+      catalog,
+      message,
+      pref,
+      exercise_id,
+      new Date(),
+      tournament_id,
+    ),
     k.references,
     k.definitions,
   );
   if (
     !pref.context_enabled &&
+    !tournament_id &&
     ["report", "agenda", "competition"].includes(q.intent)
   ) {
     answer.sections = [
@@ -216,8 +253,13 @@ export function demoAnswer(
     ];
     answer.scope = [];
   }
-  answer.notice = pref.context_enabled
-    ? "Demonstração local · assistência por regras. Nenhum dado é enviado a um modelo externo."
-    : "Personalização desativada. Autorize o uso dos registros para analisar sua conta de demonstração.";
+  if (tournament_id)
+    answer.scope = ["Evento público selecionado", "Fonte e validade editorial"];
+  answer.notice =
+    tournament_id && !pref.context_enabled
+      ? "Consulta ao catálogo público; registros privados não foram consultados."
+      : pref.context_enabled
+        ? "Demonstração local · assistência por regras. Nenhum dado é enviado a um modelo externo."
+        : "Personalização desativada. Autorize o uso dos registros para analisar sua conta de demonstração.";
   return answer;
 }

@@ -215,7 +215,7 @@ function escape(s: string) {
     .replace(/,/g, "\\,")
     .replace(/;/g, "\\;");
 }
-function fold(line: string) {
+export function fold(line: string) {
   const chunks: string[] = [];
   let chunk = "",
     size = 0;

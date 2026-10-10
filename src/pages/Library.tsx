@@ -78,6 +78,22 @@ export default function Library() {
               <Badge>{labels[selected.mode]}</Badge>
               <Badge>{labels[selected.level]}</Badge>
             </div>
+            {selected.skills?.length ? (
+              <div className="row">
+                {selected.skills.map((x) => (
+                  <Badge key={x}>{x}</Badge>
+                ))}
+              </div>
+            ) : null}
+            {selected.competitive_goal && (
+              <>
+                <h2>Objetivo competitivo</h2>
+                <p>{selected.competitive_goal}</p>
+                <p>
+                  {selected.map_type} · {selected.requirements}
+                </p>
+              </>
+            )}
             <h2>Como praticar</h2>
             <p>{selected.instructions}</p>
             <h2>O que registrar</h2>
@@ -89,9 +105,9 @@ export default function Library() {
             </div>
             <Source url={selected.source_url} date={selected.verified_at} />
             <p className="small-text muted">
-              O código e a descrição da ilha foram conferidos na fonte. O
-              procedimento de treino é uma proposta editorial, sem eficácia
-              específica comprovada.
+              O código e a descrição da ilha foram conferidos na fonte; não
+              realizamos testes dentro do Fortnite. O procedimento de treino é
+              uma proposta editorial, sem eficácia específica comprovada.
             </p>
           </article>
           <aside className="panel detail-aside">

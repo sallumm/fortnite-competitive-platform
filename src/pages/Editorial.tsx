@@ -1,3 +1,5 @@
+import { CoachAccess } from "../components/CoachAccess";
+import { topics, recentArticles, relatedArticles } from "../lib/competitive";
 import { useSEO } from "../lib/seo";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -19,8 +21,9 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [kind, setKind] = useState("all");
+  const [topic, setTopic] = useState("all");
   const selected = s.catalog.articles.find((a) => a.slug === slug);
-  const base = s.catalog.articles.filter((a) =>
+  const base = recentArticles(s.catalog.articles).filter((a) =>
     academy ? a.kind === "lesson" : a.kind !== "lesson",
   );
 
@@ -28,6 +31,7 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
     selected?.title || "Notícias e Academy",
     selected?.summary ||
       "Conteúdos educativos e notícias competitivas com fontes.",
+    selected,
   );
   if (slug && !selected)
     return (
@@ -53,7 +57,14 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
                     ? "Aula"
                     : "Análise editorial"}
               </Badge>
-              <Badge>{labels[selected.category]}</Badge>
+              <Badge>{topics[selected.topic || "competitive"]}</Badge>
+              <Badge>
+                {selected.evidence === "official"
+                  ? "Fonte oficial"
+                  : selected.evidence === "opinion"
+                    ? "Opinião"
+                    : "Análise editorial"}
+              </Badge>
             </div>
             <h1>{selected.title}</h1>
             <p>{selected.summary}</p>
@@ -78,6 +89,22 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
               </button>
             </div>
           </div>
+          <div className="row">
+            {selected.tags?.map((tag) => (
+              <Badge key={tag}>{tag}</Badge>
+            ))}
+          </div>
+          {selected.source_published_at && (
+            <p className="small-text muted">
+              Publicação original da fonte:{" "}
+              {dateLabel(selected.source_published_at)}. A verificação editorial
+              tem data independente.
+            </p>
+          )}
+          <CoachAccess
+            question={`Mostre conteúdos sobre ${selected.tags?.[0] || selected.category}.`}
+            label="Estudar este assunto com o Coach"
+          />
           <div className="reading-art">
             <BookOpen size={60} />
             <span>{labels[selected.category]}</span>
@@ -110,30 +137,36 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
           </div>
           <h2>Continue explorando</h2>
           <div className="two-grid">
-            {base
-              .filter((a) => a.id !== selected.id)
-              .slice(0, 2)
-              .map((a) => (
-                <Link
-                  key={a.id}
-                  to={(academy ? "/academy/" : "/news/") + a.slug}
-                  className="panel"
-                >
-                  <h3>{a.title}</h3>
-                  <p>{a.summary}</p>
-                </Link>
-              ))}
+            {relatedArticles(base, selected).map((a) => (
+              <Link
+                key={a.id}
+                to={(academy ? "/academy/" : "/news/") + a.slug}
+                className="panel"
+              >
+                <h3>{a.title}</h3>
+                <p>{a.summary}</p>
+              </Link>
+            ))}
           </div>
         </article>
       </>
     );
   const list = base.filter(
     (a) =>
-      (a.title + " " + a.summary + " " + a.body)
+      (
+        a.title +
+        " " +
+        a.summary +
+        " " +
+        a.body +
+        " " +
+        (a.tags || []).join(" ")
+      )
         .toLowerCase()
         .includes(query.toLowerCase()) &&
       (category === "all" || a.category === category) &&
-      (kind === "all" || a.kind === kind),
+      (kind === "all" || a.kind === kind) &&
+      (topic === "all" || a.topic === topic),
   );
   return (
     <>
@@ -174,6 +207,20 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
         </select>
         {!academy && (
           <select
+            aria-label="Tema editorial"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+          >
+            <option value="all">Todos os temas</option>
+            {Object.entries(topics).map(([v, l]) => (
+              <option key={v} value={v}>
+                {l}
+              </option>
+            ))}
+          </select>
+        )}
+        {!academy && (
+          <select
             aria-label="Tipo de conteúdo"
             value={kind}
             onChange={(e) => setKind(e.target.value)}
@@ -208,6 +255,12 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
                   {dateLabel(a.published_at)}
                 </span>
               </div>
+              <Badge>{topics[a.topic || "competitive"]}</Badge>
+              {isStale(a.verified_at, a.valid_until) && (
+                <span className="small-text muted">
+                  Arquivo · precisa de revisão
+                </span>
+              )}
               <h2>{a.title}</h2>
               <p>{a.summary}</p>
               <span className="text-link">

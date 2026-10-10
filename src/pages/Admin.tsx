@@ -1,3 +1,6 @@
+import { EditorialRevisions } from "../components/EditorialRevisions";
+import { topics } from "../lib/competitive";
+import { isStale } from "../lib/logic";
 import { useState, type FormEvent } from "react";
 import { Edit3, Plus, Trash2 } from "lucide-react";
 import { useStore } from "../lib/store";
@@ -17,6 +20,21 @@ const names = {
   tournaments: "Campeonatos",
 };
 const fieldNames: Record<string, string> = {
+  topic: "Tema editorial",
+  tags: "Tags separadas por vírgula",
+  evidence: "Natureza da fonte",
+  source_published_at: "Publicação original da fonte",
+  confirmation: "Confirmação",
+  season_label: "Temporada",
+  phases:
+    "Fases (JSON estruturado: key, title, kind, date, starts_at, ends_at, status, source_url, verified_at, valid_until)",
+  result_summary: "Resultado confirmado (opcional)",
+  result_source_url: "Fonte do resultado (opcional)",
+  result_verified_at: "Verificação do resultado (opcional)",
+  skills: "Habilidades separadas por vírgula",
+  competitive_goal: "Objetivo competitivo",
+  map_type: "Tipo de mapa",
+  requirements: "Recursos necessários",
   title: "Título",
   slug: "Identificador da página",
   creator: "Criador",
@@ -46,6 +64,9 @@ const fieldNames: Record<string, string> = {
   prize: "Premiação",
 };
 const options: Record<string, string[]> = {
+  topic: Object.keys(topics),
+  evidence: ["official", "analysis", "opinion"],
+  confirmation: ["confirmed", "unconfirmed"],
   mode: ["build", "zero", "both"],
   level: ["beginner", "intermediate", "advanced"],
   kind: ["news", "analysis", "lesson"],
@@ -75,6 +96,10 @@ export default function Admin() {
     const defaults =
       table === "exercises"
         ? {
+            skills: [],
+            competitive_goal: "",
+            map_type: "",
+            requirements: "",
             creator: "",
             map_code: null,
             category: "aim",
@@ -86,6 +111,10 @@ export default function Admin() {
           }
         : table === "articles"
           ? {
+              topic: "competitive",
+              tags: [],
+              evidence: "official",
+              source_published_at: null,
               slug: "",
               kind: "news",
               category: "fncs",
@@ -97,6 +126,12 @@ export default function Admin() {
             }
           : {
               slug: "",
+              confirmation: "unconfirmed",
+              season_label: "",
+              phases: [],
+              result_summary: null,
+              result_source_url: null,
+              result_verified_at: null,
               category: "FNCS",
               mode: "build",
               region: "BR",
@@ -122,7 +157,15 @@ export default function Admin() {
         : table === "articles"
           ? articleSchema
           : tournamentSchema;
-    const result = schema.safeParse(edit);
+    let input = edit;
+    try {
+      if (edit && typeof edit.phases === "string")
+        input = { ...edit, phases: JSON.parse(edit.phases) };
+    } catch {
+      setValidation("Fases: JSON inválido. Não salvei o registro.");
+      return;
+    }
+    const result = schema.safeParse(input);
     if (!result.success) {
       setValidation(
         result.error.issues
@@ -181,6 +224,10 @@ export default function Admin() {
                 {new Date(row.verified_at).toLocaleDateString("pt-BR")}
               </small>
             </div>
+            {isStale(
+              row.verified_at,
+              "valid_until" in row ? row.valid_until : null,
+            ) && <Badge>Revisão pendente</Badge>}
             <Badge tone={row.published ? "green" : "neutral"}>
               {row.published ? "Publicado / agendado" : "Rascunho"}
             </Badge>
@@ -242,6 +289,7 @@ export default function Admin() {
                         ]
                       : options[key];
                   const long = [
+                    "result_summary",
                     "body",
                     "instructions",
                     "rules",
@@ -251,7 +299,36 @@ export default function Admin() {
                   return (
                     <label key={key}>
                       {fieldNames[key] || key}
-                      {choices ? (
+                      {key === "phases" ? (
+                        <textarea
+                          rows={12}
+                          value={
+                            typeof value === "string"
+                              ? value
+                              : JSON.stringify(value, null, 2)
+                          }
+                          onChange={(e) =>
+                            setEdit({ ...edit, phases: e.target.value })
+                          }
+                        />
+                      ) : ["tags", "skills"].includes(key) ? (
+                        <input
+                          value={
+                            Array.isArray(value)
+                              ? value.join(", ")
+                              : String(value || "")
+                          }
+                          onChange={(e) =>
+                            setEdit({
+                              ...edit,
+                              [key]: e.target.value
+                                .split(",")
+                                .map((x) => x.trim())
+                                .filter(Boolean),
+                            })
+                          }
+                        />
+                      ) : choices ? (
                         <select
                           value={String(value)}
                           onChange={(e) =>
@@ -279,16 +356,29 @@ export default function Admin() {
                       ) : long ? (
                         <textarea
                           rows={key === "body" ? 8 : 3}
-                          required
+                          required={key !== "result_summary"}
                           value={String(value ?? "")}
                           onChange={(e) =>
-                            setEdit({ ...edit, [key]: e.target.value })
+                            setEdit({
+                              ...edit,
+                              [key]:
+                                key === "result_summary" && !e.target.value
+                                  ? null
+                                  : e.target.value,
+                            })
                           }
                         />
                       ) : (
                         <input
                           required={
                             ![
+                              "result_source_url",
+                              "result_verified_at",
+                              "source_published_at",
+                              "season_label",
+                              "competitive_goal",
+                              "map_type",
+                              "requirements",
                               "map_code",
                               "starts_at",
                               "ends_at",
@@ -325,6 +415,9 @@ export default function Admin() {
                               [key]:
                                 e.target.value === "" &&
                                 [
+                                  "result_source_url",
+                                  "result_verified_at",
+                                  "source_published_at",
                                   "map_code",
                                   "starts_at",
                                   "ends_at",
@@ -361,6 +454,7 @@ export default function Admin() {
                 {validation}
               </div>
             )}
+            <EditorialRevisions table={table} id={String(edit.id)} />
             <button className="button primary full" disabled={s.busy}>
               Salvar registro
             </button>
