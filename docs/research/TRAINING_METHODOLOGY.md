@@ -47,4 +47,4 @@ Permitir pausas e encerramento sem culpa. Desconforto não é sinal obrigatório
 
 ## Revisão editorial
 
-Revisar fontes quando houver mudança da ilha, regra, temporada ou vencimento do prazo. O prazo inicial de 30 dias é uma política editorial de manutenção, não uma validade científica. Conferir: código, autoria, disponibilidade anunciada, modalidade, procedimento, critério, métrica, limitações, fontes e data. Status “metadados revisados” não significa mapa testado ou eficácia validada. Despublicar itens retirados; preservar snapshots e histórico de resultados.
+Revisar fontes quando houver mudança da ilha, regra, temporada ou vencimento do prazo. O prazo inicial de aproximadamente um mês é uma política editorial de manutenção, não uma validade científica. Conferir: código, autoria, disponibilidade anunciada, modalidade, procedimento, critério, métrica, limitações, fontes e data. Status “metadados revisados” não significa mapa testado ou eficácia validada. Despublicar itens retirados; preservar snapshots e histórico de resultados.

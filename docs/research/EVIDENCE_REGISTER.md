@@ -134,7 +134,7 @@ Versão 2026-10-10.1. Data da consulta não substitui data da publicação. Data
 
 - Fonte: https://www.fortnite.com/competitive/fncs-2026-global-championship?region=EU
 - Tipo: Informação oficial. Acesso: `page`.
-- Publicação: 2026-09-27. Consulta: 2026-10-10.
+- Publicação: não identificada. Consulta: 2026-10-10.
 - Conclusão limitada: A recapitulação oficial identifica SwizzY e Pixie como campeões de 2026.
 - Limitações: Resultado confirma desempenho naquele evento, não o método de treino dos participantes nem superioridade de uma rotina.
 
