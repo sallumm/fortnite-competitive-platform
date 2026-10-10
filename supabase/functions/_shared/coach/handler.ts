@@ -93,6 +93,7 @@ export function coachHandler(deps: {
         );
       }
       const q = classify(input.message, input.exercise_id);
+      if (input.tournament_id) q.intent = "competition";
       const blocked =
         /senha|credencial|diagn[oó]stico|rem[eé]dio|sem dormir|dados.*outro|outra conta/i.test(
           q.message,
@@ -111,10 +112,15 @@ export function coachHandler(deps: {
             p_category: q.category,
             p_exercise: q.exercise_id || null,
           })) as Context);
+      if (!blocked && input.tournament_id)
+        context.tournaments = (await db.rpc("coach_competitive_event", {
+          p_tournament: input.tournament_id,
+        })) as Context["tournaments"];
       const k = retrieve(q.message),
         answer = rulesAnswer(q, context, k.references, k.definitions);
       if (
         !pref.context_enabled &&
+        !input.tournament_id &&
         !blocked &&
         ["report", "agenda", "competition"].includes(q.intent)
       ) {
@@ -131,6 +137,15 @@ export function coachHandler(deps: {
       if (!pref.context_enabled && !blocked)
         answer.notice =
           "Personalização desativada. Autorize o uso dos registros para relatórios e agenda individuais.";
+      if (input.tournament_id && !blocked) {
+        answer.scope = [
+          "Evento público selecionado",
+          "Fonte e validade editorial",
+        ];
+        if (!pref.context_enabled)
+          answer.notice =
+            "Consulta ao catálogo público; registros privados não foram consultados.";
+      }
       if (external) {
         try {
           if (q.intent === "competition") {

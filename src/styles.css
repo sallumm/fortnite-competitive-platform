@@ -3550,3 +3550,55 @@ legend {
     align-items: flex-start;
   }
 }
+/* Competitive intelligence extends the existing visual system. */
+.competitive-intelligence {
+  margin: 28px 0;
+}
+.phase-list {
+  margin: 28px 0;
+  display: grid;
+  gap: 12px;
+}
+.phase-list .panel {
+  padding: 18px;
+}
+.competition-preparation {
+  display: grid;
+  gap: 16px;
+}
+.competition-preparation fieldset,
+.competitive-intelligence fieldset {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.competition-preparation .checkbox-label {
+  flex-wrap: wrap;
+}
+.preparation-links {
+  display: grid;
+  gap: 10px;
+}
+.preparation-links a {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+details.panel {
+  margin: 18px 0;
+}
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+@media (max-width: 640px) {
+  .phase-list .row {
+    flex-wrap: wrap;
+  }
+  .phase-list .button {
+    width: 100%;
+  }
+  .competition-preparation .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

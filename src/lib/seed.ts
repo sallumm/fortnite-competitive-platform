@@ -5,6 +5,7 @@ import type {
   Article,
   Tournament,
 } from "./types";
+import { competitiveSeed } from "./competitive-seed";
 const verified = "2026-10-10T03:00:00Z";
 export const uid = (n: number) =>
   `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`;
@@ -301,7 +302,49 @@ const tournaments: Tournament[] = [
     published: true,
   },
 ];
-export const seed: Catalog = { exercises, articles, tournaments };
+export const seed: Catalog = {
+  exercises: [
+    ...exercises.map((e) =>
+      e.id === uid(5)
+        ? {
+            ...e,
+            skills: ["aim", "editing", "piece control"],
+            competitive_goal:
+              "Revisar execução com opções consistentes antes de treinos de construção.",
+            map_type: "Hub de exercícios",
+            requirements: "Fortnite Criativo; registrar cenário e opções.",
+          }
+        : e.id === uid(2)
+          ? {
+              ...e,
+              skills: ["editing", "resets"],
+              competitive_goal: "Consistência em sequências de edição.",
+              map_type: "Hub de mecânicas",
+              requirements: "Fortnite Criativo; manter a mesma sequência.",
+            }
+          : e,
+    ),
+    ...competitiveSeed.exercises.filter(
+      (e) => !exercises.some((x) => x.map_code === e.map_code),
+    ),
+  ],
+  articles: [...articles, ...competitiveSeed.articles],
+  tournaments: [
+    ...tournaments.map((t) =>
+      t.id === uid(204)
+        ? {
+            ...t,
+            result_summary:
+              "SwizzY e Pixie conquistaram o Global 2026, segundo comunicado da Team Vitality publicado em 28 de setembro. Fonte: organização participante; classificação completa e pontos não cadastrados.",
+            result_source_url:
+              "https://vitality.gg/en-eu/blogs/presse/havok-by-vitality-remporte-le-fortnite-global-championship-2026",
+            result_verified_at: verified,
+          }
+        : t,
+    ),
+    ...competitiveSeed.tournaments,
+  ],
+};
 export function emptyPlayer(): PlayerData {
   return {
     profile: null,

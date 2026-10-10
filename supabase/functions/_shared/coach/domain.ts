@@ -95,6 +95,21 @@ export type Context = {
     verified_at: string;
   }[];
   tournaments?: {
+    result_summary?: string | null;
+    result_source_url?: string | null;
+    result_verified_at?: string | null;
+    format?: string;
+    rules?: string;
+    mode?: string;
+    region?: string;
+    confirmation?: string;
+    phases?: {
+      title: string;
+      date: string;
+      starts_at: string | null;
+      status: string;
+      valid_until: string;
+    }[];
     id: string;
     slug: string;
     title: string;
@@ -330,6 +345,52 @@ export function rulesAnswer(
       add("Sem favoritos encontrados", [
         "Salve um campeonato na área competitiva para acompanhar sua preparação.",
       ]);
+    for (const t of c.tournaments || []) {
+      if (t.result_summary && t.result_source_url && t.result_verified_at) {
+        add("Resultado registrado · fonte identificada", [
+          t.result_summary,
+          "Verificado em " +
+            t.result_verified_at.slice(0, 10) +
+            "; não representa uma classificação completa.",
+        ]);
+        ref(
+          "result:" + t.id,
+          "Fonte do resultado",
+          t.result_source_url,
+          t.result_verified_at,
+        );
+      }
+      const stale =
+        Date.parse(t.valid_until) < Date.now() ||
+        t.confirmation === "unconfirmed";
+      if (stale)
+        add("Registro exige revisão", [
+          `${t.title}: dados históricos ou não confirmados. Confira a fonte oficial antes de planejar.`,
+        ]);
+      else {
+        if (t.format && t.rules)
+          add(t.title, [
+            `Formato editorial verificado: ${t.format} · ${t.mode} · ${t.region}.`,
+            t.rules,
+          ]);
+        if (t.phases?.length)
+          add(
+            "Fases cadastradas",
+            t.phases
+              .filter((p) => Date.parse(p.valid_until) >= Date.now())
+              .slice(0, 10)
+              .map(
+                (p) =>
+                  `${p.title}: ${p.date} · ${p.status} · ${p.starts_at || "horário não confirmado"}`,
+              ),
+          );
+      }
+      ref(
+        "prepare:" + t.id,
+        "Preparar e adicionar à agenda com confirmação",
+        "/competitive/" + t.slug + "#preparar",
+      );
+    }
     add("Verificação atual necessária", [
       "Formatos, regulamentos, horários e resultados podem mudar. Não uso memória do modelo para confirmá-los. Abra a fonte oficial; a integração de consulta ao vivo é usada somente quando configurada e retorna conteúdo verificável.",
     ]);

@@ -29,6 +29,10 @@ export interface Profile {
   reminder_enabled: boolean;
 }
 export interface Exercise {
+  skills?: string[];
+  competitive_goal?: string;
+  map_type?: string;
+  requirements?: string;
   id: string;
   title: string;
   creator: string;
@@ -101,7 +105,25 @@ export interface Xp {
   amount: number;
   created_at: string;
 }
+export interface TournamentPhase {
+  key: string;
+  title: string;
+  kind: "registration" | "qualifier" | "session" | "final";
+  date: string;
+  starts_at: string | null;
+  ends_at: string | null;
+  status: "scheduled" | "finished" | "postponed" | "cancelled";
+  source_url: string;
+  verified_at: string;
+  valid_until: string;
+}
 export interface Tournament {
+  confirmation?: "confirmed" | "unconfirmed";
+  season_label?: string;
+  phases?: TournamentPhase[];
+  result_summary?: string | null;
+  result_source_url?: string | null;
+  result_verified_at?: string | null;
   id: string;
   slug: string;
   title: string;
@@ -123,6 +145,10 @@ export interface Tournament {
   published: boolean;
 }
 export interface Article {
+  topic?: string;
+  tags?: string[];
+  evidence?: "official" | "analysis" | "opinion";
+  source_published_at?: string | null;
   id: string;
   slug: string;
   title: string;

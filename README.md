@@ -1,10 +1,10 @@
-# Clutchfolio 2.0 — espaço pessoal de treinamento competitivo
+# Clutchfolio 4.0 — Competitive Intelligence
 
-Projeto novo, independente, em português brasileiro. Nome de trabalho sujeito a pesquisa formal de marca. Interface carvão/verde-lima/violeta, modo claro, layouts responsivos, foco visível e suporte a movimento reduzido. Nenhum repositório existente foi alterado.
+Evolução do projeto existente, em português brasileiro. Nome de trabalho sujeito a pesquisa formal de marca. Interface carvão/verde-lima/violeta, modo claro, layouts responsivos, foco visível e suporte a movimento reduzido. Recursos das versões anteriores preservados.
 
 ## Estado da entrega
 
-A evolução 2.0 está na branch `feat/personal-performance-2`, preparada para revisão por Pull Request. A demonstração continua independente do Supabase e armazena apenas seus testes neste navegador. Site e serviços hospedados serão configurados em uma etapa posterior.
+A versão 4.0 está na branch `feat/competitive-intelligence`, sobre o Clutch Coach 3.0. Central com fases, preparação confirmada, preferências regionais, checklist privado, fontes e revisões editoriais. Veja [COMPETITIVE-INTELLIGENCE.md](COMPETITIVE-INTELLIGENCE.md) para pesquisa, arquitetura, testes e limitações. Hospedagem e aplicação das migrations no Supabase de produção ficam para a etapa de configuração.
 
 ## Organização pessoal 2.0
 

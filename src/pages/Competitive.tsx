@@ -1,6 +1,11 @@
+import { CompetitivePreferences } from "../components/CompetitivePreferences";
+import { currentEvent, recentArticles } from "../lib/competitive";
+import { dateInZone } from "../lib/calendar";
+import { CompetitionPreparation } from "../components/CompetitionPreparation";
+import { TournamentPhases } from "../components/TournamentPhases";
 import { CoachAccess } from "../components/CoachAccess";
 import { useSEO } from "../lib/seo";
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -41,9 +46,9 @@ export default function Competitive() {
   const [mode, setMode] = useState("all");
   const [category, setCategory] = useState("all");
   const [view, setView] = useState("overview");
+  const [preferred, setPreferred] = useState<string[]>(["BR"]);
   const [prep, setPrep] = useState<Tournament | null>(null);
-  const [plan, setPlan] = useState("");
-  const [time, setTime] = useState("");
+  const [phaseKey, setPhaseKey] = useState<string | undefined>();
   const selected = s.catalog.tournaments.find((t) => t.slug === slug);
   const bookmarked = (id: string) =>
     s.data.bookmarks.find((b) => b.kind === "tournament" && b.target_id === id);
@@ -69,23 +74,7 @@ export default function Competitive() {
       return;
     }
     setPrep(t);
-    setPlan(s.data.plans[0]?.id || "");
-  };
-  const prepSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    s.run(async () => {
-      if (prep && s.data.profile) {
-        await s.save("schedules", {
-          id: crypto.randomUUID(),
-          user_id: s.data.profile.id,
-          plan_id: plan,
-          starts_at: new Date(time).toISOString(),
-          tournament_id: prep.id,
-        });
-        setPrep(null);
-        navigate("/app/planner");
-      }
-    });
+    setPhaseKey(undefined);
   };
   const card = (t: Tournament) => (
     <article className="tournament-card panel" key={t.id}>
@@ -99,7 +88,9 @@ export default function Competitive() {
       <div className="tournament-content">
         <div className="row between">
           <Badge tone={eventStatus(t) === "live" ? "green" : "neutral"}>
-            {statuses[eventStatus(t)]}
+            {t.confirmation === "unconfirmed"
+              ? "Não confirmado"
+              : statuses[eventStatus(t)]}
           </Badge>
           <button
             className="icon-button"
@@ -148,50 +139,7 @@ export default function Competitive() {
       title="Preparar um treino para este evento"
       onClose={() => setPrep(null)}
     >
-      {s.data.plans.length ? (
-        <form onSubmit={prepSubmit}>
-          <p>
-            {prep.title}. Escolha quando deseja praticar, preservando descanso e
-            outros compromissos.
-          </p>
-          <label>
-            Rotina
-            <select
-              value={plan}
-              required
-              onChange={(e) => setPlan(e.target.value)}
-            >
-              {s.data.plans.map((p) => (
-                <option value={p.id} key={p.id}>
-                  {p.title}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Data e horário do treino
-            <input
-              type="datetime-local"
-              required
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-            />
-            <small>
-              Entrada no fuso deste navegador. Não altera o horário do
-              campeonato.
-            </small>
-          </label>
-          <button disabled={s.busy} className="button primary full">
-            Adicionar ao meu planejamento
-          </button>
-        </form>
-      ) : (
-        <Empty
-          title="Crie uma rotina primeiro"
-          to="/app/planner"
-          label="Abrir planejador"
-        />
-      )}
+      <CompetitionPreparation event={prep} phaseKey={phaseKey} />
     </Modal>
   );
   if (selected)
@@ -202,7 +150,8 @@ export default function Competitive() {
           Central competitiva
         </Link>
         <CoachAccess
-          question={`Como me preparar para ${selected.title}?`}
+          question={`Como funciona o formato de ${selected.title}?`}
+          tournamentId={selected.id}
           label="Preparar com o Coach"
         />
         <Heading
@@ -264,11 +213,32 @@ export default function Competitive() {
             </a>
             <h2>Premiação</h2>
             <p>{selected.prize}</p>
+            <TournamentPhases
+              event={selected}
+              timezone={
+                s.data.profile?.timezone ||
+                Intl.DateTimeFormat().resolvedOptions().timeZone
+              }
+              onAdd={(key) => {
+                prepare(selected);
+                setPhaseKey(key);
+              }}
+            />
             <h2>Resultados e classificação</h2>
-            <p>
-              Não há resultados verificados cadastrados para este evento.
-              Consulte a fonte oficial.
-            </p>
+            {selected.result_summary ? (
+              <>
+                <p>{selected.result_summary}</p>
+                <Source
+                  url={selected.result_source_url!}
+                  date={selected.result_verified_at!}
+                />
+              </>
+            ) : (
+              <p>
+                Não há resultados verificados cadastrados para este evento.
+                Consulte a fonte oficial.
+              </p>
+            )}
             <Source
               url={selected.source_url}
               date={selected.verified_at}
@@ -281,7 +251,7 @@ export default function Competitive() {
               </div>
             )}
           </article>
-          <aside className="panel detail-aside">
+          <aside id="preparar" className="panel detail-aside">
             <span className="eyebrow">DO CONTEXTO À PRÁTICA</span>
             <h3>Prepare sua próxima sessão.</h3>
             <p>
@@ -293,7 +263,7 @@ export default function Competitive() {
               onClick={() => prepare(selected)}
             >
               <CalendarPlus size={16} />
-              Planejar treino
+              Preparar para competição
             </button>
             <button
               className="button full"
@@ -346,7 +316,8 @@ export default function Competitive() {
       t.title.toLowerCase().includes(query.toLowerCase()) &&
       (region === "all" || t.region === region) &&
       (mode === "all" || t.mode === mode) &&
-      (category === "all" || t.category === category),
+      (category === "all" || t.category === category) &&
+      (view !== "preferred" || preferred.includes(t.region)),
   );
   return (
     <>
@@ -401,11 +372,95 @@ export default function Competitive() {
         atualização em tempo real. Cada evento mostra fonte e data de
         verificação.
       </div>
+      <CompetitivePreferences onChange={setPreferred} />
+      {view === "overview" && (
+        <section className="competitive-intelligence">
+          <div className="two-grid">
+            <div className="panel">
+              <span className="eyebrow">PRÓXIMAS SESSÕES VERIFICADAS</span>
+              {s.catalog.tournaments
+                .filter((t) => currentEvent(t))
+                .flatMap((t) =>
+                  (t.phases || [])
+                    .filter(
+                      (p) =>
+                        p.status === "scheduled" &&
+                        p.date >= new Date().toISOString().slice(0, 10) &&
+                        !isStale(p.verified_at, p.valid_until),
+                    )
+                    .map((p) => ({ t, p })),
+                )
+                .sort((a, b) => a.p.date.localeCompare(b.p.date))
+                .slice(0, 4)
+                .map(({ t, p }) => (
+                  <Link
+                    className="list-row"
+                    key={t.id + p.key}
+                    to={"/competitive/" + t.slug}
+                  >
+                    <div>
+                      <strong>
+                        {p.title} · {t.region}
+                      </strong>
+                      <small>
+                        {dateLabel(p.date)} ·{" "}
+                        {p.starts_at
+                          ? "horário confirmado"
+                          : "sem horário confirmado"}
+                      </small>
+                    </div>
+                  </Link>
+                ))}
+            </div>
+            <div className="panel">
+              <span className="eyebrow">EM ANDAMENTO</span>
+              {s.catalog.tournaments.filter((t) => eventStatus(t) === "live")
+                .length ? (
+                s.catalog.tournaments
+                  .filter((t) => eventStatus(t) === "live")
+                  .map(card)
+              ) : (
+                <p>
+                  Nenhuma sessão em andamento foi confirmada nos registros
+                  disponíveis.
+                </p>
+              )}
+              <Link
+                to="/competitive"
+                onClick={() => setView("favorites")}
+                className="text-link"
+              >
+                Conferir meus favoritos
+              </Link>
+            </div>
+          </div>
+          <h2>Resultados e organizações · fontes identificadas</h2>
+          <div className="two-grid">
+            {recentArticles(s.catalog.articles)
+              .filter(
+                (a) => a.topic === "results" || a.topic === "organizations",
+              )
+              .slice(0, 2)
+              .map((a) => (
+                <Link key={a.id} to={"/news/" + a.slug} className="panel">
+                  <Badge>Comunicado da organização</Badge>
+                  <h3>{a.title}</h3>
+                  <p>{a.summary}</p>
+                  <small>
+                    {dateLabel(a.published_at)} · verificado{" "}
+                    {dateLabel(a.verified_at)}
+                  </small>
+                </Link>
+              ))}
+          </div>
+        </section>
+      )}
       <div className="tabs page-tabs">
         {[
           ["overview", "Visão geral"],
           ["calendar", "Calendário"],
           ["favorites", "Salvos"],
+          ["preferred", "Minhas regiões"],
         ].map(([v, l]) => (
           <button key={v} aria-pressed={view === v} onClick={() => setView(v)}>
             {l}
@@ -458,19 +513,37 @@ export default function Competitive() {
       </div>
       {view === "calendar" ? (
         <Calendar
-          items={list.map((t) => ({
-            id: t.id,
-            date: t.starts_at
-              ? new Intl.DateTimeFormat("en-CA", {
-                  timeZone:
-                    s.data.profile?.timezone ||
-                    Intl.DateTimeFormat().resolvedOptions().timeZone,
-                }).format(new Date(t.starts_at))
-              : t.start_date,
-            title: t.title,
-            tone: "purple",
-            onClick: () => navigate("/competitive/" + t.slug),
-          }))}
+          items={list.flatMap((t) =>
+            t.phases?.length
+              ? t.phases.map((p) => ({
+                  id: t.id + "-" + p.key,
+                  date: p.starts_at
+                    ? dateInZone(
+                        p.starts_at,
+                        s.data.profile?.timezone ||
+                          Intl.DateTimeFormat().resolvedOptions().timeZone,
+                      )
+                    : p.date,
+                  title: t.title + " · " + p.title,
+                  tone: "purple",
+                  onClick: () => navigate("/competitive/" + t.slug),
+                }))
+              : [
+                  {
+                    id: t.id,
+                    date: t.starts_at
+                      ? dateInZone(
+                          t.starts_at,
+                          s.data.profile?.timezone ||
+                            Intl.DateTimeFormat().resolvedOptions().timeZone,
+                        )
+                      : t.start_date,
+                    title: t.title,
+                    tone: "purple",
+                    onClick: () => navigate("/competitive/" + t.slug),
+                  },
+                ],
+          )}
         />
       ) : (
         <>
@@ -507,7 +580,8 @@ export default function Competitive() {
       <div className="two-grid">
         {s.catalog.articles
           .filter((a) => a.kind !== "lesson")
-          .slice(0, 2)
+          .sort((a, b) => b.published_at.localeCompare(a.published_at))
+          .slice(0, 4)
           .map((a) => (
             <Link
               className="panel editorial-mini"

@@ -1,3 +1,4 @@
+import { fold } from "./calendar";
 import type { Exercise, Profile, Step, Training, Tournament } from "./types";
 export const rankNames = [
   "Rookie",
@@ -81,9 +82,27 @@ export function isStale(
     : now.getTime() - new Date(verifiedAt).getTime() > 90 * 864e5;
 }
 export function eventStatus(t: Tournament, now = new Date()) {
+  if (t.status === "finished") return "finished";
   if (t.status === "cancelled" || t.status === "postponed") return t.status;
   if (t.ends_at && new Date(t.ends_at) < now) return "finished";
   if (
+    !t.starts_at &&
+    t.confirmation !== "unconfirmed" &&
+    !isStale(t.verified_at, t.valid_until, now) &&
+    t.phases?.some(
+      (p) =>
+        p.status === "scheduled" &&
+        !isStale(p.verified_at, p.valid_until, now) &&
+        p.starts_at &&
+        p.ends_at &&
+        Date.parse(p.starts_at) <= +now &&
+        Date.parse(p.ends_at) >= +now,
+    )
+  )
+    return "live";
+  if (
+    t.confirmation !== "unconfirmed" &&
+    !isStale(t.verified_at, t.valid_until, now) &&
     t.starts_at &&
     t.ends_at &&
     new Date(t.starts_at) <= now &&
@@ -150,10 +169,20 @@ export function tournamentICS(t: Tournament) {
     "SUMMARY:" + escapeICS(t.title),
     "DESCRIPTION:" + escapeICS(desc),
     "URL:" + t.source_url,
+    ...(t.status === "cancelled"
+      ? ["STATUS:CANCELLED"]
+      : [
+          "STATUS:" +
+            (t.confirmation === "unconfirmed" || t.status === "postponed"
+              ? "TENTATIVE"
+              : "CONFIRMED"),
+        ]),
     "END:VEVENT",
     "END:VCALENDAR",
     "",
-  ].join("\r\n");
+  ]
+    .map(fold)
+    .join("\r\n");
 }
 export function download(content: string, name: string, type = "text/plain") {
   const url = URL.createObjectURL(new Blob([content], { type }));

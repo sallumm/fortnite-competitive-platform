@@ -172,11 +172,19 @@ export default function Coach() {
     try {
       const exercise = params.get("exercise") || undefined;
       const answer = s.demo
-        ? demoAnswer(s.data, s.catalog, question, pref, exercise)
+        ? demoAnswer(
+            s.data,
+            s.catalog,
+            question,
+            pref,
+            exercise,
+            params.get("tournament") || undefined,
+          )
         : ((await call({
             op: "ask",
             message: question,
             exercise_id: exercise,
+            tournament_id: params.get("tournament") || undefined,
             conversation_id: pref.history_enabled ? conversation : undefined,
           })) as Answer);
       if (!alive.current) return;
