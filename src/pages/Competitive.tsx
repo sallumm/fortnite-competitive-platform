@@ -341,6 +341,9 @@ export default function Competitive() {
           </a>
         }
       />
+      <Link className="button" to="/competitive/meta">
+        Meta Center: contexto, versões e treinamento
+      </Link>
       <div className="competitive-hero panel">
         <div>
           <Badge tone="green">FNCS · CONTEXTO 2026</Badge>

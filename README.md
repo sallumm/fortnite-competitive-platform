@@ -187,3 +187,5 @@ A Academy inclui `/academy/research`, com taxonomia, glossário, referências cl
 `/academy/curriculum` organiza aulas originais por nível editorial (0–5), modalidade e fase, preservando o CMS e o catálogo. Pré-requisitos são sugestões flexíveis. Fontes, critérios de auto-revisão e escopo temporal aparecem em cada aula; abrir uma aula não certifica habilidade ou concede XP.
 
 Pesquisa, arquitetura, mapa de dependências e lacunas: [docs/mastery/RESEARCH.md](docs/mastery/RESEARCH.md), [ARCHITECTURE.md](docs/mastery/ARCHITECTURE.md) e [COVERAGE.md](docs/mastery/COVERAGE.md). Aplicação incremental: migrations 012–013, depois de 001–011, primeiro em staging. Conferir seed com `node scripts/mastery-seed.mjs --check`.
+
+Base de meta contextual: [pesquisa e implementação](docs/meta/CURRENT_META_RESEARCH.md), [arquitetura](docs/meta/IMPLEMENTATION.md) e [lacunas](docs/meta/META_KNOWLEDGE_GAPS.md). Acesso público em `/competitive/meta`.

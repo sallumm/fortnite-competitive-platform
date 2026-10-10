@@ -4,6 +4,7 @@ import { reviewPending, type ExerciseResearch } from "../lib/training-research";
 import { EditorialRevisions } from "../components/EditorialRevisions";
 import { topics } from "../lib/competitive";
 import { isStale } from "../lib/logic";
+import { Link } from "react-router-dom";
 import { useState, type FormEvent } from "react";
 import { Edit3, Plus, Trash2 } from "lucide-react";
 import { useStore } from "../lib/store";
@@ -218,6 +219,9 @@ export default function Admin() {
           </button>
         }
       />
+      <Link className="button" to="/competitive/meta">
+        Revisar base de meta
+      </Link>
       <div className="tabs page-tabs">
         {(["exercises", "articles", "tournaments"] as Table[]).map((t) => (
           <button

@@ -16,6 +16,7 @@ const paths = [
   "/",
   "/library",
   "/competitive",
+  "/competitive/meta",
   "/news",
   "/academy",
   "/academy/research",

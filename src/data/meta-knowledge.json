@@ -1,0 +1,1517 @@
+{
+  "investigated_at": "2026-10-10T21:00:00Z",
+  "versions": [
+    {
+      "id": "br-42-4200",
+      "season": "Capítulo 7 · Temporada 4: Override",
+      "patch": "42.00",
+      "released_on": "2026-08-20"
+    },
+    {
+      "id": "br-42-4210",
+      "season": "Capítulo 7 · Temporada 4: Override",
+      "patch": "42.10",
+      "released_on": "2026-09-03"
+    },
+    {
+      "id": "br-42-4220",
+      "season": "Capítulo 7 · Temporada 4: Override",
+      "patch": "42.20",
+      "released_on": "2026-09-17"
+    },
+    {
+      "id": "br-42-4230",
+      "season": "Capítulo 7 · Temporada 4: Override",
+      "patch": "42.30",
+      "released_on": "2026-10-01"
+    },
+    {
+      "id": "reload-kado-4230",
+      "season": "Reload: Nitemare Island — Kado’s Curse",
+      "patch": "42.30",
+      "released_on": "2026-10-08"
+    }
+  ],
+  "modes": [
+    {
+      "id": "br-build",
+      "title": "Battle Royale com Construção",
+      "construction": true
+    },
+    {
+      "id": "br-zero",
+      "title": "Construção Zero",
+      "construction": false
+    },
+    {
+      "id": "reload-build",
+      "title": "Reload com Construção",
+      "construction": true
+    },
+    {
+      "id": "reload-zero",
+      "title": "Reload Construção Zero",
+      "construction": false
+    },
+    {
+      "id": "blitz",
+      "title": "Blitz Royale",
+      "construction": false
+    }
+  ],
+  "formats": [
+    {
+      "id": "unspecified",
+      "title": "Formato não especificado",
+      "size": null
+    },
+    {
+      "id": "solo",
+      "title": "Solo",
+      "size": 1
+    },
+    {
+      "id": "duo",
+      "title": "Duplas",
+      "size": 2
+    },
+    {
+      "id": "trio",
+      "title": "Trios",
+      "size": 3
+    },
+    {
+      "id": "squad",
+      "title": "Esquadrões",
+      "size": 4
+    }
+  ],
+  "contexts": [
+    {
+      "id": "br-4200",
+      "version_id": "br-42-4200",
+      "mode_id": "br-build",
+      "format_id": "unspecified",
+      "play_context": "casual",
+      "region": "unspecified",
+      "event_key": null
+    },
+    {
+      "id": "br-4210",
+      "version_id": "br-42-4210",
+      "mode_id": "br-build",
+      "format_id": "unspecified",
+      "play_context": "casual",
+      "region": "unspecified",
+      "event_key": null
+    },
+    {
+      "id": "br-4220",
+      "version_id": "br-42-4220",
+      "mode_id": "br-build",
+      "format_id": "unspecified",
+      "play_context": "casual",
+      "region": "unspecified",
+      "event_key": null
+    },
+    {
+      "id": "br-4230",
+      "version_id": "br-42-4230",
+      "mode_id": "br-build",
+      "format_id": "unspecified",
+      "play_context": "casual",
+      "region": "unspecified",
+      "event_key": null
+    },
+    {
+      "id": "br-ranked-4230",
+      "version_id": "br-42-4230",
+      "mode_id": "br-build",
+      "format_id": "unspecified",
+      "play_context": "ranked",
+      "region": "unspecified",
+      "event_key": null
+    },
+    {
+      "id": "zero-4220",
+      "version_id": "br-42-4220",
+      "mode_id": "br-zero",
+      "format_id": "unspecified",
+      "play_context": "casual",
+      "region": "unspecified",
+      "event_key": null
+    },
+    {
+      "id": "zero-4230",
+      "version_id": "br-42-4230",
+      "mode_id": "br-zero",
+      "format_id": "unspecified",
+      "play_context": "casual",
+      "region": "unspecified",
+      "event_key": null
+    },
+    {
+      "id": "reload-4230",
+      "version_id": "reload-kado-4230",
+      "mode_id": "reload-build",
+      "format_id": "unspecified",
+      "play_context": "casual",
+      "region": "unspecified",
+      "event_key": null
+    },
+    {
+      "id": "reload-ranked-4230",
+      "version_id": "reload-kado-4230",
+      "mode_id": "reload-build",
+      "format_id": "unspecified",
+      "play_context": "ranked",
+      "region": "unspecified",
+      "event_key": null
+    },
+    {
+      "id": "reload-zero-4230",
+      "version_id": "reload-kado-4230",
+      "mode_id": "reload-zero",
+      "format_id": "unspecified",
+      "play_context": "casual",
+      "region": "unspecified",
+      "event_key": null
+    },
+    {
+      "id": "victory-br",
+      "version_id": "br-42-4230",
+      "mode_id": "br-build",
+      "format_id": "solo",
+      "play_context": "tournament",
+      "region": "BR",
+      "event_key": "solo-victory-cup-c7s4"
+    },
+    {
+      "id": "fncs-duos",
+      "version_id": "br-42-4230",
+      "mode_id": "br-build",
+      "format_id": "duo",
+      "play_context": "tournament",
+      "region": "unspecified",
+      "event_key": "fncs-2026-duos"
+    },
+    {
+      "id": "fncs-solo",
+      "version_id": "br-42-4230",
+      "mode_id": "br-build",
+      "format_id": "solo",
+      "play_context": "tournament",
+      "region": "unspecified",
+      "event_key": "fncs-solos-2026"
+    }
+  ],
+  "sources": [
+    {
+      "id": "override-launch",
+      "title": "Override: anúncio de temporada",
+      "url": "https://www.fortnite.com/news/fortnite-override-break-the-rules-change-the-game",
+      "kind": "official",
+      "access": "page",
+      "published_on": "2026-08-20",
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Texto consultado; não houve teste dentro do Fortnite. A fonte não confirma todos os contextos competitivos."
+    },
+    {
+      "id": "br-4200",
+      "title": "v42.00: notas oficiais",
+      "url": "https://communities.epicgames.com/thread/v42-00-fortnite-override-battle-royale-update-notes/L5R3/",
+      "kind": "official",
+      "access": "page",
+      "published_on": null,
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Texto da equipe Epic; atualização inline de 28/08. Página exibe idade relativa: publicação exata não inferida."
+    },
+    {
+      "id": "br-4210",
+      "title": "v42.10: notas oficiais",
+      "url": "https://communities.epicgames.com/thread/v42-10-fortnite-override-battle-royale-update-notes/y3Ub",
+      "kind": "official",
+      "access": "page",
+      "published_on": null,
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Texto consultado; não houve teste dentro do Fortnite. A fonte não confirma todos os contextos competitivos."
+    },
+    {
+      "id": "br-4220",
+      "title": "v42.20: notas oficiais (espanhol)",
+      "url": "https://communities.epicgames.com/thread/v42-20-fortnite-override-battle-royale-update-notes/g1Wm?lang=th&locale=es-ES",
+      "kind": "official",
+      "access": "page",
+      "published_on": null,
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Texto consultado; não houve teste dentro do Fortnite. A fonte não confirma todos os contextos competitivos."
+    },
+    {
+      "id": "ecosystem-4230",
+      "title": "v42.30: lançamento em 1º de outubro",
+      "url": "https://dev.epicgames.com/documentation/en-us/fortnite/42-30-fortnite-ecosystem-updates-and-release-notes",
+      "kind": "official",
+      "access": "page",
+      "published_on": "2026-10-01",
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Documentação UEFN confirma versão/data. Itens do Criativo não demonstram disponibilidade em BR ou torneios."
+    },
+    {
+      "id": "fortnitemares-news",
+      "title": "Fortnitemares: anúncio oficial",
+      "url": "https://www.fortnite.com/news/the-corruption-spreads-in-fortnitemares-2026",
+      "kind": "official",
+      "access": "page",
+      "published_on": "2026-10-01",
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Texto consultado; não houve teste dentro do Fortnite. A fonte não confirma todos os contextos competitivos."
+    },
+    {
+      "id": "br-fortnitemares",
+      "title": "Fortnite: Pesadelos — notas da equipe Epic",
+      "url": "https://communities.epicgames.com/thread/fortnitemares-2026-curses-battle-royale-reload-and-more/L4S8?lang=pt-br",
+      "kind": "official",
+      "access": "page",
+      "published_on": null,
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Texto consultado; não houve teste dentro do Fortnite. A fonte não confirma todos os contextos competitivos."
+    },
+    {
+      "id": "reload-4230",
+      "title": "Reload 42.30: transição de temporada",
+      "url": "https://communities.epicgames.com/thread/fortnite-reload-42-30-update-notes/u8cA",
+      "kind": "official",
+      "access": "page",
+      "published_on": null,
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Texto consultado; não houve teste dentro do Fortnite. A fonte não confirma todos os contextos competitivos."
+    },
+    {
+      "id": "reload-kado",
+      "title": "Reload: Kado’s Curse — notas atuais",
+      "url": "https://communities.epicgames.com/thread/fortnitemares-haunts-reload/P64j?lang=id",
+      "kind": "official",
+      "access": "page",
+      "published_on": null,
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Texto Epic com correção inline de rotação. Data de publicação relativa não convertida; lançamento 08/10 confirmado separadamente."
+    },
+    {
+      "id": "reload-store",
+      "title": "Reload: modalidades e formatos gerais",
+      "url": "https://store.epicgames.com/p/fortnite--reload",
+      "kind": "official",
+      "access": "listing",
+      "published_on": null,
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Listagem oficial: não garante fila específica em toda região ou evento."
+    },
+    {
+      "id": "victory-s4",
+      "title": "Victory Cups C7S4 — regulamento",
+      "url": "https://www.fortnite.com/competitive/rules-guidelines/rules-library/fortnite-victory-cups-chapter-7-season-4-official-rules?region=NAC",
+      "kind": "official",
+      "access": "page",
+      "published_on": "2026-08-20",
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Texto consultado; não houve teste dentro do Fortnite. A fonte não confirma todos os contextos competitivos."
+    },
+    {
+      "id": "fncs-duos-2026",
+      "title": "FNCS 2026 — circuito de duplas",
+      "url": "https://www.fortnite.com/competitive/rules-guidelines/rules-library/fortnite-championship-series-fncs-2026-official-rules/?region=NAC",
+      "kind": "official",
+      "access": "page",
+      "published_on": "2026-03-19",
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Texto consultado; não houve teste dentro do Fortnite. A fonte não confirma todos os contextos competitivos."
+    },
+    {
+      "id": "khanada-practice",
+      "title": "Khanada: prática e adaptação (Kayla Sue, Dignitas)",
+      "url": "https://dignitas.gg/articles/how-fortnite-pros-actually-practice-in-2026-featuring-khanada",
+      "kind": "professional",
+      "access": "page",
+      "published_on": "2026-09-11",
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Entrevista textual; experiência individual, sem experimento causal ou análise audiovisual. Não comprova o loot atual."
+    },
+    {
+      "id": "elite-drop-study",
+      "title": "Elite Esports: análise de drops Override",
+      "url": "https://eliteesports.gg/fortnite/map",
+      "kind": "analysis",
+      "access": "page",
+      "published_on": null,
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Análise própria do autor em EU/NAC Performance Evaluation, corpus de 24/08. Dados brutos não reanalisados; não generalizar para BR, outro evento ou v42.30."
+    },
+    {
+      "id": "video-mechanics",
+      "title": "How to ACTUALLY Get Fast Mechanics in 2026",
+      "url": "https://www.youtube.com/watch?v=N1N3pA-Etb0",
+      "kind": "professional",
+      "access": "metadata",
+      "published_on": null,
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Somente título/footer retornados. Autor, transcrição e jogabilidade não confirmados; excluído de afirmações aprovadas."
+    },
+    {
+      "id": "video-pending",
+      "title": "Vídeo fornecido: acesso indisponível",
+      "url": "https://www.youtube.com/watch?v=sk3yKXim6IY",
+      "kind": "professional",
+      "access": "unavailable",
+      "published_on": null,
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Falha de acesso: nenhum título, autor ou conteúdo inferido."
+    },
+    {
+      "id": "ecosystem-4210",
+      "title": "Epic: data de lançamento v42.10",
+      "url": "https://dev.epicgames.com/documentation/fortnite/42-10-fortnite-ecosystem-updates-and-release-notes",
+      "kind": "official",
+      "access": "page",
+      "published_on": "2026-09-03",
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Confirma data do patch, não disponibilidade do inventário UEFN em Battle Royale."
+    },
+    {
+      "id": "ecosystem-4220",
+      "title": "Epic: data de lançamento v42.20",
+      "url": "https://dev.epicgames.com/documentation/fortnite/42-20-fortnite-ecosystem-updates-and-release-notes",
+      "kind": "official",
+      "access": "page",
+      "published_on": "2026-09-17",
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Confirma data do patch, não disponibilidade do inventário UEFN em Battle Royale."
+    },
+    {
+      "id": "fncs-solo-2026",
+      "title": "FNCS Solos 2026 — regulamento próprio",
+      "url": "https://www.fortnite.com/competitive/rules-guidelines/rules-library/fortnite-championship-series-fncs-solos-2026-official-rules?region=NAC",
+      "kind": "official",
+      "access": "page",
+      "published_on": "2026-08-31",
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Regras do evento Solo; não importar requisitos do circuito de duplas."
+    },
+    {
+      "id": "official-trailer",
+      "title": "Trailer oficial de Fortnitemares (embed)",
+      "url": "https://www.youtube-nocookie.com/embed/7qQFLL_DJ7Q",
+      "kind": "official",
+      "access": "metadata",
+      "published_on": null,
+      "verified_at": "2026-10-10T21:00:00Z",
+      "limitations": "Embed ligado pelo anúncio oficial. Ferramenta retornou somente estrutura da página; gameplay, áudio e transcrição não analisados."
+    }
+  ],
+  "entries": [
+    {
+      "id": "meta-001",
+      "subject_key": "season-current",
+      "context_id": "br-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "mechanic",
+      "title": "Temporada e versão verificadas",
+      "category": "general",
+      "body": "Override é a temporada BR investigada. A documentação oficial registra v42.30 em 1º de outubro; não é garantia de ausência de hotfix posterior.",
+      "state": "confirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "override-launch",
+        "ecosystem-4230"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-002",
+      "subject_key": "sonic-sneakers",
+      "context_id": "br-4200",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Sonic Power Sneakers",
+      "category": "mobility",
+      "body": "Spin Dash no chão e Spin Attack no ar.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "br-4200"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-003",
+      "subject_key": "mega-buster",
+      "context_id": "br-4200",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Mega Buster",
+      "category": "equipment",
+      "body": "Canhão com tiros e cargas; interação com movimento descrita no lançamento.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "br-4200"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-004",
+      "subject_key": "midas-masterpiece",
+      "context_id": "br-4200",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Midas’ Masterpiece",
+      "category": "equipment",
+      "body": "Pistola de tiro único; sem tabela numérica cadastrada.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "br-4200"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-005",
+      "subject_key": "tetris-rift",
+      "context_id": "br-4200",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Tetris Rift",
+      "category": "recovery",
+      "body": "Fenda com peças de Tetris e efeito de recuperação.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "br-4200"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-006",
+      "subject_key": "tetris-rift",
+      "context_id": "br-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Tetris Rift: retirada",
+      "category": "recovery",
+      "body": "As notas de Pesadelos listam a Fenda Tetris no cofre.",
+      "state": "confirmed",
+      "availability": "vaulted",
+      "evidence": "official",
+      "source_ids": [
+        "br-fortnitemares"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-007",
+      "subject_key": "sweeper-shotgun",
+      "context_id": "br-4210",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Sweeper Shotgun: reformulação",
+      "category": "equipment",
+      "body": "Dispersão padrão, recarga interrompível, cadência maior; alcance e carregador reduzidos.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "br-4210"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-008",
+      "subject_key": "kingdom-key",
+      "context_id": "br-4220",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Kingdom Key",
+      "category": "equipment",
+      "body": "Combos corpo a corpo e ataque elétrico.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "br-4220"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-009",
+      "subject_key": "sea-salt-ice-cream",
+      "context_id": "br-4220",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Sea-Salt Ice Cream",
+      "category": "recovery",
+      "body": "Recuperação de vida e escudo para aliados próximos.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "br-4220"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-010",
+      "subject_key": "rebecca-guns",
+      "context_id": "br-4220",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Rebecca’s Guns",
+      "category": "equipment",
+      "body": "Combinação de rifle e SMG; variante exótica citada na fonte.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "br-4220"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-011",
+      "subject_key": "rebecca-guns",
+      "context_id": "br-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Armas da Rebecca: ajuste",
+      "category": "equipment",
+      "body": "As notas aumentam dano da SMG e reduzem dispersão/recuo; não fornecem valores.",
+      "state": "confirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "br-fortnitemares"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-012",
+      "subject_key": "bonerattler",
+      "context_id": "br-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Bonerattler SMG",
+      "category": "equipment",
+      "body": "Revela inimigos através de paredes.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "fortnitemares-news"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-013",
+      "subject_key": "freddy-nightmare",
+      "context_id": "br-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Freddy’s Nightmare",
+      "category": "mobility",
+      "body": "Permite teleporte para atacar; obtido no encontro descrito pela Epic.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "fortnitemares-news"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-014",
+      "subject_key": "witch-broom",
+      "context_id": "br-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Vassoura de Bruxa",
+      "category": "mobility",
+      "body": "Retorno listado nas notas; sem parâmetros numéricos registrados.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "br-fortnitemares"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-015",
+      "subject_key": "slap-candy",
+      "context_id": "br-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Bala de Milho do Tapa",
+      "category": "recovery",
+      "body": "Incluída no conjunto de Hacks de Saque publicado.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "br-fortnitemares"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-016",
+      "subject_key": "bonerattler",
+      "context_id": "victory-br",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Bonerattler no Solo Victory Cup",
+      "category": "equipment",
+      "body": "A nota geral diz que apenas parte do loot chega ao competitivo, sem enumerar este evento.",
+      "state": "unconfirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "br-fortnitemares",
+        "victory-s4"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Não há confirmação específica para este torneio; não inferir disponibilidade do BR casual.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-017",
+      "subject_key": "pocket-items",
+      "context_id": "zero-4220",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "mechanic",
+      "title": "Itens de bolso em Construção Zero",
+      "category": "general",
+      "body": "A v42.20 adiciona Shield Keg, Rift-to-Go e Shield Bubble Jr. como opções de recuperação, mobilidade e cobertura.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "br-4220"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-018",
+      "subject_key": "pocket-items",
+      "context_id": "zero-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "mechanic",
+      "title": "Itens de bolso: revisão necessária",
+      "category": "general",
+      "body": "A evidência cadastrada é da v42.20. A composição atual da rotação de bolso ainda precisa de confirmação.",
+      "state": "unconfirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "br-4220"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-019",
+      "subject_key": "stone-sanctum",
+      "context_id": "br-4200",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "location",
+      "title": "Stone Sanctum",
+      "category": "map",
+      "body": "Local anunciado no início de Override.",
+      "state": "confirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "br-4200"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Sem coordenadas licenciadas, inventário garantido ou rota de drop comprovada.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-020",
+      "subject_key": "green-hill-zone",
+      "context_id": "br-4200",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "location",
+      "title": "Green Hill Zone",
+      "category": "map",
+      "body": "O anúncio menciona loops de velocidade.",
+      "state": "confirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "br-4200"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Sem coordenadas licenciadas, inventário garantido ou rota de drop comprovada.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-021",
+      "subject_key": "reality-reign",
+      "context_id": "br-4200",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "location",
+      "title": "Reality’s Reign",
+      "category": "map",
+      "body": "Local anunciado com tubulações e cabos.",
+      "state": "confirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "br-4200"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Sem coordenadas licenciadas, inventário garantido ou rota de drop comprovada.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-022",
+      "subject_key": "nightmare-neighborhood",
+      "context_id": "br-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "location",
+      "title": "Nightmare Neighborhood",
+      "category": "map",
+      "body": "Novo PDI associado ao encontro com Freddy Krueger.",
+      "state": "confirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "fortnitemares-news"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Sem coordenadas licenciadas, inventário garantido ou rota de drop comprovada.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-023",
+      "subject_key": "freaky-fields",
+      "context_id": "br-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "location",
+      "title": "Freaky Fields",
+      "category": "map",
+      "body": "Local citado no anúncio de Pesadelos.",
+      "state": "confirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "fortnitemares-news"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Sem coordenadas licenciadas, inventário garantido ou rota de drop comprovada.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-024",
+      "subject_key": "nitemare-island",
+      "context_id": "reload-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "location",
+      "title": "Nitemare Island: Kado’s Curse",
+      "category": "map",
+      "body": "Mapa atualizado; Kado é encontrado em Terror Turrets.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "reload-kado"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-025",
+      "subject_key": "reload-map-rotation",
+      "context_id": "reload-ranked-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "mechanic",
+      "title": "Rotação de mapas Reload",
+      "category": "map",
+      "body": "A nota inclui Nitemare, Stranger Things e Surf City. Uma correção inline restaura Stranger Things após troca temporária por Oasis; Squid Grounds é anunciado para depois.",
+      "state": "confirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "reload-kado"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Rotação transitória; não transformar anúncio futuro de 15–19/10 em disponibilidade presente.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-026",
+      "subject_key": "morphite-ar",
+      "context_id": "reload-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Morphite Assault Rifle",
+      "category": "equipment",
+      "body": "Retirada listada.",
+      "state": "confirmed",
+      "availability": "vaulted",
+      "evidence": "official",
+      "source_ids": [
+        "reload-kado"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-027",
+      "subject_key": "shield-keg",
+      "context_id": "reload-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Shield Keg",
+      "category": "recovery",
+      "body": "Item listado no conjunto de saque da nova temporada.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "reload-kado"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-028",
+      "subject_key": "kado-gatekeeper",
+      "context_id": "reload-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "item",
+      "title": "Kado’s Siphon Gatekeeper Shotgun",
+      "category": "equipment",
+      "body": "Item listado no conjunto de saque da nova temporada.",
+      "state": "confirmed",
+      "availability": "available",
+      "evidence": "official",
+      "source_ids": [
+        "reload-kado"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-029",
+      "subject_key": "reload-solo-reboot",
+      "context_id": "reload-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "mechanic",
+      "title": "Reload Solo: retorno na borda",
+      "category": "general",
+      "body": "A lógica de retorno Solo passa a priorizar a borda da zona segura e, sobre água, a costa.",
+      "state": "confirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "reload-kado"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-030",
+      "subject_key": "reload-zero-loot",
+      "context_id": "reload-zero-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "mechanic",
+      "title": "Loot de Reload Construção Zero",
+      "category": "general",
+      "body": "A existência da variante é oficial; falta confirmar separadamente cada item da atualização neste conjunto de regras.",
+      "state": "unconfirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "reload-store",
+        "reload-kado"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-031",
+      "subject_key": "sprites-ranked",
+      "context_id": "br-ranked-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "mechanic",
+      "title": "Elementais no Ranked: histórico",
+      "category": "general",
+      "body": "A nota v42.00 atualizada em 28/08 colocou Elementais no cofre do Ranked. Sem revalidação específica pós-v42.30, conservar como histórico.",
+      "state": "stale",
+      "availability": "vaulted",
+      "evidence": "official",
+      "source_ids": [
+        "br-4200"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-032",
+      "subject_key": "victory-format",
+      "context_id": "victory-br",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "strategy",
+      "title": "Solo Victory Cup: contexto próprio",
+      "category": "general",
+      "body": "O regulamento C7S4 define Solo com Battle Royale. Outros eventos do documento usam Construção Zero ou Reload; não compartilhar regras automaticamente.",
+      "state": "confirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "victory-s4"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-033",
+      "subject_key": "fncs-format",
+      "context_id": "fncs-duos",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "strategy",
+      "title": "FNCS 2026: circuito Duos",
+      "category": "general",
+      "body": "O regulamento do circuito FNCS 2026 usa Duplas e Battle Royale. Isso não identifica todos os eventos com o nome FNCS.",
+      "state": "confirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "fncs-duos-2026"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-034",
+      "subject_key": "khanada-adaptation",
+      "context_id": "br-4230",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "analysis",
+      "title": "Khanada: revisar para entender o meta",
+      "category": "general",
+      "body": "Na entrevista textual, Khanada descreve VOD Review após scrims e torneios para entender decisões e adaptar a prática.",
+      "state": "under_analysis",
+      "availability": "unknown",
+      "evidence": "professional",
+      "source_ids": [
+        "khanada-practice"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Relato individual anterior à v42.30; não é análise audiovisual nem recomendação universal.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-035",
+      "subject_key": "drop-study",
+      "context_id": "br-4200",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "analysis",
+      "title": "Drops em Performance Evaluation: estudo externo",
+      "category": "general",
+      "body": "Elite Esports publica análise própria de pousos em EU/NAC, com corpus de agosto. Registra limitações por evento e linha de ônibus.",
+      "state": "under_analysis",
+      "availability": "unknown",
+      "evidence": "analysis",
+      "source_ids": [
+        "elite-drop-study"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Resultados não reproduzidos; não são probabilidade garantida nem mapa atual verificado. Sem copiar imagens/datasets.",
+      "change_note": "Registro inicial."
+    },
+    {
+      "id": "meta-036",
+      "subject_key": "fncs-solo-format",
+      "context_id": "fncs-solo",
+      "revision": 1,
+      "previous_id": null,
+      "kind": "strategy",
+      "title": "FNCS Solos: regulamento separado",
+      "category": "competitive",
+      "body": "Este evento usa Solo e Battle Royale, com classificatórias e fases próprias. O nome FNCS não implica sempre Duplas.",
+      "state": "confirmed",
+      "availability": "unknown",
+      "evidence": "official",
+      "source_ids": [
+        "fncs-solo-2026"
+      ],
+      "verified_at": "2026-10-10T21:00:00Z",
+      "valid_from": "2026-10-10T00:00:00Z",
+      "review_due": "2026-10-17T00:00:00Z",
+      "limitations": "Disponibilidade por torneio, valores numéricos e eficácia do treinamento não foram confirmados.",
+      "change_note": "Registro inicial."
+    }
+  ],
+  "links": [
+    {
+      "id": "link-001",
+      "entry_id": "meta-001",
+      "target_kind": "competency",
+      "target_id": "information",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-002",
+      "entry_id": "meta-006",
+      "target_kind": "competency",
+      "target_id": "resources",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-003",
+      "entry_id": "meta-006",
+      "target_kind": "article",
+      "target_id": "00000000-0000-4000-8000-000000002203",
+      "reason": "Reavaliar exemplos da aula quando este contexto mudar; fundamentos não implicam loot atual."
+    },
+    {
+      "id": "link-004",
+      "entry_id": "meta-007",
+      "target_kind": "competency",
+      "target_id": "shotgun",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-005",
+      "entry_id": "meta-011",
+      "target_kind": "competency",
+      "target_id": "tracking",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-006",
+      "entry_id": "meta-011",
+      "target_kind": "competency",
+      "target_id": "crosshair",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-007",
+      "entry_id": "meta-017",
+      "target_kind": "competency",
+      "target_id": "zero-cover",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-008",
+      "entry_id": "meta-017",
+      "target_kind": "competency",
+      "target_id": "zero-rotation",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-009",
+      "entry_id": "meta-017",
+      "target_kind": "article",
+      "target_id": "00000000-0000-4000-8000-000000002211",
+      "reason": "Reavaliar exemplos da aula quando este contexto mudar; fundamentos não implicam loot atual."
+    },
+    {
+      "id": "link-010",
+      "entry_id": "meta-018",
+      "target_kind": "competency",
+      "target_id": "zero-resources",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-011",
+      "entry_id": "meta-019",
+      "target_kind": "competency",
+      "target_id": "offspawn",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-012",
+      "entry_id": "meta-019",
+      "target_kind": "competency",
+      "target_id": "rotation",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-013",
+      "entry_id": "meta-019",
+      "target_kind": "article",
+      "target_id": "00000000-0000-4000-8000-000000002209",
+      "reason": "Reavaliar exemplos da aula quando este contexto mudar; fundamentos não implicam loot atual."
+    },
+    {
+      "id": "link-014",
+      "entry_id": "meta-020",
+      "target_kind": "competency",
+      "target_id": "offspawn",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-015",
+      "entry_id": "meta-020",
+      "target_kind": "competency",
+      "target_id": "rotation",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-016",
+      "entry_id": "meta-020",
+      "target_kind": "article",
+      "target_id": "00000000-0000-4000-8000-000000002209",
+      "reason": "Reavaliar exemplos da aula quando este contexto mudar; fundamentos não implicam loot atual."
+    },
+    {
+      "id": "link-017",
+      "entry_id": "meta-021",
+      "target_kind": "competency",
+      "target_id": "offspawn",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-018",
+      "entry_id": "meta-021",
+      "target_kind": "competency",
+      "target_id": "rotation",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-019",
+      "entry_id": "meta-021",
+      "target_kind": "article",
+      "target_id": "00000000-0000-4000-8000-000000002209",
+      "reason": "Reavaliar exemplos da aula quando este contexto mudar; fundamentos não implicam loot atual."
+    },
+    {
+      "id": "link-020",
+      "entry_id": "meta-022",
+      "target_kind": "competency",
+      "target_id": "offspawn",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-021",
+      "entry_id": "meta-022",
+      "target_kind": "competency",
+      "target_id": "rotation",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-022",
+      "entry_id": "meta-022",
+      "target_kind": "article",
+      "target_id": "00000000-0000-4000-8000-000000002209",
+      "reason": "Reavaliar exemplos da aula quando este contexto mudar; fundamentos não implicam loot atual."
+    },
+    {
+      "id": "link-023",
+      "entry_id": "meta-023",
+      "target_kind": "competency",
+      "target_id": "offspawn",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-024",
+      "entry_id": "meta-023",
+      "target_kind": "competency",
+      "target_id": "rotation",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-025",
+      "entry_id": "meta-023",
+      "target_kind": "article",
+      "target_id": "00000000-0000-4000-8000-000000002209",
+      "reason": "Reavaliar exemplos da aula quando este contexto mudar; fundamentos não implicam loot atual."
+    },
+    {
+      "id": "link-026",
+      "entry_id": "meta-024",
+      "target_kind": "competency",
+      "target_id": "offspawn",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-027",
+      "entry_id": "meta-024",
+      "target_kind": "article",
+      "target_id": "00000000-0000-4000-8000-000000002216",
+      "reason": "Reavaliar exemplos da aula quando este contexto mudar; fundamentos não implicam loot atual."
+    },
+    {
+      "id": "link-028",
+      "entry_id": "meta-025",
+      "target_kind": "competency",
+      "target_id": "information",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-029",
+      "entry_id": "meta-029",
+      "target_kind": "competency",
+      "target_id": "positioning",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-030",
+      "entry_id": "meta-029",
+      "target_kind": "competency",
+      "target_id": "rotation",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-031",
+      "entry_id": "meta-030",
+      "target_kind": "competency",
+      "target_id": "zero-awareness",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-032",
+      "entry_id": "meta-031",
+      "target_kind": "competency",
+      "target_id": "information",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-033",
+      "entry_id": "meta-032",
+      "target_kind": "competency",
+      "target_id": "tournament-prep",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-034",
+      "entry_id": "meta-032",
+      "target_kind": "article",
+      "target_id": "00000000-0000-4000-8000-000000002217",
+      "reason": "Reavaliar exemplos da aula quando este contexto mudar; fundamentos não implicam loot atual."
+    },
+    {
+      "id": "link-035",
+      "entry_id": "meta-033",
+      "target_kind": "competency",
+      "target_id": "duo",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-036",
+      "entry_id": "meta-033",
+      "target_kind": "competency",
+      "target_id": "tournament-prep",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-037",
+      "entry_id": "meta-033",
+      "target_kind": "article",
+      "target_id": "00000000-0000-4000-8000-000000002215",
+      "reason": "Reavaliar exemplos da aula quando este contexto mudar; fundamentos não implicam loot atual."
+    },
+    {
+      "id": "link-038",
+      "entry_id": "meta-034",
+      "target_kind": "competency",
+      "target_id": "self-review",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-039",
+      "entry_id": "meta-034",
+      "target_kind": "competency",
+      "target_id": "scrims",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-040",
+      "entry_id": "meta-034",
+      "target_kind": "exercise",
+      "target_id": "00000000-0000-4000-8000-000000001027",
+      "reason": "Atividade do catálogo relacionada ao tema; conferir modalidade e instruções antes de usar."
+    },
+    {
+      "id": "link-041",
+      "entry_id": "meta-034",
+      "target_kind": "article",
+      "target_id": "00000000-0000-4000-8000-000000002219",
+      "reason": "Reavaliar exemplos da aula quando este contexto mudar; fundamentos não implicam loot atual."
+    },
+    {
+      "id": "link-042",
+      "entry_id": "meta-035",
+      "target_kind": "competency",
+      "target_id": "offspawn",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-043",
+      "entry_id": "meta-035",
+      "target_kind": "competency",
+      "target_id": "pro-review",
+      "reason": "Mudanças neste contexto exigem revisar a aplicação desta habilidade; relação editorial, não prova de melhoria."
+    },
+    {
+      "id": "link-044",
+      "entry_id": "meta-036",
+      "target_kind": "competency",
+      "target_id": "tournament-prep",
+      "reason": "Verificar o regulamento específico antes de definir objetivos e revisar partidas."
+    }
+  ]
+}
