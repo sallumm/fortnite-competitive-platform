@@ -1,3 +1,5 @@
+import * as m from "motion/react-m";
+import { ProgressIndicator } from "./experience/primitives";
 import { useEffect, useRef, useId, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, Check, Copy, Target, X } from "lucide-react";
@@ -83,6 +85,7 @@ export function CopyCode({ code }: { code: string }) {
   const { run } = useStore();
   return (
     <button
+      type="button"
       className="button small"
       onClick={() =>
         run(async () => {
@@ -99,7 +102,9 @@ export function Modal({
   title,
   children,
   onClose,
+  variant = "modal",
 }: {
+  variant?: "modal" | "drawer";
   title: string;
   children: ReactNode;
   onClose: () => void;
@@ -112,6 +117,7 @@ export function Modal({
   }, []);
   return (
     <dialog
+      className={variant === "drawer" ? "animated-drawer" : "animated-modal"}
       ref={ref}
       onCancel={onClose}
       onClick={(e) => {
@@ -119,39 +125,27 @@ export function Modal({
       }}
       aria-labelledby={titleId}
     >
-      <div className="modal-heading">
-        <h2 id={titleId}>{title}</h2>
-        <button
-          className="icon-button"
-          aria-label="Fechar janela"
-          onClick={onClose}
-        >
-          <X />
-        </button>
-      </div>
-      {children}
+      <m.div
+        initial={{ opacity: 0.8 }}
+        animate={{ opacity: 1 }}
+        className="modal-content"
+      >
+        <div className="modal-heading">
+          <h2 id={titleId}>{title}</h2>
+          <button
+            className="icon-button"
+            aria-label="Fechar janela"
+            onClick={onClose}
+          >
+            <X />
+          </button>
+        </div>
+        {children}
+      </m.div>
     </dialog>
   );
 }
-export function Progress({
-  value,
-  max = 100,
-}: {
-  value: number;
-  max?: number;
-}) {
-  return (
-    <progress
-      max={Number.isFinite(max) && max > 0 ? max : 1}
-      value={
-        Number.isFinite(value)
-          ? Math.max(0, Math.min(value, max > 0 ? max : 1))
-          : 0
-      }
-      aria-label={`${max > 0 && Number.isFinite(value) ? Math.round(Math.max(0, Math.min(value / max, 1)) * 100) : 0}% concluído`}
-    />
-  );
-}
+export const Progress = ProgressIndicator;
 export function CheckLine({ children }: { children: ReactNode }) {
   return (
     <div className="check-line">

@@ -1,3 +1,15 @@
+import * as m from "motion/react-m";
+import {
+  DndContext,
+  useDraggable,
+  useDroppable,
+  PointerSensor,
+  useSensors,
+  useSensor,
+} from "@dnd-kit/core";
+import { GripVertical } from "lucide-react";
+import { AnimatedTabs } from "./experience/primitives";
+import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 export interface CalendarItem {
@@ -5,17 +17,23 @@ export interface CalendarItem {
   date: string;
   title: string;
   tone?: string;
+  draggable?: boolean;
   onClick: () => void;
 }
 export function Calendar({
   items,
   timezone,
   onRangeChange,
+  onMove,
 }: {
   items: CalendarItem[];
+  onMove?: (id: string, date: string) => void;
   timezone?: string;
   onRangeChange?: (from: string, to: string) => void;
 }) {
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+  );
   const [cursor, setCursor] = useState(() =>
     timezone
       ? new Date(localDate(new Date().toISOString(), timezone) + "T12:00:00")
@@ -69,102 +87,109 @@ export function Calendar({
     setCursor(next);
   };
   return (
-    <div className="calendar panel">
-      <div className="calendar-toolbar">
-        <div className="row">
-          <button
-            className="icon-button"
-            aria-label="Período anterior"
-            onClick={() => move(-1)}
-          >
-            <ChevronLeft size={18} />
-          </button>
-          <h3>
-            {cursor.toLocaleDateString("pt-BR", {
-              month: "long",
-              year: "numeric",
-              ...(view === "day" ? { day: "numeric" } : {}),
-            })}
-          </h3>
-          <button
-            className="icon-button"
-            aria-label="Próximo período"
-            onClick={() => move(1)}
-          >
-            <ChevronRight size={18} />
-          </button>
-        </div>
-        <div className="tabs">
-          {(["agenda", "month", "week", "day"] as const).map((v) => (
+    <DndContext
+      sensors={sensors}
+      onDragEnd={({ active, over }) => {
+        if (over && onMove) onMove(String(active.id), String(over.id));
+      }}
+    >
+      <div className="calendar panel">
+        <div className="calendar-toolbar">
+          <div className="row">
             <button
-              key={v}
-              aria-pressed={view === v}
-              onClick={() => setView(v)}
+              className="icon-button"
+              aria-label="Período anterior"
+              onClick={() => move(-1)}
             >
-              {v === "agenda"
-                ? "Agenda"
-                : v === "month"
-                  ? "Mês"
-                  : v === "week"
-                    ? "Semana"
-                    : "Dia"}
+              <ChevronLeft size={18} />
             </button>
-          ))}
-          <button
-            onClick={() =>
-              setCursor(
-                timezone
-                  ? new Date(
-                      localDate(new Date().toISOString(), timezone) +
-                        "T12:00:00",
-                    )
-                  : new Date(),
-              )
-            }
-          >
-            Hoje
-          </button>
-        </div>
-      </div>
-      {(view === "week" || view === "agenda") && (
-        <p className="calendar-range" aria-live="polite">
-          {days[0].toLocaleDateString("pt-BR")} a{" "}
-          {days.at(-1)!.toLocaleDateString("pt-BR")}
-        </p>
-      )}
-      <div className={`calendar-grid ${view}`}>
-        {days.map((date) => {
-          const key = [
-            date.getFullYear(),
-            String(date.getMonth() + 1).padStart(2, "0"),
-            String(date.getDate()).padStart(2, "0"),
-          ].join("-");
-          return (
-            <div
-              className={`calendar-day ${date.getMonth() !== cursor.getMonth() ? "other-month" : ""}`}
-              key={key}
+            <h3>
+              {cursor.toLocaleDateString("pt-BR", {
+                month: "long",
+                year: "numeric",
+                ...(view === "day" ? { day: "numeric" } : {}),
+              })}
+            </h3>
+            <button
+              className="icon-button"
+              aria-label="Próximo período"
+              onClick={() => move(1)}
             >
-              <span>
-                {date.toLocaleDateString("pt-BR", { weekday: "short" })}{" "}
-                <strong>{date.getDate()}</strong>
-              </span>
-              {view === "agenda" && !byDate.has(key) && (
-                <p className="muted small-text">Sem atividades planejadas</p>
-              )}
-              {(byDate.get(key) || []).map((item) => (
-                <button
-                  className={"event " + (item.tone || "")}
-                  key={item.id}
-                  onClick={item.onClick}
-                >
-                  {item.title}
-                </button>
-              ))}
-            </div>
-          );
-        })}
+              <ChevronRight size={18} />
+            </button>
+          </div>
+          <div className="tabs">
+            <AnimatedTabs
+              label="Visualização do calendário"
+              value={view}
+              onChange={setView}
+              items={[
+                { value: "agenda", label: "Agenda" },
+                { value: "month", label: "Mês" },
+                { value: "week", label: "Semana" },
+                { value: "day", label: "Dia" },
+              ]}
+            />
+            <button
+              onClick={() =>
+                setCursor(
+                  timezone
+                    ? new Date(
+                        localDate(new Date().toISOString(), timezone) +
+                          "T12:00:00",
+                      )
+                    : new Date(),
+                )
+              }
+            >
+              Hoje
+            </button>
+          </div>
+        </div>
+        {(view === "week" || view === "agenda") && (
+          <p className="calendar-range" aria-live="polite">
+            {days[0].toLocaleDateString("pt-BR")} a{" "}
+            {days.at(-1)!.toLocaleDateString("pt-BR")}
+          </p>
+        )}
+        <m.div
+          key={from + view}
+          className={`calendar-grid ${view}`}
+          initial={{ opacity: 0.85 }}
+          animate={{ opacity: 1 }}
+        >
+          {days.map((date) => {
+            const key = [
+              date.getFullYear(),
+              String(date.getMonth() + 1).padStart(2, "0"),
+              String(date.getDate()).padStart(2, "0"),
+            ].join("-");
+            return (
+              <CalendarDay
+                date={key}
+                className={`calendar-day ${date.getMonth() !== cursor.getMonth() ? "other-month" : ""}`}
+                key={key}
+              >
+                <span>
+                  {date.toLocaleDateString("pt-BR", { weekday: "short" })}{" "}
+                  <strong>{date.getDate()}</strong>
+                </span>
+                {view === "agenda" && !byDate.has(key) && (
+                  <p className="muted small-text">Sem atividades planejadas</p>
+                )}
+                {(byDate.get(key) || []).map((item) => (
+                  <CalendarEvent
+                    key={item.id}
+                    item={item}
+                    enabled={!!onMove && !!item.draggable}
+                  />
+                ))}
+              </CalendarDay>
+            );
+          })}
+        </m.div>
       </div>
-    </div>
+    </DndContext>
   );
 }
 export function localDate(iso: string, timezone: string) {
@@ -174,4 +199,62 @@ export function localDate(iso: string, timezone: string) {
     month: "2-digit",
     day: "2-digit",
   }).format(new Date(iso));
+}
+
+function CalendarDay({
+  date,
+  className,
+  children,
+}: {
+  date: string;
+  className: string;
+  children: ReactNode;
+}) {
+  const { setNodeRef, isOver } = useDroppable({ id: date });
+  return (
+    <div
+      ref={setNodeRef}
+      data-calendar-date={date}
+      className={`${className} ${isOver ? "drop-target" : ""}`}
+    >
+      {children}
+    </div>
+  );
+}
+function CalendarEvent({
+  item,
+  enabled,
+}: {
+  item: CalendarItem;
+  enabled: boolean;
+}) {
+  const { setNodeRef, listeners, transform, isDragging } = useDraggable({
+    id: item.id,
+    disabled: !enabled,
+  });
+  return (
+    <div
+      ref={setNodeRef}
+      className={`calendar-event-row ${isDragging ? "dragging" : ""}`}
+      style={{
+        transform: transform
+          ? `translate3d(${transform.x}px,${transform.y}px,0)`
+          : undefined,
+      }}
+    >
+      {enabled && (
+        <span
+          className="calendar-drag"
+          {...listeners}
+          aria-hidden="true"
+          title="Arrastar para outro dia. Use o botão da atividade para editar pelo teclado."
+        >
+          <GripVertical size={14} />
+        </span>
+      )}
+      <button className={"event " + (item.tone || "")} onClick={item.onClick}>
+        {item.title}
+      </button>
+    </div>
+  );
 }

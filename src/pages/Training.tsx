@@ -1,3 +1,4 @@
+import { TrainingStepTransition } from "../components/experience/primitives";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Check, Pause, Play, Square } from "lucide-react";
@@ -45,6 +46,8 @@ export default function Training() {
     };
   });
   const [tick, setTick] = useState(Date.now());
+  const [activeStep, setActiveStep] = useState(0);
+  const [allSteps, setAllSteps] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [openJournal, setOpenJournal] = useState(false);
   useEffect(() => {
@@ -136,107 +139,157 @@ export default function Training() {
           <Progress value={done} max={session.steps.length} />
         </div>
       </section>
+      <nav className="session-navigation panel" aria-label="Etapas da sessão">
+        <div className="row between">
+          <h2>Seu percurso</h2>
+          <button
+            className="button small"
+            aria-pressed={allSteps}
+            onClick={() => setAllSteps(!allSteps)}
+          >
+            {allSteps ? "Focar exercício atual" : "Ver todas as etapas"}
+          </button>
+        </div>
+        <div className="session-checklist">
+          {session.steps.map((step, i) => (
+            <div key={i} className={activeStep === i ? "selected" : ""}>
+              <button
+                className="text-link"
+                onClick={() => setActiveStep(i)}
+                aria-current={activeStep === i ? "step" : undefined}
+              >
+                {i + 1}.{" "}
+                {step.exercise?.title ||
+                  store.catalog.exercises.find((e) => e.id === step.exercise_id)
+                    ?.title}
+              </button>
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={Boolean(draft.done[i])}
+                  onChange={(ev) =>
+                    setDraft({
+                      ...draft,
+                      done: draft.done.map((d, n) =>
+                        n === i ? ev.target.checked : d,
+                      ),
+                    })
+                  }
+                />
+                Etapa concluída
+              </label>
+            </div>
+          ))}
+        </div>
+      </nav>
       <div className="session-steps">
         {session.steps.map((step, i) => {
           const e =
             step.exercise ||
             store.catalog.exercises.find((e) => e.id === step.exercise_id);
+          if (!allSteps && i !== activeStep) return null;
           return (
-            <article
-              key={i}
-              className={`panel session-step ${draft.done[i] ? "done" : ""}`}
-            >
-              <div className="session-number">
-                {draft.done[i] ? <Check /> : String(i + 1).padStart(2, "0")}
-              </div>
-              <div className="session-body">
-                <div className="row between">
-                  <h2>{e?.title || "Exercício indisponível"}</h2>
-                  <Badge>{step.minutes} min planejados</Badge>
+            <TrainingStepTransition key={i} identity={i}>
+              <article
+                key={i}
+                className={`panel session-step ${draft.done[i] ? "done" : ""}`}
+              >
+                <div className="session-number">
+                  {draft.done[i] ? <Check /> : String(i + 1).padStart(2, "0")}
                 </div>
-                <p>
-                  {e?.instructions ||
-                    "Este exercício foi removido do catálogo. Registre suas observações."}
-                </p>
-                {e?.map_code && (
-                  <div className="row">
-                    <CopyCode code={e.map_code} />
-                    <a
-                      className="text-link"
-                      href={e.source_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Abrir ilha oficial
-                    </a>
+                <div className="session-body">
+                  <div className="row between">
+                    <h2>{e?.title || "Exercício indisponível"}</h2>
+                    <Badge>{step.minutes} min planejados</Badge>
                   </div>
-                )}
-                <div className="form-grid">
-                  <label>
-                    {e?.metric || "Resultado observado"}
-                    <input
-                      type="number"
-                      min={0}
-                      max={1000000}
-                      step="any"
-                      placeholder="Opcional"
-                      value={draft.results[i]?.value ?? ""}
-                      onChange={(ev) =>
-                        change(
-                          i,
-                          "value",
-                          ev.target.value === ""
-                            ? null
-                            : Number(ev.target.value),
-                        )
-                      }
-                    />
-                  </label>
-                  <label>
-                    Configuração comparável (opcional)
-                    <input
-                      maxLength={200}
-                      value={draft.results[i]?.configuration || ""}
-                      placeholder="Cenário, arma, modo, sensibilidade e duração do teste"
-                      onChange={(ev) =>
-                        change(i, "configuration", ev.target.value)
-                      }
-                    />
-                    <small>
-                      Use a mesma identificação somente para testes
-                      equivalentes. Resultados sem configuração não geram
-                      tendência automática.
-                    </small>
-                  </label>
-                  <label>
-                    Observação ou erro recorrente
-                    <textarea
-                      value={draft.results[i]?.note || ""}
-                      maxLength={1000}
-                      placeholder="O que você quer testar na próxima sessão?"
-                      onChange={(ev) => change(i, "note", ev.target.value)}
-                    />
-                  </label>
+                  <p>
+                    {e?.instructions ||
+                      "Este exercício foi removido do catálogo. Registre suas observações."}
+                  </p>
+                  {e?.map_code && (
+                    <div className="row">
+                      <CopyCode code={e.map_code} />
+                      <a
+                        className="text-link"
+                        href={e.source_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Abrir ilha oficial
+                      </a>
+                    </div>
+                  )}
+                  <div className="form-grid">
+                    <label>
+                      {e?.metric || "Resultado observado"}
+                      <input
+                        type="number"
+                        min={0}
+                        max={1000000}
+                        step="any"
+                        placeholder="Opcional"
+                        value={draft.results[i]?.value ?? ""}
+                        onChange={(ev) =>
+                          change(
+                            i,
+                            "value",
+                            ev.target.value === ""
+                              ? null
+                              : Number(ev.target.value),
+                          )
+                        }
+                      />
+                    </label>
+                    <label>
+                      Configuração comparável (opcional)
+                      <input
+                        maxLength={200}
+                        value={draft.results[i]?.configuration || ""}
+                        placeholder="Cenário, arma, modo, sensibilidade e duração do teste"
+                        onChange={(ev) =>
+                          change(i, "configuration", ev.target.value)
+                        }
+                      />
+                      <small>
+                        Use a mesma identificação somente para testes
+                        equivalentes. Resultados sem configuração não geram
+                        tendência automática.
+                      </small>
+                    </label>
+                    <label>
+                      Observação ou erro recorrente
+                      <textarea
+                        value={draft.results[i]?.note || ""}
+                        maxLength={1000}
+                        placeholder="O que você quer testar na próxima sessão?"
+                        onChange={(ev) => change(i, "note", ev.target.value)}
+                      />
+                    </label>
+                  </div>
                 </div>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={Boolean(draft.done[i])}
-                    onChange={(ev) =>
-                      setDraft({
-                        ...draft,
-                        done: draft.done.map((d, n) =>
-                          n === i ? ev.target.checked : d,
-                        ),
-                      })
-                    }
-                  />
-                  Etapa concluída
-                </label>
-              </div>
-            </article>
+              </article>
+            </TrainingStepTransition>
           );
         })}
+      </div>
+      <div className="row between session-controls">
+        <button
+          className="button"
+          disabled={activeStep === 0}
+          onClick={() => setActiveStep((i) => i - 1)}
+        >
+          Exercício anterior
+        </button>
+        <span className="muted">
+          Etapa {activeStep + 1} de {session.steps.length}
+        </span>
+        <button
+          className="button"
+          disabled={activeStep === session.steps.length - 1}
+          onClick={() => setActiveStep((i) => i + 1)}
+        >
+          Próximo exercício
+        </button>
       </div>
       <div className="wellbeing-note">
         <p>

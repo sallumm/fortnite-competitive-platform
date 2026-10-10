@@ -1,3 +1,4 @@
+import { MotionSystem } from "./components/experience/MotionSystem";
 import { lazy, Suspense, type ReactNode } from "react";
 import {
   BrowserRouter,
@@ -247,8 +248,10 @@ function Application() {
 }
 export default function App() {
   return (
-    <Provider>
-      <Application />
-    </Provider>
+    <MotionSystem>
+      <Provider>
+        <Application />
+      </Provider>
+    </MotionSystem>
   );
 }

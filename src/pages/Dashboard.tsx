@@ -1,3 +1,4 @@
+import { AnimatedCard, StatCounter } from "../components/experience/primitives";
 import { CoachSummary } from "../components/CoachSummary";
 import { CoachAccess } from "../components/CoachAccess";
 import { Link, useNavigate } from "react-router-dom";
@@ -116,7 +117,7 @@ export default function Dashboard() {
       />
       <CoachSummary />
       <div className="dashboard-top">
-        <section className="next-training">
+        <AnimatedCard className="next-training">
           <div className="row between">
             <Badge tone="green">
               {active
@@ -163,10 +164,12 @@ export default function Dashboard() {
             <ArrowUpRight size={17} />
           </button>
           <div className="training-line" />
-        </section>
-        <section className="panel rank-card">
+        </AnimatedCard>
+        <AnimatedCard className="panel rank-card">
           <span className="eyebrow">EVOLUÇÃO RECENTE · 7 DIAS</span>
-          <h2>{recent.completed} sessões concluídas</h2>
+          <h2>
+            <StatCounter value={recent.completed} /> sessões concluídas
+          </h2>
           <p>
             {recent.minutes} minutos ativos · {recent.practiceDays} dias com
             prática registrada.
@@ -184,7 +187,7 @@ export default function Dashboard() {
           <Link className="text-link" to="/app/progression">
             Regras e conquistas <ArrowRight size={16} />
           </Link>
-        </section>
+        </AnimatedCard>
       </div>
       <div className="quick-actions">
         <CoachAccess />
@@ -207,7 +210,7 @@ export default function Dashboard() {
         )}
       </div>
       <div className="two-grid">
-        <section className="panel">
+        <AnimatedCard className="panel">
           <div className="section-title">
             <h2>Hoje e próximas atividades</h2>
             <Link to="/app/planner">
@@ -255,8 +258,8 @@ export default function Dashboard() {
               </Link>
             </div>
           )}
-        </section>
-        <section className="panel">
+        </AnimatedCard>
+        <AnimatedCard className="panel">
           <h2>Meu foco e minhas metas</h2>
           {s.data.goals.filter((g) => !g.completed).length ? (
             s.data.goals
@@ -303,10 +306,10 @@ export default function Dashboard() {
               </p>
             </div>
           )}
-        </section>
+        </AnimatedCard>
       </div>
       {last && (
-        <section className="panel day-review">
+        <AnimatedCard className="panel day-review">
           <div>
             <span className="eyebrow">ÚLTIMA SESSÃO</span>
             <h2>{last.title}</h2>
@@ -322,7 +325,7 @@ export default function Dashboard() {
           <Link className="button" to={"/app/journal/" + last.id}>
             Revisar meu último treino
           </Link>
-        </section>
+        </AnimatedCard>
       )}
       <div className="section-title outside">
         <div>
