@@ -1,3 +1,4 @@
+import { prerequisiteIssues } from "../lib/curriculum";
 import { ExerciseResearchEditor } from "../components/ExerciseResearchEditor";
 import { reviewPending, type ExerciseResearch } from "../lib/training-research";
 import { EditorialRevisions } from "../components/EditorialRevisions";
@@ -22,6 +23,8 @@ const names = {
   tournaments: "Campeonatos",
 };
 const fieldNames: Record<string, string> = {
+  curriculum:
+    "Currículo estruturado (JSON; nível 0–5, modalidades, pré-requisitos, fontes e avaliação)",
   topic: "Tema editorial",
   tags: "Tags separadas por vírgula",
   evidence: "Natureza da fonte",
@@ -115,6 +118,7 @@ export default function Admin() {
           }
         : table === "articles"
           ? {
+              curriculum: null,
               topic: "competitive",
               tags: [],
               evidence: "official",
@@ -165,7 +169,7 @@ export default function Admin() {
     try {
       if (edit) {
         input = { ...edit };
-        for (const key of ["phases", "measurement"])
+        for (const key of ["phases", "measurement", "curriculum"])
           if (typeof edit[key] === "string")
             input[key] = JSON.parse(edit[key] as string);
       }
@@ -184,6 +188,17 @@ export default function Admin() {
           .join(" "),
       );
       return;
+    }
+    if (table === "articles") {
+      const article = result.data as Article;
+      const issues = prerequisiteIssues([
+        ...s.catalog.articles.filter((a) => a.id !== article.id),
+        article,
+      ]);
+      if (issues.length) {
+        setValidation(issues.join(" "));
+        return;
+      }
     }
     s.run(async () => {
       await s.saveEditorial(table, result.data as Row);
@@ -298,6 +313,46 @@ export default function Admin() {
           onClose={() => setEdit(null)}
         >
           <form onSubmit={submit}>
+            {table === "articles" && !edit.curriculum && (
+              <button
+                type="button"
+                className="button"
+                onClick={() =>
+                  setEdit({
+                    ...edit,
+                    kind: "lesson",
+                    curriculum: {
+                      version: "editorial-1",
+                      level: 0,
+                      domain: "foundations",
+                      modes: ["build", "zero"],
+                      experience: "all",
+                      phase: "foundation",
+                      prerequisites: [],
+                      objectives: ["Descrever o objetivo desta aula."],
+                      assessment: ["Explicar uma decisão observável."],
+                      exercise_ids: [],
+                      competency_ids: [],
+                      classification: "editorial",
+                      meta_scope:
+                        "Defina modalidade, versão e limites de aplicação antes de publicar.",
+                      sources: [
+                        {
+                          title: "Fonte a verificar",
+                          url: "https://www.fortnite.com/competitive",
+                          kind: "official",
+                          access: "page",
+                          supports:
+                            "Substitua pela fonte e pelo alcance efetivamente consultados.",
+                        },
+                      ],
+                    },
+                  })
+                }
+              >
+                Adicionar estrutura curricular à aula
+              </button>
+            )}
             <div className="form-grid">
               {Object.entries(edit)
                 .filter(
@@ -328,7 +383,7 @@ export default function Admin() {
                   return (
                     <label key={key}>
                       {fieldNames[key] || key}
-                      {["phases", "measurement"].includes(key) ? (
+                      {["phases", "measurement", "curriculum"].includes(key) ? (
                         <textarea
                           rows={12}
                           value={

@@ -1,3 +1,4 @@
+import { LessonContext } from "../components/LessonContext";
 import { CoachAccess } from "../components/CoachAccess";
 import { topics, recentArticles, relatedArticles } from "../lib/competitive";
 import { useSEO } from "../lib/seo";
@@ -114,6 +115,11 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
               <p key={i}>{p}</p>
             ))}
           </div>
+          <LessonContext
+            article={selected}
+            articles={s.catalog.articles}
+            exercises={s.catalog.exercises}
+          />
           <Source
             url={selected.source_url}
             date={selected.verified_at}
@@ -183,6 +189,11 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
             : "Informação com fonte, data e contexto. Interpretações editoriais identificadas."
         }
       />
+      {academy && (
+        <Link className="button primary" to="/academy/curriculum">
+          Estudar do zero ao avançado
+        </Link>
+      )}
       {academy && (
         <Link className="button" to="/academy/research">
           Explorar habilidades, trilhas e evidências

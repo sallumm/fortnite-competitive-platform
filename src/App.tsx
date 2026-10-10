@@ -24,6 +24,7 @@ const TrainingCenter = lazy(() => import("./pages/TrainingCenter"));
 const Training = lazy(() => import("./pages/Training"));
 const Library = lazy(() => import("./pages/Library"));
 const Competitive = lazy(() => import("./pages/Competitive"));
+const Curriculum = lazy(() => import("./pages/Curriculum"));
 const TrainingResearch = lazy(() => import("./pages/TrainingResearch"));
 const Editorial = lazy(() => import("./pages/Editorial"));
 const Evolution = lazy(() => import("./pages/Evolution"));
@@ -245,6 +246,7 @@ function Application() {
             <Route path="/competitive/:slug" element={<Competitive />} />
             <Route path="/news" element={<Editorial />} />
             <Route path="/news/:slug" element={<Editorial />} />
+            <Route path="/academy/curriculum" element={<Curriculum />} />
             <Route path="/academy/research" element={<TrainingResearch />} />
             <Route path="/academy" element={<Editorial academy />} />
             <Route path="/academy/:slug" element={<Editorial academy />} />

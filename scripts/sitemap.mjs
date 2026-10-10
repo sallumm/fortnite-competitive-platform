@@ -19,6 +19,7 @@ const paths = [
   "/news",
   "/academy",
   "/academy/research",
+  "/academy/curriculum",
   "/help",
   "/community",
   "/legal/privacy",

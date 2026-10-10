@@ -201,6 +201,7 @@ export interface Tournament {
   published: boolean;
 }
 export interface Article {
+  curriculum?: import("./curriculum").Curriculum | null;
   topic?: string;
   tags?: string[];
   evidence?: "official" | "analysis" | "opinion";

@@ -6,11 +6,12 @@ import {
   screen,
   within,
   waitFor,
+  fireEvent,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../src/App";
 import { demoPlayer, seed, uid } from "../src/lib/seed";
-import { dateInZone, weekday } from "../src/lib/calendar";
+import { dateInZone, shiftDate, weekday } from "../src/lib/calendar";
 vi.stubGlobal("scrollTo", () => {});
 vi.stubGlobal(
   "ResizeObserver",
@@ -81,7 +82,7 @@ describe("Fluxos pessoais 2.0 e persistência em DOM", () => {
     await waitFor(() => expect(stored().series).toHaveLength(1));
     expect(stored().schedules).toHaveLength(0);
     await user.click(
-      screen.getAllByRole("button", { name: "Detalhes / editar" })[0],
+      (await screen.findAllByRole("button", { name: "Detalhes / editar" }))[0],
     );
     await screen.findByRole("dialog");
     await user.clear(screen.getByLabelText(/^Título/));
@@ -176,13 +177,22 @@ describe("Fluxos pessoais 2.0 e persistência em DOM", () => {
     await user.click(screen.getByRole("link", { name: "Planejador" }));
     await screen.findByRole("button", { name: "Criar atividade" });
     await user.click(screen.getByRole("button", { name: "Criar atividade" }));
+    const future =
+      shiftDate(dateInZone(new Date(), stored().profile.timezone), 1) +
+      "T18:00";
     await user.type(screen.getByLabelText(/^Título/), "Estudos");
+    fireEvent.change(screen.getByLabelText(/^Data e horário/), {
+      target: { value: future },
+    });
     await user.click(
       screen.getByRole("button", { name: "Salvar agendamento" }),
     );
     await waitFor(() => expect(stored().schedules).toHaveLength(1));
     await user.click(screen.getByRole("button", { name: "Criar atividade" }));
     await user.type(screen.getByLabelText(/^Título/), "Pausa");
+    fireEvent.change(screen.getByLabelText(/^Data e horário/), {
+      target: { value: future },
+    });
     expect(screen.getByText(/Conflito com Estudos/)).toBeTruthy();
     expect(
       screen
@@ -195,7 +205,7 @@ describe("Fluxos pessoais 2.0 e persistência em DOM", () => {
     );
     await waitFor(() => expect(stored().schedules).toHaveLength(2));
     await user.click(
-      screen.getAllByRole("button", { name: "Detalhes / editar" })[0],
+      (await screen.findAllByRole("button", { name: "Detalhes / editar" }))[0],
     );
     await user.click(
       screen.getByRole("button", { name: "Cancelar esta ocorrência" }),

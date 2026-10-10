@@ -181,3 +181,9 @@ Os documentos legais e a identificação do operador ainda precisam de revisão 
 ### Pesquisa e desenvolvimento de habilidades
 
 A Academy inclui `/academy/research`, com taxonomia, glossário, referências classificadas e trilhas que abrem o construtor existente. A metodologia é editorial, não uma intervenção cientificamente validada para Fortnite. Consulte [pesquisa](docs/research/TRAINING_RESEARCH.md), [metodologia](docs/research/TRAINING_METHODOLOGY.md), [evidências](docs/research/EVIDENCE_REGISTER.md), [lacunas](docs/research/CONTENT_GAPS.md) e [implementação](docs/research/IMPLEMENTATION.md). Migrations incrementais 010–011; nenhuma chave externa adicional.
+
+### Percurso educativo: fundamentos e prática avançada
+
+`/academy/curriculum` organiza aulas originais por nível editorial (0–5), modalidade e fase, preservando o CMS e o catálogo. Pré-requisitos são sugestões flexíveis. Fontes, critérios de auto-revisão e escopo temporal aparecem em cada aula; abrir uma aula não certifica habilidade ou concede XP.
+
+Pesquisa, arquitetura, mapa de dependências e lacunas: [docs/mastery/RESEARCH.md](docs/mastery/RESEARCH.md), [ARCHITECTURE.md](docs/mastery/ARCHITECTURE.md) e [COVERAGE.md](docs/mastery/COVERAGE.md). Aplicação incremental: migrations 012–013, depois de 001–011, primeiro em staging. Conferir seed com `node scripts/mastery-seed.mjs --check`.
