@@ -3,6 +3,7 @@ import { BrowserRouter, Link, Navigate, Route, Routes } from "react-router-dom";
 import { Provider, useStore } from "./lib/store";
 import { Layout } from "./components/Layout";
 import { Empty } from "./components/ui";
+import { dateInZone } from "./lib/calendar";
 const Landing = lazy(() => import("./pages/Landing"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
@@ -12,6 +13,9 @@ const Training = lazy(() => import("./pages/Training"));
 const Library = lazy(() => import("./pages/Library"));
 const Competitive = lazy(() => import("./pages/Competitive"));
 const Editorial = lazy(() => import("./pages/Editorial"));
+const Skills = lazy(() => import("./pages/Skills"));
+const Week = lazy(() => import("./pages/Week"));
+const Journal = lazy(() => import("./pages/Journal"));
 const Reports = lazy(() => import("./pages/Reports"));
 const Progression = lazy(() =>
   import("./pages/Reports").then((m) => ({ default: m.Progression })),
@@ -65,7 +69,7 @@ function Reminders() {
       (t.starts_at
         ? new Date(t.starts_at).getTime() - now >= 0 &&
           new Date(t.starts_at).getTime() - now < 864e5
-        : t.start_date === new Date().toISOString().slice(0, 10)),
+        : t.start_date === dateInZone(new Date(), s.data.profile!.timezone)),
   );
   return upcoming.length ? (
     <div className="reminders" role="status">
@@ -117,6 +121,30 @@ function Application() {
               element={
                 <Guard>
                   <Training />
+                </Guard>
+              }
+            />
+            <Route
+              path="/app/skills"
+              element={
+                <Guard>
+                  <Skills />
+                </Guard>
+              }
+            />
+            <Route
+              path="/app/week"
+              element={
+                <Guard>
+                  <Week />
+                </Guard>
+              }
+            />
+            <Route
+              path="/app/journal/:id"
+              element={
+                <Guard>
+                  <Journal />
                 </Guard>
               }
             />

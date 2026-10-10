@@ -44,3 +44,10 @@ Cash Cups, Victory Cups, Ranked Cups, Console e Reload foram identificados no po
 ## Identidade
 
 Clutchfolio é nome de trabalho e identidade gráfica original em carvão, verde-lima e violeta. A busca exata encontrou usos em revista francesa e acessórios; não há alegação de exclusividade, registro ou disponibilidade de domínio. Veyra, VantGrid e Veyrix foram descartados após encontrar usos no setor de software. Antes do lançamento comercial, realizar pesquisa formal no INPI, classes pertinentes, domínio e redes sociais e decidir a marca final. Nenhum domínio foi registrado ou comprado.
+
+## Referências técnicas da evolução 2.0
+
+- PostgreSQL, tipos de data/hora e comportamento de timestamps ambíguos/inexistentes: https://www.postgresql.org/docs/current/datatype-datetime.html e https://www.postgresql.org/docs/16/datetime-invalid-input.html. O produto resolve horários locais explicitamente no cliente e valida gaps no RPC, sem depender de um offset fixo.
+- IETF RFC 5545, https://www.rfc-editor.org/rfc/rfc5545.html: identidade, escaping, datas UTC e folding de linhas em bytes. A agenda exporta um intervalo resolvido, sem prometer assinatura ou sincronização com calendários externos.
+
+As regras de planejamento e os agrupamentos de habilidades são decisões de organização do produto; não foram validados como protocolo científico de desempenho competitivo.

@@ -42,6 +42,7 @@ export default function Training() {
   });
   const [tick, setTick] = useState(Date.now());
   const [confirm, setConfirm] = useState(false);
+  const [openJournal, setOpenJournal] = useState(false);
   useEffect(() => {
     const interval = setInterval(() => setTick(Date.now()), 1000);
     return () => clearInterval(interval);
@@ -78,7 +79,7 @@ export default function Training() {
     });
   const change = (
     i: number,
-    key: "value" | "note",
+    key: "value" | "note" | "configuration",
     value: number | string | null,
   ) =>
     setDraft({
@@ -91,7 +92,9 @@ export default function Training() {
     store.run(async () => {
       await store.finish(session, draft.results, seconds, abandon);
       sessionStorage.removeItem(key);
-      navigate("/app/reports");
+      navigate(
+        openJournal && !abandon ? "/app/journal/" + session.id : "/app/reports",
+      );
     });
   return (
     <>
@@ -182,6 +185,22 @@ export default function Training() {
                     />
                   </label>
                   <label>
+                    Configuração comparável (opcional)
+                    <input
+                      maxLength={200}
+                      value={draft.results[i]?.configuration || ""}
+                      placeholder="Cenário, arma, modo, sensibilidade e duração do teste"
+                      onChange={(ev) =>
+                        change(i, "configuration", ev.target.value)
+                      }
+                    />
+                    <small>
+                      Use a mesma identificação somente para testes
+                      equivalentes. Resultados sem configuração não geram
+                      tendência automática.
+                    </small>
+                  </label>
+                  <label>
                     Observação ou erro recorrente
                     <textarea
                       value={draft.results[i]?.note || ""}
@@ -211,6 +230,21 @@ export default function Training() {
           );
         })}
       </div>
+      <div className="wellbeing-note">
+        <p>
+          Faça pausas quando precisar. Se estiver com dificuldade de
+          concentração, reduza a sessão ou deixe a próxima atividade para outro
+          momento.
+        </p>
+      </div>
+      <label className="checkbox-label">
+        <input
+          type="checkbox"
+          checked={openJournal}
+          onChange={(e) => setOpenJournal(e.target.checked)}
+        />
+        Abrir diário opcional após concluir
+      </label>
       <div className="row between">
         <p className="muted">
           Pausas não reduzem seu XP. Finalize somente o que você praticou.

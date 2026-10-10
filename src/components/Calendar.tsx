@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 export interface CalendarItem {
   id: string;
@@ -7,8 +7,20 @@ export interface CalendarItem {
   tone?: string;
   onClick: () => void;
 }
-export function Calendar({ items }: { items: CalendarItem[] }) {
-  const [cursor, setCursor] = useState(() => new Date());
+export function Calendar({
+  items,
+  timezone,
+  onRangeChange,
+}: {
+  items: CalendarItem[];
+  timezone?: string;
+  onRangeChange?: (from: string, to: string) => void;
+}) {
+  const [cursor, setCursor] = useState(() =>
+    timezone
+      ? new Date(localDate(new Date().toISOString(), timezone) + "T12:00:00")
+      : new Date(),
+  );
   const [view, setView] = useState<"month" | "week" | "day">("month");
   const start = new Date(
     cursor.getFullYear(),
@@ -24,10 +36,21 @@ export function Calendar({ items }: { items: CalendarItem[] }) {
     (_, i) =>
       new Date(start.getFullYear(), start.getMonth(), start.getDate() + i),
   );
+  const keyOf = (date: Date) =>
+    [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, "0"),
+      String(date.getDate()).padStart(2, "0"),
+    ].join("-");
+  const from = keyOf(days[0]),
+    to = keyOf(days[days.length - 1]);
+  useEffect(() => onRangeChange?.(from, to), [from, to, onRangeChange]);
   const move = (amount: number) => {
     const next = new Date(cursor);
-    if (view === "month") next.setMonth(next.getMonth() + amount);
-    else next.setDate(next.getDate() + amount * (view === "week" ? 7 : 1));
+    if (view === "month") {
+      next.setDate(1);
+      next.setMonth(next.getMonth() + amount);
+    } else next.setDate(next.getDate() + amount * (view === "week" ? 7 : 1));
     setCursor(next);
   };
   return (
@@ -66,7 +89,20 @@ export function Calendar({ items }: { items: CalendarItem[] }) {
               {v === "month" ? "Mês" : v === "week" ? "Semana" : "Dia"}
             </button>
           ))}
-          <button onClick={() => setCursor(new Date())}>Hoje</button>
+          <button
+            onClick={() =>
+              setCursor(
+                timezone
+                  ? new Date(
+                      localDate(new Date().toISOString(), timezone) +
+                        "T12:00:00",
+                    )
+                  : new Date(),
+              )
+            }
+          >
+            Hoje
+          </button>
         </div>
       </div>
       <div className={`calendar-grid ${view}`}>

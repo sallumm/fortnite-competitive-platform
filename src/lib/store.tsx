@@ -24,6 +24,40 @@ import type {
   Exercise,
   Tournament,
 } from "./types";
+import type {
+  Series,
+  Exception,
+  Journal,
+  SkillReview,
+  PlanningPreference,
+  WeeklyReport,
+  Occurrence,
+} from "./performance-types";
+import { normalizePlayer } from "./performance-types";
+import { validOccurrence } from "./calendar";
+const entityNames = {
+  plans: "training_plans",
+  schedules: "scheduled_sessions",
+  goals: "personal_goals",
+  bookmarks: "bookmarks",
+  series: "activity_series",
+  exceptions: "calendar_exceptions",
+  journals: "training_journals",
+  skillReviews: "skill_reviews",
+  planningPreferences: "planning_preferences",
+  weeklyReports: "weekly_reports",
+} as const;
+type Row =
+  | Plan
+  | Schedule
+  | Goal
+  | Bookmark
+  | Series
+  | Exception
+  | Journal
+  | SkillReview
+  | PlanningPreference
+  | WeeklyReport;
 const KEY = "clutchfolio-demo-v1";
 async function check<T>(
   promise: PromiseLike<{ data: T; error: unknown }>,
@@ -32,17 +66,31 @@ async function check<T>(
   if (error) throw error;
   return data;
 }
+async function readRows(table: string) {
+  const rows: unknown[] = [];
+  for (let from = 0; ; from += 500) {
+    const page = await check(
+      supabase!
+        .from(table)
+        .select("*")
+        .order("id")
+        .range(from, from + 499),
+    );
+    rows.push(...(page || []));
+    if (!page || page.length < 500) return rows;
+  }
+}
 function restore(): PlayerData {
   try {
     const data = JSON.parse(localStorage.getItem(KEY) || "null");
     return data?.profile?.id === "demo" && Array.isArray(data.sessions)
-      ? data
+      ? normalizePlayer(data)
       : demoPlayer();
   } catch {
     return demoPlayer();
   }
 }
-type Entity = "plans" | "schedules" | "goals" | "bookmarks";
+type Entity = keyof typeof entityNames;
 interface Store {
   catalog: Catalog;
   editorial: Catalog;
@@ -59,12 +107,14 @@ interface Store {
   exitDemo: () => void;
   refresh: () => Promise<void>;
   saveProfile: (p: Profile) => Promise<void>;
-  save: (
-    table: Entity,
-    row: Plan | Schedule | Goal | Bookmark,
-  ) => Promise<void>;
+  save: (table: Entity, row: Row) => Promise<void>;
   remove: (table: Entity, id: string) => Promise<void>;
-  start: (p: Plan) => Promise<Training>;
+  start: (p: Plan, occurrence?: Occurrence) => Promise<Training>;
+  reviseSeries: (
+    old: Series,
+    date: string,
+    replacement: Series,
+  ) => Promise<void>;
   finish: (
     s: Training,
     results: Result[],
@@ -168,6 +218,12 @@ export function Provider({ children }: { children: ReactNode }) {
           xp,
           bookmarks,
           isAdmin,
+          series,
+          exceptions,
+          journals,
+          skillReviews,
+          planningPreferences,
+          weeklyReports,
         ] = await Promise.all([
           check(
             supabase
@@ -176,28 +232,39 @@ export function Provider({ children }: { children: ReactNode }) {
               .eq("id", session.user.id)
               .maybeSingle(),
           ),
-          check(supabase.from("training_plans").select("*")),
-          check(supabase.from("scheduled_sessions").select("*")),
-          check(
-            supabase
-              .from("training_sessions")
-              .select("*")
-              .order("started_at", { ascending: false }),
-          ),
-          check(supabase.from("personal_goals").select("*")),
-          check(supabase.from("xp_transactions").select("*")),
-          check(supabase.from("bookmarks").select("*")),
+          readRows("training_plans"),
+          readRows("scheduled_sessions"),
+          readRows("training_sessions"),
+          readRows("personal_goals"),
+          readRows("xp_transactions"),
+          readRows("bookmarks"),
           check(supabase.rpc("is_admin")),
+          ...[
+            "activity_series",
+            "calendar_exceptions",
+            "training_journals",
+            "skill_reviews",
+            "planning_preferences",
+            "weekly_reports",
+          ].map((table) => readRows(table)),
         ]);
         if (ticket !== generation.current) return;
         setData({
           profile,
           plans,
           schedules,
-          sessions,
+          sessions: (sessions as Training[]).sort((a, b) =>
+            b.started_at.localeCompare(a.started_at),
+          ),
           goals,
           xp,
           bookmarks,
+          series,
+          exceptions,
+          journals,
+          skillReviews,
+          planningPreferences,
+          weeklyReports,
         } as PlayerData);
         setAdmin(Boolean(isAdmin));
         setHydratedUser(session.user.id);
@@ -255,24 +322,40 @@ export function Provider({ children }: { children: ReactNode }) {
       await refresh();
     }
   };
-  const save = async (
-    table: Entity,
-    row: Plan | Schedule | Goal | Bookmark,
-  ) => {
+  const save = async (table: Entity, row: Row) => {
     if (demo) {
       const current = restore();
+      if (row.user_id !== current.profile?.id)
+        throw new Error("Clutchfolio: proprietário inválido.");
+      if (
+        (table === "schedules" || table === "series") &&
+        "plan_id" in row &&
+        row.plan_id &&
+        !current.plans.some((p) => p.id === row.plan_id)
+      )
+        throw new Error("Clutchfolio: rotina indisponível.");
+      if (table === "exceptions") {
+        const e = row as Exception;
+        const series = current.series.find((r) => r.id === e.series_id);
+        if (!series || !validOccurrence(series, e.occurrence_date))
+          throw new Error("Clutchfolio: ocorrência inválida.");
+      }
+      if (
+        table === "journals" &&
+        !current.sessions.some(
+          (s) => s.id === (row as Journal).session_id && s.status !== "active",
+        )
+      )
+        throw new Error(
+          "Clutchfolio: conclua a sessão antes de escrever o diário.",
+        );
       const rows = current[table] as { id: string }[];
       persist({
         ...current,
         [table]: [...rows.filter((x) => x.id !== row.id), row],
       });
     } else {
-      const names = {
-        plans: "training_plans",
-        schedules: "scheduled_sessions",
-        goals: "personal_goals",
-        bookmarks: "bookmarks",
-      };
+      const names = entityNames;
       await check(
         supabase!
           .from(names[table])
@@ -294,27 +377,77 @@ export function Provider({ children }: { children: ReactNode }) {
         next = {
           ...next,
           schedules: next.schedules.filter((x) => x.plan_id !== id),
+          series: next.series.filter((x) => x.plan_id !== id),
+          exceptions: next.exceptions.filter(
+            (e) =>
+              !next.series.some(
+                (r) => r.id === e.series_id && r.plan_id === id,
+              ),
+          ),
+          sessions: next.sessions.map((s) => ({
+            ...s,
+            plan_id: s.plan_id === id ? null : s.plan_id,
+            schedule_id: next.schedules.some(
+              (a) => a.id === s.schedule_id && a.plan_id === id,
+            )
+              ? null
+              : s.schedule_id,
+            series_id: next.series.some(
+              (r) => r.id === s.series_id && r.plan_id === id,
+            )
+              ? null
+              : s.series_id,
+          })),
+        };
+      if (table === "series")
+        next = {
+          ...next,
+          exceptions: next.exceptions.filter((e) => e.series_id !== id),
+          sessions: next.sessions.map((s) =>
+            s.series_id === id ? { ...s, series_id: null } : s,
+          ),
+        };
+      if (table === "schedules")
+        next = {
+          ...next,
+          sessions: next.sessions.map((s) =>
+            s.schedule_id === id ? { ...s, schedule_id: null } : s,
+          ),
         };
       persist(next);
     } else {
-      const names = {
-        plans: "training_plans",
-        schedules: "scheduled_sessions",
-        goals: "personal_goals",
-        bookmarks: "bookmarks",
-      };
+      const names = entityNames;
       await check(supabase!.from(names[table]).delete().eq("id", id));
       await refresh();
     }
   };
-  const start = async (p: Plan) => {
+  const start = async (p: Plan, occurrence?: Occurrence) => {
     if (demo) {
       const current = restore();
       if (current.sessions.some((s) => s.status === "active"))
         throw new Error(
           "Clutchfolio: encerre a sessão ativa antes de iniciar outra.",
         );
+      if (
+        occurrence &&
+        (occurrence.plan_id !== p.id ||
+          occurrence.status !== "planned" ||
+          current.sessions.some(
+            (x) =>
+              x.status !== "abandoned" &&
+              (occurrence.schedule_id
+                ? x.schedule_id === occurrence.schedule_id
+                : x.series_id === occurrence.series_id &&
+                  x.occurrence_date === occurrence.occurrence_date),
+          ))
+      )
+        throw new Error("Clutchfolio: atividade já iniciada ou indisponível.");
       const s: Training = {
+        schedule_id: occurrence?.schedule_id || null,
+        series_id: occurrence?.series_id || null,
+        occurrence_date: occurrence?.series_id
+          ? occurrence.occurrence_date
+          : null,
         id: crypto.randomUUID(),
         user_id: "demo",
         plan_id: p.id,
@@ -333,9 +466,75 @@ export function Provider({ children }: { children: ReactNode }) {
       persist({ ...current, sessions: [s, ...current.sessions] });
       return s;
     }
-    const s = await check(supabase!.rpc("start_training", { p_plan: p.id }));
+    const s = await check(
+      occurrence
+        ? supabase!.rpc("start_scheduled_training", {
+            p_plan: p.id,
+            p_schedule: occurrence.schedule_id,
+            p_series: occurrence.series_id,
+            p_date: occurrence.series_id ? occurrence.occurrence_date : null,
+          })
+        : supabase!.rpc("start_training", { p_plan: p.id }),
+    );
     await refresh();
     return s as Training;
+  };
+  const reviseSeries = async (
+    old: Series,
+    date: string,
+    replacement: Series,
+  ) => {
+    if (date <= old.start_date) {
+      if (
+        data.exceptions.some((e) => e.series_id === old.id) ||
+        data.sessions.some(
+          (s) => s.series_id === old.id && s.status !== "abandoned",
+        )
+      )
+        throw new Error(
+          "Clutchfolio: há exceções ou treinos iniciados. Edite uma ocorrência ou revise a série a partir de uma data posterior.",
+        );
+      await save("series", { ...replacement, id: old.id });
+      return;
+    }
+    if (demo) {
+      const current = restore();
+      if (
+        current.exceptions.some(
+          (e) => e.series_id === old.id && e.occurrence_date >= date,
+        ) ||
+        current.sessions.some(
+          (s) =>
+            s.series_id === old.id &&
+            s.occurrence_date! >= date &&
+            s.status !== "abandoned",
+        )
+      )
+        throw new Error(
+          "Clutchfolio: há exceções ou treinos iniciados no intervalo. Edite uma ocorrência pendente.",
+        );
+      const end = new Date(Date.parse(date + "T12:00:00Z") - 86400000)
+        .toISOString()
+        .slice(0, 10);
+      persist({
+        ...current,
+        series: [
+          ...current.series.map((r) =>
+            r.id === old.id ? { ...r, end_date: end } : r,
+          ),
+          { ...replacement, start_date: date },
+        ],
+      });
+    } else {
+      await check(
+        supabase!.rpc("revise_series", {
+          p_id: old.id,
+          p_from: date,
+          p_replacement: replacement,
+        }),
+      );
+      await refresh();
+    }
   };
   const finish = async (
     s: Training,
@@ -444,6 +643,7 @@ export function Provider({ children }: { children: ReactNode }) {
         save,
         remove,
         start,
+        reviseSeries,
         finish,
         saveEditorial,
         deleteEditorial,

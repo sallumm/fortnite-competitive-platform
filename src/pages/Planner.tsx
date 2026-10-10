@@ -11,17 +11,17 @@ import {
   Trash2,
 } from "lucide-react";
 import { useStore } from "../lib/store";
-import type { Plan, Schedule } from "../lib/types";
-import { starterSteps, timeLabel } from "../lib/logic";
-import { Calendar, localDate } from "../components/Calendar";
+import type { Plan } from "../lib/types";
+import { starterSteps } from "../lib/logic";
+import { PlanningCalendar } from "../components/PlanningCalendar";
+import { PlanningAssistant } from "../components/PlanningAssistant";
 import { Badge, Empty, Heading, Modal } from "../components/ui";
 export default function Planner() {
   const s = useStore();
   const p = s.data.profile!;
   const navigate = useNavigate();
   const [edit, setEdit] = useState<Plan | null>(null);
-  const [agenda, setAgenda] = useState<Schedule | null>(null);
-  const [time, setTime] = useState("");
+  const [agendaIntent, setAgendaIntent] = useState<Plan | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const create = () =>
     setEdit({
@@ -44,27 +44,7 @@ export default function Planner() {
     [steps[i], steps[i + d]] = [steps[i + d], steps[i]];
     setEdit({ ...edit, steps });
   };
-  const schedule = (plan: Plan) => {
-    setAgenda({
-      id: crypto.randomUUID(),
-      user_id: p.id,
-      plan_id: plan.id,
-      starts_at: "",
-      tournament_id: null,
-    });
-    setTime("");
-  };
-  const saveAgenda = (e: FormEvent) => {
-    e.preventDefault();
-    if (agenda)
-      s.run(async () => {
-        await s.save("schedules", {
-          ...agenda,
-          starts_at: new Date(time).toISOString(),
-        });
-        setAgenda(null);
-      });
-  };
+  const schedule = (plan: Plan) => setAgendaIntent(plan);
   return (
     <>
       <Heading
@@ -78,6 +58,7 @@ export default function Planner() {
           </button>
         }
       />
+      <PlanningAssistant onSchedule={schedule} />
       <div className="template-strip panel">
         <div>
           <span className="eyebrow">UM PONTO DE PARTIDA</span>
@@ -186,77 +167,10 @@ export default function Planner() {
           Comece com uma rotina sugerida ou monte a sua.
         </Empty>
       )}
-      <div className="section-title outside">
-        <h2>Calendário pessoal</h2>
-        <small className="muted">Exibição: {p.timezone}</small>
-      </div>
-      <Calendar
-        items={s.data.schedules.map((x) => ({
-          id: x.id,
-          date: localDate(x.starts_at, p.timezone),
-          title:
-            s.data.plans.find((plan) => plan.id === x.plan_id)?.title ||
-            "Treino",
-          onClick: () => {
-            setAgenda(x);
-            const d = new Date(x.starts_at);
-            setTime(
-              new Date(d.getTime() - d.getTimezoneOffset() * 60000)
-                .toISOString()
-                .slice(0, 16),
-            );
-          },
-        }))}
+      <PlanningCalendar
+        intent={agendaIntent}
+        onHandled={() => setAgendaIntent(null)}
       />
-      <section className="panel agenda-list">
-        <h2>Sessões agendadas</h2>
-        {s.data.schedules.length ? (
-          s.data.schedules
-            .slice()
-            .sort((a, b) => a.starts_at.localeCompare(b.starts_at))
-            .map((x) => (
-              <div className="list-row" key={x.id}>
-                <CalendarDays size={18} />
-                <div>
-                  <strong>
-                    {s.data.plans.find((plan) => plan.id === x.plan_id)
-                      ?.title || "Treino"}
-                  </strong>
-                  <small>
-                    {timeLabel(x.starts_at, p.timezone)}
-                    {x.tournament_id ? " · preparação para campeonato" : ""}
-                  </small>
-                </div>
-                <button
-                  className="button small"
-                  onClick={() => {
-                    setAgenda(x);
-                    const d = new Date(x.starts_at);
-                    setTime(
-                      new Date(d.getTime() - d.getTimezoneOffset() * 60000)
-                        .toISOString()
-                        .slice(0, 16),
-                    );
-                  }}
-                >
-                  Editar
-                </button>
-                <button
-                  className="icon-button danger"
-                  aria-label="Remover agendamento"
-                  disabled={s.busy}
-                  onClick={() => s.run(() => s.remove("schedules", x.id))}
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            ))
-        ) : (
-          <p className="muted">
-            Nenhum treino agendado. Use “Agendar” em uma rotina.
-          </p>
-        )}
-      </section>
       <div className="wellbeing-note">
         <p>
           O calendário é uma ferramenta de organização. Não há penalidade por
@@ -377,44 +291,6 @@ export default function Planner() {
               disabled={s.busy || !edit.steps.length}
             >
               Salvar rotina
-            </button>
-          </form>
-        </Modal>
-      )}
-      {agenda && (
-        <Modal title="Agendar treino" onClose={() => setAgenda(null)}>
-          <form onSubmit={saveAgenda}>
-            <label>
-              Rotina
-              <select
-                value={agenda.plan_id}
-                onChange={(e) =>
-                  setAgenda({ ...agenda, plan_id: e.target.value })
-                }
-              >
-                {s.data.plans.map((plan) => (
-                  <option key={plan.id} value={plan.id}>
-                    {plan.title}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Data e horário
-              <input
-                type="datetime-local"
-                required
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-              />
-              <small>
-                Entrada no fuso do navegador:{" "}
-                {Intl.DateTimeFormat().resolvedOptions().timeZone}. A agenda
-                converte para {p.timezone}.
-              </small>
-            </label>
-            <button className="button primary full" disabled={s.busy}>
-              Salvar agendamento
             </button>
           </form>
         </Modal>
