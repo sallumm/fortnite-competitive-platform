@@ -1,3 +1,4 @@
+import { compatibleExercises, matchesSkill } from "./skill-match";
 import type {
   Category,
   Exercise,
@@ -12,6 +13,7 @@ import type {
   ReportSummary,
   Skill,
 } from "./performance-types";
+import { skills } from "./performance-types";
 import { dateInZone, expandCalendar, shiftDate } from "./calendar";
 export const skillCategory: Record<Skill, Category> = {
   aim: "aim",
@@ -25,17 +27,15 @@ export const skillCategory: Record<Skill, Category> = {
   rotations: "decisions",
   endgame: "competitive",
   vod: "vod",
+  box_fighting: "competitive",
+  positioning: "decisions",
 };
 export function skillExercises(
   exercises: Exercise[],
   skill: Skill,
   profile: Profile,
 ) {
-  return exercises.filter(
-    (e) =>
-      (e.mode === "both" || e.mode === profile.mode) &&
-      e.category === skillCategory[skill],
-  );
+  return compatibleExercises(exercises, skill, profile);
 }
 export function resultGroups(sessions: Training[], exerciseId: string) {
   const groups = new Map<
@@ -200,7 +200,11 @@ export function summarize(
     suggestions.push(
       "Sugestão: confira atividades pendentes e reagende apenas as que ainda fazem sentido.",
     );
-  if (!data.goals.some((g) => !g.completed))
+  if (
+    !data.goals.some(
+      (g) => !g.completed && (!g.status || g.status === "active"),
+    )
+  )
     suggestions.push(
       "Sugestão: defina um objetivo observável para a próxima sessão.",
     );
@@ -220,7 +224,9 @@ export function summarize(
     difficulties: [...tally].map(([key, count]) => ({ key, count })),
     observations,
     suggestions,
-    goals: data.goals.map((g) => ({ title: g.title, completed: g.completed })),
+    goals: data.goals
+      .filter((g) => g.status !== "archived" && g.status !== "paused")
+      .map((g) => ({ title: g.title, completed: g.completed })),
   };
 }
 export function personalPlan(
@@ -247,10 +253,21 @@ export function personalPlan(
     .filter(
       (e) =>
         (e.mode === "both" || e.mode === profile.mode) &&
+        e.published &&
         e.category !== "wellbeing",
     )
     .sort(
       (a, b) =>
+        Number(!!pref.primary_skill && matchesSkill(b, pref.primary_skill)) -
+          Number(!!pref.primary_skill && matchesSkill(a, pref.primary_skill)) ||
+        Number(
+          (pref.secondary_skills || []).some((skill) => matchesSkill(b, skill)),
+        ) -
+          Number(
+            (pref.secondary_skills || []).some((skill) =>
+              matchesSkill(a, skill),
+            ),
+          ) ||
         Number(pref.focuses.includes(b.category)) -
           Number(pref.focuses.includes(a.category)) ||
         Number(b.level === profile.level) - Number(a.level === profile.level) ||
@@ -275,7 +292,7 @@ export function personalPlan(
     })),
     reasons: selected.map(
       (e) =>
-        `${e.title}: ${e.description} Dispositivo informado: ${profile.input === "kbm" ? "teclado e mouse" : "controle"}; ajuste sensibilidade e cenário. Prioridade: ${pref.focuses.includes(e.category) ? "foco escolhido" : "variedade complementar"}. ${recentPractice.get(e.category) || 0} sessões dessa categoria nos últimos 30 dias; frequência não mede habilidade.`,
+        `${e.title}: ${e.description} Dispositivo informado: ${profile.input === "kbm" ? "teclado e mouse" : "controle"}; ajuste sensibilidade e cenário. Prioridade: ${pref.primary_skill && matchesSkill(e, pref.primary_skill) ? "habilidade principal: " + skills[pref.primary_skill] : (pref.secondary_skills || []).some((skill) => matchesSkill(e, skill)) ? "habilidade secundária escolhida" : pref.focuses.includes(e.category) ? "categoria escolhida" : "variedade complementar"}. ${recentPractice.get(e.category) || 0} sessões dessa categoria nos últimos 30 dias; frequência não mede habilidade.`,
     ),
   };
 }

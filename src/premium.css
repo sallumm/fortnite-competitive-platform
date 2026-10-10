@@ -767,3 +767,48 @@ dialog:has(.builder-summary) {
     min-width: 44px;
   }
 }
+
+/* Evolution: explicit evidence and bounded selection; shared motion/reduced-motion applies. */
+.evolution-profile {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+}
+.evolution-profile > .row {
+  max-width: 26rem;
+}
+.diagnostic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 1rem;
+}
+.diagnostic-card {
+  padding: 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius, 16px);
+  background: var(--panel-alt);
+}
+.diagnostic-card h3 {
+  margin: 0.8rem 0;
+}
+.intelligence-picker {
+  max-height: 230px;
+  overflow: auto;
+  display: grid;
+  gap: 0.5rem;
+}
+.intelligence-picker .checkbox-label {
+  min-height: 44px;
+}
+@media (max-width: 1000px) {
+  .evolution-profile {
+    grid-template-columns: 1fr;
+  }
+  .evolution-profile > .row {
+    max-width: none;
+  }
+  .diagnostic-grid {
+    grid-template-columns: 1fr;
+  }
+}

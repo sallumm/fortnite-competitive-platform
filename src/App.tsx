@@ -25,6 +25,8 @@ const Training = lazy(() => import("./pages/Training"));
 const Library = lazy(() => import("./pages/Library"));
 const Competitive = lazy(() => import("./pages/Competitive"));
 const Editorial = lazy(() => import("./pages/Editorial"));
+const Evolution = lazy(() => import("./pages/Evolution"));
+const Vod = lazy(() => import("./pages/Vod"));
 const Skills = lazy(() => import("./pages/Skills"));
 const Week = lazy(() => import("./pages/Week"));
 const Journal = lazy(() => import("./pages/Journal"));
@@ -169,6 +171,22 @@ function Application() {
               element={
                 <Guard>
                   <TrainingRoute />
+                </Guard>
+              }
+            />
+            <Route
+              path="/app/evolution"
+              element={
+                <Guard>
+                  <Evolution />
+                </Guard>
+              }
+            />
+            <Route
+              path="/app/vod"
+              element={
+                <Guard>
+                  <Vod />
                 </Guard>
               }
             />

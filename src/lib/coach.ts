@@ -97,7 +97,52 @@ export function demoContext(
       c.goals = data.goals
         .filter((g) => g.user_id === owner)
         .slice(0, 20)
-        .map((g) => ({ title: g.title, completed: g.completed }));
+        .map((g) => ({
+          title: g.title,
+          completed: g.completed,
+          status: g.status,
+        }));
+      const planning = data.planningPreferences.find(
+        (x) => x.user_id === owner,
+      );
+      c.focus = {
+        primary_skill: planning?.primary_skill || null,
+        secondary_skills: planning?.secondary_skills || [],
+        assessments: [
+          ...new Map(
+            data.skillReviews
+              .filter(
+                (r) =>
+                  r.user_id === owner &&
+                  Date.parse(r.created_at) <= now.getTime(),
+              )
+              .sort((a, b) => a.created_at.localeCompare(b.created_at))
+              .map((r) => [
+                r.skill,
+                {
+                  skill: r.skill,
+                  goal: r.goal,
+                  assessment: r.assessment,
+                  created_at: r.created_at,
+                },
+              ]),
+          ).values(),
+        ].slice(0, 13),
+      };
+      const vods = data.vodReviews.filter(
+        (r) =>
+          r.user_id === owner && r.match_date >= from && r.match_date <= today,
+      );
+      const counts = new Map<string, number>();
+      for (const r of vods)
+        for (const category of new Set(
+          r.markers.filter((m) => m.kind === "mistake").map((m) => m.category),
+        ))
+          counts.set(category, (counts.get(category) || 0) + 1);
+      c.vod_summary = {
+        reviews: vods.length,
+        mistakes: [...counts].map(([category, count]) => ({ category, count })),
+      };
       c.journals = data.journals
         .filter(
           (j) =>

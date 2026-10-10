@@ -1,3 +1,4 @@
+import type { VodReview, Readiness } from "./intelligence-types";
 import {
   createContext,
   useCallback,
@@ -60,6 +61,8 @@ const entityNames = {
   skillReviews: "skill_reviews",
   planningPreferences: "planning_preferences",
   weeklyReports: "weekly_reports",
+  vodReviews: "vod_reviews",
+  readiness: "training_readiness",
 } as const;
 type Row =
   | Plan
@@ -71,7 +74,9 @@ type Row =
   | Journal
   | SkillReview
   | PlanningPreference
-  | WeeklyReport;
+  | WeeklyReport
+  | VodReview
+  | Readiness;
 const KEY = "clutchfolio-demo-v1";
 async function check<T>(
   promise: PromiseLike<{ data: T; error: unknown }>,
@@ -255,6 +260,9 @@ export function Provider({ children }: { children: ReactNode }) {
           skillReviews,
           planningPreferences,
           weeklyReports,
+          vodReviews,
+          goalRevisions,
+          readiness,
         ] = await Promise.all([
           check(
             supabase
@@ -277,6 +285,9 @@ export function Provider({ children }: { children: ReactNode }) {
             "skill_reviews",
             "planning_preferences",
             "weekly_reports",
+            "vod_reviews",
+            "goal_revisions",
+            "training_readiness",
           ].map((table) => readRows(table)),
         ]);
         if (ticket !== generation.current) return;
@@ -296,6 +307,9 @@ export function Provider({ children }: { children: ReactNode }) {
           skillReviews,
           planningPreferences,
           weeklyReports,
+          vodReviews,
+          goalRevisions,
+          readiness,
         } as PlayerData);
         setAdmin(Boolean(isAdmin));
         setHydratedUser(session.user.id);
@@ -362,6 +376,30 @@ export function Provider({ children }: { children: ReactNode }) {
     }
   };
   const save = async (table: Entity, row: Row) => {
+    if (table === "vodReviews")
+      (await import("./intelligence-validation")).validateVod(
+        row as VodReview,
+        catalog.exercises,
+        catalog.tournaments,
+      );
+    if (table === "goals")
+      (await import("./intelligence-validation")).validateGoal(
+        row as Goal,
+        catalog.exercises,
+      );
+    if (table === "readiness") {
+      const r = row as Readiness;
+      if (
+        !Number.isInteger(r.available_minutes) ||
+        r.available_minutes < 1 ||
+        r.available_minutes > 240 ||
+        !["light", "habitual"].includes(r.style) ||
+        [r.energy, r.focus].some(
+          (x) => x !== null && (!Number.isInteger(x) || x < 1 || x > 5),
+        )
+      )
+        throw new Error("Clutchfolio: confira a preparação informada.");
+    }
     if (table === "plans") {
       const errors = validatePlan(row as Plan, catalog.exercises);
       if (errors.length) throw new Error("Clutchfolio: " + errors.join(" "));
@@ -374,7 +412,7 @@ export function Provider({ children }: { children: ReactNode }) {
         (table === "schedules" || table === "series") &&
         "plan_id" in row &&
         row.plan_id &&
-        !current.plans.some((p) => p.id === row.plan_id)
+        !current.plans.some((p) => p.id === (row as Schedule | Series).plan_id)
       )
         throw new Error("Clutchfolio: rotina indisponível.");
       if (table === "exceptions") {
@@ -392,6 +430,52 @@ export function Provider({ children }: { children: ReactNode }) {
         throw new Error(
           "Clutchfolio: conclua a sessão antes de escrever o diário.",
         );
+      if (
+        table === "vodReviews" &&
+        !current.vodReviews.some((r) => r.id === row.id)
+      ) {
+        const midnight = new Date().toISOString().slice(0, 10);
+        if (
+          current.vodReviews.filter(
+            (r) => r.created_at.slice(0, 10) >= midnight,
+          ).length >= 60
+        )
+          throw new Error(
+            "Clutchfolio: limite diário de 60 revisões atingido.",
+          );
+        row = { ...row, created_at: new Date().toISOString() } as VodReview;
+      }
+      if (
+        table === "readiness" &&
+        !current.sessions.some((x) => x.id === row.id)
+      )
+        throw new Error("Clutchfolio: sessão indisponível.");
+      if (table === "goals") {
+        const goal = row as Goal,
+          old = current.goals.find((g) => g.id === goal.id);
+        const status =
+          old && goal.completed !== old.completed && goal.status === old.status
+            ? goal.completed
+              ? "completed"
+              : "active"
+            : goal.status || (goal.completed ? "completed" : "active");
+        row = {
+          ...goal,
+          status,
+          completed:
+            status === "archived"
+              ? (old?.completed ?? goal.completed)
+              : status === "completed",
+        };
+        current.goalRevisions.push({
+          id: crypto.randomUUID(),
+          user_id: goal.user_id,
+          goal_id: goal.id,
+          before_value: old || null,
+          after_value: row as Goal,
+          created_at: new Date().toISOString(),
+        });
+      }
       const rows = current[table] as { id: string }[];
       persist({
         ...current,
@@ -416,6 +500,11 @@ export function Provider({ children }: { children: ReactNode }) {
           (x) => x.id !== id,
         ),
       };
+      if (table === "goals")
+        next = {
+          ...next,
+          goalRevisions: next.goalRevisions.filter((r) => r.goal_id !== id),
+        };
       if (table === "plans")
         next = {
           ...next,

@@ -105,6 +105,9 @@ export default function Dashboard() {
     });
   return (
     <>
+      <Link className="button" to="/app/evolution">
+        Abrir Minha Evolução
+      </Link>
       <Heading
         eyebrow={`${dateLabel(today)} · ${p.timezone}`}
         title="Meu Dia"

@@ -26,7 +26,7 @@ export default function Skills() {
   const records = s.data.sessions.filter(
     (x) =>
       x.status === "completed" &&
-      x.results.some((r) => known.has(r.exercise_id)),
+      x.results.some((r) => known.has(r.exercise_id) && r.status !== "skipped"),
   );
   const choose = (value: Skill) => {
     setSkill(value);
@@ -60,7 +60,7 @@ export default function Skills() {
               onClick={() => choose(key as Skill)}
               disabled={
                 p.mode === "zero" &&
-                ["building", "editing", "piece"].includes(key)
+                ["building", "editing", "piece", "box_fighting"].includes(key)
               }
             >
               {title}
@@ -75,8 +75,8 @@ export default function Skills() {
                 <Badge>{records.length} sessões relacionadas</Badge>
               </div>
               <p className="muted">
-                Os exercícios são associados por categoria editorial. Não medem
-                isoladamente todas as dimensões desta habilidade.
+                Os exercícios são associados por habilidades e tags editoriais.
+                Não medem isoladamente todas as dimensões desta habilidade.
               </p>
               <form
                 onSubmit={(e) => {
@@ -212,9 +212,12 @@ export default function Skills() {
                       {dateLabel(session.completed_at!, p.timezone)}
                     </small>
                     {session.results
-                      .filter((r) => known.has(r.exercise_id))
+                      .filter(
+                        (r) =>
+                          known.has(r.exercise_id) && r.status !== "skipped",
+                      )
                       .map((r) => (
-                        <p key={r.exercise_id}>
+                        <p key={r.step_id || r.exercise_id}>
                           {
                             session.steps.find(
                               (st) => st.exercise_id === r.exercise_id,

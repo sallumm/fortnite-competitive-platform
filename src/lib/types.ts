@@ -1,3 +1,4 @@
+import type { VodReview, GoalRevision, Readiness } from "./intelligence-types";
 import type {
   Series,
   Exception,
@@ -132,6 +133,11 @@ export interface Training {
   xp: number;
 }
 export interface Goal {
+  status?: "active" | "paused" | "completed" | "archived";
+  criteria?: string;
+  skill?: import("./performance-types").Skill | null;
+  exercise_ids?: string[];
+  due_date?: string | null;
   measurement?: {
     exercise_id: string;
     unit: string;
@@ -140,7 +146,7 @@ export interface Goal {
     desired: number;
     configuration: string;
     deadline?: string;
-  };
+  } | null;
   id: string;
   user_id: string;
   title: string;
@@ -237,6 +243,9 @@ export interface PlayerData {
   skillReviews: SkillReview[];
   planningPreferences: PlanningPreference[];
   weeklyReports: WeeklyReport[];
+  vodReviews: VodReview[];
+  goalRevisions: GoalRevision[];
+  readiness: Readiness[];
 }
 export const labels: Record<string, string> = {
   build: "Construção",

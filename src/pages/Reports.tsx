@@ -1,3 +1,6 @@
+import { validPeriod } from "../lib/intelligence";
+import { ReportEvidence } from "../components/ReportEvidence";
+import { reportEvidence } from "../lib/intelligence-report";
 import { AnimatedTabs, StatCounter } from "../components/experience/primitives";
 import { useMotionLevel } from "../components/experience/MotionSystem";
 import { CoachAccess } from "../components/CoachAccess";
@@ -31,12 +34,20 @@ export default function Reports() {
     const value = Number(query.get("period"));
     return [7, 30, 90].includes(value) ? value : 30;
   });
+  const [custom, setCustom] = useState(false);
+  const [customBounds, setCustomBounds] = useState(() =>
+    periodBounds(30, s.data.profile!.timezone),
+  );
   const [exercise, setExercise] = useState(s.catalog.exercises[0]?.id || "");
   const [goal, setGoal] = useState("");
   const [target, setTarget] = useState(3);
   const profile = s.data.profile!;
   const [configuration, setConfiguration] = useState("");
-  const bounds = periodBounds(period, profile.timezone);
+  const customValid = validPeriod(customBounds.from, customBounds.to);
+  const bounds =
+    custom && customValid
+      ? customBounds
+      : periodBounds(period, profile.timezone);
   const sessions = s.data.sessions.filter((x) => {
     const date = dateInZone(x.completed_at || x.started_at, profile.timezone);
     return date >= bounds.from && date <= bounds.to;
@@ -91,6 +102,51 @@ export default function Reports() {
           </button>
         }
       />
+      <Link className="button" to="/app/evolution">
+        Central Minha Evolução
+      </Link>
+      <section className="panel">
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            checked={custom}
+            onChange={(e) => setCustom(e.target.checked)}
+          />
+          Usar intervalo personalizado
+        </label>
+        {custom && (
+          <>
+            <div className="form-grid">
+              <label>
+                Data inicial do relatório
+                <input
+                  type="date"
+                  value={customBounds.from}
+                  onChange={(e) =>
+                    setCustomBounds({ ...customBounds, from: e.target.value })
+                  }
+                />
+              </label>
+              <label>
+                Data final do relatório
+                <input
+                  type="date"
+                  value={customBounds.to}
+                  onChange={(e) =>
+                    setCustomBounds({ ...customBounds, to: e.target.value })
+                  }
+                />
+              </label>
+            </div>
+            {!customValid && (
+              <p role="alert">
+                Intervalo inválido: use até 366 dias em ordem. Enquanto ajusta,
+                os gráficos usam o período padrão indicado abaixo.
+              </p>
+            )}
+          </>
+        )}
+      </section>
       <Link className="button" to="/app/training">
         Histórico detalhado e metas mensuráveis
       </Link>
@@ -481,6 +537,14 @@ export default function Reports() {
           <Empty title="Seu histórico começa na próxima sessão" />
         )}
       </section>
+      <ReportEvidence
+        evidence={reportEvidence(
+          s.data,
+          s.catalog.exercises,
+          bounds.from,
+          bounds.to,
+        )}
+      />
     </>
   );
 }

@@ -1,3 +1,5 @@
+import { ReportEvidence } from "../components/ReportEvidence";
+import { reportEvidence } from "../lib/intelligence-report";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "../lib/store";
@@ -19,7 +21,11 @@ export default function Week() {
     [live, setLive] = useState(false);
   const saved = s.data.weeklyReports.find((r) => r.week_start === from);
   const to = shiftDate(from, 6);
-  const summary = !live && saved ? saved.summary : summarize(s.data, from, to);
+  const build = () => ({
+    ...summarize(s.data, from, to),
+    evidence: reportEvidence(s.data, s.catalog.exercises, from, to),
+  });
+  const summary = !live && saved ? saved.summary : build();
   const upcoming = expandCalendar(
     s.data,
     shiftDate(to, 1),
@@ -38,6 +44,14 @@ export default function Week() {
         `Meta ${g.completed ? "marcada concluída" : "em andamento"}: ${g.title}`,
     ),
     ...summary.suggestions,
+    ...(summary.evidence?.diagnostics.map(
+      (d) =>
+        `${d.kind === "fact" ? "FATO OBSERVADO" : "RECOMENDAÇÃO"}: ${d.title}. ${d.detail}`,
+    ) || []),
+    ...(summary.evidence?.comparisons.map(
+      (c) =>
+        `${c.title} (${c.configuration}, ${c.version}): ${c.first} → ${c.last} ${c.unit}; ${c.count} sessões.`,
+    ) || []),
     "Método: contagem de registros reais; comparação apenas com configurações identificadas. Marcação manual e registros antigos são identificados; não é avaliação de desempenho em partidas.",
   ].join("\n\n");
   return (
@@ -102,7 +116,7 @@ export default function Week() {
                 week_start: from,
                 timezone: p.timezone,
                 generated_at: new Date().toISOString(),
-                summary: summarize(s.data, from, to),
+                summary: build(),
               });
               setLive(false);
             })
@@ -189,6 +203,16 @@ export default function Week() {
           Reorganizar minha semana
         </Link>
       </section>
+      {summary.evidence ? (
+        <ReportEvidence evidence={summary.evidence} />
+      ) : (
+        <section className="panel">
+          <p>
+            Este resumo legado não contém diagnósticos detalhados. Use a prévia
+            atual ou atualize o resumo para incluí-los.
+          </p>
+        </section>
+      )}
       <section className="panel">
         <h2>Atividades da semana seguinte</h2>
         {!upcoming.length && (

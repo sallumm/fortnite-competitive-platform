@@ -133,6 +133,9 @@ export default function TrainingCenter() {
       </section>
       <section className="panel">
         <h2>Metas mensuráveis</h2>
+        <Link className="text-link" to="/app/evolution#goals">
+          Editar, pausar, concluir e consultar histórico das metas
+        </Link>
         <p>
           Acompanhe uma métrica do mesmo exercício e configuração. Não inferimos
           evolução por horas de treino.
