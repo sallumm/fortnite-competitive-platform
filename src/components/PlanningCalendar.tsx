@@ -320,11 +320,33 @@ export function PlanningCalendar({
         <span>Conflitos são avisos: você decide como organizar.</span>
       </div>
       <Calendar
+        onMove={(id, date) => {
+          const occurrence = occurrences.find(
+            (o) => o.key === id && o.status === "planned" && !o.session_id,
+          );
+          if (
+            !occurrence ||
+            date === dateInZone(occurrence.starts_at, p.timezone)
+          )
+            return;
+          open(occurrence);
+          setForm((f) =>
+            f
+              ? {
+                  ...f,
+                  datetime:
+                    date + "T" + wallTime(occurrence.starts_at, p.timezone),
+                  scope: "occurrence",
+                }
+              : f,
+          );
+        }}
         timezone={p.timezone}
         onRangeChange={onRange}
         items={[
           ...occurrences.map((o) => ({
             id: o.key,
+            draggable: o.status === "planned" && !o.session_id,
             date: dateInZone(o.starts_at, p.timezone),
             title: `${wallTime(o.starts_at, p.timezone)} · ${o.title}${o.status === "done" ? " · concluída" : o.status === "cancelled" ? " · cancelada" : ""}`,
             tone:
@@ -442,8 +464,34 @@ export function PlanningCalendar({
       {form && (
         <Modal
           title={editing ? "Editar atividade" : "Agendar atividade"}
+          variant="drawer"
           onClose={() => setForm(null)}
         >
+          {editing && preview && editing.starts_at !== preview.starts_at && (
+            <div className="reschedule-preview">
+              <span className="eyebrow">PRÉVIA DO REAGENDAMENTO</span>
+              <h3>{editing.title}</h3>
+              <p>
+                Atual:{" "}
+                {new Date(editing.starts_at).toLocaleString("pt-BR", {
+                  timeZone: p.timezone,
+                })}
+              </p>
+              <p>
+                Proposta:{" "}
+                {new Date(preview.starts_at).toLocaleString("pt-BR", {
+                  timeZone: p.timezone,
+                })}
+              </p>
+              <small>
+                Fuso: {p.timezone}.{" "}
+                {editing.series_id
+                  ? "Somente esta ocorrência, salvo se você escolher alterar a série."
+                  : "Esta atividade."}{" "}
+                Nada mudou na agenda. Salvar agendamento confirma a alteração.
+              </small>
+            </div>
+          )}
           <form onSubmit={submit}>
             {editing?.status === "done" ? (
               <>

@@ -1,10 +1,10 @@
-# Clutchfolio 4.0 — Competitive Intelligence
+# Clutchfolio — Premium Interactive Experience
 
 Evolução do projeto existente, em português brasileiro. Nome de trabalho sujeito a pesquisa formal de marca. Interface carvão/verde-lima/violeta, modo claro, layouts responsivos, foco visível e suporte a movimento reduzido. Recursos das versões anteriores preservados.
 
 ## Estado da entrega
 
-A versão 4.0 está na branch `feat/competitive-intelligence`, sobre o Clutch Coach 3.0. Central com fases, preparação confirmada, preferências regionais, checklist privado, fontes e revisões editoriais. Veja [COMPETITIVE-INTELLIGENCE.md](COMPETITIVE-INTELLIGENCE.md) para pesquisa, arquitetura, testes e limitações. Hospedagem e aplicação das migrations no Supabase de produção ficam para a etapa de configuração.
+A experiência premium está na branch `feat/premium-interactive`, sobre a versão 5.0 (`feat/product-excellence`). Preserva Clutch Coach, inteligência competitiva e organização pessoal. Inclui Motion, editor com arraste/teclado e desfazer, reagendamento confirmado, execução focada, busca rápida, temas e preferências de movimento. Veja [INTERACTIVE-EXPERIENCE.md](docs/INTERACTIVE-EXPERIENCE.md) para decisões, verificação e limites e [PRODUCTION-READINESS.md](docs/PRODUCTION-READINESS.md) para publicação. As PRs estão empilhadas e devem ser integradas na ordem de dependência. Hospedagem e configuração de produção continuam pendentes.
 
 ## Organização pessoal 2.0
 
@@ -41,7 +41,7 @@ Veja o roteiro completo em [VALIDATION-V2.md](VALIDATION-V2.md).
 
 ## Tecnologias e estrutura
 
-React, TypeScript, Vite, React Router, CSS com tokens, Lucide, Recharts, Zod, Supabase/PostgreSQL. Vitest, Testing Library e PGlite verificam lógica, fluxos em DOM e permissões SQL. Dependências exatas estão travadas em `package-lock.json`.
+React, TypeScript, Vite, React Router, Motion, dnd-kit, CSS com tokens, Lucide, Recharts, Zod, Supabase/PostgreSQL. Vitest, Testing Library e PGlite verificam lógica, fluxos em DOM e permissões SQL. Dependências exatas estão travadas em `package-lock.json`.
 
 | Diretório | Conteúdo |
 | --- | --- |

@@ -1,3 +1,5 @@
+import { ProductPreview } from "../components/experience/ProductPreview";
+import { SectionReveal } from "../components/experience/primitives";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
@@ -9,12 +11,11 @@ import {
   Play,
   ShieldCheck,
   Layers,
-  MoveUpRight,
 } from "lucide-react";
 import { useStore } from "../lib/store";
 import { CheckLine } from "../components/ui";
 export default function Landing() {
-  const { enterDemo } = useStore();
+  const { enterDemo, catalog } = useStore();
   const navigate = useNavigate();
   const demo = () => {
     enterDemo();
@@ -22,7 +23,7 @@ export default function Landing() {
   };
   return (
     <>
-      <section className="hero">
+      <SectionReveal className="hero">
         <div className="hero-copy">
           <div className="pill">
             <span className="dot" />
@@ -63,53 +64,7 @@ export default function Landing() {
           <div className="orbit orbit-one" />
           <div className="orbit orbit-two" />
           <div className="visual-coordinate">TRAIN WITH INTENT / 01</div>
-          <div className="preview-dashboard">
-            <div className="preview-top">
-              <span className="brand-mark">C</span>
-              <span>SEU PLANO DE JOGO</span>
-              <span className="badge green">PRÉVIA</span>
-            </div>
-            <h3>
-              Uma sessão.
-              <br />
-              Um objetivo claro.
-            </h3>
-            <div className="preview-objective">
-              <Target size={20} />
-              <div>
-                Foco da sessão<strong>Precisão antes da velocidade</strong>
-              </div>
-              <MoveUpRight size={20} />
-            </div>
-            <div className="preview-plan">
-              <div>
-                <span>01</span>
-                <div>
-                  <strong>Tracking com intenção</strong>
-                  <small>Mira · 10 minutos</small>
-                </div>
-                <div className="mini-line" />
-              </div>
-              <div>
-                <span>02</span>
-                <div>
-                  <strong>Edits e resets</strong>
-                  <small>Mecânicas · 10 minutos</small>
-                </div>
-              </div>
-              <div>
-                <span>03</span>
-                <div>
-                  <strong>Revisão de uma decisão</strong>
-                  <small>Game sense · 10 minutos</small>
-                </div>
-              </div>
-            </div>
-            <button className="button primary full" onClick={demo}>
-              Testar este fluxo
-              <ArrowRight size={16} />
-            </button>
-          </div>
+          <ProductPreview onExplore={demo} />
           <div className="floating-note">
             <span className="green-text">PLANEJE. PRATIQUE. REVISE.</span>
             <p>
@@ -119,7 +74,7 @@ export default function Landing() {
             </p>
           </div>
         </div>
-      </section>
+      </SectionReveal>
       <div className="feature-strip">
         <span>
           <Target />
@@ -138,7 +93,7 @@ export default function Landing() {
           Registros que fazem sentido
         </span>
       </div>
-      <section className="landing-section">
+      <SectionReveal className="landing-section">
         <div className="section-heading">
           <div>
             <span className="eyebrow">MAIS CLAREZA. MAIS INTENÇÃO.</span>
@@ -208,8 +163,8 @@ export default function Landing() {
             </Link>
           </article>
         </div>
-      </section>
-      <section className="landing-section split-section">
+      </SectionReveal>
+      <SectionReveal className="landing-section split-section">
         <div>
           <span className="eyebrow">PROGRESSO COM CONTEXTO</span>
           <h2>
@@ -265,8 +220,8 @@ export default function Landing() {
             Prévia de uma conta nova. Sem estatísticas demonstrativas.
           </span>
         </div>
-      </section>
-      <section className="landing-section">
+      </SectionReveal>
+      <SectionReveal className="landing-section">
         <div className="section-heading">
           <div>
             <span className="eyebrow">ACADEMY</span>
@@ -303,8 +258,68 @@ export default function Landing() {
             </Link>
           ))}
         </div>
-      </section>
-      <section className="landing-section" id="plans">
+      </SectionReveal>
+      <SectionReveal className="landing-section">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">TRAINING CENTER</span>
+            <h2>Da intenção à prática.</h2>
+          </div>
+          <Link to="/library" className="button">
+            Abrir biblioteca <ArrowRight size={16} />
+          </Link>
+        </div>
+        <div className="three-grid">
+          {catalog.exercises.slice(0, 3).map((exercise) => (
+            <article className="panel landing-exercise" key={exercise.id}>
+              <Target className="green-text" size={24} />
+              <h3>{exercise.title}</h3>
+              <p>{exercise.description}</p>
+              <small className="muted">
+                {exercise.map_code
+                  ? `Ilha ${exercise.map_code}`
+                  : "Exercício sem mapa"}{" "}
+                · Verificado em {exercise.verified_at.slice(0, 10)}
+              </small>
+              <Link to="/library" className="text-link">
+                Consultar instruções <ArrowRight size={16} />
+              </Link>
+            </article>
+          ))}
+        </div>
+      </SectionReveal>
+      <SectionReveal className="landing-section">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">INTELIGÊNCIA COMPETITIVA</span>
+            <h2>Preparação começa com informação.</h2>
+          </div>
+          <Link to="/competitive" className="button">
+            Central competitiva <ArrowRight size={16} />
+          </Link>
+        </div>
+        <p className="muted">
+          Registros editoriais com fonte e data. Eventos antigos permanecem como
+          contexto histórico; confira a validade antes de se preparar.
+        </p>
+        <div className="three-grid">
+          {catalog.tournaments.slice(0, 3).map((event) => (
+            <article className="panel landing-event" key={event.id}>
+              <span className="badge">{event.region}</span>
+              <h3>{event.title}</h3>
+              <p>{event.format}</p>
+              <small className="muted">
+                Período registrado: {event.start_date} a {event.end_date}.
+                Verificado: {event.verified_at.slice(0, 10)}.
+              </small>
+              <Link to={"/competitive/" + event.slug} className="text-link">
+                Formato, fontes e preparação <ArrowRight size={16} />
+              </Link>
+            </article>
+          ))}
+        </div>
+      </SectionReveal>
+      <SectionReveal className="landing-section" id="plans">
         <div className="section-heading">
           <div>
             <span className="eyebrow">COMECE PELO ESSENCIAL</span>
@@ -371,8 +386,8 @@ export default function Landing() {
             </article>
           ))}
         </div>
-      </section>
-      <section className="landing-section faq">
+      </SectionReveal>
+      <SectionReveal className="landing-section faq">
         <span className="eyebrow">PERGUNTAS FREQUENTES</span>
         <h2>Antes de começar.</h2>
         {[
@@ -390,7 +405,7 @@ export default function Landing() {
           ],
           [
             "Existe análise automática das minhas partidas?",
-            "Ainda não. Os relatórios usam dados que você registra. A central de ajuda usa conteúdos estruturados e não se apresenta como IA.",
+            "Os relatórios usam dados que você registra. O Clutch Coach oferece assistência baseada em regras; respostas generativas dependem de um provedor configurado e de consentimento. Não há leitura automática das partidas.",
           ],
           [
             "O calendário é atualizado em tempo real?",
@@ -402,8 +417,8 @@ export default function Landing() {
             <p>{a}</p>
           </details>
         ))}
-      </section>
-      <section className="closing-cta">
+      </SectionReveal>
+      <SectionReveal className="closing-cta">
         <span className="eyebrow">PRATIQUE COM DIREÇÃO</span>
         <h2>
           A próxima sessão
@@ -414,7 +429,7 @@ export default function Landing() {
           Criar meu primeiro plano
           <ArrowUpRight size={18} />
         </button>
-      </section>
+      </SectionReveal>
     </>
   );
 }

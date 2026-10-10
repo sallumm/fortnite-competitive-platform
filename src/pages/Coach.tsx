@@ -1,3 +1,4 @@
+import { TrainingStepTransition } from "../components/experience/primitives";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
@@ -488,78 +489,80 @@ export default function Coach() {
               </div>
             )}
             {turns.map((t) => (
-              <article className="coach-turn" key={t.id}>
-                <div className="coach-user">
-                  <span className="small-text">VOCÊ</span>
-                  <p>{t.question}</p>
-                </div>
-                <div className="coach-answer">
-                  <span className="eyebrow">
-                    {t.answer.mode === "generative"
-                      ? "ANÁLISE + ORIENTAÇÃO POR IA"
-                      : "ASSISTÊNCIA POR REGRAS"}
-                  </span>
-                  {t.answer.sections.map((section, i) => (
-                    <section key={i}>
-                      <h3>{section.title}</h3>
-                      <ul>
-                        {section.items.map((line, j) => (
-                          <li key={j}>{line}</li>
-                        ))}
-                      </ul>
-                    </section>
-                  ))}
-                  {t.answer.guidance && (
-                    <section className="coach-guidance">
-                      <h3>Orientação gerada · hipóteses e sugestões</h3>
-                      <p>{t.answer.guidance}</p>
-                      <p className="small-text">
-                        Referências:{" "}
-                        {t.answer.references
-                          .filter((r) =>
-                            t.answer.guidance_reference_ids?.includes(r.id),
-                          )
-                          .map((r) => (
-                            <a key={r.id} href={safeURL(r.url)}>
-                              {r.title} ·{" "}
-                            </a>
+              <TrainingStepTransition identity={t.id} key={t.id}>
+                <article className="coach-turn">
+                  <div className="coach-user">
+                    <span className="small-text">VOCÊ</span>
+                    <p>{t.question}</p>
+                  </div>
+                  <div className="coach-answer">
+                    <span className="eyebrow">
+                      {t.answer.mode === "generative"
+                        ? "ANÁLISE + ORIENTAÇÃO POR IA"
+                        : "ASSISTÊNCIA POR REGRAS"}
+                    </span>
+                    {t.answer.sections.map((section, i) => (
+                      <section key={i}>
+                        <h3>{section.title}</h3>
+                        <ul>
+                          {section.items.map((line, j) => (
+                            <li key={j}>{line}</li>
                           ))}
+                        </ul>
+                      </section>
+                    ))}
+                    {t.answer.guidance && (
+                      <section className="coach-guidance">
+                        <h3>Orientação gerada · hipóteses e sugestões</h3>
+                        <p>{t.answer.guidance}</p>
+                        <p className="small-text">
+                          Referências:{" "}
+                          {t.answer.references
+                            .filter((r) =>
+                              t.answer.guidance_reference_ids?.includes(r.id),
+                            )
+                            .map((r) => (
+                              <a key={r.id} href={safeURL(r.url)}>
+                                {r.title} ·{" "}
+                              </a>
+                            ))}
+                        </p>
+                      </section>
+                    )}
+                    <p className="small-text muted">{t.answer.notice}</p>
+                    <details>
+                      <summary>Contexto e referências</summary>
+                      <p>
+                        Dados consultados:{" "}
+                        {t.answer.scope.join(", ") || "nenhum dado privado"}.
                       </p>
-                    </section>
-                  )}
-                  <p className="small-text muted">{t.answer.notice}</p>
-                  <details>
-                    <summary>Contexto e referências</summary>
-                    <p>
-                      Dados consultados:{" "}
-                      {t.answer.scope.join(", ") || "nenhum dado privado"}.
-                    </p>
-                    <div className="coach-references">
-                      {t.answer.references
-                        .filter((r) => safeURL(r.url))
-                        .map((r) =>
-                          r.url.startsWith("/") ? (
-                            <Link key={r.id} to={r.url}>
-                              {r.title}
-                            </Link>
-                          ) : (
-                            <a
-                              key={r.id}
-                              href={r.url}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              {r.title}
-                              {r.verified_at
-                                ? " · " + r.verified_at.slice(0, 10)
-                                : ""}
-                            </a>
-                          ),
-                        )}
-                    </div>
-                  </details>
-                </div>
-              </article>
+                      <div className="coach-references">
+                        {t.answer.references
+                          .filter((r) => safeURL(r.url))
+                          .map((r) =>
+                            r.url.startsWith("/") ? (
+                              <Link key={r.id} to={r.url}>
+                                {r.title}
+                              </Link>
+                            ) : (
+                              <a
+                                key={r.id}
+                                href={r.url}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {r.title}
+                                {r.verified_at
+                                  ? " · " + r.verified_at.slice(0, 10)
+                                  : ""}
+                              </a>
+                            ),
+                          )}
+                      </div>
+                    </details>
+                  </div>
+                </article>
+              </TrainingStepTransition>
             ))}
             {busy && (
               <p className="coach-loading" role="status">

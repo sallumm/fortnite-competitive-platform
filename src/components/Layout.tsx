@@ -1,3 +1,11 @@
+import * as m from "motion/react-m";
+import { useMotionLevel } from "./experience/MotionSystem";
+import { CommandPalette } from "./experience/CommandPalette";
+import {
+  PageTransition,
+  NotificationToast,
+  LoadingSkeleton,
+} from "./experience/primitives";
 import { Suspense, useEffect, useRef, useState } from "react";
 import {
   Link,
@@ -65,6 +73,7 @@ function RouteFocus() {
 }
 export function Layout() {
   const store = useStore();
+  const { effective } = useMotionLevel();
   const [theme, setTheme] = useState(() => {
     try {
       return localStorage.getItem("clutchfolio-theme") === "light"
@@ -86,6 +95,7 @@ export function Layout() {
       window.removeEventListener("offline", update);
     };
   }, []);
+  const [collapsed, setCollapsed] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -185,6 +195,7 @@ export function Layout() {
             <Link to="/news">Notícias</Link>
           </nav>
           <div className="row">
+            <CommandPalette />
             {themeButton}
             {auth}
           </div>
@@ -194,11 +205,18 @@ export function Layout() {
           <aside
             id="main-navigation"
             ref={menu}
-            className={`sidebar ${open ? "open" : ""}`}
+            className={`sidebar ${open ? "open" : ""} ${collapsed ? "collapsed" : ""}`}
           >
             <Link to="/" className="brand">
               <span className="brand-mark">C</span>clutchfolio
             </Link>
+            <button
+              className="sidebar-collapse button small"
+              onClick={() => setCollapsed(!collapsed)}
+              aria-label={collapsed ? "Expandir menu" : "Recolher menu"}
+            >
+              <ChevronRight size={16} />
+            </button>
             <span className="sidebar-label">SEU PRÓXIMO NÍVEL</span>
             <nav aria-label="Navegação principal">
               {nav.map(([to, title, Icon], index) => (
@@ -217,9 +235,35 @@ export function Layout() {
                             : "Ajuda"}
                     </span>
                   )}
-                  <NavLink end to={to} key={to}>
-                    <Icon size={18} />
-                    {title}
+                  <NavLink
+                    end
+                    to={to}
+                    key={to}
+                    aria-label={title}
+                    title={title}
+                  >
+                    {({ isActive }) => (
+                      <>
+                        {isActive && (
+                          <m.span
+                            aria-hidden="true"
+                            className="active-navigation"
+                            layoutId={
+                              effective === "full"
+                                ? "active-navigation"
+                                : undefined
+                            }
+                            transition={{
+                              type: "spring",
+                              stiffness: 450,
+                              damping: 38,
+                            }}
+                          />
+                        )}
+                        <Icon size={18} />
+                        <span className="nav-title">{title}</span>
+                      </>
+                    )}
                   </NavLink>
                 </div>
               ))}
@@ -264,7 +308,7 @@ export function Layout() {
             aria-label="Fechar menu"
             onClick={() => setOpen(false)}
           />
-          <header className="app-header">
+          <header className={`app-header ${collapsed ? "compact" : ""}`}>
             <div className="row">
               <button
                 ref={toggle}
@@ -285,6 +329,7 @@ export function Layout() {
               </span>
             </div>
             <div className="row">
+              <CommandPalette />
               {themeButton}
               {auth}
               {(store.session || store.demo) && (
@@ -312,7 +357,9 @@ export function Layout() {
       <main
         id="main"
         tabIndex={-1}
-        className={landing ? "landing" : "workspace"}
+        className={
+          landing ? "landing" : `workspace ${collapsed ? "compact" : ""}`
+        }
       >
         {!online && (
           <div className="alert" role="status">
@@ -348,27 +395,19 @@ export function Layout() {
             </button>
           </div>
         )}
-        {store.notice && (
-          <div role="status" className="toast">
-            {store.notice}
-          </div>
-        )}
-        <Suspense
-          fallback={
-            <div
-              role="status"
-              className="skeleton-page"
-              aria-label="Carregando"
-            >
-              <p>Carregando esta página…</p>
-            </div>
-          }
-        >
-          <Outlet />
-          <RouteFocus />
+        <NotificationToast message={store.notice || ""} />
+        <Suspense fallback={<LoadingSkeleton />}>
+          <PageTransition identity={location.pathname}>
+            <Outlet />
+            <RouteFocus />
+          </PageTransition>
         </Suspense>
       </main>
-      <footer className={landing ? "public-footer" : "app-footer"}>
+      <footer
+        className={
+          landing ? "public-footer" : `app-footer ${collapsed ? "compact" : ""}`
+        }
+      >
         <div>
           <Link to="/" className="brand">
             clutchfolio

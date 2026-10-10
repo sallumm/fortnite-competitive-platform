@@ -1,3 +1,4 @@
+import { MotionPreferences } from "../components/experience/MotionSystem";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
@@ -178,6 +179,10 @@ export function ProfilePage() {
         title="Seu perfil, suas preferências."
         description="Ajuste o plano ao seu momento. Você mantém o controle dos seus dados."
       />
+      <section className="panel motion-settings">
+        <h2>Uma experiência no seu ritmo</h2>
+        <MotionPreferences />
+      </section>
       <section className="panel profile-form">
         <form
           onSubmit={(e) => {

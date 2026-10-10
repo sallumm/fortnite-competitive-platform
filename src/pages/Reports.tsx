@@ -1,3 +1,5 @@
+import { AnimatedTabs, StatCounter } from "../components/experience/primitives";
+import { useMotionLevel } from "../components/experience/MotionSystem";
 import { CoachAccess } from "../components/CoachAccess";
 import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
@@ -11,6 +13,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
+  Brush,
 } from "recharts";
 import { Download, Plus, Target } from "lucide-react";
 import { useStore } from "../lib/store";
@@ -22,6 +25,7 @@ import { periodBounds, resultGroups, summarize } from "../lib/performance";
 import { difficulties } from "../lib/performance-types";
 export default function Reports() {
   const s = useStore();
+  const { effective } = useMotionLevel();
   const [query] = useSearchParams();
   const [period, setPeriod] = useState(() => {
     const value = Number(query.get("period"));
@@ -86,24 +90,20 @@ export default function Reports() {
           </button>
         }
       />
-      <div className="tabs page-tabs">
-        {[7, 30, 90].map((n) => (
-          <button
-            key={n}
-            aria-pressed={period === n}
-            onClick={() => setPeriod(n)}
-          >
-            {n} dias
-          </button>
-        ))}
-      </div>
+      <AnimatedTabs
+        className="page-tabs"
+        label="Período do relatório"
+        value={period}
+        onChange={setPeriod}
+        items={[7, 30, 90].map((n) => ({ value: n, label: `${n} dias` }))}
+      />
       <div className="metrics-grid">
         <article className="metric">
-          <strong>{metrics.count}</strong>
+          <StatCounter value={metrics.count} />
           <span>Sessões concluídas</span>
         </article>
         <article className="metric">
-          <strong>{metrics.minutes}</strong>
+          <StatCounter value={metrics.minutes} />
           <span>Minutos ativos registrados</span>
         </article>
         <article className="metric">
@@ -115,10 +115,53 @@ export default function Reports() {
           <span>Conclusão explícita da agenda</span>
         </article>
         <article className="metric">
-          <strong>{metrics.xp}</strong>
+          <StatCounter value={metrics.xp} />
           <span>XP no período</span>
         </article>
       </div>
+      {chart.length > 0 && (
+        <details className="panel chart-data">
+          <summary>Consultar dados dos gráficos</summary>
+          <table>
+            <caption>
+              Minutos planejados nas etapas das sessões concluídas
+            </caption>
+            <thead>
+              <tr>
+                <th>Categoria</th>
+                <th>Minutos</th>
+              </tr>
+            </thead>
+            <tbody>
+              {chart.map((row) => (
+                <tr key={row.name}>
+                  <td>{row.name}</td>
+                  <td>{row.minutos}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {trend.length > 0 && (
+            <table>
+              <caption>Resultados na configuração selecionada</caption>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Resultado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {trend.map((row, i) => (
+                  <tr key={i}>
+                    <td>{row.data}</td>
+                    <td>{row.resultado}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </details>
+      )}
       <section className="panel report-insights">
         <div className="section-title">
           <h2>Leitura do período</h2>
@@ -266,12 +309,21 @@ export default function Reports() {
                       }}
                     />
                     <Line
+                      isAnimationActive={effective === "full"}
+                      animationDuration={450}
                       type="linear"
                       dataKey="resultado"
                       stroke="var(--accent)"
                       strokeWidth={2}
                       dot
                     />
+                    {trend.length >= 8 && (
+                      <Brush
+                        dataKey="data"
+                        height={24}
+                        stroke="var(--accent)"
+                      />
+                    )}
                   </LineChart>
                 </ResponsiveContainer>
               </div>

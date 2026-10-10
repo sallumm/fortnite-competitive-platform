@@ -1,3 +1,4 @@
+import { TrainingStepTransition } from "../components/experience/primitives";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import {
@@ -79,89 +80,93 @@ export default function Onboarding() {
         ))}
       </div>
       <Progress value={step + 1} max={4} />
-      <Heading
-        title={titles[step]}
-        description="Você pode mudar essas escolhas a qualquer momento."
-      />
-      {step < 3 ? (
-        <div className="choice-grid">
-          {choices
-            .filter(
-              (c) => !(step === 2 && p.mode === "zero" && c === "mechanics"),
-            )
-            .map((c) => (
-              <button
-                aria-pressed={p[field] === c}
-                className={p[field] === c ? "selected" : ""}
-                key={c}
-                onClick={() => setP({ ...p, [field]: c })}
+      <TrainingStepTransition identity={step}>
+        <Heading
+          title={titles[step]}
+          description="Você pode mudar essas escolhas a qualquer momento."
+        />
+        {step < 3 ? (
+          <div className="choice-grid">
+            {choices
+              .filter(
+                (c) => !(step === 2 && p.mode === "zero" && c === "mechanics"),
+              )
+              .map((c) => (
+                <button
+                  aria-pressed={p[field] === c}
+                  className={p[field] === c ? "selected" : ""}
+                  key={c}
+                  onClick={() => setP({ ...p, [field]: c })}
+                >
+                  <strong>{labels[c]}</strong>
+                  {p[field] === c && <Check size={18} />}
+                </button>
+              ))}
+          </div>
+        ) : (
+          <div className="form-grid">
+            <label>
+              Como podemos chamar você?
+              <input
+                value={p.display_name}
+                maxLength={40}
+                required
+                onChange={(e) => setP({ ...p, display_name: e.target.value })}
+              />
+            </label>
+            <label>
+              Duração inicial
+              <select
+                value={p.minutes}
+                onChange={(e) =>
+                  setP({ ...p, minutes: Number(e.target.value) })
+                }
               >
-                <strong>{labels[c]}</strong>
-                {p[field] === c && <Check size={18} />}
-              </button>
-            ))}
-        </div>
-      ) : (
-        <div className="form-grid">
-          <label>
-            Como podemos chamar você?
-            <input
-              value={p.display_name}
-              maxLength={40}
-              required
-              onChange={(e) => setP({ ...p, display_name: e.target.value })}
-            />
-          </label>
-          <label>
-            Duração inicial
-            <select
-              value={p.minutes}
-              onChange={(e) => setP({ ...p, minutes: Number(e.target.value) })}
-            >
-              {[30, 45, 60].map((n) => (
-                <option value={n} key={n}>
-                  {n} minutos
-                </option>
-              ))}
-            </select>
-            <small>
-              Ponto de partida ajustável, sem duração ideal universal.
-            </small>
-          </label>
-          <label>
-            Dispositivo
-            <select
-              value={p.input}
-              onChange={(e) =>
-                setP({ ...p, input: e.target.value as Profile["input"] })
-              }
-            >
-              <option value="kbm">Teclado e mouse</option>
-              <option value="controller">Controle</option>
-            </select>
-          </label>
-          <label>
-            Fuso horário
-            <select
-              value={p.timezone}
-              onChange={(e) => setP({ ...p, timezone: e.target.value })}
-            >
-              {Array.from(
-                new Set([
-                  p.timezone,
-                  "America/Sao_Paulo",
-                  "America/Manaus",
-                  "America/Rio_Branco",
-                  "Europe/Lisbon",
-                  "UTC",
-                ]),
-              ).map((t) => (
-                <option key={t}>{t}</option>
-              ))}
-            </select>
-          </label>
-        </div>
-      )}
+                {[30, 45, 60].map((n) => (
+                  <option value={n} key={n}>
+                    {n} minutos
+                  </option>
+                ))}
+              </select>
+              <small>
+                Ponto de partida ajustável, sem duração ideal universal.
+              </small>
+            </label>
+            <label>
+              Dispositivo
+              <select
+                value={p.input}
+                onChange={(e) =>
+                  setP({ ...p, input: e.target.value as Profile["input"] })
+                }
+              >
+                <option value="kbm">Teclado e mouse</option>
+                <option value="controller">Controle</option>
+              </select>
+            </label>
+            <label>
+              Fuso horário
+              <select
+                value={p.timezone}
+                onChange={(e) => setP({ ...p, timezone: e.target.value })}
+              >
+                {Array.from(
+                  new Set([
+                    p.timezone,
+                    "America/Sao_Paulo",
+                    "America/Manaus",
+                    "America/Rio_Branco",
+                    "Europe/Lisbon",
+                    "UTC",
+                  ]),
+                ).map((t) => (
+                  <option key={t}>{t}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+        )}
+      </TrainingStepTransition>
       <div className="row between">
         <button
           className="button"
