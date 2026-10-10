@@ -3709,3 +3709,18 @@ dialog {
     scroll-behavior: auto !important;
   }
 }
+
+.meta-context { margin: 1.5rem 0; padding: clamp(1rem,3vw,2rem); }
+.meta-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,320px),1fr)); gap: 1rem; }
+.meta-record { padding: 1.25rem; min-width: 0; overflow-wrap: anywhere; }
+.meta-record h2 { font-size: 1.2rem; margin: 1rem 0; }
+.meta-record summary { cursor: pointer; padding: .75rem 0; }
+.meta-filters { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr) minmax(0,1fr); gap: 1rem; margin-top: 1.5rem; }
+.meta-filters label, .meta-context label { display: grid; gap: .5rem; min-width: 0; }
+.meta-filters select, .meta-context select { width: 100%; min-width: 0; }
+.meta-filters label:last-child { display: flex; align-items: center; }
+.meta-record li { margin-bottom: 1rem; }
+@media(max-width:768px) { .meta-filters { grid-template-columns: minmax(0,1fr); } }
+
+.meta-filters input[type="checkbox"] { width: 18px; height: 18px; min-height: 18px; margin: 0; flex: 0 0 auto; }
+.meta-filters label:last-child { gap: .75rem; justify-content: flex-start; }
