@@ -1,3 +1,4 @@
+import { contextLabel, practiceLabel } from "../lib/meta-training/context";
 import { SessionReadiness } from "../components/SessionReadiness";
 import { TrainingStepTransition } from "../components/experience/primitives";
 import { useEffect, useRef, useState } from "react";
@@ -227,6 +228,10 @@ export default function Training() {
         title={session.title}
         description="Conclua as etapas, registre observações e ajuste o ritmo quando precisar."
       />
+      <p className="muted">
+        {contextLabel(session.plan_snapshot?.game_context)} · prática:{" "}
+        {practiceLabel(session.plan_snapshot?.practice_format)}
+      </p>
       {session.plan_snapshot?.objective && (
         <p>Objetivo: {session.plan_snapshot.objective}</p>
       )}

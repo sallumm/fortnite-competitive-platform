@@ -362,8 +362,8 @@ export function Provider({ children }: { children: ReactNode }) {
             ? String(e.message)
             : "";
       setError(
-        raw.startsWith("Clutchfolio:")
-          ? raw
+        raw.startsWith("kyrven:") || raw.startsWith("Clutchfolio:")
+          ? raw.replace(/^Clutchfolio:/, "kyrven:")
           : "Não foi possível concluir. Confira os campos e tente novamente.",
       );
       return undefined;
@@ -406,28 +406,63 @@ export function Provider({ children }: { children: ReactNode }) {
           (x) => x !== null && (!Number.isInteger(x) || x < 1 || x > 5),
         )
       )
-        throw new Error("Clutchfolio: confira a preparação informada.");
+        throw new Error("kyrven: confira a preparação informada.");
     }
     if (table === "plans") {
       const errors = validatePlan(row as Plan, catalog.exercises);
-      if (errors.length) throw new Error("Clutchfolio: " + errors.join(" "));
+      if (errors.length) throw new Error("kyrven: " + errors.join(" "));
     }
     if (demo) {
       const current = restore();
+      if (
+        (table === "plans" || table === "vodReviews") &&
+        "meta_context_id" in row &&
+        !row.meta_context_id
+      ) {
+        if (row.meta_entry_ids?.length)
+          throw new Error(
+            "kyrven: escolha um contexto antes de vincular referências.",
+          );
+        row = { ...row, game_context: null, meta_entry_ids: [] };
+      }
+      if (
+        (table === "plans" || table === "vodReviews") &&
+        "meta_context_id" in row &&
+        row.meta_context_id
+      ) {
+        const meta = await (await import("./meta-service")).loadMeta(true);
+        const old =
+          table === "plans"
+            ? current.plans.find((p) => p.id === row.id)
+            : current.vodReviews.find((p) => p.id === row.id);
+        const unchanged =
+          old?.meta_context_id === row.meta_context_id &&
+          JSON.stringify(old?.meta_entry_ids || []) ===
+            JSON.stringify(row.meta_entry_ids || []);
+        row = {
+          ...row,
+          game_context: unchanged
+            ? old?.game_context
+            : (await import("./meta-training/context")).contextSnapshot(meta, {
+                context_id: row.meta_context_id,
+                entry_ids: row.meta_entry_ids || [],
+              }),
+        };
+      }
       if (row.user_id !== current.profile?.id)
-        throw new Error("Clutchfolio: proprietário inválido.");
+        throw new Error("kyrven: proprietário inválido.");
       if (
         (table === "schedules" || table === "series") &&
         "plan_id" in row &&
         row.plan_id &&
         !current.plans.some((p) => p.id === (row as Schedule | Series).plan_id)
       )
-        throw new Error("Clutchfolio: rotina indisponível.");
+        throw new Error("kyrven: rotina indisponível.");
       if (table === "exceptions") {
         const e = row as Exception;
         const series = current.series.find((r) => r.id === e.series_id);
         if (!series || !validOccurrence(series, e.occurrence_date))
-          throw new Error("Clutchfolio: ocorrência inválida.");
+          throw new Error("kyrven: ocorrência inválida.");
       }
       if (
         table === "journals" &&
@@ -435,9 +470,7 @@ export function Provider({ children }: { children: ReactNode }) {
           (s) => s.id === (row as Journal).session_id && s.status !== "active",
         )
       )
-        throw new Error(
-          "Clutchfolio: conclua a sessão antes de escrever o diário.",
-        );
+        throw new Error("kyrven: conclua a sessão antes de escrever o diário.");
       if (
         table === "vodReviews" &&
         !current.vodReviews.some((r) => r.id === row.id)
@@ -448,16 +481,14 @@ export function Provider({ children }: { children: ReactNode }) {
             (r) => r.created_at.slice(0, 10) >= midnight,
           ).length >= 60
         )
-          throw new Error(
-            "Clutchfolio: limite diário de 60 revisões atingido.",
-          );
+          throw new Error("kyrven: limite diário de 60 revisões atingido.");
         row = { ...row, created_at: new Date().toISOString() } as VodReview;
       }
       if (
         table === "readiness" &&
         !current.sessions.some((x) => x.id === row.id)
       )
-        throw new Error("Clutchfolio: sessão indisponível.");
+        throw new Error("kyrven: sessão indisponível.");
       if (table === "goals") {
         const goal = row as Goal,
           old = current.goals.find((g) => g.id === goal.id);
@@ -566,7 +597,7 @@ export function Provider({ children }: { children: ReactNode }) {
       const current = restore();
       if (current.sessions.some((s) => s.status === "active"))
         throw new Error(
-          "Clutchfolio: encerre a sessão ativa antes de iniciar outra.",
+          "kyrven: encerre a sessão ativa antes de iniciar outra.",
         );
       if (
         occurrence &&
@@ -581,12 +612,12 @@ export function Provider({ children }: { children: ReactNode }) {
                   x.occurrence_date === occurrence.occurrence_date),
           ))
       )
-        throw new Error("Clutchfolio: atividade já iniciada ou indisponível.");
+        throw new Error("kyrven: atividade já iniciada ou indisponível.");
       const owned = current.plans.find(
         (x) => x.id === p.id && x.user_id === current.profile?.id,
       );
       if (!owned || validatePlan(owned, catalog.exercises).length)
-        throw new Error("Clutchfolio: rotina indisponível.");
+        throw new Error("kyrven: rotina indisponível.");
       p = { ...owned, steps: identifySteps(owned.steps) };
       const s: Training = {
         schedule_id: occurrence?.schedule_id || null,
@@ -599,6 +630,8 @@ export function Provider({ children }: { children: ReactNode }) {
         plan_id: p.id,
         title: p.title,
         plan_snapshot: {
+          game_context: owned.game_context || null,
+          practice_format: owned.practice_format || null,
           title: p.title,
           description: p.description,
           objective: p.objective,
@@ -649,7 +682,7 @@ export function Provider({ children }: { children: ReactNode }) {
         )
       )
         throw new Error(
-          "Clutchfolio: há exceções ou treinos iniciados. Edite uma ocorrência ou revise a série a partir de uma data posterior.",
+          "kyrven: há exceções ou treinos iniciados. Edite uma ocorrência ou revise a série a partir de uma data posterior.",
         );
       await save("series", { ...replacement, id: old.id });
       return;
@@ -668,7 +701,7 @@ export function Provider({ children }: { children: ReactNode }) {
         )
       )
         throw new Error(
-          "Clutchfolio: há exceções ou treinos iniciados no intervalo. Edite uma ocorrência pendente.",
+          "kyrven: há exceções ou treinos iniciados no intervalo. Edite uma ocorrência pendente.",
         );
       const end = new Date(Date.parse(date + "T12:00:00Z") - 86400000)
         .toISOString()
@@ -711,7 +744,7 @@ export function Provider({ children }: { children: ReactNode }) {
         seconds > 86400 ||
         seconds > (Date.now() - Date.parse(authoritative.started_at)) / 1000 + 2
       )
-        throw new Error("Clutchfolio: resultados ou duração inválidos.");
+        throw new Error("kyrven: resultados ou duração inválidos.");
       s = authoritative;
       const now = new Date().toISOString();
       const completed = current.sessions.filter(
@@ -773,7 +806,7 @@ export function Provider({ children }: { children: ReactNode }) {
         (active.checkpoint_version || 0) !== version
       )
         throw new Error(
-          "Clutchfolio: a sessão mudou em outra aba. Recarregue antes de continuar.",
+          "kyrven: a sessão mudou em outra aba. Recarregue antes de continuar.",
         );
       persist({
         ...current,
@@ -811,12 +844,12 @@ export function Provider({ children }: { children: ReactNode }) {
       index >= session.steps.length ||
       session.status === "active"
     )
-      throw new Error("Clutchfolio: registro indisponível.");
+      throw new Error("kyrven: registro indisponível.");
     const results = session.results.map((r, n) => (n === index ? result : r));
     if (
       !validateResults(session.steps, results, session.status === "abandoned")
     )
-      throw new Error("Clutchfolio: resultado inválido.");
+      throw new Error("kyrven: resultado inválido.");
     if (demo) {
       const current = restore(),
         stored = current.sessions.find((x) => x.id === session.id);
@@ -825,7 +858,7 @@ export function Provider({ children }: { children: ReactNode }) {
         (stored.result_revision || 0) !== (session.result_revision || 0)
       )
         throw new Error(
-          "Clutchfolio: o registro mudou. Atualize antes de corrigir.",
+          "kyrven: o registro mudou. Atualize antes de corrigir.",
         );
       const key = "clutchfolio-result-revisions:" + session.user_id;
       const revisions = JSON.parse(localStorage.getItem(key) || "[]");
@@ -866,9 +899,7 @@ export function Provider({ children }: { children: ReactNode }) {
     row: Exercise | Tournament | Article,
   ) => {
     if (!supabase || demo || !admin)
-      throw new Error(
-        "Clutchfolio: a administração exige uma conta autorizada.",
-      );
+      throw new Error("kyrven: a administração exige uma conta autorizada.");
     await check(
       supabase.from(table).upsert(row as unknown as Record<string, unknown>),
     );

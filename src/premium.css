@@ -812,3 +812,27 @@ dialog:has(.builder-summary) {
     grid-template-columns: 1fr;
   }
 }
+
+/* Contextual training extends the existing system; no background loops or new animation dependency. */
+.meta-training > .panel {
+  margin-block: 1.25rem;
+}
+.meta-training details {
+  border-block-start: 1px solid var(--border);
+  padding-block: 0.9rem;
+}
+.meta-training summary {
+  cursor: pointer;
+  font-weight: 650;
+}
+.meta-training .context-evidence {
+  border-inline-start: 3px solid var(--accent);
+  padding-inline-start: 0.85rem;
+}
+.meta-training .two-grid > .panel {
+  min-width: 0;
+}
+.meta-training a,
+.meta-training p {
+  overflow-wrap: anywhere;
+}

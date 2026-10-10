@@ -23,6 +23,8 @@ const Planner = lazy(() => import("./pages/Planner"));
 const TrainingCenter = lazy(() => import("./pages/TrainingCenter"));
 const Training = lazy(() => import("./pages/Training"));
 const Library = lazy(() => import("./pages/Library"));
+const MetaTraining = lazy(() => import("./pages/MetaTraining"));
+const Teams = lazy(() => import("./pages/Teams"));
 const MetaAdmin = lazy(() => import("./pages/MetaAdmin"));
 const MetaDetail = lazy(() => import("./pages/MetaDetail"));
 const MetaCenter = lazy(() => import("./pages/MetaCenter"));
@@ -254,6 +256,8 @@ function Application() {
                 </Guard>
               }
             />
+            <Route path="/app/meta-training" element={<Guard><MetaTraining /></Guard>} />
+            <Route path="/app/teams" element={<Guard><Teams /></Guard>} />
             <Route path="/library" element={<Library />} />
             <Route path="/library/:id" element={<Library />} />
             <Route path="/competitive/meta" element={<MetaCenter />} />

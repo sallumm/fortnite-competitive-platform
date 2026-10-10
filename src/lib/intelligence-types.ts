@@ -18,6 +18,9 @@ export interface VodMarker {
   skills: Skill[];
 }
 export interface VodReview {
+  meta_context_id?: string | null;
+  meta_entry_ids?: string[];
+  game_context?: import("./meta-training/context").GameContext | null;
   id: string;
   user_id: string;
   title: string;

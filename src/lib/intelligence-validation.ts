@@ -10,6 +10,9 @@ const ids = z
 const date = z.iso.date();
 export const vodSchema = z
   .object({
+    meta_context_id: z.string().regex(/^[a-z0-9-]{2,100}$/).nullable().optional(),
+    meta_entry_ids: z.array(z.string().regex(/^[a-z0-9-]{2,100}$/)).max(12).optional(),
+    game_context: z.unknown().optional(),
     id: z.uuid(),
     user_id: z.string().min(1),
     title: z.string().trim().min(1).max(160),
@@ -92,7 +95,7 @@ export function validateVod(
   vodSchema.parse(row);
   if (new TextEncoder().encode(JSON.stringify(row.markers)).byteLength > 90000)
     throw new Error(
-      "Clutchfolio: a revisão ultrapassa o limite de dados dos marcadores.",
+      "kyrven: a revisão ultrapassa o limite de dados dos marcadores.",
     );
   if (
     row.exercise_ids.some(
@@ -100,7 +103,7 @@ export function validateVod(
     ) ||
     (row.tournament_id && !tournaments.some((t) => t.id === row.tournament_id))
   )
-    throw new Error("Clutchfolio: vínculo indisponível.");
+    throw new Error("kyrven: vínculo indisponível.");
 }
 export function validateGoal(g: Goal, exercises: Exercise[]) {
   z.object({
@@ -128,7 +131,7 @@ export function validateGoal(g: Goal, exercises: Exercise[]) {
       (m.deadline && !date.safeParse(m.deadline).success)
     )
       throw new Error(
-        "Clutchfolio: confira o protocolo, os limites e a configuração da meta.",
+        "kyrven: confira o protocolo, os limites e a configuração da meta.",
       );
   }
   if (
@@ -136,5 +139,5 @@ export function validateGoal(g: Goal, exercises: Exercise[]) {
       (id) => !exercises.some((e) => e.id === id && e.published),
     )
   )
-    throw new Error("Clutchfolio: exercício indisponível.");
+    throw new Error("kyrven: exercício indisponível.");
 }

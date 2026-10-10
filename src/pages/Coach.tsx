@@ -1,3 +1,8 @@
+import { loadCompetitivePreferences } from "../lib/meta-training/service";
+import { appendMetaAnswer } from "../../supabase/functions/_shared/coach/meta";
+import { loadMeta } from "../lib/meta-service";
+import { metaAnswerData } from "../lib/meta-training/context";
+import { ContextSelector } from "../components/meta-training/ContextSelector";
 import { TrainingStepTransition } from "../components/experience/primitives";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
@@ -33,6 +38,9 @@ export default function Coach() {
   const s = useStore(),
     owner = s.data.profile!.id,
     [params, setParams] = useSearchParams();
+  const [metaContext, setMetaContext] = useState(
+    params.get("meta_context") || "",
+  );
   const localKey = "clutchfolio-coach-demo:" + owner;
   const [pref, setPref] = useState<Preferences>(defaults),
     [ready, setReady] = useState(false),
@@ -186,8 +194,39 @@ export default function Coach() {
             message: question,
             exercise_id: exercise,
             tournament_id: params.get("tournament") || undefined,
+            meta_context_id: metaContext || undefined,
             conversation_id: pref.history_enabled ? conversation : undefined,
           })) as Answer);
+      if (
+        s.demo &&
+        pref.context_enabled &&
+        /perfil|modalidade.*selecion|formato.*selecion/i.test(question)
+      ) {
+        const profile = await loadCompetitivePreferences(true, owner);
+        const meta = await loadMeta(true);
+        answer.sections.push({
+          title: "Meu perfil competitivo",
+          items: [
+            profile
+              ? `${meta.modes.find((m) => m.id === profile.primary_mode)?.title || profile.primary_mode}; formato de prática: ${meta.formats.find((f) => f.id === profile.format)?.title || profile.format}; contexto editorial: ${profile.meta_context_id || "não selecionado"}. Seu formato de prática não confirma o formato de um torneio.`
+              : "Nenhuma preferência competitiva específica foi salva.",
+          ],
+        });
+      }
+      if (
+        s.demo &&
+        metaContext &&
+        !/senha|credencial|diagn[oó]stico|rem[eé]dio|sem dormir|dados.*outro|outra conta/i.test(
+          question,
+        )
+      ) {
+        const meta = await loadMeta(true);
+        appendMetaAnswer(
+          answer,
+          metaAnswerData(meta, question, metaContext),
+          metaContext,
+        );
+      }
       if (!alive.current) return;
       let id = answer.conversation_id || conversation;
       const turn: Turn = {
@@ -272,9 +311,13 @@ export default function Coach() {
   }
   return (
     <>
+      <ContextSelector
+        value={metaContext}
+        onChange={(id) => setMetaContext(id)}
+      />
       <Heading
         eyebrow="SEU TREINAMENTO, COM CONTEXTO"
-        title="Clutch Coach"
+        title="kyrven coach"
         description="Entenda seus registros, encontre exercícios e planeje os próximos passos."
         action={
           <button
@@ -436,12 +479,12 @@ export default function Coach() {
         </aside>
         <section
           className="coach-chat panel"
-          aria-label="Conversa com Clutch Coach"
+          aria-label="Conversa com kyrven coach"
         >
           <div className="coach-chat-header">
             <ShieldCheck size={19} />
             <div>
-              <strong>Clutch Coach</strong>
+              <strong>kyrven coach</strong>
               <small>
                 {s.demo
                   ? "Demonstração local · regras"

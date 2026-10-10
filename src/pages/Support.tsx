@@ -350,7 +350,7 @@ export function ProfilePage() {
                   );
                   if (error)
                     throw new Error(
-                      "Clutchfolio: a exclusão não foi concluída. Entre novamente e tente outra vez. Se persistir, contate o responsável pela plataforma.",
+                      "kyrven: a exclusão não foi concluída. Entre novamente e tente outra vez. Se persistir, contate o responsável pela plataforma.",
                     );
                   clearLocalProductData(localStorage, sessionStorage);
                   await supabase!.auth.signOut();
@@ -395,7 +395,7 @@ export function Legal() {
             vinculados do banco ativo; políticas de retenção de backups do
             provedor devem ser verificadas pelo operador.
           </p>
-          <h2>Clutch Coach e provedores externos</h2>
+          <h2>kyrven coach e provedores externos</h2>
           <p>
             A personalização, o envio externo e o histórico de conversas são
             opcionais e ficam desligados por padrão. Quando você autoriza e há
@@ -405,7 +405,7 @@ export function Legal() {
             utiliza os dados para treinamento por padrão; registros de prevenção
             de abuso podem ser retidos por até 30 dias. A retenção externa segue
             a política do provedor e não é apagada pela exclusão do histórico no
-            Clutchfolio.
+            kyrven.
           </p>
           <p>
             Você pode desativar novos envios, excluir o histórico nas
@@ -460,7 +460,7 @@ export function Legal() {
           </p>
           <h2>Identidade e propriedade intelectual</h2>
           <p>
-            Não há afiliação com a Epic Games. O nome Clutchfolio é provisório.
+            Não há afiliação com a Epic Games. kyrven é uma plataforma independente.
             A monetização de conteúdo relacionado à propriedade intelectual da
             Epic exige avaliação e permissões adequadas; o aviso de
             independência não concede licença comercial.

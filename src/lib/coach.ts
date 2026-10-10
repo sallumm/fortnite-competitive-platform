@@ -1,3 +1,4 @@
+import { comparisonContext } from "./meta-training/context";
 import type { Catalog, PlayerData } from "./types";
 import { dateInZone, expandCalendar, shiftDate } from "./calendar";
 import {
@@ -69,6 +70,8 @@ export function demoContext(
       c.total = sessions.length;
       c.sessions = sessions.slice(0, 200).map((s) => ({
         id: s.id,
+        game_context: s.plan_snapshot?.game_context,
+        practice_format: s.plan_snapshot?.practice_format,
         completed_at: s.completed_at!,
         duration_seconds: s.duration_seconds,
         steps: s.steps.map((st) => ({
@@ -138,7 +141,11 @@ export function demoContext(
         for (const category of new Set(
           r.markers.filter((m) => m.kind === "mistake").map((m) => m.category),
         ))
-          counts.set(category, (counts.get(category) || 0) + 1);
+          counts.set(
+            category + " · " + comparisonContext(r.game_context),
+            (counts.get(category + " · " + comparisonContext(r.game_context)) ||
+              0) + 1,
+          );
       c.vod_summary = {
         reviews: vods.length,
         mistakes: [...counts].map(([category, count]) => ({ category, count })),

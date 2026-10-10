@@ -60,6 +60,8 @@ export default function TrainingCenter() {
       <Link className="button primary" to="/app/evolution-plan">
         Criar meu plano de evolução
       </Link>
+      <Link className="button" to="/app/meta-training">Meta Training Center</Link>
+      <Link className="button" to="/app/teams">Minhas equipes</Link>
       <div className="three-grid">
         <article className="panel">
           <h2>Seu próximo passo</h2>

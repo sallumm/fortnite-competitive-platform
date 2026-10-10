@@ -29,7 +29,7 @@ export default function Auth() {
     store.run(async () => {
       if (!supabase)
         throw new Error(
-          "Clutchfolio: configure o Supabase para habilitar contas.",
+          "kyrven: configure o Supabase para habilitar contas.",
         );
       if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({
@@ -38,7 +38,7 @@ export default function Auth() {
         });
         if (error)
           throw new Error(
-            "Clutchfolio: não foi possível entrar. Confira os dados e a confirmação de e-mail.",
+            "kyrven: não foi possível entrar. Confira os dados e a confirmação de e-mail.",
           );
         navigate(destination);
       } else if (mode === "signup") {
@@ -49,7 +49,7 @@ export default function Auth() {
         });
         if (error)
           throw new Error(
-            "Clutchfolio: cadastro indisponível. Verifique os dados ou tente novamente mais tarde.",
+            "kyrven: cadastro indisponível. Verifique os dados ou tente novamente mais tarde.",
           );
         setMessage(
           "Solicitação enviada. Se necessário, confirme o e-mail para continuar.",

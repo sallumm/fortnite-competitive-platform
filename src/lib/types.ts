@@ -72,6 +72,10 @@ export interface Step {
   exercise?: Exercise;
 }
 export interface Plan {
+  practice_format?: "solo" | "duo" | "trio" | "squad" | "unspecified" | null;
+  meta_context_id?: string | null;
+  meta_entry_ids?: string[];
+  game_context?: import("./meta-training/context").GameContext | null;
   description?: string;
   objective?: string;
   mode?: Mode | "both";
@@ -113,7 +117,13 @@ export interface Result {
 export interface Training {
   plan_snapshot?: Pick<
     Plan,
-    "title" | "description" | "objective" | "mode" | "level"
+    | "title"
+    | "description"
+    | "objective"
+    | "mode"
+    | "level"
+    | "game_context"
+    | "practice_format"
   >;
   checkpoint?: import("./local-data").SessionDraft | null;
   checkpoint_version?: number;

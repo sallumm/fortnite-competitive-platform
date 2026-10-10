@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { MessageSquare } from "lucide-react";
 export function CoachAccess({
   question = "O que devo treinar hoje?",
-  label = "Conversar com o Clutch Coach",
+  label = "Conversar com o kyrven coach",
   exerciseId,
   tournamentId,
 }: {

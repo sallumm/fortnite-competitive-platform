@@ -1,3 +1,9 @@
+import { ContextSelector } from "../components/meta-training/ContextSelector";
+import {
+  contextSnapshot,
+  contextLabel,
+  comparisonContext,
+} from "../lib/meta-training/context";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "../lib/store";
@@ -19,6 +25,7 @@ const timestamp = (n: number) =>
 export default function Vod() {
   const s = useStore();
   const [query, setQuery] = useState(""),
+    [contextFilter, setContextFilter] = useState("all"),
     [category, setCategory] = useState(""),
     [editing, setEditing] = useState<VodReview | null>(null),
     [open, setOpen] = useState(false),
@@ -26,6 +33,8 @@ export default function Vod() {
   const rows = s.data.vodReviews
     .filter(
       (r) =>
+        (contextFilter === "all" ||
+          comparisonContext(r.game_context) === contextFilter) &&
         (!category || r.markers.some((m) => m.category === category)) &&
         [r.title, r.notes, ...r.markers.map((m) => m.note)]
           .join(" ")
@@ -36,13 +45,44 @@ export default function Vod() {
   const recurring = Object.entries(vodCategories)
     .map(([key, label]) => ({
       label,
-      count: s.data.vodReviews.filter((r) =>
-        r.markers.some((m) => m.category === key && m.kind === "mistake"),
-      ).length,
+      count: Math.max(
+        0,
+        ...[...new Set(rows.map((r) => comparisonContext(r.game_context)))].map(
+          (ctx) =>
+            rows.filter(
+              (r) =>
+                comparisonContext(r.game_context) === ctx &&
+                r.markers.some(
+                  (m) => m.category === key && m.kind === "mistake",
+                ),
+            ).length,
+        ),
+      ),
     }))
     .filter((x) => x.count >= 2);
   return (
     <>
+      <label>
+        Contexto das revisões
+        <select
+          value={contextFilter}
+          onChange={(e) => setContextFilter(e.target.value)}
+        >
+          <option value="all">Todos · padrões separados por contexto</option>
+          {[
+            ...new Map(
+              s.data.vodReviews.map((r) => [
+                comparisonContext(r.game_context),
+                contextLabel(r.game_context),
+              ]),
+            ).entries(),
+          ].map(([key, label]) => (
+            <option key={key} value={key}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </label>
       <Heading
         eyebrow="VOD REVIEW CENTER"
         title="Reveja decisões, registre contexto."
@@ -296,6 +336,22 @@ function Editor({
           });
         }}
       >
+        <ContextSelector
+          value={row.meta_context_id || ""}
+          onChange={(id, c) =>
+            patch({
+              meta_context_id: id || null,
+              meta_entry_ids: [],
+              game_context: id
+                ? contextSnapshot(c, { context_id: id, entry_ids: [] })
+                : null,
+            })
+          }
+        />
+        <p className="muted">
+          {contextLabel(row.game_context)} · análise manual, sem avaliação
+          automática por IA.
+        </p>
         <label>
           Nome da partida ou revisão
           <input

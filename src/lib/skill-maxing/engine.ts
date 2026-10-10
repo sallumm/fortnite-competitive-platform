@@ -1,3 +1,10 @@
+import {
+  exerciseRelations,
+  attachContext,
+  historicalContext,
+  type MetaSelection,
+} from "../meta-training/context";
+import type { MetaCatalog } from "../meta";
 import { z } from "zod";
 import settings from "../../data/skill-maxing-rules.json";
 import { knowledge, purposeLabels } from "../training-research";
@@ -62,6 +69,8 @@ export interface EvolutionProposal {
   rules_version: string;
   sessions: ProposedSession[];
   warnings: string[];
+  meta?: MetaSelection;
+  practice_format?: Plan["practice_format"];
 }
 const validDate = (d: string) =>
   /^\d{4}-\d{2}-\d{2}$/.test(d) &&
@@ -165,6 +174,22 @@ export function proposalIssues(
     shiftDate(proposal.from, proposal.weeks * 7 + 1),
   );
   for (const s of proposal.sessions) {
+    if (
+      proposal.practice_format &&
+      s.plan.practice_format !== proposal.practice_format
+    )
+      errors.push(
+        "O formato da sessão deve corresponder à configuração da prévia.",
+      );
+    if (
+      proposal.meta &&
+      (s.plan.meta_context_id !== proposal.meta.context_id ||
+        JSON.stringify([...(s.plan.meta_entry_ids || [])].sort()) !==
+          JSON.stringify([...proposal.meta.entry_ids].sort()))
+    )
+      errors.push(
+        "O contexto da sessão mudou. Refaça a prévia antes de confirmar.",
+      );
     errors.push(...validatePlan(s.plan, catalog.exercises));
     for (const step of s.plan.steps.filter((st) => !st.custom)) {
       const e = catalog.exercises.find((e) => e.id === step.exercise_id);
@@ -267,6 +292,8 @@ export function generateEvolution(
   from: string,
   weeks = 1,
   now = new Date(),
+  meta?: { catalog: MetaCatalog; selection: MetaSelection },
+  practiceFormat: NonNullable<Plan["practice_format"]> = "unspecified",
 ): EvolutionProposal {
   config = evolutionConfigSchema.parse(config);
   data = ownedPerformanceData(data);
@@ -280,9 +307,16 @@ export function generateEvolution(
   )
     throw new Error("Escolha uma segunda-feira e de uma a quatro semanas.");
   const warnings: string[] = [];
+  if (["trio", "squad"].includes(practiceFormat))
+    warnings.push(
+      "Grupo de prática selecionado. O catálogo não confirma uma metodologia específica ou um torneio vigente neste tamanho; exercícios de Duplas devem ser adaptados manualmente, sem presumir equivalência de formato.",
+    );
   const eligible = catalog.exercises.filter(
     (e) =>
       e.published &&
+      (practiceFormat !== "solo" ||
+        e.research?.purpose === "review" ||
+        !e.research?.competency_ids.includes("duo")) &&
       (e.mode === "both" || e.mode === config.mode) &&
       e.research?.review_status === "verified" &&
       Date.parse(e.research.review_due_at) > now.getTime() &&
@@ -327,6 +361,8 @@ export function generateEvolution(
     rules_version: rules.version,
     sessions: [],
     warnings,
+    meta: meta?.selection,
+    practice_format: practiceFormat,
   };
   const unavailable = config.skills.filter(
     (s) => !eligible.some((e) => e.research?.competency_ids.includes(s.id)),
@@ -380,6 +416,19 @@ export function generateEvolution(
           );
           const score =
             multi * w.skill +
+            (["duo", "trio", "squad"].includes(practiceFormat) &&
+            e.research!.competency_ids.includes("duo")
+              ? w.opposition
+              : 0) +
+            (meta
+              ? exerciseRelations(
+                  meta.catalog,
+                  e,
+                  meta.selection.context_id,
+                  now,
+                ).filter((r) => meta.selection.entry_ids.includes(r.entry.id))
+                  .length * w.goal
+              : 0) +
             (goalIds.has(e.id) ? w.goal : 0) +
             (e.research!.competency_ids.some((id) => difficult.has(id))
               ? w.difficulty
@@ -430,6 +479,7 @@ export function generateEvolution(
           mode: config.mode,
           level: config.level,
           objective: config.objective,
+          practice_format: practiceFormat,
           description: `Proposta editorial ${rules.version}. Tempo escolhido pelo usuário; sem promessa de evolução.`,
           steps: chosen.map((e, i) => ({
             id: crypto.randomUUID(),
@@ -441,6 +491,11 @@ export function generateEvolution(
             notes: `Objetivo: ${e.research!.completion.slice(0, 600)} Dispositivo: ${config.input}. Registre conclusão manual e condições comparáveis.`,
           })),
         };
+        if (meta)
+          Object.assign(
+            plan,
+            attachContext(plan, meta.catalog, meta.selection, now),
+          );
         const session = {
           id: crypto.randomUUID(),
           date,
@@ -498,6 +553,62 @@ export function generateEvolution(
       warnings.push(
         `A duração/disponibilidade não cobriu ${knowledge.competencies.find((k) => k.id === s.id)?.title || s.id}. Ajuste a prévia ou priorize em outra semana.`,
       );
+  for (const session of proposal.sessions) {
+    session.plan.practice_format = practiceFormat;
+    session.reasons.push(
+      `Formato de prática: ${practiceFormat}. É uma preferência de treinamento, não confirmação do formato ou meta de um torneio. Exercícios individuais permanecem úteis em preparação de equipe; escolha atividades conjuntas nas competências disponíveis.`,
+    );
+  }
+  if (meta) {
+    if (!meta.selection.entry_ids.length)
+      proposal.warnings.push(
+        "Sem informação atual verificada do meta neste contexto. As atividades propostas são fundamentos gerais.",
+      );
+    if (historicalContext(meta.catalog, meta.selection.context_id, now))
+      proposal.warnings.push(
+        "Contexto histórico selecionado: suas fontes não confirmam a versão mais recente do jogo.",
+      );
+    const mode = meta.catalog.modes.find(
+      (m) =>
+        m.id ===
+        meta.catalog.contexts.find((c) => c.id === meta.selection.context_id)
+          ?.mode_id,
+    );
+    if (!mode || mode.construction !== (config.mode === "build"))
+      throw new Error("Modalidade incompatível com o contexto.");
+    for (const session of proposal.sessions) {
+      session.plan = attachContext(
+        session.plan,
+        meta.catalog,
+        meta.selection,
+        now,
+      );
+      for (const step of session.plan.steps) {
+        const e = catalog.exercises.find((e) => e.id === step.exercise_id);
+        const relations = e
+          ? exerciseRelations(
+              meta.catalog,
+              e,
+              meta.selection.context_id,
+              now,
+            ).filter((r) => meta.selection.entry_ids.includes(r.entry.id))
+          : [];
+        if (!relations.length)
+          session.reasons.push(
+            `${e?.title || "Atividade"}: fundamento geral; nenhuma relação atual verificada com o meta selecionado.`,
+          );
+        for (const r of relations)
+          session.reasons.push(
+            `${e!.title}: ${r.entry.title} (revisão ${r.entry.revision}); ${r.reason} Fonte: ${meta.catalog.sources
+              .filter((s) => r.entry.source_ids.includes(s.id))
+              .map((s) => s.url)
+              .join(
+                " ",
+              )}. ${r.inherited ? "Vínculo herdado da edição anterior: reavaliar aplicação." : "Relação editorial, sem prova de melhoria."} ${r.entry.limitations}`,
+          );
+      }
+    }
+  }
   return proposal;
 }
 export function weeklyEvolutionReview(

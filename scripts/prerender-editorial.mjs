@@ -28,7 +28,7 @@ export function editorialSnapshot(template, article, origin, now = new Date()) {
     Date.parse(article.valid_until) < now.getTime();
   let html = template.replace(
     /<title>[^<]*<\/title>/,
-    `<title>${escapeHTML(article.title)} — Clutchfolio</title>`,
+    `<title>${escapeHTML(article.title)} — kyrven</title>`,
   );
   html = html.replace(
     /<meta\s+(?:name="description"|property="og:[^"]+")\s+content="[^"]*"\s*\/>/g,
@@ -40,7 +40,7 @@ export function editorialSnapshot(template, article, origin, now = new Date()) {
   );
   html = html.replace(
     '<div id="root"></div>',
-    `<div id="root"><main class="reading-page article-body"><a href="/">Clutchfolio</a><article><h1>${escapeHTML(article.title)}</h1><p>${escapeHTML(article.summary)}</p><p>Publicado em ${escapeHTML(article.published_at.slice(0, 10))} · Verificado em ${escapeHTML(article.verified_at?.slice(0, 10) || "não informado")}</p>${stale ? "<p>Informação precisa de revisão. Confira a fonte original.</p>" : ""}${String(
+    `<div id="root"><main class="reading-page article-body"><a href="/">kyrven</a><article><h1>${escapeHTML(article.title)}</h1><p>${escapeHTML(article.summary)}</p><p>Publicado em ${escapeHTML(article.published_at.slice(0, 10))} · Verificado em ${escapeHTML(article.verified_at?.slice(0, 10) || "não informado")}</p>${stale ? "<p>Informação precisa de revisão. Confira a fonte original.</p>" : ""}${String(
       article.body,
     )
       .split(/\n\s*\n/)

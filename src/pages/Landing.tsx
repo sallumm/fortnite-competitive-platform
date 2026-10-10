@@ -405,7 +405,7 @@ export default function Landing() {
           ],
           [
             "Existe análise automática das minhas partidas?",
-            "Os relatórios usam dados que você registra. O Clutch Coach oferece assistência baseada em regras; respostas generativas dependem de um provedor configurado e de consentimento. Não há leitura automática das partidas.",
+            "Os relatórios usam dados que você registra. O kyrven coach oferece assistência baseada em regras; respostas generativas dependem de um provedor configurado e de consentimento. Não há leitura automática das partidas.",
           ],
           [
             "O calendário é atualizado em tempo real?",

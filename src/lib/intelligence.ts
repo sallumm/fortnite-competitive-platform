@@ -56,7 +56,7 @@ export function analyze(
   now = new Date(),
 ) {
   if (!validPeriod(from, to))
-    throw new Error("Clutchfolio: escolha um intervalo de até 366 dias.");
+    throw new Error("kyrven: escolha um intervalo de até 366 dias.");
   data = ownedPerformanceData(data);
   const tz = data.profile?.timezone || "UTC";
   const sessions = data.sessions.filter(
@@ -79,6 +79,7 @@ export function analyze(
     exercise_id: string;
     title: string;
     configuration: string;
+    context: string;
     unit: string;
     version: string;
     first: number;
@@ -129,6 +130,7 @@ export function analyze(
         exercise_id: id,
         title: e?.title || "Exercício",
         configuration: g.configuration,
+        context: g.context,
         unit: g.unit || g.metric,
         version: g.version || "legado",
         first: points[0].value,

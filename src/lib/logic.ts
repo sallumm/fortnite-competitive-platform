@@ -160,7 +160,7 @@ export function tournamentICS(t: Tournament) {
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Clutchfolio//Competitivo//PT-BR",
+    "PRODID:-//kyrven//Competitivo//PT-BR",
     "BEGIN:VEVENT",
     `UID:${t.id}@clutchfolio`,
     "DTSTAMP:" + stamp(new Date().toISOString()),

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import index from "../../data/training-knowledge-index.json";
+import index from "../../data/training-knowledge-index.json" with { type: "json" };
 import type { Profile } from "../types";
 export const timeSchema = z.string().regex(/^(?:[01]\d|2[0-3]):[0-5]\d$/);
 export const timeMinutes = (time: string) =>

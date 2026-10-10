@@ -116,7 +116,8 @@ describe("Fluxos funcionais do MVP em DOM simulado", () => {
     );
     await screen.findByRole("heading", { name: "Como você joga?" });
     await user.click(screen.getByRole("link", { name: "Planejador" }));
-    await screen.findByRole("heading", { name: "Seu treino, com direção." });
+    // The lazy route may compile alongside PostgreSQL/DOM workers in CI.
+    await screen.findByRole("heading", { name: "Seu treino, com direção." }, { timeout: 5000 });
     await user.click(
       screen.getByRole("button", { name: "Editar Minha rotina" }),
     );

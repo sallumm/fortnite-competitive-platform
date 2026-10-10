@@ -1,3 +1,4 @@
+import { contextLabel, practiceLabel } from "../../lib/meta-training/context";
 import { useState } from "react";
 import { TrainingBuilder } from "../TrainingBuilder";
 import { weekdays } from "../../lib/skill-maxing/config";
@@ -40,6 +41,10 @@ export function EvolutionPreview({
         {proposal.config.timezone} · {proposal.weeks} semana(s) · regra{" "}
         {proposal.rules_version}. As divisões de tempo são pontos de partida
         editoriais e podem ser editadas.
+      </p>
+      <p>
+        Formato de prática: {practiceLabel(proposal.practice_format)}.{" "}
+        {contextLabel(proposal.sessions[0]?.plan.game_context)}
       </p>
       {proposal.warnings.map((w) => (
         <p className="alert" key={w}>

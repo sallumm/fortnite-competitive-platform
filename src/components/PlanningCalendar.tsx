@@ -174,7 +174,7 @@ export function PlanningCalendar({
       o = preview;
     s.run(async () => {
       if (f.kind === "training" && !f.plan_id)
-        throw new Error("Clutchfolio: escolha uma rotina.");
+        throw new Error("kyrven: escolha uma rotina.");
       if (editing?.series_id && f.scope === "occurrence") {
         const existing = s.data.exceptions.find(
           (e) =>

@@ -1,3 +1,9 @@
+import type { Plan } from "../lib/types";
+import { loadCompetitivePreferences } from "../lib/meta-training/service";
+import { loadMeta } from "../lib/meta-service";
+import { ContextSelector } from "../components/meta-training/ContextSelector";
+import { currentEntries, attachContext } from "../lib/meta-training/context";
+import type { MetaCatalog } from "../lib/meta";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "../lib/store";
@@ -38,20 +44,52 @@ export default function EvolutionPlanner() {
   const [confirmation, setConfirmation] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [meta, setMeta] = useState<MetaCatalog | null>(null);
+  const [contextId, setContextId] = useState("");
+  const [practiceFormat, setPracticeFormat] =
+    useState<NonNullable<Plan["practice_format"]>>("unspecified");
   const token = useRef(crypto.randomUUID());
   useEffect(() => {
     let active = true;
     setLoading(true);
     setProposal(null);
     setConfig(defaultEvolutionConfig(p));
-    loadEvolutionConfig(s.demo)
-      .then((c) => {
-        if (active && c) setConfig(c);
+    Promise.all([
+      loadEvolutionConfig(s.demo),
+      loadCompetitivePreferences(s.demo, p.id),
+    ])
+      .then(async ([saved, pref]) => {
+        const initial = saved || defaultEvolutionConfig(p);
+        const catalog = pref ? await loadMeta(s.demo) : null;
+        if (!active) return;
+        if (pref && catalog) {
+          const mode = catalog.modes.find((m) => m.id === pref.primary_mode)
+            ?.construction
+            ? "build"
+            : "zero";
+          const compatible = initial.skills.filter((s) =>
+            knowledge.competencies.some(
+              (k) => k.id === s.id && (k.mode === mode || k.mode === "both"),
+            ),
+          );
+          setConfig({
+            ...initial,
+            mode,
+            skills: compatible.length
+              ? compatible
+              : [{ id: mode === "zero" ? "zero-aim" : "shotgun", weight: 3 }],
+          });
+          setPracticeFormat(
+            pref.format as NonNullable<Plan["practice_format"]>,
+          );
+          setMeta(catalog);
+          setContextId(pref.meta_context_id || "");
+        } else setConfig(initial);
       })
       .catch(() => {
         if (active)
           setError(
-            "Não foi possível carregar suas preferências. Você pode preparar uma nova proposta e tentar salvar novamente.",
+            "Não foi possível carregar as preferências. Confira modalidade, objetivos e contexto antes de preparar um novo plano.",
           );
       })
       .finally(() => {
@@ -88,10 +126,32 @@ export default function EvolutionPlanner() {
   function prepare() {
     try {
       const parsed = evolutionConfigSchema.safeParse(config);
-      if (!parsed.success) throw new Error(parsed.error.issues.map(i => i.message).join(" "));
+      if (!parsed.success)
+        throw new Error(parsed.error.issues.map((i) => i.message).join(" "));
       const c = parsed.data;
       if (!manual)
-        setProposal(generateEvolution(c, s.data, s.catalog, from, weeks));
+        setProposal(
+          generateEvolution(
+            c,
+            s.data,
+            s.catalog,
+            from,
+            weeks,
+            new Date(),
+            meta && contextId
+              ? {
+                  catalog: meta,
+                  selection: {
+                    context_id: contextId,
+                    entry_ids: currentEntries(meta, contextId)
+                      .slice(0, 12)
+                      .map((e) => e.id),
+                  },
+                }
+              : undefined,
+            practiceFormat,
+          ),
+        );
       else {
         const sessions: Array<EvolutionProposal["sessions"][number]> = [];
         for (let i = 0; i < 7; i++) {
@@ -113,6 +173,7 @@ export default function EvolutionPlanner() {
                 user_id: p.id,
                 title: `Meu treino · ${date}`,
                 mode: c.mode,
+                practice_format: practiceFormat,
                 level: c.level,
                 objective: c.objective,
                 steps: [],
@@ -123,8 +184,29 @@ export default function EvolutionPlanner() {
           from,
           weeks,
           config: c,
+          practice_format: practiceFormat,
           rules_version: rules.version,
-          sessions,
+          sessions:
+            meta && contextId
+              ? sessions.map((s) => ({
+                  ...s,
+                  plan: attachContext(s.plan, meta, {
+                    context_id: contextId,
+                    entry_ids: currentEntries(meta, contextId)
+                      .slice(0, 12)
+                      .map((e) => e.id),
+                  }),
+                }))
+              : sessions,
+          meta:
+            meta && contextId
+              ? {
+                  context_id: contextId,
+                  entry_ids: currentEntries(meta, contextId)
+                    .slice(0, 12)
+                    .map((e) => e.id),
+                }
+              : undefined,
           warnings: [
             "Modo manual: edite cada rotina para incluir suas atividades. Confirme somente depois de revisar os horários.",
           ],
@@ -178,6 +260,37 @@ export default function EvolutionPlanner() {
       <Link className="text-link" to="/app/planner">
         Voltar ao planejador
       </Link>
+      <label>
+        Formato de prática
+        <select
+          value={practiceFormat}
+          onChange={(e) => {
+            setPracticeFormat(
+              e.target.value as NonNullable<Plan["practice_format"]>,
+            );
+            setProposal(null);
+            setConfirmation(false);
+            token.current = crypto.randomUUID();
+          }}
+        >
+          <option value="unspecified">Não especificado</option>
+          <option value="solo">Solo</option>
+          <option value="duo">Duplas</option>
+          <option value="trio">Trios · grupo de prática</option>
+          <option value="squad">Esquadrões · grupo de prática</option>
+        </select>
+      </label>
+      <ContextSelector
+        mode={config.mode}
+        value={contextId}
+        onChange={(id, catalog) => {
+          setMeta(catalog);
+          setContextId(id);
+          setProposal(null);
+          setConfirmation(false);
+          token.current = crypto.randomUUID();
+        }}
+      />
       <Heading
         eyebrow="SKILL MAXING ENGINE"
         title="Criar meu plano de evolução"

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import type { Article } from "./types";
 export function useSEO(title: string, description: string, article?: Article) {
   useEffect(() => {
-    document.title = title + " — Clutchfolio";
+    document.title = title + " — kyrven";
     const values: Record<string, string> = {
       description,
       "og:title": title,
