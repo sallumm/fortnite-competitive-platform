@@ -177,3 +177,7 @@ Auditoria, correções implementadas, limitações verificadas e checklist em [d
 - `PRERENDER_PUBLIC=1`: exportação HTML de artigos públicos no build com Supabase configurado. Rebuild obrigatório após alteração editorial.
 
 Os documentos legais e a identificação do operador ainda precisam de revisão antes do cadastro público. Nenhum serviço pago ou deploy público foi ativado nesta etapa.
+
+### Pesquisa e desenvolvimento de habilidades
+
+A Academy inclui `/academy/research`, com taxonomia, glossário, referências classificadas e trilhas que abrem o construtor existente. A metodologia é editorial, não uma intervenção cientificamente validada para Fortnite. Consulte [pesquisa](docs/research/TRAINING_RESEARCH.md), [metodologia](docs/research/TRAINING_METHODOLOGY.md), [evidências](docs/research/EVIDENCE_REGISTER.md), [lacunas](docs/research/CONTENT_GAPS.md) e [implementação](docs/research/IMPLEMENTATION.md). Migrations incrementais 010–011; nenhuma chave externa adicional.

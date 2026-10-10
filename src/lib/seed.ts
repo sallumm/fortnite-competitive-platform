@@ -5,6 +5,8 @@ import type {
   Article,
   Tournament,
 } from "./types";
+import researchExercises from "../data/research-exercises.json" with { type: "json" };
+import { seedResearch } from "./research-seed";
 import { trainingCatalog } from "./training-catalog";
 import { competitiveSeed } from "./competitive-seed";
 const verified = "2026-10-10T03:00:00Z";
@@ -328,7 +330,8 @@ export const seed: Catalog = {
     ...competitiveSeed.exercises.filter(
       (e) => !exercises.some((x) => x.map_code === e.map_code),
     ),
-    ...trainingCatalog,
+    ...trainingCatalog.map(seedResearch),
+    ...(researchExercises as Exercise[]),
   ],
   articles: [...articles, ...competitiveSeed.articles],
   tournaments: [

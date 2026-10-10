@@ -1,4 +1,8 @@
 import { z } from "zod";
+import {
+  researchSchema,
+  compatibleCompetencies,
+} from "./training-research-validation";
 const https = z
   .string()
   .url()
@@ -48,40 +52,57 @@ export const phaseSchema = z
     (x) => Date.parse(x.valid_until) >= Date.parse(x.verified_at),
     "Validade anterior à verificação.",
   );
-export const exerciseSchema = z.object({
-  ...base,
-  title,
-  skills: tags.optional(),
-  video_url: https.nullable().optional(),
-  categories: tags.optional(),
-  tags: tags.optional(),
-  measurement: z
-    .object({
-      unit: z.string().min(1).max(80),
-      min: z.number().min(0),
-      max: z.number().max(1000000),
-      direction: z.enum(["higher", "lower"]),
-      procedure: z.string().min(20).max(1000),
-      version: z.string().min(1).max(80),
-    })
-    .refine((m) => m.max >= m.min)
-    .nullable()
-    .optional(),
-  competitive_goal: z.string().max(500).optional(),
-  map_type: z.string().max(80).optional(),
-  requirements: z.string().max(500).optional(),
-  creator: z.string().min(2).max(80),
-  map_code: z
-    .string()
-    .regex(/^\d{4}-\d{4}-\d{4}$/)
-    .nullable(),
-  category,
-  mode,
-  level: z.enum(["beginner", "intermediate", "advanced"]),
-  description: z.string().min(10).max(500),
-  instructions: z.string().min(20).max(10000),
-  metric: z.string().min(3).max(200),
-});
+export const exerciseSchema = z
+  .object({
+    research: researchSchema.nullable().optional(),
+    ...base,
+    title,
+    skills: tags.optional(),
+    video_url: https.nullable().optional(),
+    categories: tags.optional(),
+    tags: tags.optional(),
+    measurement: z
+      .object({
+        unit: z.string().min(1).max(80),
+        min: z.number().min(0),
+        max: z.number().max(1000000),
+        direction: z.enum(["higher", "lower"]),
+        procedure: z.string().min(20).max(1000),
+        version: z.string().min(1).max(80),
+      })
+      .refine((m) => m.max >= m.min)
+      .nullable()
+      .optional(),
+    competitive_goal: z.string().max(500).optional(),
+    map_type: z.string().max(80).optional(),
+    requirements: z.string().max(500).optional(),
+    creator: z.string().min(2).max(80),
+    map_code: z
+      .string()
+      .regex(/^\d{4}-\d{4}-\d{4}$/)
+      .nullable(),
+    category,
+    mode,
+    level: z.enum(["beginner", "intermediate", "advanced"]),
+    description: z.string().min(10).max(500),
+    instructions: z.string().min(20).max(10000),
+    metric: z.string().min(3).max(200),
+  })
+  .refine(
+    (e) =>
+      !e.research || compatibleCompetencies(e.mode, e.research.competency_ids),
+    "Competência incompatível com a modalidade.",
+  )
+  .refine(
+    (e) =>
+      !e.research ||
+      Date.parse(e.research.review_due_at) >= Date.parse(e.verified_at),
+    "Revisão anterior à verificação.",
+  )
+  .refine(
+    (e) => !e.published || e.research?.review_status !== "retired",
+    "Despublique um exercício retirado.",
+  );
 export const articleSchema = z.object({
   ...base,
   title,

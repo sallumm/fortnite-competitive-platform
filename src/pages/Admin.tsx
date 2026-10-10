@@ -1,3 +1,5 @@
+import { ExerciseResearchEditor } from "../components/ExerciseResearchEditor";
+import { reviewPending, type ExerciseResearch } from "../lib/training-research";
 import { EditorialRevisions } from "../components/EditorialRevisions";
 import { topics } from "../lib/competitive";
 import { isStale } from "../lib/logic";
@@ -74,6 +76,7 @@ const options: Record<string, string[]> = {
 };
 export default function Admin() {
   const s = useStore();
+  const [dueOnly, setDueOnly] = useState(false);
   const [table, setTable] = useState<Table>("exercises");
   const [edit, setEdit] = useState<Record<string, unknown> | null>(null);
   const [validation, setValidation] = useState("");
@@ -96,6 +99,7 @@ export default function Admin() {
     const defaults =
       table === "exercises"
         ? {
+            research: null,
             skills: [],
             competitive_goal: "",
             map_type: "",
@@ -159,10 +163,14 @@ export default function Admin() {
           : tournamentSchema;
     let input = edit;
     try {
-      if (edit && typeof edit.phases === "string")
-        input = { ...edit, phases: JSON.parse(edit.phases) };
+      if (edit) {
+        input = { ...edit };
+        for (const key of ["phases", "measurement"])
+          if (typeof edit[key] === "string")
+            input[key] = JSON.parse(edit[key] as string);
+      }
     } catch {
-      setValidation("Fases: JSON inválido. Não salvei o registro.");
+      setValidation("Campo estruturado: JSON inválido. Não salvei o registro.");
       return;
     }
     const result = schema.safeParse(input);
@@ -214,44 +222,63 @@ export default function Admin() {
         sincronização automática. Não cadastre horários sem identificar o fuso
         de origem.
       </div>
+      {table === "exercises" && (
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            checked={dueOnly}
+            onChange={(e) => setDueOnly(e.target.checked)}
+          />
+          Somente exercícios com revisão pendente ou vencida
+        </label>
+      )}
       <section className="panel">
-        {s.editorial[table].map((row) => (
-          <div className="list-row" key={row.id}>
-            <div>
-              <strong>{row.title}</strong>
-              <small>
-                Verificação:{" "}
-                {new Date(row.verified_at).toLocaleDateString("pt-BR")}
-              </small>
+        {s.editorial[table]
+          .filter(
+            (row) =>
+              !dueOnly ||
+              table !== "exercises" ||
+              reviewPending(row as Exercise),
+          )
+          .map((row) => (
+            <div className="list-row" key={row.id}>
+              <div>
+                <strong>{row.title}</strong>
+                <small>
+                  Verificação:{" "}
+                  {new Date(row.verified_at).toLocaleDateString("pt-BR")}
+                </small>
+              </div>
+              {(table === "exercises"
+                ? reviewPending(row as Exercise)
+                : isStale(
+                    row.verified_at,
+                    "valid_until" in row ? row.valid_until : null,
+                  )) && <Badge>Revisão pendente</Badge>}
+              <Badge tone={row.published ? "green" : "neutral"}>
+                {row.published ? "Publicado / agendado" : "Rascunho"}
+              </Badge>
+              <button
+                className="icon-button"
+                aria-label={`Editar ${row.title}`}
+                onClick={() => {
+                  setEdit(
+                    structuredClone(row) as unknown as Record<string, unknown>,
+                  );
+                  setValidation("");
+                }}
+              >
+                <Edit3 size={16} />
+              </button>
+              <button
+                className="icon-button danger"
+                aria-label={`Excluir ${row.title}`}
+                onClick={() => setRemove(row.id)}
+              >
+                <Trash2 size={16} />
+              </button>
             </div>
-            {isStale(
-              row.verified_at,
-              "valid_until" in row ? row.valid_until : null,
-            ) && <Badge>Revisão pendente</Badge>}
-            <Badge tone={row.published ? "green" : "neutral"}>
-              {row.published ? "Publicado / agendado" : "Rascunho"}
-            </Badge>
-            <button
-              className="icon-button"
-              aria-label={`Editar ${row.title}`}
-              onClick={() => {
-                setEdit(
-                  structuredClone(row) as unknown as Record<string, unknown>,
-                );
-                setValidation("");
-              }}
-            >
-              <Edit3 size={16} />
-            </button>
-            <button
-              className="icon-button danger"
-              aria-label={`Excluir ${row.title}`}
-              onClick={() => setRemove(row.id)}
-            >
-              <Trash2 size={16} />
-            </button>
-          </div>
-        ))}
+          ))}
       </section>
       <section className="panel">
         <h2>Indicadores agregados</h2>
@@ -273,7 +300,9 @@ export default function Admin() {
           <form onSubmit={submit}>
             <div className="form-grid">
               {Object.entries(edit)
-                .filter(([key]) => !["id", "published"].includes(key))
+                .filter(
+                  ([key]) => !["id", "published", "research"].includes(key),
+                )
                 .map(([key, value]) => {
                   const choices =
                     key === "category" && table !== "tournaments"
@@ -299,7 +328,7 @@ export default function Admin() {
                   return (
                     <label key={key}>
                       {fieldNames[key] || key}
-                      {key === "phases" ? (
+                      {["phases", "measurement"].includes(key) ? (
                         <textarea
                           rows={12}
                           value={
@@ -308,10 +337,10 @@ export default function Admin() {
                               : JSON.stringify(value, null, 2)
                           }
                           onChange={(e) =>
-                            setEdit({ ...edit, phases: e.target.value })
+                            setEdit({ ...edit, [key]: e.target.value })
                           }
                         />
-                      ) : ["tags", "skills"].includes(key) ? (
+                      ) : ["tags", "skills", "categories"].includes(key) ? (
                         <input
                           value={
                             Array.isArray(value)
@@ -435,6 +464,13 @@ export default function Admin() {
                   );
                 })}
             </div>
+            {table === "exercises" && (
+              <ExerciseResearchEditor
+                value={edit.research as ExerciseResearch | null}
+                mode={String(edit.mode)}
+                onChange={(research) => setEdit({ ...edit, research })}
+              />
+            )}
             <p className="muted small-text">
               Campos com horário usam o fuso deste navegador e são salvos em
               UTC.

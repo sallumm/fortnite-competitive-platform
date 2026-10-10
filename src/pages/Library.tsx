@@ -1,9 +1,19 @@
 import { CoachAccess } from "../components/CoachAccess";
 import { useSEO } from "../lib/seo";
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { ArrowLeft, ArrowUpRight, Heart, Search, Target } from "lucide-react";
 import { useStore } from "../lib/store";
+import {
+  knowledge,
+  purposeLabels,
+  reviewPending,
+} from "../lib/training-research";
 import { trainingCategories } from "../lib/training";
 import { labels } from "../lib/types";
 import { Badge, CopyCode, Empty, Heading, Source } from "../components/ui";
@@ -11,6 +21,9 @@ export default function Library() {
   const s = useStore();
   const { id } = useParams();
   const navigate = useNavigate();
+  const [params, setParams] = useSearchParams();
+  const competency = params.get("competency") || "all";
+  const [purpose, setPurpose] = useState("all");
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [level, setLevel] = useState("all");
@@ -104,9 +117,53 @@ export default function Library() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Vídeo do criador: rotina de treinos (referência de 2025)
+                  Vídeo relacionado (conteúdo não revalidado nesta pesquisa)
                 </a>
               </p>
+            )}
+            {selected.research && (
+              <section aria-label="Contexto de aprendizagem">
+                <h2>Como avaliar esta prática</h2>
+                <Badge>{purposeLabels[selected.research.purpose]}</Badge>
+                <p>
+                  <strong>Conclusão:</strong> {selected.research.completion}
+                </p>
+                <p>
+                  <strong>Aplicação:</strong> {selected.research.transfer}
+                </p>
+                <p>
+                  <strong>Limites:</strong> {selected.research.limitations}
+                </p>
+                <p className="small-text">
+                  {reviewPending(selected)
+                    ? "Revisão editorial pendente"
+                    : "Metadados revisados"}{" "}
+                  · revisar até{" "}
+                  {new Date(selected.research.review_due_at).toLocaleDateString(
+                    "pt-BR",
+                  )}
+                </p>
+                <div className="row">
+                  {selected.research.competency_ids.map((id) => (
+                    <Link
+                      key={id}
+                      className="text-link"
+                      to={`/library?competency=${id}`}
+                    >
+                      {knowledge.competencies.find((c) => c.id === id)?.title}
+                    </Link>
+                  ))}
+                </div>
+                <p>
+                  Fontes:{" "}
+                  {selected.research.evidence_ids.map((id) => (
+                    <Link key={id} to={`/academy/research?view=sources#${id}`}>
+                      {knowledge.references.find((r) => r.id === id)?.title}
+                      {" · "}
+                    </Link>
+                  ))}
+                </p>
+              </section>
             )}
             <h2>O que registrar</h2>
             <p>{selected.metric}</p>
@@ -185,6 +242,9 @@ export default function Library() {
         (e.categories?.length ? e.categories : [e.category]).includes(
           category,
         )) &&
+      (competency === "all" ||
+        e.research?.competency_ids.includes(competency)) &&
+      (purpose === "all" || e.research?.purpose === purpose) &&
       (level === "all" || e.level === level) &&
       (mode === "all" || e.mode === mode || e.mode === "both") &&
       (!favorite || bookmarked(e.id)),
@@ -200,7 +260,38 @@ export default function Library() {
         title="Encontre seu próximo exercício."
         description="Códigos verificados, objetivos claros e instruções para praticar com intenção."
       />
+      <Link className="button" to="/academy/research">
+        Explorar habilidades e metodologia
+      </Link>
       <div className="filters panel">
+        <select
+          aria-label="Competência específica"
+          value={competency}
+          onChange={(e) =>
+            setParams(
+              e.target.value === "all" ? {} : { competency: e.target.value },
+            )
+          }
+        >
+          <option value="all">Todas as competências</option>
+          {knowledge.competencies.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.title}
+            </option>
+          ))}
+        </select>
+        <select
+          aria-label="Finalidade da prática"
+          value={purpose}
+          onChange={(e) => setPurpose(e.target.value)}
+        >
+          <option value="all">Todas as finalidades</option>
+          {Object.entries(purposeLabels).map(([id, label]) => (
+            <option key={id} value={id}>
+              {label}
+            </option>
+          ))}
+        </select>
         <label className="search-field">
           <Search size={17} />
           <input
