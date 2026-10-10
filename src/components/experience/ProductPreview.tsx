@@ -115,7 +115,7 @@ export function ProductPreview({ onExplore }: { onExplore: () => void }) {
             <h3>Contexto para decidir.</h3>
             <div className="preview-message">O que devo treinar hoje?</div>
             <p className="preview-answer">
-              O Clutch Coach consulta seu objetivo, seus registros autorizados e
+              O kyrven coach consulta seu objetivo, seus registros autorizados e
               os exercícios verificados. Com poucos dados, propõe um ponto de
               partida e explica os limites da recomendação.
             </p>

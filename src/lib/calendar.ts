@@ -50,7 +50,7 @@ export function wallTime(instant: string, timezone: string) {
 /** Real IANA offsets, including DST. Repeated wall times choose the first instant; gaps are rejected. */
 export function zonedInstant(date: string, time: string, timezone: string) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}(:\d{2})?$/.test(time))
-    throw new Error("Clutchfolio: data ou horário inválido.");
+    throw new Error("kyrven: data ou horário inválido.");
   const cacheKey = JSON.stringify([date, time.slice(0, 5), timezone]);
   const cached = instants.get(cacheKey);
   if (cached) return cached;
@@ -59,7 +59,7 @@ export function zonedInstant(date: string, time: string, timezone: string) {
     !Number.isFinite(wall) ||
     new Date(wall).toISOString().slice(0, 16) !== date + "T" + time.slice(0, 5)
   )
-    throw new Error("Clutchfolio: data ou horário inválido.");
+    throw new Error("kyrven: data ou horário inválido.");
   const offsets = new Set<number>();
   for (let hours = -36; hours <= 36; hours += 6) {
     const probe = new Date(wall + hours * 3600000);
@@ -81,7 +81,7 @@ export function zonedInstant(date: string, time: string, timezone: string) {
     .sort();
   if (!candidates.length)
     throw new Error(
-      "Clutchfolio: este horário não existe no fuso escolhido devido à mudança de horário. Escolha outro horário.",
+      "kyrven: este horário não existe no fuso escolhido devido à mudança de horário. Escolha outro horário.",
     );
   if (instants.size >= 2048) instants.clear();
   instants.set(cacheKey, candidates[0]);
@@ -241,7 +241,7 @@ export function calendarICS(rows: Occurrence[], now = new Date()) {
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Clutchfolio//Agenda pessoal//PT-BR",
+    "PRODID:-//kyrven//Agenda pessoal//PT-BR",
     ...rows
       .filter((r) => r.status !== "cancelled")
       .flatMap((r) => [

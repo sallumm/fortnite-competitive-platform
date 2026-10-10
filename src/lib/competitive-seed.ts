@@ -220,7 +220,7 @@ export const competitiveSeed: Catalog = {
       description:
         "Competição Solo com classificatórias, Fast Track, Heats, LCQ e finais. Datas do Anexo B; horários regionais devem ser conferidos no jogo.",
       rules:
-        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do Clutchfolio não representa Power Rankings oficiais.",
+        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do kyrven não representa Power Rankings oficiais.",
       prize:
         "Valores por região e colocação no Anexo C; não há premiação individual garantida.",
       source_url:
@@ -248,7 +248,7 @@ export const competitiveSeed: Catalog = {
       description:
         "Competição Solo com classificatórias, Fast Track, Heats, LCQ e finais. Datas do Anexo B; horários regionais devem ser conferidos no jogo.",
       rules:
-        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do Clutchfolio não representa Power Rankings oficiais.",
+        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do kyrven não representa Power Rankings oficiais.",
       prize:
         "Valores por região e colocação no Anexo C; não há premiação individual garantida.",
       source_url:
@@ -276,7 +276,7 @@ export const competitiveSeed: Catalog = {
       description:
         "Competição Solo com classificatórias, Fast Track, Heats, LCQ e finais. Datas do Anexo B; horários regionais devem ser conferidos no jogo.",
       rules:
-        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do Clutchfolio não representa Power Rankings oficiais.",
+        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do kyrven não representa Power Rankings oficiais.",
       prize:
         "Valores por região e colocação no Anexo C; não há premiação individual garantida.",
       source_url:
@@ -304,7 +304,7 @@ export const competitiveSeed: Catalog = {
       description:
         "Competição Solo com classificatórias, Fast Track, Heats, LCQ e finais. Datas do Anexo B; horários regionais devem ser conferidos no jogo.",
       rules:
-        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do Clutchfolio não representa Power Rankings oficiais.",
+        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do kyrven não representa Power Rankings oficiais.",
       prize:
         "Valores por região e colocação no Anexo C; não há premiação individual garantida.",
       source_url:
@@ -332,7 +332,7 @@ export const competitiveSeed: Catalog = {
       description:
         "Competição Solo com classificatórias, Fast Track, Heats, LCQ e finais. Datas do Anexo B; horários regionais devem ser conferidos no jogo.",
       rules:
-        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do Clutchfolio não representa Power Rankings oficiais.",
+        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do kyrven não representa Power Rankings oficiais.",
       prize:
         "Valores por região e colocação no Anexo C; não há premiação individual garantida.",
       source_url:
@@ -360,7 +360,7 @@ export const competitiveSeed: Catalog = {
       description:
         "Competição Solo com classificatórias, Fast Track, Heats, LCQ e finais. Datas do Anexo B; horários regionais devem ser conferidos no jogo.",
       rules:
-        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do Clutchfolio não representa Power Rankings oficiais.",
+        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do kyrven não representa Power Rankings oficiais.",
       prize:
         "Valores por região e colocação no Anexo C; não há premiação individual garantida.",
       source_url:
@@ -388,7 +388,7 @@ export const competitiveSeed: Catalog = {
       description:
         "Competição Solo com classificatórias, Fast Track, Heats, LCQ e finais. Datas do Anexo B; horários regionais devem ser conferidos no jogo.",
       rules:
-        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do Clutchfolio não representa Power Rankings oficiais.",
+        "A classificação usa Power Rankings e avanços por fase. Confira sua elegibilidade nas seções 2 e 3 e nas regras gerais. A pontuação de eliminações muda entre fases; consulte o Anexo A. XP do kyrven não representa Power Rankings oficiais.",
       prize:
         "Valores por região e colocação no Anexo C; não há premiação individual garantida.",
       source_url:
@@ -438,7 +438,7 @@ export const competitiveSeed: Catalog = {
       evidence: "official",
       source_published_at: "2026-08-31T12:00:00Z",
       category: "fncs",
-      author: "Redação Clutchfolio",
+      author: "Redação kyrven",
       verified_at: "2026-10-10T03:00:00Z",
       published_at: "2026-10-10T03:00:00Z",
       valid_until: "2026-10-11T23:59:59Z",
@@ -459,7 +459,7 @@ export const competitiveSeed: Catalog = {
       evidence: "official",
       source_published_at: "2026-08-20T12:00:00Z",
       category: "competitive",
-      author: "Redação Clutchfolio",
+      author: "Redação kyrven",
       verified_at: "2026-10-10T03:00:00Z",
       published_at: "2026-10-10T03:00:00Z",
       valid_until: "2026-10-11T23:59:59Z",
@@ -480,7 +480,7 @@ export const competitiveSeed: Catalog = {
       evidence: "official",
       source_published_at: "2026-08-20T12:00:00Z",
       category: "competitive",
-      author: "Redação Clutchfolio",
+      author: "Redação kyrven",
       verified_at: "2026-10-10T03:00:00Z",
       published_at: "2026-10-10T03:00:00Z",
       valid_until: "2026-10-11T23:59:59Z",
@@ -501,7 +501,7 @@ export const competitiveSeed: Catalog = {
       evidence: "official",
       source_published_at: "2026-09-28T12:00:00Z",
       category: "competitive",
-      author: "Redação Clutchfolio",
+      author: "Redação kyrven",
       verified_at: "2026-10-10T03:00:00Z",
       published_at: "2026-09-28T12:00:00Z",
       valid_until: "2026-10-11T23:59:59Z",
@@ -522,7 +522,7 @@ export const competitiveSeed: Catalog = {
       evidence: "analysis",
       source_published_at: "2026-08-27T12:00:00Z",
       category: "decisions",
-      author: "Redação Clutchfolio",
+      author: "Redação kyrven",
       verified_at: "2026-10-10T03:00:00Z",
       published_at: "2026-10-10T03:00:00Z",
       valid_until: "2026-11-10T03:00:00Z",
@@ -543,7 +543,7 @@ export const competitiveSeed: Catalog = {
       evidence: "official",
       source_published_at: "2026-05-29T12:00:00Z",
       category: "competitive",
-      author: "Redação Clutchfolio",
+      author: "Redação kyrven",
       verified_at: "2026-10-10T03:00:00Z",
       published_at: "2026-05-29T12:00:00Z",
       valid_until: "2026-10-11T23:59:59Z",

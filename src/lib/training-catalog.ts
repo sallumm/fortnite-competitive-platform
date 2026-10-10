@@ -302,7 +302,7 @@ export const trainingCatalog: Exercise[] = rows.map(
         m?.creator === "persa.maps"
           ? "https://www.youtube.com/watch?v=ZNwzbeUVgto"
           : null,
-      creator: m?.creator || "Clutchfolio · protocolo editorial",
+      creator: m?.creator || "kyrven · protocolo editorial",
       map_code: m?.code || null,
       category: (categories[0] === "combat" ||
       categories[0] === "endgame" ||

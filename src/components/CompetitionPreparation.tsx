@@ -1,3 +1,4 @@
+import { ContextSelector } from "./meta-training/ContextSelector";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "../lib/store";
@@ -33,6 +34,7 @@ export function CompetitionPreparation({
 }) {
   const s = useStore(),
     user = s.data.profile;
+  const [metaContext, setMetaContext] = useState("");
   const [loadedFor, setLoadedFor] = useState("");
   const [objective, setObjective] = useState(""),
     [checks, setChecks] = useState(
@@ -125,7 +127,7 @@ export function CompetitionPreparation({
     setMessage("");
     if (!currentEvent(event))
       throw new Error(
-        "Clutchfolio: confira a fonte; este evento precisa de revisão.",
+        "kyrven: confira a fonte; este evento precisa de revisão.",
       );
     const payload = phaseKey
       ? { kind: "event", phase_key: phaseKey }
@@ -166,13 +168,9 @@ export function CompetitionPreparation({
           phase.status !== "scheduled" ||
           Date.parse(phase.valid_until) < Date.now()))
     )
-      throw new Error(
-        "Clutchfolio: confira atividade, data e horário confirmado.",
-      );
+      throw new Error("kyrven: confira atividade, data e horário confirmado.");
     if (agendaConflicts(s.data, start, minutes).length)
-      throw new Error(
-        "Clutchfolio: conflito na agenda. Escolha outro horário.",
-      );
+      throw new Error("kyrven: conflito na agenda. Escolha outro horário.");
     setPreview({
       id: crypto.randomUUID(),
       item: {
@@ -191,7 +189,7 @@ export function CompetitionPreparation({
   async function confirm() {
     if (!preview) return;
     if (Date.parse(preview.expires_at) < Date.now())
-      throw new Error("Clutchfolio: prévia expirada. Gere outra.");
+      throw new Error("kyrven: prévia expirada. Gere outra.");
     if (s.demo) {
       if (
         !currentEvent(event) ||
@@ -201,9 +199,7 @@ export function CompetitionPreparation({
           preview.item.duration_minutes,
         ).length
       )
-        throw new Error(
-          "Clutchfolio: evento ou agenda mudou. Gere outra prévia.",
-        );
+        throw new Error("kyrven: evento ou agenda mudou. Gere outra prévia.");
       await s.save("schedules", {
         ...preview.item,
         id: preview.id,
@@ -224,6 +220,24 @@ export function CompetitionPreparation({
   }
   return (
     <div className="competition-preparation">
+      <ContextSelector
+        value={metaContext}
+        onChange={(id) => setMetaContext(id)}
+        mode={event.mode === "both" ? undefined : event.mode}
+      />
+      {metaContext && (
+        <Link
+          className="button"
+          to={`/app/coach?meta_context=${metaContext}&tournament=${event.id}&q=${encodeURIComponent("Quais conteúdos verificados posso revisar para esta competição?")}`}
+        >
+          Revisar contexto e regulamento com kyrven coach
+        </Link>
+      )}
+      <p className="muted">
+        O contexto escolhido deve corresponder ao regulamento deste evento; a
+        seleção não confirma a sua elegibilidade nem a versão utilizada no
+        torneio.
+      </p>
       <p>
         {event.title} · {dateLabel(event.start_date)} · {timezone}
       </p>

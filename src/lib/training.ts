@@ -23,6 +23,13 @@ export function stepExercise(step: Step, exercises: Exercise[]) {
 export function validatePlan(plan: Plan, exercises: Exercise[]): string[] {
   const errors: string[] = [];
   const seen = new Set<string>();
+  if (
+    plan.practice_format &&
+    !["solo", "duo", "trio", "squad", "unspecified"].includes(
+      plan.practice_format,
+    )
+  )
+    errors.push("Formato de prática inválido.");
   if (!plan.title.trim() || plan.title.length > 80)
     errors.push("Informe um nome de até 80 caracteres.");
   if (plan.steps.length < 1 || plan.steps.length > 50)

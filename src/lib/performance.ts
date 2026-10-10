@@ -1,3 +1,8 @@
+import {
+  comparisonContext,
+  contextLabel,
+  practiceLabel,
+} from "./meta-training/context";
 import { compatibleExercises, matchesSkill } from "./skill-match";
 import type {
   Category,
@@ -44,6 +49,7 @@ export function resultGroups(sessions: Training[], exerciseId: string) {
       key: string;
       configuration: string;
       metric: string;
+      context: string;
       unit?: string;
       version?: string;
       points: { date: string; value: number }[];
@@ -68,6 +74,8 @@ export function resultGroups(sessions: Training[], exerciseId: string) {
       const configuration = result.configuration!.trim();
       const key = JSON.stringify([
         exerciseId,
+        comparisonContext(session.plan_snapshot?.game_context),
+        session.plan_snapshot?.practice_format || "unrecorded-practice-format",
         metric,
         configuration,
         result.unit || "legacy",
@@ -85,6 +93,7 @@ export function resultGroups(sessions: Training[], exerciseId: string) {
         key,
         configuration,
         metric,
+        context: `${contextLabel(session.plan_snapshot?.game_context)} · prática: ${practiceLabel(session.plan_snapshot?.practice_format)}`,
         unit: result.unit,
         version: result.version,
         points: [],

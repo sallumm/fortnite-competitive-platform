@@ -1,3 +1,9 @@
+import { ContextSelector } from "./meta-training/ContextSelector";
+import {
+  attachContext,
+  currentEntries,
+  contextLabel,
+} from "../lib/meta-training/context";
 import { useEffect, useRef, useState } from "react";
 import {
   DndContext,
@@ -323,8 +329,7 @@ export function TrainingBuilder({
           e.preventDefault();
           s.run(
             async () => {
-              if (errors.length)
-                throw new Error("Clutchfolio: " + errors.join(" "));
+              if (errors.length) throw new Error("kyrven: " + errors.join(" "));
               if (onCommit) await onCommit(draft);
               else await s.save("plans", draft);
               saved.current = true;
@@ -337,6 +342,63 @@ export function TrainingBuilder({
           );
         }}
       >
+        {!onCommit && (
+          <ContextSelector
+            value={draft.meta_context_id || ""}
+            onChange={(id, c) => {
+              if (!id) {
+                update({
+                  ...draft,
+                  meta_context_id: null,
+                  meta_entry_ids: [],
+                  game_context: null,
+                });
+                return;
+              }
+              const context = c.contexts.find((x) => x.id === id)!;
+              const mode = c.modes.find((m) => m.id === context.mode_id)
+                ?.construction
+                ? "build"
+                : "zero";
+              update(
+                attachContext({ ...draft, mode }, c, {
+                  context_id: id,
+                  entry_ids: currentEntries(c, id)
+                    .slice(0, 12)
+                    .map((e) => e.id),
+                }),
+              );
+            }}
+          />
+        )}
+        <p className="muted">
+          {onCommit
+            ? "O contexto e o formato de todas as sessões são definidos na configuração da proposta. "
+            : ""}
+          {contextLabel(draft.game_context)}. Alterar o contexto não atualiza
+          sessões anteriores. Revise a compatibilidade das etapas antes de
+          salvar.
+        </p>
+        {!onCommit && (
+          <label>
+            Formato de prática
+            <select
+              value={draft.practice_format || "unspecified"}
+              onChange={(e) =>
+                update({
+                  ...draft,
+                  practice_format: e.target.value as Plan["practice_format"],
+                })
+              }
+            >
+              <option value="unspecified">Não especificado</option>
+              <option value="solo">Solo</option>
+              <option value="duo">Duplas</option>
+              <option value="trio">Trios · grupo de prática</option>
+              <option value="squad">Esquadrões · grupo de prática</option>
+            </select>
+          </label>
+        )}
         <label>
           Nome
           <input
@@ -393,7 +455,13 @@ export function TrainingBuilder({
             <select
               value={draft.mode || "both"}
               onChange={(e) =>
-                update({ ...draft, mode: e.target.value as Plan["mode"] })
+                update({
+                  ...draft,
+                  mode: e.target.value as Plan["mode"],
+                  meta_context_id: null,
+                  meta_entry_ids: [],
+                  game_context: null,
+                })
               }
             >
               <option value="both">Todas</option>

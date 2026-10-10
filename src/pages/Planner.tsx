@@ -1,3 +1,4 @@
+import { TeamCalendar } from "../components/meta-training/TeamCalendar";
 import { TrainingBuilder } from "../components/TrainingBuilder";
 import { CoachAccess } from "../components/CoachAccess";
 import { useState } from "react";
@@ -48,6 +49,7 @@ export default function Planner() {
       <Link className="button primary" to="/app/evolution-plan">
         Criar meu plano de evolução
       </Link>
+      <TeamCalendar />
       <PlanningAssistant onSchedule={schedule} />
       <div className="template-strip panel">
         <div>

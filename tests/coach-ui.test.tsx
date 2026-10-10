@@ -35,8 +35,8 @@ async function demo() {
     await screen.findByRole("button", { name: "Explorar demonstração" }),
   );
   await screen.findByRole("heading", { name: "Como você joga?" });
-  await u.click(screen.getByRole("link", { name: "Clutch Coach" }));
-  await screen.findByRole("heading", { name: "Clutch Coach" });
+  await u.click(screen.getByRole("link", { name: "kyrven coach" }));
+  await screen.findByRole("heading", { name: "kyrven coach" });
   await waitFor(() =>
     expect(
       (screen.getByLabelText("Sua mensagem") as HTMLTextAreaElement).disabled,
@@ -154,7 +154,7 @@ it("link contextual de exercício mantém pergunta e não envia dados para IA ex
     ).disabled,
   ).toBe(true);
   await u.click(screen.getByRole("button", { name: "Enviar mensagem" }));
-  await screen.findByRole("heading", { name: "Exercícios do Clutchfolio" });
+  await screen.findByRole("heading", { name: "Exercícios do kyrven" });
   expect(
     within(screen.getByRole("log")).getByText(/Mapa cadastrado/),
   ).toBeTruthy();

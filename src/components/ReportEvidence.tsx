@@ -42,12 +42,24 @@ export function ReportEvidence({ evidence }: { evidence: ReportEvidenceData }) {
           </LineChart>
         </ResponsiveContainer>
       </div>
+      <h3>Contextos registrados</h3>
+      <p>
+        Resultados de versões, modalidades e formatos diferentes são agrupados
+        separadamente. Mudanças de resultado não demonstram efeito do meta.
+      </p>
+      <ul>
+        {evidence.contexts?.map((c) => (
+          <li key={c.key}>
+            {c.label} · prática: {c.practice}: {c.count} sessão(ões)
+          </li>
+        ))}
+      </ul>
       <h3>Testes comparáveis</h3>
       {evidence.comparisons.length ? (
         evidence.comparisons.map((c, i) => (
           <p key={i}>
-            {c.title} · {c.configuration} · {c.version}: {c.first} → {c.last}{" "}
-            {c.unit}, em {c.count} sessões distintas.{" "}
+            {c.title} · {c.context} · {c.configuration} · {c.version}: {c.first}{" "}
+            → {c.last} {c.unit}, em {c.count} sessões distintas.{" "}
             {c.direction
               ? `O protocolo busca valores ${c.direction === "lower" ? "menores" : "maiores"}.`
               : "Direção não padronizada."}

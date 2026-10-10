@@ -39,16 +39,21 @@ import {
 } from "lucide-react";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/client";
+const additionalTitles: Record<string, string> = {
+  "/app/meta-training": "Meta Training Center",
+  "/app/teams": "Minhas equipes",
+  "/app/evolution-plan": "Plano de evolução",
+};
 const nav = [
   ["/app", "Meu Dia", Home],
-  ["/app/coach", "Clutch Coach", MessageSquare],
+  ["/app/coach", "kyrven coach", MessageSquare],
   ["/app/training", "Training Center", Target],
   ["/app/planner", "Planejador", CalendarDays],
   ["/library", "Exercícios", Target],
   ["/competitive", "Competitivo", Trophy],
   ["/competitive/meta", "Meta", Compass],
   ["/news", "Notícias e análises", Compass],
-  ["/academy", "Academy", GraduationCap],
+  ["/academy", "kyrven academy", GraduationCap],
   ["/app/evolution", "Minha Evolução", BarChart3],
   ["/app/vod", "VOD Review", Target],
   ["/app/skills", "Minhas Habilidades", Target],
@@ -119,7 +124,7 @@ export function Layout() {
     if (
       !/^\/(library|competitive|news|academy)(\/|$)/.test(location.pathname)
     ) {
-      document.title = `${match?.[1] || "Evolução competitiva"} — Clutchfolio`;
+      document.title = `${match?.[1] || additionalTitles[location.pathname] || "Evolução competitiva"} — kyrven`;
     }
     let robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
     if (!robots) {
@@ -189,7 +194,7 @@ export function Layout() {
       {landing ? (
         <header className="public-header">
           <Link to="/" className="brand">
-            <span className="brand-mark">C</span>clutchfolio
+            <span className="brand-mark">k</span>kyrven
             <span className="beta">BETA</span>
           </Link>
           <nav aria-label="Menu público">
@@ -213,7 +218,7 @@ export function Layout() {
             className={`sidebar ${open ? "open" : ""} ${collapsed ? "collapsed" : ""}`}
           >
             <Link to="/" className="brand">
-              <span className="brand-mark">C</span>clutchfolio
+              <span className="brand-mark">k</span>kyrven
             </Link>
             <button
               className="sidebar-collapse button small"
@@ -338,7 +343,8 @@ export function Layout() {
                 EVOLUÇÃO COMPETITIVA <span>/</span>{" "}
                 <strong>
                   {nav.find((n) => n[0] === location.pathname)?.[1] ||
-                    "Clutchfolio"}
+                    additionalTitles[location.pathname] ||
+                    "kyrven"}
                 </strong>
               </span>
             </div>
@@ -424,7 +430,7 @@ export function Layout() {
       >
         <div>
           <Link to="/" className="brand">
-            clutchfolio
+            kyrven
           </Link>
           <p>Treinamento, informação e evolução competitiva.</p>
         </div>

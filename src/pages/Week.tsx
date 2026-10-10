@@ -32,7 +32,7 @@ export default function Week() {
     shiftDate(to, 7),
   ).filter((o) => o.status === "planned");
   const text = [
-    "Minha Semana · Clutchfolio",
+    "Minha Semana · kyrven",
     `${summary.from} a ${summary.to} (${!live && saved ? saved.timezone : p.timezone})`,
     ...summary.observations,
     ...summary.difficulties.map(

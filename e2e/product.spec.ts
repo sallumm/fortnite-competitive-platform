@@ -108,7 +108,7 @@ test("training, reports, coach and complete local deletion", async ({
     path: testInfo.outputPath("agenda.png"),
     fullPage: true,
   });
-  await navigate(page, "Clutch Coach");
+  await navigate(page, "kyrven coach");
   await page.getByLabel("Sua mensagem").fill("Como foi minha última semana?");
   await page.getByRole("button", { name: "Enviar mensagem" }).click();
   await expect(page.locator(".coach-turn").last()).toBeVisible();

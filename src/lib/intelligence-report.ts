@@ -1,3 +1,8 @@
+import {
+  comparisonContext,
+  contextLabel,
+  practiceLabel,
+} from "./meta-training/context";
 import { analyze, ownedPerformanceData } from "./intelligence";
 import { dateInZone, shiftDate } from "./calendar";
 import type { PlayerData, Exercise } from "./types";
@@ -10,6 +15,10 @@ export function reportEvidence(
   data = ownedPerformanceData(data);
   const analysis = analyze(data, exercises, from, to);
   const tz = data.profile?.timezone || "UTC";
+  const contextKey = (s: (typeof analysis.sessions)[number]) =>
+    comparisonContext(s.plan_snapshot?.game_context) +
+    ":" +
+    (s.plan_snapshot?.practice_format || "unrecorded");
   const daily = [] as { date: string; sessions: number }[];
   for (let day = from; day <= to; day = shiftDate(day, 1))
     daily.push({
@@ -19,6 +28,18 @@ export function reportEvidence(
       ).length,
     });
   return {
+    contexts: [...new Set(analysis.sessions.map(contextKey))].map((key) => ({
+      key,
+      label: contextLabel(
+        analysis.sessions.find((s) => contextKey(s) === key)?.plan_snapshot
+          ?.game_context,
+      ),
+      practice: practiceLabel(
+        analysis.sessions.find((s) => contextKey(s) === key)?.plan_snapshot
+          ?.practice_format,
+      ),
+      count: analysis.sessions.filter((s) => contextKey(s) === key).length,
+    })),
     diagnostics: analysis.diagnostics,
     comparisons: analysis.comparisons,
     daily,

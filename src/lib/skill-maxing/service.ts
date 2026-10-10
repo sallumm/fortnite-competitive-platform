@@ -1,3 +1,5 @@
+import { loadMeta } from "../meta-service";
+import { attachContext } from "../meta-training/context";
 import { supabase } from "../client";
 import { normalizePlayer } from "../performance-types";
 import type { Catalog, PlayerData } from "../types";
@@ -75,7 +77,7 @@ export async function saveEvolutionConfig(
   const { error } = await supabase.rpc("save_evolution_config", {
     p_config: config,
   });
-  if (error) throw new Error(failure(error.message));
+  if (error) throw new Error("kyrven: " + failure(error.message));
 }
 export function approvalPayload(proposal: EvolutionProposal) {
   return {
@@ -107,7 +109,17 @@ export async function confirmEvolution(
   proposal: EvolutionProposal,
   catalog: Catalog,
 ) {
-  const payload = approvalPayload(proposal);
+  const contextual = !!proposal.meta || !!proposal.practice_format;
+  const payload = {
+    ...approvalPayload(proposal),
+    ...(contextual
+      ? {
+          p_context: proposal.meta?.context_id || null,
+          p_entries: proposal.meta?.entry_ids || [],
+          p_practice_format: proposal.practice_format || "unspecified",
+        }
+      : {}),
+  };
   if (demo) {
     const d = demoData(),
       receipt = d.evolution?.receipts.find((r) => r.id === token);
@@ -118,6 +130,16 @@ export async function confirmEvolution(
     }
     const errors = proposalIssues(proposal, d, catalog);
     if (errors.length) throw new Error(errors.join(" "));
+    if (proposal.meta) {
+      const meta = await loadMeta(true);
+      proposal = {
+        ...proposal,
+        sessions: proposal.sessions.map((s) => ({
+          ...s,
+          plan: attachContext(s.plan, meta, proposal.meta!),
+        })),
+      };
+    }
     const series = proposalSeries(proposal);
     const result = series.map((r) => ({
       plan_id: r.plan_id!,
@@ -140,10 +162,13 @@ export async function confirmEvolution(
     return result;
   }
   if (!supabase) throw new Error("Entre em sua conta.");
-  const { data, error } = await supabase.rpc("confirm_evolution_plan", {
-    p_token: token,
-    ...payload,
-  });
-  if (error) throw new Error(failure(error.message));
+  const { data, error } = await supabase.rpc(
+    contextual ? "confirm_meta_evolution_plan" : "confirm_evolution_plan",
+    {
+      p_token: token,
+      ...payload,
+    },
+  );
+  if (error) throw new Error("kyrven: " + failure(error.message));
   return data as { plan_id: string; series_id: string }[];
 }

@@ -55,7 +55,7 @@ export default function Academy() {
     compatible[0];
   const last = study.data.records.at(-1);
   useSEO(
-    "Mastery Academy",
+    "kyrven academy",
     "Estudo progressivo de Fortnite com fontes, avaliações conceituais e aplicação em treinos.",
   );
   return (

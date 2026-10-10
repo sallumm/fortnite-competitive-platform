@@ -1,6 +1,6 @@
-# Clutchfolio — Premium Interactive Experience
+# kyrven — Meta-aware Competitive Training
 
-Evolução do projeto existente, em português brasileiro. Nome de trabalho sujeito a pesquisa formal de marca. Interface carvão/verde-lima/violeta, modo claro, layouts responsivos, foco visível e suporte a movimento reduzido. Recursos das versões anteriores preservados.
+Evolução do projeto existente, em português brasileiro. Marca visível kyrven; identificadores antigos preservados para compatibilidade. Interface carvão/verde-lima/violeta, modo claro, layouts responsivos, foco visível e suporte a movimento reduzido. Recursos das versões anteriores preservados.
 
 ## Estado da entrega
 
@@ -193,3 +193,9 @@ Base de meta contextual: [pesquisa e implementação](docs/meta/CURRENT_META_RES
 ### Intelligent Skill Maxing Engine
 
 `/app/evolution-plan` combina competências, disponibilidade semanal, catálogo verificado e histórico em uma proposta explicada e editável. Modos assistido/manual, confirmação transacional, recorrência existente e revisão semanal; sem API de IA ou custos adicionais de modelo. Consulte [regras, segurança, fontes e limites](docs/SKILL_MAXING_ENGINE.md). Aplicar migration 020 após 001–019 em homologação, antes de habilitar contas reais. Nenhum deploy foi realizado.
+
+## kyrven — continuidade da identidade
+
+A marca visível passa a ser **kyrven**, com **kyrven academy** e **kyrven coach**. O repositório, URLs, funções de servidor, chaves locais e identificadores antigos foram preservados para compatibilidade. Não há módulo de recrutamento ou publicação automática.
+
+Consulte [Meta-aware Skill Maxing](docs/META_AWARE_MASTERY.md) para preferências competitivas, contexto de versão em planos/sessões/VODs, recomendações explicadas, equipes privadas com aceite e migrations incrementais 021–022. A publicação continua pendente de validação em staging e decisão posterior.

@@ -1,3 +1,4 @@
+import { appendMetaAnswer, type MetaReferenceData } from "./meta.ts";
 import {
   classify,
   rulesAnswer,
@@ -145,6 +146,36 @@ export function coachHandler(deps: {
         if (!pref.context_enabled)
           answer.notice =
             "Consulta ao catálogo público; registros privados não foram consultados.";
+      }
+      if (
+        pref.context_enabled &&
+        !blocked &&
+        /perfil|modalidade.*selecion|formato.*selecion/i.test(q.message)
+      ) {
+        const profile = (await db.rpc("coach_competitive_profile", {})) as {
+          mode?: string;
+          format?: string;
+          context_id?: string;
+        } | null;
+        answer.sections.push({
+          title: "Meu perfil competitivo",
+          items: [
+            profile?.mode
+              ? `${profile.mode}; formato de prática: ${profile.format || "não informado"}; contexto editorial: ${profile.context_id || "não selecionado"}. Seu formato de prática não confirma o formato de um torneio.`
+              : "Nenhuma preferência competitiva específica foi salva.",
+          ],
+        });
+      }
+      if (input.meta_context_id && !blocked) {
+        const references = await db.rpc("coach_meta_context", {
+          p_context: input.meta_context_id,
+          p_query: q.message,
+        });
+        appendMetaAnswer(
+          answer,
+          references as MetaReferenceData[],
+          input.meta_context_id,
+        );
       }
       if (external) {
         try {

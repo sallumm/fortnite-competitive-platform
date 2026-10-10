@@ -7,12 +7,13 @@ export async function exportPlayerData(
   local: Storage = localStorage,
 ) {
   if (!data.profile)
-    throw new Error("Clutchfolio: entre novamente para exportar seus dados.");
+    throw new Error("kyrven: entre novamente para exportar seus dados.");
   const owner = data.profile.id;
   const additional: Record<string, unknown> = {};
   if (demo) {
     for (const key of Object.keys(local).filter(
       (key) =>
+        key.startsWith("clutchfolio-meta-training-demo:" + owner) ||
         key.startsWith("clutchfolio-coach-demo:") ||
         key.startsWith("clutchfolio-preparation-demo:") ||
         key.startsWith("clutchfolio-result-revisions:" + owner) ||
@@ -29,7 +30,7 @@ export async function exportPlayerData(
   } else {
     if (!client)
       throw new Error(
-        "Clutchfolio: a exportação está indisponível. Tente novamente.",
+        "kyrven: a exportação está indisponível. Tente novamente.",
       );
     for (const table of [
       "training_result_revisions",
@@ -39,6 +40,8 @@ export async function exportPlayerData(
       "coach_messages",
       "coach_actions",
       "competitive_preferences",
+      "meta_study_notes",
+      "meta_plan_approvals",
       "competition_preparations",
       "competition_proposals",
     ]) {
@@ -52,7 +55,32 @@ export async function exportPlayerData(
           .range(offset, offset + 499);
         if (result.error)
           throw new Error(
-            "Clutchfolio: não foi possível exportar todos os registros. Tente novamente.",
+            "kyrven: não foi possível exportar todos os registros. Tente novamente.",
+          );
+        rows.push(...(result.data || []));
+        if ((result.data?.length || 0) < 500) break;
+      }
+      additional[table] = rows;
+    }
+    // Group data is already authorized by membership RLS; export only this player's own contribution.
+    for (const [table, key] of [
+      ["training_team_members", "team_id"],
+      ["training_team_participation", "session_id"],
+      ["training_team_resources", "id"],
+    ]) {
+      const rows: unknown[] = [];
+      const ownerColumn =
+        table === "training_team_resources" ? "author_id" : "user_id";
+      for (let offset = 0; ; offset += 500) {
+        const result = await client
+          .from(table)
+          .select("*")
+          .eq(ownerColumn, owner)
+          .order(key)
+          .range(offset, offset + 499);
+        if (result.error)
+          throw new Error(
+            "kyrven: não foi possível exportar suas contribuições de equipe.",
           );
         rows.push(...(result.data || []));
         if ((result.data?.length || 0) < 500) break;

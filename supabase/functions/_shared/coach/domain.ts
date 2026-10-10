@@ -71,6 +71,14 @@ export type Context = {
     minutes: number;
   };
   sessions?: {
+    practice_format?: string | null;
+    game_context?: {
+      version_id: string;
+      mode_id: string;
+      format_id: string;
+      play_context: string;
+      region: string;
+    } | null;
     id: string;
     completed_at: string;
     duration_seconds: number;
@@ -324,6 +332,16 @@ export function rulesAnswer(
           configuration = r.configuration.trim(),
           key = JSON.stringify([
             r.exercise_id,
+            s.practice_format || "unrecorded-practice-format",
+            s.game_context
+              ? [
+                  s.game_context.version_id,
+                  s.game_context.mode_id,
+                  s.game_context.format_id,
+                  s.game_context.play_context,
+                  s.game_context.region,
+                ]
+              : "legacy-context",
             metric,
             configuration,
             r.unit || "legacy",
@@ -523,7 +541,7 @@ export function rulesAnswer(
       .slice(0, 3);
     if (eligible.length) {
       add(
-        "Exercícios do Clutchfolio",
+        "Exercícios do kyrven",
         eligible.map(
           (e) =>
             `${e.title}: ${e.description} ${e.map_code ? "Mapa cadastrado: " + e.map_code + "." : "Sem código de mapa cadastrado."} Registre: ${e.metric}`,
