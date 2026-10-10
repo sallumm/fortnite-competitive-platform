@@ -214,16 +214,24 @@ export function Provider({ children }: { children: ReactNode }) {
   }, []);
   const refresh = useCallback(async () => {
     const ticket = ++generation.current;
-    if (demo) {
-      setData(restore());
-      setCatalog(seed);
-      setAdmin(false);
-      setLoading(false);
-      return;
-    }
-    if (!supabase) {
-      setData(emptyPlayer());
-      setLoading(false);
+    if (demo || !supabase) {
+      setLoading(true);
+      try {
+        const { default: lessons } = await import("./mastery-catalog");
+        if (ticket !== generation.current) return;
+        setData(demo ? restore() : emptyPlayer());
+        setCatalog({
+          ...seed,
+          articles: [...seed.articles, ...(lessons as Article[])],
+        });
+        setAdmin(false);
+      } catch {
+        if (ticket !== generation.current) return;
+        setError(
+          "Não foi possível carregar as aulas. Tente atualizar a página.",
+        );
+      }
+      if (ticket === generation.current) setLoading(false);
       return;
     }
     setLoading(true);

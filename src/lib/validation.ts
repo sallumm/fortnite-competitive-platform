@@ -1,3 +1,4 @@
+import { curriculumSchema } from "./curriculum";
 import { z } from "zod";
 import {
   researchSchema,
@@ -103,35 +104,45 @@ export const exerciseSchema = z
     (e) => !e.published || e.research?.review_status !== "retired",
     "Despublique um exercício retirado.",
   );
-export const articleSchema = z.object({
-  ...base,
-  title,
-  slug: z.string().regex(/^[a-z0-9-]{3,100}$/),
-  topic: z
-    .enum([
-      "competitive",
-      "fncs",
-      "championships",
-      "results",
-      "updates",
-      "meta",
-      "players",
-      "organizations",
-      "analysis",
-      "guides",
-    ])
-    .optional(),
-  tags: tags.optional(),
-  evidence: z.enum(["official", "analysis", "opinion"]).optional(),
-  source_published_at: timestamp.nullable().optional(),
-  kind: z.enum(["news", "analysis", "lesson"]),
-  category: z.enum([...category.options, "fncs"]),
-  summary: z.string().min(10).max(500),
-  body: z.string().min(30).max(30000),
-  author: z.string().min(2).max(80),
-  published_at: timestamp,
-  valid_until: timestamp.nullable(),
-});
+export const articleSchema = z
+  .object({
+    curriculum: curriculumSchema.nullable().optional(),
+    ...base,
+    title,
+    slug: z.string().regex(/^[a-z0-9-]{3,100}$/),
+    topic: z
+      .enum([
+        "competitive",
+        "fncs",
+        "championships",
+        "results",
+        "updates",
+        "meta",
+        "players",
+        "organizations",
+        "analysis",
+        "guides",
+      ])
+      .optional(),
+    tags: tags.optional(),
+    evidence: z.enum(["official", "analysis", "opinion"]).optional(),
+    source_published_at: timestamp.nullable().optional(),
+    kind: z.enum(["news", "analysis", "lesson"]),
+    category: z.enum([...category.options, "fncs"]),
+    summary: z.string().min(10).max(500),
+    body: z.string().min(30).max(30000),
+    author: z.string().min(2).max(80),
+    published_at: timestamp,
+    valid_until: timestamp.nullable(),
+  })
+  .refine(
+    (a) =>
+      !a.curriculum ||
+      (a.kind === "lesson" &&
+        !a.curriculum.prerequisites.includes(a.slug) &&
+        !!a.valid_until),
+    "Uma aula curricular exige prazo de revisão e não pode ser seu próprio pré-requisito.",
+  );
 export const tournamentSchema = z
   .object({
     ...base,
