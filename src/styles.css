@@ -3303,3 +3303,250 @@ legend {
     flex-wrap: wrap;
   }
 }
+
+/* Clutch Coach uses the existing theme and layout tokens. */
+.coach-access {
+  margin-bottom: 16px;
+}
+.quick-actions .coach-access {
+  margin-bottom: 0;
+}
+.coach-layout {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.coach-conversations {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.coach-conversations h2 {
+  font-size: 16px;
+  margin: 8px 0 0;
+}
+.coach-conversation {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  color: var(--text);
+  text-align: left;
+}
+.coach-conversation span {
+  overflow-wrap: anywhere;
+}
+.coach-conversation.selected {
+  border-color: var(--accent);
+  background: var(--panel-alt);
+}
+.coach-chat {
+  padding: 0;
+  overflow: hidden;
+  min-width: 0;
+}
+.coach-chat-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.coach-chat-header small {
+  display: block;
+  color: var(--muted);
+}
+.coach-transcript {
+  padding: 28px;
+  min-height: 340px;
+  max-height: 70vh;
+  overflow: auto;
+  overflow-wrap: anywhere;
+}
+.coach-welcome {
+  max-width: 640px;
+  margin: 16px auto 32px;
+}
+.coach-welcome h2 {
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.2;
+  margin-top: 14px;
+}
+.coach-suggestions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 24px 0;
+}
+.coach-suggestions .button {
+  white-space: normal;
+  justify-content: flex-start;
+  text-align: left;
+}
+.coach-turn {
+  margin-bottom: 30px;
+}
+.coach-user {
+  margin-left: auto;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px 14px 2px 14px;
+  background: var(--panel-alt);
+  max-width: 90%;
+}
+.coach-user p {
+  margin: 4px 0 0;
+  white-space: pre-wrap;
+}
+.coach-answer {
+  padding: 22px 0 0;
+}
+.coach-answer h3 {
+  font-size: 16px;
+  margin: 22px 0 8px;
+}
+.coach-answer ul {
+  padding-left: 22px;
+}
+.coach-answer li {
+  margin: 8px 0;
+}
+.coach-guidance {
+  border-left: 3px solid var(--purple);
+  padding-left: 18px;
+}
+.coach-references {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+}
+.coach-references a {
+  color: var(--accent);
+}
+.coach-loading {
+  color: var(--muted);
+}
+.coach-composer {
+  padding: 20px 24px;
+  border-top: 1px solid var(--border);
+  background: var(--panel-alt);
+}
+.coach-composer label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.coach-composer .row {
+  align-items: stretch;
+}
+.coach-composer textarea {
+  flex: 1;
+  min-width: 0;
+  resize: vertical;
+  max-height: 200px;
+}
+.coach-composer small {
+  display: block;
+  margin-top: 8px;
+}
+.coach-settings {
+  margin-bottom: 20px;
+}
+.coach-settings .check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+.coach-settings input[type="checkbox"],
+.coach-planning input[type="checkbox"] {
+  width: auto;
+}
+.coach-planning {
+  margin-top: 24px;
+}
+.coach-planning .form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.coach-planning label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.coach-planning fieldset {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin: 20px 0;
+}
+.coach-planning fieldset label,
+.coach-planning .check {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.coach-planning .check {
+  margin-bottom: 18px;
+}
+.coach-preview {
+  padding: 20px;
+  margin-top: 20px;
+  background: var(--panel-alt);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+}
+.coach-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.coach-summary p {
+  margin-bottom: 0;
+}
+.coach-summary .coach-access {
+  margin: 0;
+}
+@media (max-width: 900px) {
+  .coach-layout {
+    grid-template-columns: 1fr;
+  }
+  .coach-conversations {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .coach-conversations h2,
+  .coach-conversations p {
+    width: 100%;
+  }
+  .coach-planning .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 550px) {
+  .coach-transcript {
+    padding: 18px;
+    max-height: 65vh;
+  }
+  .coach-suggestions,
+  .coach-planning .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .coach-composer {
+    padding: 16px;
+  }
+  .coach-composer button span {
+    display: none;
+  }
+  .coach-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,5 +1,6 @@
+import { CoachAccess } from "../components/CoachAccess";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   BarChart,
   Bar,
@@ -21,7 +22,11 @@ import { periodBounds, resultGroups, summarize } from "../lib/performance";
 import { difficulties } from "../lib/performance-types";
 export default function Reports() {
   const s = useStore();
-  const [period, setPeriod] = useState(30);
+  const [query] = useSearchParams();
+  const [period, setPeriod] = useState(() => {
+    const value = Number(query.get("period"));
+    return [7, 30, 90].includes(value) ? value : 30;
+  });
   const [exercise, setExercise] = useState(s.catalog.exercises[0]?.id || "");
   const [goal, setGoal] = useState("");
   const [target, setTarget] = useState(3);
@@ -57,6 +62,10 @@ export default function Reports() {
   }));
   return (
     <>
+      <CoachAccess
+        question={`Como foi minha evolução nos últimos ${period} dias?`}
+        label="Analisar minha evolução"
+      />
       <Heading
         eyebrow="EVOLUÇÃO OBSERVÁVEL"
         title="Seu histórico, com contexto."

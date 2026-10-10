@@ -378,6 +378,25 @@ export function Legal() {
             vinculados do banco ativo; políticas de retenção de backups do
             provedor devem ser verificadas pelo operador.
           </p>
+          <h2>Clutch Coach e provedores externos</h2>
+          <p>
+            A personalização, o envio externo e o histórico de conversas são
+            opcionais e ficam desligados por padrão. Quando você autoriza e há
+            um provedor configurado, sua pergunta, observações resumidas e
+            referências necessárias podem ser enviadas à OpenAI. A assistência
+            por regras continua disponível sem esse envio. A API da OpenAI não
+            utiliza os dados para treinamento por padrão; registros de prevenção
+            de abuso podem ser retidos por até 30 dias. A retenção externa segue
+            a política do provedor e não é apagada pela exclusão do histórico no
+            Clutchfolio.
+          </p>
+          <p>
+            Você pode desativar novos envios, excluir o histórico nas
+            preferências do Coach e excluir sua conta no perfil. Contadores
+            operacionais são mínimos, privados e não registram perguntas em
+            logs. O Coach pode errar, não identifica causas de oscilações de
+            desempenho e não fornece diagnóstico médico.
+          </p>
           <h2>Armazenamento local</h2>
           <p>
             A demonstração usa armazenamento neste navegador. A preferência de

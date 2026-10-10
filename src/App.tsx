@@ -7,6 +7,7 @@ import { dateInZone } from "./lib/calendar";
 const Landing = lazy(() => import("./pages/Landing"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
+const Coach = lazy(() => import("./pages/Coach"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Planner = lazy(() => import("./pages/Planner"));
 const Training = lazy(() => import("./pages/Training"));
@@ -105,6 +106,14 @@ function Application() {
               element={
                 <Guard>
                   <Dashboard />
+                </Guard>
+              }
+            />
+            <Route
+              path="/app/coach"
+              element={
+                <Guard>
+                  <Coach />
                 </Guard>
               }
             />

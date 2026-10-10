@@ -2,3 +2,7 @@ project_id = "clutchfolio"
 [functions.delete-account]
 verify_jwt = false
 # The function verifies the token against Auth.getUser; never trust decoded JWT alone.
+
+[functions.clutch-coach]
+verify_jwt = false
+# The handler verifies every token using Auth.getUser; database access keeps that JWT.
