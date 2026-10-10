@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Badge, Empty, Heading } from "../components/ui";
 import { useStore } from "../lib/store";
-import { loadMeta, appendMeta } from "../lib/meta-service";
+import { loadMeta } from "../lib/meta-service";
 import {
   relatedMetaLinks,
   compareMeta,
@@ -11,9 +11,11 @@ import {
   metaStates,
   metaStatus,
   type MetaCatalog,
-  type MetaEntry,
 } from "../lib/meta";
 import { useSEO } from "../lib/seo";
+import { loadEditorial } from "../lib/meta-editorial-service";
+import type { MetaEdition, MetaAsset } from "../lib/meta-editorial";
+import { MetaImage } from "../components/MetaContent";
 const evidenceNames: Record<string, string> = {
   official: "Informação oficial",
   professional: "Experiência profissional",
@@ -55,9 +57,11 @@ export default function MetaCenter() {
     [kind, setKind] = useState("all"),
     [history, setHistory] = useState(false),
     [compare, setCompare] = useState(""),
-    [edit, setEdit] = useState(""),
-    [saving, setSaving] = useState(false),
-    [notice, setNotice] = useState("");
+    [section, setSection] = useState("all"),
+    [sort, setSort] = useState("verified"),
+    [dimensions, setDimensions] = useState<Record<string, string>>({}),
+    [editions, setEditions] = useState<MetaEdition[]>([]),
+    [assets, setAssets] = useState<MetaAsset[]>([]);
   useSEO(
     "Meta Center",
     "Informação de Fortnite com versão, contexto, fontes e relações com treinamento.",
@@ -66,9 +70,16 @@ export default function MetaCenter() {
     let active = true;
     setCatalog(null);
     setError("");
-    loadMeta(s.demo)
-      .then((c) => {
-        if (active) setCatalog(c);
+    Promise.all([
+      loadMeta(s.demo),
+      s.demo ? Promise.resolve({ editions: [], assets: [] }) : loadEditorial(),
+    ])
+      .then(([c, e]) => {
+        if (active) {
+          setCatalog(c);
+          setEditions(e.editions);
+          setAssets(e.assets);
+        }
       })
       .catch((e) => {
         if (active) setError(e.message);
@@ -80,7 +91,7 @@ export default function MetaCenter() {
   if (error)
     return (
       <Empty title="Meta indisponível">
-        <p>{error}</p>
+        <span>{error}</span>
         <button className="button" onClick={() => setRetry((x) => x + 1)}>
           Tentar novamente
         </button>
@@ -90,12 +101,33 @@ export default function MetaCenter() {
   const selected = catalog.contexts.find((c) => c.id === context);
   const version = catalog.versions.find((v) => v.id === selected?.version_id);
   const now = new Date();
+  const latestVersion = catalog.versions
+    .filter(
+      (v) =>
+        catalog.contexts.some(
+          (ctx) => ctx.mode_id === selected?.mode_id && ctx.version_id === v.id,
+        ) &&
+        v.released_on &&
+        Date.parse(v.released_on) <= now.getTime(),
+    )
+    .sort((a, b) => Date.parse(b.released_on!) - Date.parse(a.released_on!))[0];
   const rows = (
     history ? catalog.entries : latestMeta(catalog.entries, now)
   ).filter(
     (e) =>
       e.context_id === context &&
       (kind === "all" || kind === e.kind) &&
+      (section === "all" ||
+        section === "history" ||
+        (section === "training" && relatedMetaLinks(catalog, e).length > 0) ||
+        (section === "videos" &&
+          (editions.find((x) => x.entry_id === e.id)?.content.videos.length ||
+            0) > 0) ||
+        section === e.kind ||
+        section ===
+          (editions.find((x) => x.entry_id === e.id)?.content.display_kind ||
+            e.kind)) &&
+      (history || e.state !== "archived") &&
       `${e.title} ${e.body} ${e.category}`
         .normalize("NFD")
         .replace(/\p{Diacritic}/gu, "")
@@ -107,6 +139,11 @@ export default function MetaCenter() {
             .toLowerCase(),
         ),
   );
+  rows.sort((a, b) =>
+    sort === "title"
+      ? a.title.localeCompare(b.title, "pt-BR")
+      : Date.parse(b.verified_at) - Date.parse(a.verified_at),
+  );
   const contextLabel = (id: string) => {
     const c = catalog.contexts.find((x) => x.id === id);
     const v = catalog.versions.find((x) => x.id === c?.version_id);
@@ -114,25 +151,65 @@ export default function MetaCenter() {
       ? `${catalog.modes.find((x) => x.id === c.mode_id)?.title} · ${v?.patch} · ${playNames[c.play_context]} · ${catalog.formats.find((x) => x.id === c.format_id)?.title} · ${c.region === "unspecified" ? "Região não especificada" : c.region}${c.event_key ? " · " + (eventNames[c.event_key] || "Evento específico") : ""}`
       : id;
   };
-  const revise = (e: MetaEntry) => {
-    const { ...copy } = e;
-    setEdit(
-      JSON.stringify(
-        {
-          ...copy,
-          id: "meta-" + crypto.randomUUID(),
-          revision: e.revision + 1,
-          previous_id: e.id,
-          verified_at: new Date().toISOString(),
-          valid_from: new Date().toISOString(),
-          review_due: new Date(Date.now() + 7 * 864e5).toISOString(),
-          change_note: "Descreva a nova verificação e a diferença encontrada.",
-        },
-        (key, value) => (key === "created_at" ? undefined : value),
-        2,
+  const setDimension = (key: string, value: string) => {
+    const next = { ...dimensions, [key]: value };
+    setDimensions(next);
+    setCompare("");
+    const candidate = catalog.contexts.find((c) =>
+      Object.entries(next).every(
+        ([k, v]) =>
+          !v ||
+          (k === "season"
+            ? catalog.versions.find((x) => x.id === c.version_id)?.season === v
+            : k === "construction"
+              ? String(
+                  catalog.modes.find((x) => x.id === c.mode_id)?.construction,
+                ) === v
+              : k === "family"
+                ? (c.mode_id.startsWith("reload-")
+                    ? "reload"
+                    : c.mode_id.startsWith("br-")
+                      ? "br"
+                      : "other") === v
+                : String(c[k as keyof typeof c] ?? "") === v),
       ),
     );
-    setNotice("");
+    setContext(candidate?.id || "");
+  };
+  const contextRows = latestMeta(catalog.entries, now).filter(
+    (e) => e.context_id === context && e.state !== "archived",
+  );
+  const filterOptions: Record<string, { id: string; title: string }[]> = {
+    season: [...new Set(catalog.versions.map((v) => v.season))].map((id) => ({
+      id,
+      title: id,
+    })),
+    version_id: catalog.versions.map((v) => ({
+      id: v.id,
+      title: v.patch + " · " + v.season,
+    })),
+    mode_id: catalog.modes,
+    format_id: catalog.formats,
+    construction: [
+      { id: "true", title: "Construção" },
+      { id: "false", title: "Construção Zero" },
+    ],
+    family: [
+      { id: "br", title: "Battle Royale" },
+      { id: "reload", title: "Reload / Trocação" },
+      { id: "other", title: "Outras modalidades" },
+    ],
+    play_context: Object.entries(playNames).map(([id, title]) => ({
+      id,
+      title,
+    })),
+    region: [...new Set(catalog.contexts.map((c) => c.region))].map((id) => ({
+      id,
+      title: id === "unspecified" ? "Não especificada" : id,
+    })),
+    event_key: [
+      ...new Set(catalog.contexts.map((c) => c.event_key).filter(Boolean)),
+    ].map((id) => ({ id: id!, title: eventNames[id!] || id! })),
   };
   return (
     <>
@@ -146,12 +223,52 @@ export default function MetaCenter() {
           </Link>
         }
       />
+      <nav
+        className="tabs page-tabs meta-section-nav"
+        aria-label="Seções do Meta"
+      >
+        {Object.entries({
+          all: "Visão geral",
+          item: "Itens",
+          location: "Mapa e drops",
+          strategy: "Estratégias",
+          analysis: "Análises profissionais",
+          videos: "Vídeos",
+          history: "Atualizações e histórico",
+          training: "Treinos relacionados",
+        }).map(([id, title]) => (
+          <button
+            key={id}
+            aria-pressed={section === id}
+            onClick={() => {
+              setSection(id);
+              setHistory(id === "history");
+            }}
+          >
+            {title}
+          </button>
+        ))}
+      </nav>
+      {s.admin && !s.demo && (
+        <Link className="button" to="/admin/meta">
+          Gerenciar Meta
+        </Link>
+      )}
       <div className="panel meta-context">
         <Badge>Pesquisa inicial · 10/10/2026</Badge>
         <h2>{version?.season || "Selecione um contexto"}</h2>
         <p>
-          Patch {version?.patch || "não confirmado"}.{" "}
-          {version?.patch !== "42.30" &&
+          Patch {version?.patch || "não confirmado"}. Última verificação neste
+          recorte:{" "}
+          {contextRows.length
+            ? new Date(
+                Math.max(...contextRows.map((e) => Date.parse(e.verified_at))),
+              ).toLocaleString("pt-BR")
+            : "sem dados"}
+          .{" "}
+          {version?.released_on &&
+            latestVersion?.released_on &&
+            version.released_on < latestVersion.released_on &&
             "Contexto histórico: não representa o patch mais recente investigado."}{" "}
           Cobertura parcial: não há inventário completo, mapa visual licenciado
           ou análise audiovisual integral. Consulte a fonte antes de preparar
@@ -168,10 +285,12 @@ export default function MetaCenter() {
           <select
             value={context}
             onChange={(e) => {
+              setDimensions({});
               setContext(e.target.value);
               setCompare("");
             }}
           >
+            <option value="">Nenhuma combinação selecionada</option>
             {catalog.contexts.map((c) => (
               <option key={c.id} value={c.id}>
                 {contextLabel(c.id)}
@@ -207,6 +326,73 @@ export default function MetaCenter() {
           Mostrar revisões históricas
         </label>
       </div>
+      <details className="panel meta-context">
+        <summary>Combinar filtros de modalidade, versão e equipe</summary>
+        <p>
+          Somente contextos cadastrados são selecionados. Combinações sem
+          registro permanecem vazias.
+        </p>
+        <div className="meta-editor-fields">
+          {Object.entries(filterOptions).map(([key, options]) => (
+            <label key={key}>
+              {
+                {
+                  season: "Temporada",
+                  version_id: "Versão",
+                  mode_id: "Modalidade",
+                  format_id: "Equipe",
+                  construction: "Construção",
+                  family: "Experiência",
+                  play_context: "Tipo de partida",
+                  region: "Região",
+                  event_key: "Competição",
+                }[key]
+              }
+              <select
+                aria-label={
+                  "Filtrar " +
+                  {
+                    season: "temporada",
+                    version_id: "versão",
+                    mode_id: "modalidade",
+                    format_id: "equipe",
+                    construction: "construção",
+                    family: "experiência",
+                    play_context: "partida",
+                    region: "região",
+                    event_key: "competição",
+                  }[key]
+                }
+                value={dimensions[key] || ""}
+                onChange={(e) => setDimension(key, e.target.value)}
+              >
+                <option value="">Todas</option>
+                {options.map((x) => (
+                  <option key={x.id} value={x.id}>
+                    {x.title}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ))}
+        </div>
+        <button
+          className="button"
+          onClick={() => {
+            setDimensions({});
+            setContext(catalog.contexts[0]?.id || "");
+          }}
+        >
+          Limpar filtros
+        </button>
+      </details>
+      <label>
+        Ordenar registros
+        <select value={sort} onChange={(e) => setSort(e.target.value)}>
+          <option value="verified">Verificação mais recente</option>
+          <option value="title">Nome</option>
+        </select>
+      </label>
       <p role="status">{rows.length} registros neste contexto.</p>
       {!rows.length && (
         <Empty title="Ainda não há registros para este recorte">
@@ -230,8 +416,32 @@ export default function MetaCenter() {
                 </Badge>
                 <span className="small-text">Revisão {e.revision}</span>
               </div>
+              {(() => {
+                const assetId = editions.find((x) => x.entry_id === e.id)
+                    ?.content.media_ids[0],
+                  a = assets.find((x) => x.id === assetId);
+                return a ? <MetaImage asset={a} /> : null;
+              })()}
               <h2>{e.title}</h2>
-              <p>{e.body}</p>
+              <p>
+                {editions.find((x) => x.entry_id === e.id)?.content.summary ||
+                  e.body}
+              </p>
+              <p className="small-text">
+                {e.category} ·{" "}
+                {catalog.modes.find((m) => m.id === selected?.mode_id)?.title} ·{" "}
+                {version?.season}
+              </p>
+              <Link
+                className="button"
+                to={
+                  editions.find((x) => x.entry_id === e.id)?.content.slug
+                    ? `/competitive/meta/${e.context_id}/${editions.find((x) => x.entry_id === e.id)!.content.slug}`
+                    : "/competitive/meta/" + e.id
+                }
+              >
+                Abrir página detalhada
+              </Link>
               <p className="small-text">
                 {available[e.availability]} · Evidência:{" "}
                 {evidenceNames[e.evidence]}
@@ -309,9 +519,9 @@ export default function MetaCenter() {
                 </ul>
               </details>
               {s.admin && !s.demo && (
-                <button className="button" onClick={() => revise(e)}>
+                <Link className="button" to={"/admin/meta?entry=" + e.id}>
                   Preparar nova revisão
-                </button>
+                </Link>
               )}
             </article>
           );
@@ -371,47 +581,6 @@ export default function MetaCenter() {
           </>
         )}
       </section>
-      {s.admin && !s.demo && (
-        <section className="panel meta-context">
-          <h2>Publicar revisão editorial</h2>
-          <p>
-            Selecione “Preparar nova revisão”. O registro anterior será
-            preservado; fontes precisam ser verificadas. Novos contextos e
-            fontes são cadastrados pelo processo editorial de migrations.
-          </p>
-          <label>
-            Revisão estruturada (JSON)
-            <textarea
-              rows={12}
-              value={edit}
-              onChange={(e) => setEdit(e.target.value)}
-            />
-          </label>
-          <button
-            className="button primary"
-            disabled={saving || !edit}
-            onClick={async () => {
-              setSaving(true);
-              setNotice("");
-              try {
-                await appendMeta(JSON.parse(edit), catalog);
-                setNotice("Revisão salva no banco.");
-                setEdit("");
-                setRetry((x) => x + 1);
-              } catch (e) {
-                setNotice(
-                  e instanceof Error ? e.message : "Não foi possível salvar.",
-                );
-              } finally {
-                setSaving(false);
-              }
-            }}
-          >
-            {saving ? "Salvando…" : "Confirmar publicação da revisão"}
-          </button>
-        </section>
-      )}
-      {notice && <p role="status">{notice}</p>}
       <section className="panel meta-context">
         <h2>Fontes ainda insuficientes</h2>
         <p>

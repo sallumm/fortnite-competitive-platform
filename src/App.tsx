@@ -23,6 +23,8 @@ const Planner = lazy(() => import("./pages/Planner"));
 const TrainingCenter = lazy(() => import("./pages/TrainingCenter"));
 const Training = lazy(() => import("./pages/Training"));
 const Library = lazy(() => import("./pages/Library"));
+const MetaAdmin = lazy(() => import("./pages/MetaAdmin"));
+const MetaDetail = lazy(() => import("./pages/MetaDetail"));
 const MetaCenter = lazy(() => import("./pages/MetaCenter"));
 const Competitive = lazy(() => import("./pages/Competitive"));
 const Curriculum = lazy(() => import("./pages/Curriculum"));
@@ -244,6 +246,19 @@ function Application() {
             <Route path="/library" element={<Library />} />
             <Route path="/library/:id" element={<Library />} />
             <Route path="/competitive/meta" element={<MetaCenter />} />
+            <Route path="/competitive/meta/:id" element={<MetaDetail />} />
+            <Route
+              path="/competitive/meta/:contextId/:slug"
+              element={<MetaDetail />}
+            />
+            <Route
+              path="/admin/meta"
+              element={
+                <Guard onboard={false}>
+                  <MetaAdmin />
+                </Guard>
+              }
+            />
             <Route path="/competitive" element={<Competitive />} />
             <Route path="/competitive/:slug" element={<Competitive />} />
             <Route path="/news" element={<Editorial />} />
