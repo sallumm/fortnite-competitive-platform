@@ -10,6 +10,7 @@ import {
   Trophy,
   Play,
 } from "lucide-react";
+import { currentEvent } from "../lib/competitive";
 import { useStore } from "../lib/store";
 import {
   dateLabel,
@@ -44,7 +45,11 @@ export default function Dashboard() {
     s.data.plans.find((x) => x.id === next?.plan_id) || s.data.plans[0];
   const last = s.data.sessions
     .filter((x) => x.status !== "active")
-    .sort((a, b) => b.completed_at!.localeCompare(a.completed_at!))[0];
+    .sort((a, b) =>
+      (b.completed_at || b.started_at).localeCompare(
+        a.completed_at || a.started_at,
+      ),
+    )[0];
   const diary = s.data.journals.find((j) => j.session_id === last?.id);
   const pending = expandCalendar(s.data, shiftDate(today, -30), today).filter(
     (o) =>
@@ -65,6 +70,7 @@ export default function Dashboard() {
   const nearest = s.catalog.tournaments
     .filter(
       (t) =>
+        currentEvent(t, now) &&
         s.data.bookmarks.some(
           (b) => b.kind === "tournament" && b.target_id === t.id,
         ) &&
@@ -134,8 +140,11 @@ export default function Dashboard() {
           <div className="row">
             <span>
               <Clock size={16} />
-              {plan?.steps.reduce((n, x) => n + x.minutes, 0) || p.minutes} min
-              planejados
+              {(active?.steps || plan?.steps)?.reduce(
+                (n, x) => n + x.minutes,
+                0,
+              ) || p.minutes}{" "}
+              min planejados
             </span>
             {next && (
               <span>
@@ -146,7 +155,11 @@ export default function Dashboard() {
           </div>
           <button className="button primary" onClick={start} disabled={s.busy}>
             <Play size={16} />
-            {active ? "Retomar treino" : "Começar meu treino"}
+            {active
+              ? "Retomar treino"
+              : plan
+                ? "Começar meu treino"
+                : "Criar minha primeira rotina"}
             <ArrowUpRight size={17} />
           </button>
           <div className="training-line" />
@@ -298,7 +311,7 @@ export default function Dashboard() {
             <span className="eyebrow">ÚLTIMA SESSÃO</span>
             <h2>{last.title}</h2>
             <p>
-              {dateLabel(last.completed_at!, p.timezone)} ·{" "}
+              {dateLabel(last.completed_at || last.started_at, p.timezone)} ·{" "}
               {last.status === "completed" ? "concluída" : "interrompida"} ·{" "}
               {Math.round(last.duration_seconds / 60)} min ativos.
             </p>

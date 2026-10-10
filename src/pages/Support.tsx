@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -11,6 +11,8 @@ import {
   Users,
 } from "lucide-react";
 import { useStore } from "../lib/store";
+import { exportPlayerData } from "../lib/export-data";
+import { clearLocalProductData } from "../lib/local-data";
 import { supabase } from "../lib/client";
 import { download, recommendations } from "../lib/logic";
 import type { Profile } from "../lib/types";
@@ -166,7 +168,6 @@ export function Community() {
 }
 export function ProfilePage() {
   const s = useStore();
-  const navigate = useNavigate();
   const [p, setP] = useState<Profile>(s.data.profile!);
   const [confirm, setConfirm] = useState(false);
   const [deletion, setDeletion] = useState("");
@@ -181,7 +182,7 @@ export function ProfilePage() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            s.run(() => s.saveProfile(p));
+            s.run(() => s.saveProfile(p), "Preferências salvas.");
           }}
         >
           <div className="form-grid">
@@ -293,12 +294,20 @@ export function ProfilePage() {
         <div className="row wrap">
           <button
             className="button"
+            disabled={s.busy}
             onClick={() =>
-              download(
-                JSON.stringify(s.data, null, 2),
-                "clutchfolio-meus-dados.json",
-                "application/json",
-              )
+              s.run(async () => {
+                const snapshot = await exportPlayerData(
+                  s.data,
+                  supabase,
+                  s.demo,
+                );
+                download(
+                  JSON.stringify(snapshot, null, 2),
+                  "clutchfolio-meus-dados.json",
+                  "application/json",
+                );
+              }, "Exportação preparada.")
             }
           >
             <Download size={16} />
@@ -325,8 +334,10 @@ export function ProfilePage() {
             onClick={() =>
               s.run(async () => {
                 if (s.demo) {
-                  localStorage.removeItem("clutchfolio-demo-v1");
-                  s.exitDemo();
+                  clearLocalProductData(localStorage, sessionStorage);
+                  // A full navigation clears in-memory private state as well.
+                  window.location.assign("/");
+                  return;
                 } else {
                   const { error } = await supabase!.functions.invoke(
                     "delete-account",
@@ -334,11 +345,12 @@ export function ProfilePage() {
                   );
                   if (error)
                     throw new Error(
-                      "Clutchfolio: a exclusão não foi concluída. Confira se a função delete-account foi publicada.",
+                      "Clutchfolio: a exclusão não foi concluída. Entre novamente e tente outra vez. Se persistir, contate o responsável pela plataforma.",
                     );
+                  clearLocalProductData(localStorage, sessionStorage);
                   await supabase!.auth.signOut();
                 }
-                navigate("/");
+                window.location.assign("/");
               })
             }
           >

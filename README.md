@@ -164,3 +164,16 @@ Os registros de revisão ficam em `content_revision_history` e são legíveis so
 ## Clutch Coach 3.0
 
 Chat contextual, relatórios conversacionais e propostas de agenda com confirmação, preservando a arquitetura e os dados 2.0. Sem chave, assistência claramente identificada por regras. Veja [funcionamento, segurança, configuração e custos verificados](docs/CLUTCH_COACH.md).
+
+## Clutchfolio 5.0 — preparação de produção
+
+Auditoria, correções implementadas, limitações verificadas e checklist em [docs/PRODUCTION-READINESS.md](docs/PRODUCTION-READINESS.md).
+
+- `npm test`: testes de lógica, interface, segurança e banco PGlite.
+- `npx playwright install chromium` e `npm run test:e2e`: fluxos em desktop/mobile e acessibilidade automatizada. Use `PLAYWRIGHT_EXECUTABLE_PATH` apenas quando houver um Chromium local compatível.
+- `npm run build`: validação de chaves públicas, TypeScript, funções de servidor, bundle e sitemap.
+- `npm run check:production`: valida configuração pública para publicação; não substitui homologação do backend.
+- `npm run report:bundle`: tamanho verificável do JS inicial, separado das rotas lazy.
+- `PRERENDER_PUBLIC=1`: exportação HTML de artigos públicos no build com Supabase configurado. Rebuild obrigatório após alteração editorial.
+
+Os documentos legais e a identificação do operador ainda precisam de revisão antes do cadastro público. Nenhum serviço pago ou deploy público foi ativado nesta etapa.

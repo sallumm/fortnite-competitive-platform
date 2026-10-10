@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 export interface CalendarItem {
   id: string;
@@ -21,7 +21,9 @@ export function Calendar({
       ? new Date(localDate(new Date().toISOString(), timezone) + "T12:00:00")
       : new Date(),
   );
-  const [view, setView] = useState<"month" | "week" | "day">("month");
+  const [view, setView] = useState<"month" | "week" | "day" | "agenda">(() =>
+    window.matchMedia?.("(max-width: 680px)").matches ? "agenda" : "month",
+  );
   const start = new Date(
     cursor.getFullYear(),
     cursor.getMonth(),
@@ -32,7 +34,10 @@ export function Calendar({
   if (view === "week")
     start.setDate(start.getDate() - ((start.getDay() + 6) % 7));
   const days = Array.from(
-    { length: view === "month" ? 42 : view === "week" ? 7 : 1 },
+    {
+      length:
+        view === "month" ? 42 : view === "week" || view === "agenda" ? 7 : 1,
+    },
     (_, i) =>
       new Date(start.getFullYear(), start.getMonth(), start.getDate() + i),
   );
@@ -45,12 +50,22 @@ export function Calendar({
   const from = keyOf(days[0]),
     to = keyOf(days[days.length - 1]);
   useEffect(() => onRangeChange?.(from, to), [from, to, onRangeChange]);
+  const byDate = useMemo(() => {
+    const result = new Map<string, CalendarItem[]>();
+    for (const item of items)
+      result.set(item.date, [...(result.get(item.date) || []), item]);
+    return result;
+  }, [items]);
   const move = (amount: number) => {
     const next = new Date(cursor);
     if (view === "month") {
       next.setDate(1);
       next.setMonth(next.getMonth() + amount);
-    } else next.setDate(next.getDate() + amount * (view === "week" ? 7 : 1));
+    } else
+      next.setDate(
+        next.getDate() +
+          amount * (view === "week" || view === "agenda" ? 7 : 1),
+      );
     setCursor(next);
   };
   return (
@@ -80,13 +95,19 @@ export function Calendar({
           </button>
         </div>
         <div className="tabs">
-          {(["month", "week", "day"] as const).map((v) => (
+          {(["agenda", "month", "week", "day"] as const).map((v) => (
             <button
               key={v}
               aria-pressed={view === v}
               onClick={() => setView(v)}
             >
-              {v === "month" ? "Mês" : v === "week" ? "Semana" : "Dia"}
+              {v === "agenda"
+                ? "Agenda"
+                : v === "month"
+                  ? "Mês"
+                  : v === "week"
+                    ? "Semana"
+                    : "Dia"}
             </button>
           ))}
           <button
@@ -105,6 +126,12 @@ export function Calendar({
           </button>
         </div>
       </div>
+      {(view === "week" || view === "agenda") && (
+        <p className="calendar-range" aria-live="polite">
+          {days[0].toLocaleDateString("pt-BR")} a{" "}
+          {days.at(-1)!.toLocaleDateString("pt-BR")}
+        </p>
+      )}
       <div className={`calendar-grid ${view}`}>
         {days.map((date) => {
           const key = [
@@ -121,17 +148,18 @@ export function Calendar({
                 {date.toLocaleDateString("pt-BR", { weekday: "short" })}{" "}
                 <strong>{date.getDate()}</strong>
               </span>
-              {items
-                .filter((x) => x.date === key)
-                .map((item) => (
-                  <button
-                    className={"event " + (item.tone || "")}
-                    key={item.id}
-                    onClick={item.onClick}
-                  >
-                    {item.title}
-                  </button>
-                ))}
+              {view === "agenda" && !byDate.has(key) && (
+                <p className="muted small-text">Sem atividades planejadas</p>
+              )}
+              {(byDate.get(key) || []).map((item) => (
+                <button
+                  className={"event " + (item.tone || "")}
+                  key={item.id}
+                  onClick={item.onClick}
+                >
+                  {item.title}
+                </button>
+              ))}
             </div>
           );
         })}

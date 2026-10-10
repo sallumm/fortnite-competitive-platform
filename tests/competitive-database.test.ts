@@ -217,13 +217,14 @@ it("confirmação reavalia conflitos criados após a prévia", async () => {
 });
 it("sessão confirmada deriva hora e duração do catálogo, ignorando texto livre", async () => {
   await user(editor);
+  const startsAt = future(5);
   const phase = {
     key: "sessao-verificada",
     title: "Sessão de teste",
     kind: "session",
     date: future(5).slice(0, 10),
-    starts_at: future(5),
-    ends_at: new Date(Date.parse(future(5)) + 180 * 60000).toISOString(),
+    starts_at: startsAt,
+    ends_at: new Date(Date.parse(startsAt) + 180 * 60000).toISOString(),
     status: "scheduled",
     source_url: "https://www.fortnite.com/competitive",
     verified_at: new Date().toISOString(),

@@ -11,6 +11,8 @@
   "include": [
     "supabase/functions/_shared/coach",
     "supabase/functions/clutch-coach/index.ts",
-    "tests/types/edge-runtime.d.ts"
+    "tests/types/edge-runtime.d.ts",
+    "supabase/functions/_shared/delete-account.ts",
+    "supabase/functions/delete-account/index.ts"
   ]
 }

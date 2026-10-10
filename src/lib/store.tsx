@@ -102,7 +102,10 @@ interface Store {
   error: string;
   notice: string;
   admin: boolean;
-  run: <T>(fn: () => Promise<T>) => Promise<T | undefined>;
+  run: <T>(
+    fn: () => Promise<T>,
+    success?: string | false,
+  ) => Promise<T | undefined>;
   enterDemo: () => void;
   exitDemo: () => void;
   refresh: () => Promise<void>;
@@ -132,7 +135,9 @@ interface Store {
 }
 const Context = createContext<Store | null>(null);
 export function Provider({ children }: { children: ReactNode }) {
-  const [catalog, setCatalog] = useState<Catalog>(seed);
+  const [catalog, setCatalog] = useState<Catalog>(
+    supabase ? { exercises: [], tournaments: [], articles: [] } : seed,
+  );
   const [data, setData] = useState<PlayerData>(emptyPlayer());
   const [session, setSession] = useState<Session | null>(null);
   const [demo, setDemo] = useState(false);
@@ -279,11 +284,19 @@ export function Provider({ children }: { children: ReactNode }) {
   useEffect(() => {
     refresh().catch(() =>
       setError(
-        "Falha ao carregar os dados. Verifique sua conexão e a configuração do banco.",
+        "Não foi possível carregar seus dados. Verifique a conexão e tente novamente.",
       ),
     );
   }, [refresh]);
-  const run = async <T,>(fn: () => Promise<T>): Promise<T | undefined> => {
+  useEffect(() => {
+    if (!notice) return;
+    const timer = window.setTimeout(() => setNotice(""), 6000);
+    return () => window.clearTimeout(timer);
+  }, [notice]);
+  const run = async <T,>(
+    fn: () => Promise<T>,
+    success: string | false = "Ação concluída.",
+  ): Promise<T | undefined> => {
     if (lock.current) return;
     lock.current = true;
     setBusy(true);
@@ -291,7 +304,7 @@ export function Provider({ children }: { children: ReactNode }) {
     setNotice("");
     try {
       const result = await fn();
-      setNotice("Alteração concluída.");
+      if (success) setNotice(success);
       return result;
     } catch (e) {
       const raw =

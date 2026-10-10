@@ -4,6 +4,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { seed, demoPlayer } from "../src/lib/seed";
 const mocked = vi.hoisted(() => ({
   profile: null as unknown,
+  fail: false,
   session: { user: { id: "00000000-0000-4000-8000-000000009999" } },
 }));
 vi.mock("../src/lib/client", () => ({
@@ -31,7 +32,7 @@ vi.mock("../src/lib/client", () => ({
         },
         then: (resolve: (value: unknown) => void) =>
           resolve({
-            error: null,
+            error: mocked.fail ? new Error("database offline") : null,
             data:
               table === "profiles"
                 ? mocked.profile
@@ -51,7 +52,10 @@ vi.mock("../src/lib/client", () => ({
 }));
 import App from "../src/App";
 vi.stubGlobal("scrollTo", () => {});
-afterEach(cleanup);
+afterEach(() => {
+  mocked.fail = false;
+  cleanup();
+});
 describe("Integração Auth com adaptador simulado", () => {
   it("aguarda carregar perfil de conta existente antes de decidir onboarding", async () => {
     window.history.replaceState({}, "", "/app");
@@ -84,4 +88,23 @@ describe("Integração Auth com adaptador simulado", () => {
       }),
     ).toBeNull();
   });
+});
+
+it("offers retry instead of an endless spinner after private data fails to load", async () => {
+  mocked.fail = true;
+  mocked.profile = {
+    ...demoPlayer().profile!,
+    id: mocked.session.user.id,
+    onboarded: true,
+  };
+  window.history.replaceState({}, "", "/app");
+  render(<App />);
+  expect(
+    await screen.findByRole("heading", {
+      name: "Seu espaço não pôde ser carregado",
+    }),
+  ).toBeTruthy();
+  mocked.fail = false;
+  screen.getByRole("button", { name: "Tentar novamente" }).click();
+  expect(await screen.findByRole("heading", { name: "Meu Dia" })).toBeTruthy();
 });

@@ -3602,3 +3602,110 @@ details summary {
     grid-template-columns: 1fr;
   }
 }
+
+/* Product excellence: shared navigation, touch targets and readable agenda. */
+.nav-group {
+  display: block;
+  margin: 18px 12px 6px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.sidebar {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.sidebar nav > div > a {
+  min-height: 42px;
+}
+.calendar-grid.agenda {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.calendar-grid.agenda .calendar-day {
+  min-height: auto;
+  padding: 16px;
+}
+.calendar-grid.agenda .event {
+  white-space: normal;
+  min-height: 44px;
+  padding: 10px 12px;
+}
+.calendar-range {
+  padding: 0 18px;
+  color: var(--muted);
+  font-size: 13px;
+}
+main:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+dialog {
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@media (max-width: 680px) {
+  .sidebar {
+    visibility: hidden;
+  }
+  .sidebar.open {
+    visibility: visible;
+  }
+  .sidebar a,
+  .icon-button,
+  .tabs button,
+  .button {
+    min-height: 44px;
+  }
+  .calendar-toolbar {
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .calendar-toolbar .tabs {
+    flex-wrap: wrap;
+  }
+  .calendar-grid.week {
+    overflow-x: auto;
+    grid-template-columns: repeat(7, minmax(130px, 1fr));
+  }
+  .public-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .public-header nav {
+    display: flex;
+    order: 3;
+    flex-basis: 100%;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 13px;
+  }
+  .public-header nav a {
+    padding: 8px 0;
+  }
+  .session-toolbar .row,
+  .session-body .row {
+    flex-wrap: wrap;
+  }
+  .session-toolbar .button {
+    flex: 1;
+  }
+  .workspace {
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

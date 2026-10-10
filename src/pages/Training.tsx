@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Check, Pause, Play, Square } from "lucide-react";
 import { useStore } from "../lib/store";
+import { validSessionDraft } from "../lib/local-data";
 import type { Result } from "../lib/types";
 import {
   Badge,
@@ -22,11 +23,14 @@ export default function Training() {
   const store = useStore();
   const session = store.data.sessions.find((s) => s.id === id);
   const navigate = useNavigate();
-  const key = "clutchfolio-session-" + id;
+  const key = "clutchfolio-session-" + store.data.profile?.id + ":" + id;
   const [draft, setDraft] = useState<Draft>(() => {
     try {
       const saved = JSON.parse(sessionStorage.getItem(key) || "null");
-      if (saved) return saved;
+      if (
+        validSessionDraft(saved, session?.steps.map((x) => x.exercise_id) || [])
+      )
+        return saved;
     } catch {}
     return {
       elapsed: 0,
@@ -48,7 +52,11 @@ export default function Training() {
     return () => clearInterval(interval);
   }, []);
   useEffect(() => {
-    sessionStorage.setItem(key, JSON.stringify(draft));
+    try {
+      sessionStorage.setItem(key, JSON.stringify(draft));
+    } catch {
+      /* Session remains usable if browser storage is unavailable. */
+    }
   }, [draft, key]);
   if (!session)
     return (

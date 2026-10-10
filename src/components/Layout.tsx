@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import {
   Link,
   NavLink,
@@ -46,18 +46,57 @@ const nav = [
   ["/help", "Central de ajuda", HelpCircle],
   ["/community", "Comunidade", Users],
 ] as const;
+function RouteFocus() {
+  const location = useLocation();
+  useEffect(() => {
+    // This effect commits only after the lazy page inside Suspense is ready.
+    document.getElementById("main")?.focus({ preventScroll: true });
+    if (location.hash) {
+      try {
+        document
+          .getElementById(decodeURIComponent(location.hash.slice(1)))
+          ?.scrollIntoView({ block: "start" });
+      } catch {
+        /* Ignore malformed fragments. */
+      }
+    }
+  }, [location.pathname, location.hash]);
+  return null;
+}
 export function Layout() {
   const store = useStore();
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem("clutchfolio-theme") || "dark",
-  );
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem("clutchfolio-theme") === "light"
+        ? "light"
+        : "dark";
+    } catch {
+      return "dark";
+    }
+  });
+  const menu = useRef<HTMLElement>(null);
+  const toggle = useRef<HTMLButtonElement>(null);
+  const [online, setOnline] = useState(() => navigator.onLine);
+  useEffect(() => {
+    const update = () => setOnline(navigator.onLine);
+    window.addEventListener("online", update);
+    window.addEventListener("offline", update);
+    return () => {
+      window.removeEventListener("online", update);
+      window.removeEventListener("offline", update);
+    };
+  }, []);
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const landing = location.pathname === "/";
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    localStorage.setItem("clutchfolio-theme", theme);
+    try {
+      localStorage.setItem("clutchfolio-theme", theme);
+    } catch {
+      /* Theme remains usable without storage. */
+    }
   }, [theme]);
   useEffect(() => {
     setOpen(false);
@@ -78,6 +117,38 @@ export function Layout() {
       ? "noindex,nofollow"
       : "index,follow";
   }, [location.pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    menu.current?.querySelector<HTMLElement>("a,button")?.focus();
+    const keyboard = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        toggle.current?.focus();
+      }
+      if (e.key !== "Tab") return;
+      const nodes = Array.from(
+        menu.current?.querySelectorAll<HTMLElement>(
+          "a[href],button:not([disabled])",
+        ) || [],
+      );
+      const first = nodes[0],
+        last = nodes.at(-1);
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last?.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first?.focus();
+      }
+    };
+    document.addEventListener("keydown", keyboard);
+    return () => {
+      document.body.style.overflow = previous;
+      document.removeEventListener("keydown", keyboard);
+    };
+  }, [open]);
   const themeButton = (
     <button
       className="icon-button"
@@ -111,6 +182,7 @@ export function Layout() {
             <Link to="/competitive">Competitivo</Link>
             <Link to="/library">Treinamento</Link>
             <Link to="/academy">Academy</Link>
+            <Link to="/news">Notícias</Link>
           </nav>
           <div className="row">
             {themeButton}
@@ -119,17 +191,37 @@ export function Layout() {
         </header>
       ) : (
         <>
-          <aside className={`sidebar ${open ? "open" : ""}`}>
+          <aside
+            id="main-navigation"
+            ref={menu}
+            className={`sidebar ${open ? "open" : ""}`}
+          >
             <Link to="/" className="brand">
               <span className="brand-mark">C</span>clutchfolio
             </Link>
             <span className="sidebar-label">SEU PRÓXIMO NÍVEL</span>
             <nav aria-label="Navegação principal">
-              {nav.map(([to, title, Icon]) => (
-                <NavLink end to={to} key={to}>
-                  <Icon size={18} />
-                  {title}
-                </NavLink>
+              {nav.map(([to, title, Icon], index) => (
+                <div key={to}>
+                  {(index === 0 ||
+                    index === 3 ||
+                    index === 7 ||
+                    index === 11) && (
+                    <span className="nav-group">
+                      {index === 0
+                        ? "Meu espaço"
+                        : index === 3
+                          ? "Explorar"
+                          : index === 7
+                            ? "Minha evolução"
+                            : "Ajuda"}
+                    </span>
+                  )}
+                  <NavLink end to={to} key={to}>
+                    <Icon size={18} />
+                    {title}
+                  </NavLink>
+                </div>
               ))}
               {store.admin && (
                 <NavLink to="/admin">
@@ -175,6 +267,9 @@ export function Layout() {
           <header className="app-header">
             <div className="row">
               <button
+                ref={toggle}
+                aria-controls="main-navigation"
+                aria-expanded={open}
                 className="icon-button mobile-menu"
                 aria-label={open ? "Fechar menu" : "Abrir menu"}
                 onClick={() => setOpen(!open)}
@@ -198,8 +293,11 @@ export function Layout() {
                   aria-label="Sair"
                   onClick={() =>
                     store.run(async () => {
+                      if (supabase && store.session) {
+                        const { error } = await supabase.auth.signOut();
+                        if (error) throw error;
+                      }
                       store.exitDemo();
-                      if (supabase) await supabase.auth.signOut();
                       navigate("/");
                     })
                   }
@@ -211,7 +309,17 @@ export function Layout() {
           </header>
         </>
       )}
-      <main id="main" className={landing ? "landing" : "workspace"}>
+      <main
+        id="main"
+        tabIndex={-1}
+        className={landing ? "landing" : "workspace"}
+      >
+        {!online && (
+          <div className="alert" role="status">
+            Você está sem conexão. Alterações na conta precisam de conexão; os
+            dados exibidos podem estar desatualizados.
+          </div>
+        )}
         {store.demo && (
           <div className="demo-banner">
             <span>
@@ -231,7 +339,11 @@ export function Layout() {
         {store.error && (
           <div role="alert" className="alert error">
             {store.error}
-            <button onClick={() => store.run(() => store.refresh())}>
+            <button
+              onClick={() =>
+                store.run(() => store.refresh(), "Dados atualizados.")
+              }
+            >
               Tentar novamente
             </button>
           </div>
@@ -241,7 +353,20 @@ export function Layout() {
             {store.notice}
           </div>
         )}
-        <Outlet />
+        <Suspense
+          fallback={
+            <div
+              role="status"
+              className="skeleton-page"
+              aria-label="Carregando"
+            >
+              <p>Carregando esta página…</p>
+            </div>
+          }
+        >
+          <Outlet />
+          <RouteFocus />
+        </Suspense>
       </main>
       <footer className={landing ? "public-footer" : "app-footer"}>
         <div>
