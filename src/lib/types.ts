@@ -30,6 +30,7 @@ export interface Profile {
   reminder_enabled: boolean;
 }
 export interface Exercise {
+  research?: import("./training-research-validation").ExerciseResearch | null;
   video_url?: string | null;
   categories?: string[];
   tags?: string[];

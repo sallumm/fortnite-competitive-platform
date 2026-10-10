@@ -9,6 +9,7 @@ export default defineConfig({
         manualChunks: {
           react: ["react", "react-dom", "react-router-dom"],
           charts: ["recharts"],
+          validation: ["zod"],
           supabase: ["@supabase/supabase-js"],
         },
       },

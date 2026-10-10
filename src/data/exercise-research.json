@@ -1,0 +1,339 @@
+{
+  "defaults": {
+    "transfer": "Revisar uma situação de partida relacionada à habilidade; a melhora no exercício não comprova transferência.",
+    "limitations": "Protocolo editorial individual. Comparar somente cenário, versão, dispositivo e configuração equivalentes. A listagem não comprova eficácia nem execução do mapa.",
+    "review_status": "verified",
+    "review_due_at": "2026-11-10T00:00:00Z",
+    "review_notes": "Listagem e metadados conferidos; não houve teste no jogo."
+  },
+  "exercises": {
+    "00000000-0000-4000-8000-000000001001": {
+      "competency_ids": [
+        "freebuild",
+        "building",
+        "camera"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "reisshub"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar uma sequência escolhida de Freebuild, suas interrupções e uma execução observada; confirmar conclusão manualmente."
+    },
+    "00000000-0000-4000-8000-000000001002": {
+      "competency_ids": [
+        "editing",
+        "camera"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "raider"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar o identificador do percurso, tempo medido e falhas, ou informar que não houve medição; confirmar o término do percurso."
+    },
+    "00000000-0000-4000-8000-000000001003": {
+      "competency_ids": [
+        "piece-ownership",
+        "prediction",
+        "space"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "jivan-piece"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar as dez tentativas do cenário escolhido, quantas atenderam ao objetivo e quais saídas permaneceram abertas."
+    },
+    "00000000-0000-4000-8000-000000001004": {
+      "competency_ids": [
+        "box-fight",
+        "peek"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "jivan-piece"
+      ],
+      "purpose": "contextual",
+      "completion": "Registrar exposições desnecessárias nas dez tentativas do mesmo drill e uma alternativa de saída."
+    },
+    "00000000-0000-4000-8000-000000001005": {
+      "competency_ids": [
+        "zone-wars",
+        "moving-zone",
+        "layers"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "jivan-zone"
+      ],
+      "purpose": "contextual",
+      "completion": "Registrar ao menos uma decisão de zona observada no bloco de rodadas, com direção, recursos e alternativa."
+    },
+    "00000000-0000-4000-8000-000000001006": {
+      "competency_ids": [
+        "self-review",
+        "information",
+        "pattern-review"
+      ],
+      "evidence_ids": [
+        "editorial"
+      ],
+      "purpose": "review",
+      "completion": "Registrar um episódio real, a informação disponível antes da decisão, uma alternativa e uma hipótese para a próxima sessão.",
+      "review_notes": "Atividade editorial sem validação experimental específica."
+    },
+    "00000000-0000-4000-8000-000000001007": {
+      "competency_ids": [
+        "static-click",
+        "flick"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "skaavok"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar cenário, arma, duração e acertos observados no bloco de alvos estáticos; não preencher pontuação estimada.",
+      "limitations": "A listagem confirma treino de mira, não cada subcenário. Use este protocolo somente se a opção existir na versão acessada. Sem teste no jogo ou comprovação de transferência.",
+      "review_notes": "Código conferido na listagem. Subcenários e métricas exatas exigem conferência dentro da ilha."
+    },
+    "00000000-0000-4000-8000-000000001008": {
+      "competency_ids": [
+        "dynamic-click"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "skaavok"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar cenário, trajetória, acertos e tentativas no bloco de alvos móveis, quando mensuráveis.",
+      "limitations": "A listagem confirma treino de mira, não cada subcenário. Use este protocolo somente se a opção existir na versão acessada. Sem teste no jogo ou comprovação de transferência.",
+      "review_notes": "Código conferido na listagem. Subcenários e métricas exatas exigem conferência dentro da ilha."
+    },
+    "00000000-0000-4000-8000-000000001009": {
+      "competency_ids": [
+        "tracking"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "skaavok"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar cenário, velocidade e precisão exibida no bloco; se não houver medidor, declarar ausência de medição.",
+      "limitations": "A listagem confirma treino de mira, não cada subcenário. Use este protocolo somente se a opção existir na versão acessada. Sem teste no jogo ou comprovação de transferência.",
+      "review_notes": "Código conferido na listagem. Subcenários e métricas exatas exigem conferência dentro da ilha."
+    },
+    "00000000-0000-4000-8000-000000001010": {
+      "competency_ids": [
+        "reactive-tracking"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "skaavok"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar o padrão de mudança de direção e precisão exibida no bloco; preservar configurações para comparação.",
+      "limitations": "A listagem confirma treino de mira, não cada subcenário. Use este protocolo somente se a opção existir na versão acessada. Sem teste no jogo ou comprovação de transferência.",
+      "review_notes": "Código conferido na listagem. Subcenários e métricas exatas exigem conferência dentro da ilha."
+    },
+    "00000000-0000-4000-8000-000000001011": {
+      "competency_ids": [
+        "switching"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "skaavok"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar a ordem de troca, janela de teste e acertos observados; anotar uma troca problemática.",
+      "limitations": "A listagem confirma treino de mira, não cada subcenário. Use este protocolo somente se a opção existir na versão acessada. Sem teste no jogo ou comprovação de transferência.",
+      "review_notes": "Código conferido na listagem. Subcenários e métricas exatas exigem conferência dentro da ilha."
+    },
+    "00000000-0000-4000-8000-000000001012": {
+      "competency_ids": [
+        "microcorrection"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "skaavok"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar distância, arma e acertos observados no bloco; anotar ajustes extras sem presumir sua causa.",
+      "limitations": "A listagem confirma treino de mira, não cada subcenário. Use este protocolo somente se a opção existir na versão acessada. Sem teste no jogo ou comprovação de transferência.",
+      "review_notes": "Código conferido na listagem. Subcenários e métricas exatas exigem conferência dentro da ilha."
+    },
+    "00000000-0000-4000-8000-000000001013": {
+      "competency_ids": [
+        "shotgun"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "raider"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar acertos nas dez tentativas de shotgun e a configuração exata, incluindo arma e distância."
+    },
+    "00000000-0000-4000-8000-000000001014": {
+      "competency_ids": [
+        "crosshair"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "raider"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar ajustes extras nas dez sequências de edição e a posição inicial da mira."
+    },
+    "00000000-0000-4000-8000-000000001015": {
+      "competency_ids": [
+        "reset"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "raider"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar quantas das dez sequências de edição e reset foram concluídas sem erro, mantendo os mesmos binds."
+    },
+    "00000000-0000-4000-8000-000000001016": {
+      "competency_ids": [
+        "peek"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "raider"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar erros de exposição nas dez tentativas do mesmo peek e descrever a abertura usada."
+    },
+    "00000000-0000-4000-8000-000000001017": {
+      "competency_ids": [
+        "retake"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "reisshub"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar a sequência de retomada escolhida, interrupções e uma limitação de aplicação em combate."
+    },
+    "00000000-0000-4000-8000-000000001018": {
+      "competency_ids": [
+        "tarping"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "reisshub"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar trajeto, falhas de cobertura e materiais observados no bloco; distinguir simulação isolada de endgame real."
+    },
+    "00000000-0000-4000-8000-000000001019": {
+      "competency_ids": [
+        "rotation",
+        "deadside"
+      ],
+      "evidence_ids": [
+        "editorial"
+      ],
+      "purpose": "review",
+      "completion": "Registrar uma rotação real, concentração observável de adversários, riscos conhecidos e uma rota alternativa.",
+      "review_notes": "Atividade editorial sem validação experimental específica."
+    },
+    "00000000-0000-4000-8000-000000001020": {
+      "competency_ids": [
+        "surge"
+      ],
+      "evidence_ids": [
+        "editorial"
+      ],
+      "purpose": "review",
+      "completion": "Registrar fonte atual das regras e um episódio de janela de dano com exposição e alternativas; não preencher limites presumidos.",
+      "review_notes": "Atividade editorial sem validação experimental específica."
+    },
+    "00000000-0000-4000-8000-000000001021": {
+      "competency_ids": [
+        "refresh",
+        "resources"
+      ],
+      "evidence_ids": [
+        "editorial"
+      ],
+      "purpose": "review",
+      "completion": "Registrar uma tentativa de refresh, recursos antes da ação, risco e alternativa disponível.",
+      "review_notes": "Atividade editorial sem validação experimental específica."
+    },
+    "00000000-0000-4000-8000-000000001022": {
+      "competency_ids": [
+        "offspawn",
+        "fight-selection"
+      ],
+      "evidence_ids": [
+        "editorial"
+      ],
+      "purpose": "review",
+      "completion": "Registrar uma disputa de queda com loot disponível, informação do adversário e rota de saída considerada.",
+      "review_notes": "Atividade editorial sem validação experimental específica."
+    },
+    "00000000-0000-4000-8000-000000001023": {
+      "competency_ids": [
+        "realistic",
+        "trades"
+      ],
+      "evidence_ids": [
+        "editorial"
+      ],
+      "purpose": "review",
+      "completion": "Registrar uma sequência Realistic revisada, recursos iniciais, decisão de continuar ou sair e uma alternativa.",
+      "review_notes": "Atividade editorial sem validação experimental específica."
+    },
+    "00000000-0000-4000-8000-000000001024": {
+      "competency_ids": [
+        "zero-cover",
+        "zero-position"
+      ],
+      "evidence_ids": [
+        "editorial"
+      ],
+      "purpose": "review",
+      "completion": "Registrar coberturas e linhas de visão de um episódio de Construção Zero, incluindo uma rota alternativa.",
+      "review_notes": "Atividade editorial sem validação experimental específica."
+    },
+    "00000000-0000-4000-8000-000000001025": {
+      "competency_ids": [
+        "zero-endgame",
+        "zero-rotation"
+      ],
+      "evidence_ids": [
+        "editorial"
+      ],
+      "purpose": "review",
+      "completion": "Registrar uma decisão de endgame de Construção Zero com terreno, mobilidade e cobertura disponível.",
+      "review_notes": "Atividade editorial sem validação experimental específica."
+    },
+    "00000000-0000-4000-8000-000000001026": {
+      "competency_ids": [
+        "moving-aim"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "skaavok"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar padrão de movimento, arma, distância, duração e acertos observados no cenário disponível.",
+      "limitations": "A listagem confirma treino de mira, não cada subcenário. Use este protocolo somente se a opção existir na versão acessada. Sem teste no jogo ou comprovação de transferência.",
+      "review_notes": "Código conferido na listagem. Subcenários e métricas exatas exigem conferência dentro da ilha."
+    },
+    "00000000-0000-4000-8000-000000001027": {
+      "competency_ids": [
+        "editing"
+      ],
+      "evidence_ids": [
+        "editorial",
+        "persa"
+      ],
+      "purpose": "technical",
+      "completion": "Registrar o circuito do Persa Training, versão, opções, tempo exibido e falhas; indicar ausência de medição se necessário."
+    }
+  }
+}

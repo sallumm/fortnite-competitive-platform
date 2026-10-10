@@ -1,0 +1,326 @@
+{
+  "competencies": [
+    {
+      "id": "tracking",
+      "mode": "both"
+    },
+    {
+      "id": "reactive-tracking",
+      "mode": "both"
+    },
+    {
+      "id": "flick",
+      "mode": "both"
+    },
+    {
+      "id": "switching",
+      "mode": "both"
+    },
+    {
+      "id": "microcorrection",
+      "mode": "both"
+    },
+    {
+      "id": "shotgun",
+      "mode": "both"
+    },
+    {
+      "id": "crosshair",
+      "mode": "both"
+    },
+    {
+      "id": "moving-aim",
+      "mode": "both"
+    },
+    {
+      "id": "static-click",
+      "mode": "both"
+    },
+    {
+      "id": "dynamic-click",
+      "mode": "both"
+    },
+    {
+      "id": "freebuild",
+      "mode": "build"
+    },
+    {
+      "id": "editing",
+      "mode": "build"
+    },
+    {
+      "id": "reset",
+      "mode": "build"
+    },
+    {
+      "id": "building",
+      "mode": "build"
+    },
+    {
+      "id": "retake",
+      "mode": "build"
+    },
+    {
+      "id": "camera",
+      "mode": "build"
+    },
+    {
+      "id": "movement",
+      "mode": "both"
+    },
+    {
+      "id": "piece-ownership",
+      "mode": "build"
+    },
+    {
+      "id": "prediction",
+      "mode": "build"
+    },
+    {
+      "id": "peek",
+      "mode": "build"
+    },
+    {
+      "id": "prefire",
+      "mode": "build"
+    },
+    {
+      "id": "space",
+      "mode": "build"
+    },
+    {
+      "id": "box-fight",
+      "mode": "build"
+    },
+    {
+      "id": "realistic",
+      "mode": "build"
+    },
+    {
+      "id": "duel",
+      "mode": "both"
+    },
+    {
+      "id": "duo",
+      "mode": "both"
+    },
+    {
+      "id": "trades",
+      "mode": "both"
+    },
+    {
+      "id": "offspawn",
+      "mode": "both"
+    },
+    {
+      "id": "positioning",
+      "mode": "both"
+    },
+    {
+      "id": "fight-selection",
+      "mode": "both"
+    },
+    {
+      "id": "rotation",
+      "mode": "both"
+    },
+    {
+      "id": "deadside",
+      "mode": "both"
+    },
+    {
+      "id": "resources",
+      "mode": "both"
+    },
+    {
+      "id": "information",
+      "mode": "both"
+    },
+    {
+      "id": "zone-wars",
+      "mode": "build"
+    },
+    {
+      "id": "tarping",
+      "mode": "build"
+    },
+    {
+      "id": "refresh",
+      "mode": "build"
+    },
+    {
+      "id": "layers",
+      "mode": "build"
+    },
+    {
+      "id": "moving-zone",
+      "mode": "both"
+    },
+    {
+      "id": "surge",
+      "mode": "build"
+    },
+    {
+      "id": "scrims",
+      "mode": "both"
+    },
+    {
+      "id": "ranked",
+      "mode": "both"
+    },
+    {
+      "id": "tournament-prep",
+      "mode": "both"
+    },
+    {
+      "id": "self-review",
+      "mode": "both"
+    },
+    {
+      "id": "pro-review",
+      "mode": "both"
+    },
+    {
+      "id": "pattern-review",
+      "mode": "both"
+    },
+    {
+      "id": "zero-aim",
+      "mode": "zero"
+    },
+    {
+      "id": "zero-movement",
+      "mode": "zero"
+    },
+    {
+      "id": "zero-cover",
+      "mode": "zero"
+    },
+    {
+      "id": "zero-position",
+      "mode": "zero"
+    },
+    {
+      "id": "zero-rotation",
+      "mode": "zero"
+    },
+    {
+      "id": "zero-endgame",
+      "mode": "zero"
+    },
+    {
+      "id": "zero-awareness",
+      "mode": "zero"
+    },
+    {
+      "id": "zero-resources",
+      "mode": "zero"
+    }
+  ],
+  "references": [
+    {
+      "id": "spacing",
+      "access": "abstract"
+    },
+    {
+      "id": "motor-review",
+      "access": "abstract"
+    },
+    {
+      "id": "exercise-review",
+      "access": "text_sections"
+    },
+    {
+      "id": "variability",
+      "access": "abstract"
+    },
+    {
+      "id": "attention-bias",
+      "access": "abstract"
+    },
+    {
+      "id": "sleep",
+      "access": "page"
+    },
+    {
+      "id": "ergonomics",
+      "access": "page"
+    },
+    {
+      "id": "khanada",
+      "access": "page"
+    },
+    {
+      "id": "reisshub",
+      "access": "listing"
+    },
+    {
+      "id": "raider",
+      "access": "listing"
+    },
+    {
+      "id": "jivan-piece",
+      "access": "listing"
+    },
+    {
+      "id": "jivan-zone",
+      "access": "listing"
+    },
+    {
+      "id": "jivan-duel",
+      "access": "listing"
+    },
+    {
+      "id": "persa",
+      "access": "listing"
+    },
+    {
+      "id": "persa-nuti",
+      "access": "page"
+    },
+    {
+      "id": "vital",
+      "access": "page"
+    },
+    {
+      "id": "fncs-results",
+      "access": "page"
+    },
+    {
+      "id": "video-pending",
+      "access": "unavailable"
+    },
+    {
+      "id": "editorial",
+      "access": "original"
+    },
+    {
+      "id": "skaavok",
+      "access": "listing"
+    },
+    {
+      "id": "fatigue",
+      "access": "abstract"
+    },
+    {
+      "id": "veno-description",
+      "access": "metadata"
+    },
+    {
+      "id": "deliberate-meta",
+      "access": "abstract"
+    },
+    {
+      "id": "deliberate-debate",
+      "access": "abstract"
+    },
+    {
+      "id": "perception",
+      "access": "indexed_excerpt"
+    },
+    {
+      "id": "feedback-children",
+      "access": "indexed_excerpt"
+    }
+  ]
+}

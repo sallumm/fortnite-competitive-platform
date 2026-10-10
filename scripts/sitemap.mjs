@@ -18,6 +18,7 @@ const paths = [
   "/competitive",
   "/news",
   "/academy",
+  "/academy/research",
   "/help",
   "/community",
   "/legal/privacy",

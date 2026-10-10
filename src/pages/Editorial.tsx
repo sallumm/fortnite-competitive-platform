@@ -183,6 +183,11 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
             : "Informação com fonte, data e contexto. Interpretações editoriais identificadas."
         }
       />
+      {academy && (
+        <Link className="button" to="/academy/research">
+          Explorar habilidades, trilhas e evidências
+        </Link>
+      )}
       <div className="filters panel">
         <label className="search-field">
           <Search size={17} />
