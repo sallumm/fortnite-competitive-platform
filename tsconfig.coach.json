@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "npm:@supabase/supabase-js@2.117.3": [
+        "node_modules/@supabase/supabase-js"
+      ]
+    }
+  },
+  "include": [
+    "supabase/functions/_shared/coach",
+    "supabase/functions/clutch-coach/index.ts",
+    "tests/types/edge-runtime.d.ts"
+  ]
+}

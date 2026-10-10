@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc -b && vite build && node scripts/sitemap.mjs",
+    "build": "tsc -b && tsc -p tsconfig.coach.json && vite build && node scripts/sitemap.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "test": "vitest run",
     "format": "prettier --write src tests scripts *.json *.ts *.html"

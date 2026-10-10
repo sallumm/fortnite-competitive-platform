@@ -7,6 +7,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import {
+  MessageSquare,
   ArrowUpRight,
   BarChart3,
   BookOpen,
@@ -32,6 +33,7 @@ import { useStore } from "../lib/store";
 import { supabase } from "../lib/client";
 const nav = [
   ["/app", "Meu Dia", Home],
+  ["/app/coach", "Clutch Coach", MessageSquare],
   ["/app/planner", "Planejador", CalendarDays],
   ["/library", "Exercícios", Target],
   ["/competitive", "Competitivo", Trophy],

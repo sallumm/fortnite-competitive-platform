@@ -1,3 +1,4 @@
+import { CoachAccess } from "../components/CoachAccess";
 import { useSEO } from "../lib/seo";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -66,6 +67,11 @@ export default function Library() {
             </button>
           }
         />
+        <CoachAccess
+          question={`Como este exercício me ajuda: ${selected.title}?`}
+          exerciseId={selected.id}
+          label="Como este exercício me ajuda?"
+        />
         <div className="detail-grid">
           <article className="panel article-body">
             <div className="row">
@@ -131,6 +137,10 @@ export default function Library() {
   );
   return (
     <>
+      <CoachAccess
+        question="O que devo treinar hoje?"
+        label="Encontrar exercícios com o Coach"
+      />
       <Heading
         eyebrow="BIBLIOTECA DE TREINAMENTO"
         title="Encontre seu próximo exercício."

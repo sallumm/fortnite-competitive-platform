@@ -1,3 +1,5 @@
+import { CoachSummary } from "../components/CoachSummary";
+import { CoachAccess } from "../components/CoachAccess";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
@@ -106,6 +108,7 @@ export default function Dashboard() {
           </Link>
         }
       />
+      <CoachSummary />
       <div className="dashboard-top">
         <section className="next-training">
           <div className="row between">
@@ -171,6 +174,7 @@ export default function Dashboard() {
         </section>
       </div>
       <div className="quick-actions">
+        <CoachAccess />
         <Link className="button" to="/app/planner">
           Organizar minha semana
         </Link>

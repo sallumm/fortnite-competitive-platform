@@ -1,0 +1,223 @@
+import type { Catalog, PlayerData } from "./types";
+import { dateInZone, expandCalendar, shiftDate } from "./calendar";
+import {
+  classify,
+  rulesAnswer,
+  defaults,
+  type Context,
+  type Preferences,
+  type Answer,
+} from "../../supabase/functions/_shared/coach/domain";
+import { retrieve } from "../../supabase/functions/_shared/coach/knowledge";
+import {
+  actionSchema,
+  type CoachAction,
+} from "../../supabase/functions/_shared/coach/schema";
+export { defaults, classify, actionSchema };
+export type { Preferences, Answer, CoachAction };
+export type Turn = {
+  id: string;
+  question: string;
+  answer: Answer;
+  created_at: string;
+};
+export type Conversation = { id: string; title: string; created_at: string };
+export type Pending = {
+  id: string;
+  payload: CoachAction;
+  expires_at: string;
+  status: string;
+};
+/** Demo follows the same opt-in projection as the server; no provider calls. */
+export function demoContext(
+  data: PlayerData,
+  catalog: Catalog,
+  message: string,
+  pref: Preferences,
+  exercise_id?: string,
+  now = new Date(),
+): Context {
+  const q = classify(message, exercise_id),
+    p = data.profile,
+    c: Context = {};
+  if (q.category === "auto")
+    q.category = pref.context_enabled ? p?.objective || "aim" : "aim";
+  if (pref.context_enabled && p) {
+    c.profile = {
+      mode: p.mode,
+      level: p.level,
+      objective: p.objective,
+      timezone: p.timezone,
+      minutes: p.minutes,
+    };
+    const owner = p.id,
+      today = dateInZone(now, p.timezone),
+      from = shiftDate(today, 1 - q.days);
+    if (q.intent === "report") {
+      const sessions = data.sessions
+        .filter(
+          (s) =>
+            s.user_id === owner &&
+            s.status === "completed" &&
+            s.completed_at &&
+            dateInZone(s.completed_at, p.timezone) >= from &&
+            Date.parse(s.completed_at) <= now.getTime(),
+        )
+        .sort((a, b) => b.completed_at!.localeCompare(a.completed_at!));
+      c.total = sessions.length;
+      c.sessions = sessions.slice(0, 200).map((s) => ({
+        id: s.id,
+        completed_at: s.completed_at!,
+        duration_seconds: s.duration_seconds,
+        steps: s.steps.map((st) => ({
+          exercise_id: st.exercise_id,
+          exercise: st.exercise
+            ? {
+                category: st.exercise.category,
+                metric: st.exercise.metric,
+                title: st.exercise.title,
+              }
+            : undefined,
+        })),
+        results: s.results.map((r) => ({
+          exercise_id: r.exercise_id,
+          value: r.value,
+          configuration: r.configuration,
+        })),
+      }));
+      c.goals = data.goals
+        .filter((g) => g.user_id === owner)
+        .slice(0, 20)
+        .map((g) => ({ title: g.title, completed: g.completed }));
+      c.journals = data.journals
+        .filter(
+          (j) =>
+            j.user_id === owner &&
+            c.sessions!.some((s) => s.id === j.session_id),
+        )
+        .map((j) => ({
+          session_id: j.session_id,
+          difficulties: j.difficulties,
+          next_focus: j.next_focus.slice(0, 300),
+          difficult: j.difficult.slice(0, 300),
+        }));
+    } else if (q.intent === "agenda") {
+      const own = {
+        ...data,
+        schedules: data.schedules.filter((s) => s.user_id === owner),
+        series: data.series.filter((s) => s.user_id === owner),
+        exceptions: data.exceptions.filter((s) => s.user_id === owner),
+        sessions: data.sessions.filter((s) => s.user_id === owner),
+      };
+      c.agenda = expandCalendar(own, today, shiftDate(today, 14))
+        .filter((o) => o.status !== "cancelled")
+        .slice(0, 100)
+        .map((o) => ({
+          id: o.schedule_id || o.key,
+          title: o.title,
+          starts_at: o.starts_at,
+          duration_minutes: o.duration_minutes,
+          status: o.status,
+          series_id: o.series_id || undefined,
+          occurrence_date: o.occurrence_date,
+        }));
+    } else if (q.intent === "competition")
+      c.tournaments = catalog.tournaments
+        .filter(
+          (t) =>
+            t.published &&
+            data.bookmarks.some(
+              (b) =>
+                b.user_id === owner &&
+                b.kind === "tournament" &&
+                b.target_id === t.id,
+            ),
+        )
+        .slice(0, 10)
+        .map((t) => ({
+          id: t.id,
+          slug: t.slug,
+          title: t.title,
+          starts_at: t.starts_at,
+          start_date: t.start_date,
+          status: t.status,
+          valid_until: t.valid_until,
+          verified_at: t.verified_at,
+          source_url: t.source_url,
+        }));
+  }
+  if (q.intent === "exercise" || q.intent === "knowledge") {
+    c.exercises = catalog.exercises
+      .filter(
+        (e) =>
+          e.published &&
+          (exercise_id ? e.id === exercise_id : e.category === q.category),
+      )
+      .slice(0, 10)
+      .map((e) => ({
+        id: e.id,
+        title: e.title,
+        category: e.category,
+        mode: e.mode,
+        level: e.level,
+        description: e.description,
+        instructions: e.instructions,
+        metric: e.metric,
+        map_code: e.map_code,
+        source_url: e.source_url,
+        verified_at: e.verified_at,
+      }));
+    c.articles = catalog.articles
+      .filter(
+        (a) =>
+          a.published &&
+          Date.parse(a.published_at) <= now.getTime() &&
+          a.category === q.category &&
+          (!a.valid_until || Date.parse(a.valid_until) >= now.getTime()),
+      )
+      .slice(0, 3)
+      .map((a) => ({
+        id: a.id,
+        slug: a.slug,
+        title: a.title,
+        summary: a.summary,
+        source_url: a.source_url,
+        verified_at: a.verified_at,
+      }));
+  }
+  return c;
+}
+export function demoAnswer(
+  data: PlayerData,
+  catalog: Catalog,
+  message: string,
+  pref: Preferences,
+  exercise_id?: string,
+) {
+  const q = classify(message, exercise_id),
+    k = retrieve(message);
+  const answer = rulesAnswer(
+    q,
+    demoContext(data, catalog, message, pref, exercise_id),
+    k.references,
+    k.definitions,
+  );
+  if (
+    !pref.context_enabled &&
+    ["report", "agenda", "competition"].includes(q.intent)
+  ) {
+    answer.sections = [
+      {
+        title: "Autorize o contexto individual",
+        items: [
+          "Seus registros privados não foram consultados. Ative a personalização nas preferências.",
+        ],
+      },
+    ];
+    answer.scope = [];
+  }
+  answer.notice = pref.context_enabled
+    ? "Demonstração local · assistência por regras. Nenhum dado é enviado a um modelo externo."
+    : "Personalização desativada. Autorize o uso dos registros para analisar sua conta de demonstração.";
+  return answer;
+}

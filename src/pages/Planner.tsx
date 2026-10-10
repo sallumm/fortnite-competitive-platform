@@ -1,3 +1,4 @@
+import { CoachAccess } from "../components/CoachAccess";
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -47,6 +48,10 @@ export default function Planner() {
   const schedule = (plan: Plan) => setAgendaIntent(plan);
   return (
     <>
+      <CoachAccess
+        question="Ajude a organizar meus treinos nesta semana."
+        label="Ajudar a organizar"
+      />
       <Heading
         eyebrow="PLANEJAMENTO"
         title="Seu treino, com direção."

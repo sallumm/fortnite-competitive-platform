@@ -1,3 +1,4 @@
+import { CoachAccess } from "../components/CoachAccess";
 import { useSEO } from "../lib/seo";
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -200,6 +201,10 @@ export default function Competitive() {
           <ArrowLeft size={16} />
           Central competitiva
         </Link>
+        <CoachAccess
+          question={`Como me preparar para ${selected.title}?`}
+          label="Preparar com o Coach"
+        />
         <Heading
           eyebrow={`${selected.category} / ${selected.region}`}
           title={selected.title}
@@ -345,6 +350,10 @@ export default function Competitive() {
   );
   return (
     <>
+      <CoachAccess
+        question="Qual campeonato salvei para esta semana?"
+        label="Consultar favoritos com o Coach"
+      />
       <Heading
         eyebrow="CENTRAL COMPETITIVA"
         title="Entenda o cenário. Prepare seu jogo."
