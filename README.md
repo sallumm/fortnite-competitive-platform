@@ -4,7 +4,7 @@ Projeto novo, independente, em português brasileiro. Nome de trabalho sujeito a
 
 ## Estado da entrega
 
-Código versionado no GitHub e testes locais, sem publicação do site ou Supabase hospedado configurado. A demonstração funciona sem serviços externos, explicitamente no navegador. As contas reais e a editoria persistente exigem configurar Supabase. Não há credenciais privadas, pagamentos, resultados inventados ou servidor Discord fictício.
+Código versionado no GitHub, 20 testes locais aprovados e workflow de testes/build aprovado no GitHub Actions, sem publicação do site ou Supabase hospedado configurado. A demonstração funciona sem serviços externos, explicitamente no navegador. As contas reais e a editoria persistente exigem configurar Supabase. Não há credenciais privadas, pagamentos, resultados inventados ou servidor Discord fictício.
 
 | Implementado | Observação |
 | --- | --- |
