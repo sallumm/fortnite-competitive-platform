@@ -201,6 +201,7 @@ export interface Tournament {
   published: boolean;
 }
 export interface Article {
+  academy_questions?: import("./academy").Question[];
   curriculum?: import("./curriculum").Curriculum | null;
   topic?: string;
   tags?: string[];

@@ -27,6 +27,8 @@ const MetaAdmin = lazy(() => import("./pages/MetaAdmin"));
 const MetaDetail = lazy(() => import("./pages/MetaDetail"));
 const MetaCenter = lazy(() => import("./pages/MetaCenter"));
 const Competitive = lazy(() => import("./pages/Competitive"));
+const AcademyAdmin = lazy(() => import("./pages/AcademyAdmin"));
+const Academy = lazy(() => import("./pages/Academy"));
 const Curriculum = lazy(() => import("./pages/Curriculum"));
 const TrainingResearch = lazy(() => import("./pages/TrainingResearch"));
 const Editorial = lazy(() => import("./pages/Editorial"));
@@ -263,9 +265,17 @@ function Application() {
             <Route path="/competitive/:slug" element={<Competitive />} />
             <Route path="/news" element={<Editorial />} />
             <Route path="/news/:slug" element={<Editorial />} />
+            <Route
+              path="/admin/academy"
+              element={
+                <Guard onboard={false}>
+                  <AcademyAdmin />
+                </Guard>
+              }
+            />
             <Route path="/academy/curriculum" element={<Curriculum />} />
             <Route path="/academy/research" element={<TrainingResearch />} />
-            <Route path="/academy" element={<Editorial academy />} />
+            <Route path="/academy" element={<Academy />} />
             <Route path="/academy/:slug" element={<Editorial academy />} />
             <Route path="/help" element={<Help />} />
             <Route path="/community" element={<Community />} />

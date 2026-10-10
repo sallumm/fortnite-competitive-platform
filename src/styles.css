@@ -3954,3 +3954,10 @@ dialog {
     width: 100%;
   }
 }
+
+/* Academy uses the same panel tokens and responsive grids as the player space. */
+.academy-page { display: grid; gap: 1.25rem; }
+.academy-page > .row { flex-wrap: wrap; }
+.academy-page progress { width: 100%; accent-color: var(--accent); }
+.academy-page li { margin-block: .4rem; }
+.academy-page details p { white-space: pre-wrap; overflow-wrap: anywhere; }

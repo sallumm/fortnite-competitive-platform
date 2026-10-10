@@ -1,3 +1,4 @@
+import { questionsSchema } from "./academy";
 import { curriculumSchema } from "./curriculum";
 import { z } from "zod";
 import {
@@ -107,6 +108,7 @@ export const exerciseSchema = z
 export const articleSchema = z
   .object({
     curriculum: curriculumSchema.nullable().optional(),
+    academy_questions: questionsSchema.optional(),
     ...base,
     title,
     slug: z.string().regex(/^[a-z0-9-]{3,100}$/),
