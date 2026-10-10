@@ -20,6 +20,7 @@ const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Coach = lazy(() => import("./pages/Coach"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Planner = lazy(() => import("./pages/Planner"));
+const TrainingCenter = lazy(() => import("./pages/TrainingCenter"));
 const Training = lazy(() => import("./pages/Training"));
 const Library = lazy(() => import("./pages/Library"));
 const Competitive = lazy(() => import("./pages/Competitive"));
@@ -144,6 +145,14 @@ function Application() {
               element={
                 <Guard>
                   <Coach />
+                </Guard>
+              }
+            />
+            <Route
+              path="/app/training"
+              element={
+                <Guard>
+                  <TrainingCenter />
                 </Guard>
               }
             />

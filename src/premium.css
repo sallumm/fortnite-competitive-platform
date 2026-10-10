@@ -709,3 +709,61 @@ textarea:focus {
     grid-template-columns: 1fr;
   }
 }
+
+/* Training workflows: readable, bounded lists and comfortable touch controls. */
+dialog:has(.builder-summary) {
+  width: min(1000px, calc(100vw - 32px));
+}
+.builder-library {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.builder-library > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.builder-library[open] {
+  max-height: 480px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.builder-library > article {
+  margin-top: 12px;
+}
+.builder-step .form-grid input,
+.builder-step textarea {
+  width: 100%;
+}
+.training-history {
+  border-top: 1px solid var(--border);
+  padding: 20px 0;
+}
+.training-history summary {
+  cursor: pointer;
+  font-weight: 600;
+  line-height: 1.7;
+}
+.training-history article {
+  padding: 16px;
+  margin: 12px 0;
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  border-radius: 8px;
+}
+@media (max-width: 600px) {
+  dialog:has(.builder-summary) {
+    width: calc(100vw - 16px);
+  }
+  .builder-step .row {
+    flex-wrap: wrap;
+  }
+  .builder-step .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .builder-step .icon-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

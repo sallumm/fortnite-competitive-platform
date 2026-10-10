@@ -111,6 +111,10 @@ test("builder keyboard reorder, undo, preview, persistence and session resume", 
   await navigate(page, "Meu Dia");
   await page.getByRole("button", { name: /Retomar/ }).click();
   await expect(page.getByLabel("Observação ou erro recorrente")).toHaveValue(
+    "Segunda etapa",
+  );
+  await page.getByRole("button", { name: "Exercício anterior" }).click();
+  await expect(page.getByLabel("Observação ou erro recorrente")).toHaveValue(
     "Preservar meu resultado",
   );
   await page.getByRole("button", { name: "Próximo exercício" }).click();

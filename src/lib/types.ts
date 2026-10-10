@@ -29,6 +29,17 @@ export interface Profile {
   reminder_enabled: boolean;
 }
 export interface Exercise {
+  video_url?: string | null;
+  categories?: string[];
+  tags?: string[];
+  measurement?: {
+    unit: string;
+    min: number;
+    max: number;
+    direction: "higher" | "lower";
+    procedure: string;
+    version: string;
+  };
   skills?: string[];
   competitive_goal?: string;
   map_type?: string;
@@ -48,11 +59,23 @@ export interface Exercise {
   published: boolean;
 }
 export interface Step {
+  id?: string;
+  block?: string;
+  notes?: string;
+  repetitions?: number;
+  resource_url?: string;
+  custom?: Exercise;
   exercise_id: string;
   minutes: number;
   exercise?: Exercise;
 }
 export interface Plan {
+  description?: string;
+  objective?: string;
+  mode?: Mode | "both";
+  level?: Level;
+  favorite?: boolean;
+  archived?: boolean;
   id: string;
   user_id: string;
   title: string;
@@ -70,12 +93,29 @@ export interface Schedule {
   tournament_id: string | null;
 }
 export interface Result {
+  step_id?: string;
+  status?: "completed" | "skipped";
+  unit?: string;
+  version?: string;
+  conditions?: {
+    scenario: string;
+    device: string;
+    sensitivity: string;
+    test_seconds: number | null;
+  };
   exercise_id: string;
   value: number | null;
   note: string;
   configuration?: string;
 }
 export interface Training {
+  plan_snapshot?: Pick<
+    Plan,
+    "title" | "description" | "objective" | "mode" | "level"
+  >;
+  checkpoint?: import("./local-data").SessionDraft | null;
+  checkpoint_version?: number;
+  result_revision?: number;
   schedule_id?: string | null;
   series_id?: string | null;
   occurrence_date?: string | null;
@@ -92,6 +132,15 @@ export interface Training {
   xp: number;
 }
 export interface Goal {
+  measurement?: {
+    exercise_id: string;
+    unit: string;
+    version: string;
+    baseline: number;
+    desired: number;
+    configuration: string;
+    deadline?: string;
+  };
   id: string;
   user_id: string;
   title: string;
@@ -198,10 +247,10 @@ export const labels: Record<string, string> = {
   advanced: "Avançado",
   aim: "Mira",
   mechanics: "Mecânicas",
-  piece: "Piece control",
+  piece: "Piece Control",
   competitive: "Prática competitiva",
-  decisions: "Game sense",
-  vod: "VOD review",
+  decisions: "Noção de Jogo",
+  vod: "VOD Review",
   wellbeing: "Bem-estar",
   fncs: "FNCS",
   kbm: "Teclado e mouse",

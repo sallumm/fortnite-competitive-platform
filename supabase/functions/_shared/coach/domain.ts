@@ -46,12 +46,28 @@ export type Context = {
     completed_at: string;
     duration_seconds: number;
     steps: {
+      id?: string;
       exercise_id: string;
-      exercise?: { category: string; metric: string; title: string };
+      exercise?: {
+        category: string;
+        metric: string;
+        title: string;
+        published?: boolean;
+      };
     }[];
     results: {
       exercise_id: string;
       value: number | null;
+      step_id?: string;
+      status?: string;
+      unit?: string;
+      version?: string;
+      conditions?: {
+        scenario: string;
+        device: string;
+        sensitivity: string;
+        test_seconds: number | null;
+      } | null;
       configuration?: string;
       note?: string;
     }[];
@@ -230,7 +246,19 @@ export function rulesAnswer(
     const cats = new Map<string, number>();
     for (const s of sessions)
       for (const category of new Set(
-        s.steps.map((st) => st.exercise?.category).filter(Boolean),
+        s.steps
+          .filter(
+            (st) =>
+              !s.results.some(
+                (r) =>
+                  (r.step_id
+                    ? r.step_id === st.id
+                    : r.exercise_id === st.exercise_id) &&
+                  r.status === "skipped",
+              ),
+          )
+          .map((st) => st.exercise?.category)
+          .filter(Boolean),
       ))
         cats.set(category!, 1 + (cats.get(category!) || 0));
     if (cats.size)
@@ -238,7 +266,7 @@ export function rulesAnswer(
         "Categorias praticadas",
         [...cats].map(
           ([key, n]) =>
-            `${({ aim: "Mira", mechanics: "Mecânicas", piece: "Piece control", competitive: "Prática competitiva", decisions: "Game sense", vod: "VOD review", wellbeing: "Bem-estar" } as Record<string, string>)[key] || key}: ${n} sessões.`,
+            `${({ aim: "Mira", mechanics: "Mecânicas", piece: "Piece Control", competitive: "Prática competitiva", decisions: "Noção de Jogo", vod: "VOD Review", wellbeing: "Bem-estar" } as Record<string, string>)[key] || key}: ${n} sessões.`,
         ),
       );
     const groups = new Map<
@@ -251,8 +279,12 @@ export function rulesAnswer(
     >();
     for (const s of sessions)
       for (const r of s.results) {
-        const step = s.steps.find((st) => st.exercise_id === r.exercise_id);
+        const step = s.steps.find((st) =>
+          r.step_id ? st.id === r.step_id : st.exercise_id === r.exercise_id,
+        );
         if (
+          r.status === "skipped" ||
+          step?.exercise?.published === false ||
           r.value === null ||
           !Number.isFinite(r.value) ||
           !r.configuration?.trim() ||
@@ -261,7 +293,21 @@ export function rulesAnswer(
           continue;
         const metric = step.exercise.metric,
           configuration = r.configuration.trim(),
-          key = JSON.stringify([r.exercise_id, metric, configuration]);
+          key = JSON.stringify([
+            r.exercise_id,
+            metric,
+            configuration,
+            r.unit || "legacy",
+            r.version || "legacy",
+            r.conditions
+              ? [
+                  r.conditions.scenario,
+                  r.conditions.device,
+                  r.conditions.sensitivity,
+                  r.conditions.test_seconds,
+                ]
+              : null,
+          ]);
         const g = groups.get(key) || { metric, configuration, points: [] };
         g.points.push({ value: r.value, date: s.completed_at });
         groups.set(key, g);

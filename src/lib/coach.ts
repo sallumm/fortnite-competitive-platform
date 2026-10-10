@@ -72,16 +72,23 @@ export function demoContext(
         completed_at: s.completed_at!,
         duration_seconds: s.duration_seconds,
         steps: s.steps.map((st) => ({
+          id: st.id,
           exercise_id: st.exercise_id,
           exercise: st.exercise
             ? {
                 category: st.exercise.category,
                 metric: st.exercise.metric,
                 title: st.exercise.title,
+                published: st.exercise.published,
               }
             : undefined,
         })),
         results: s.results.map((r) => ({
+          step_id: r.step_id,
+          status: r.status,
+          unit: r.unit,
+          version: r.version,
+          conditions: r.conditions,
           exercise_id: r.exercise_id,
           value: r.value,
           configuration: r.configuration,

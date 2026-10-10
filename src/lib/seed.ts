@@ -5,6 +5,7 @@ import type {
   Article,
   Tournament,
 } from "./types";
+import { trainingCatalog } from "./training-catalog";
 import { competitiveSeed } from "./competitive-seed";
 const verified = "2026-10-10T03:00:00Z";
 export const uid = (n: number) =>
@@ -327,6 +328,7 @@ export const seed: Catalog = {
     ...competitiveSeed.exercises.filter(
       (e) => !exercises.some((x) => x.map_code === e.map_code),
     ),
+    ...trainingCatalog,
   ],
   articles: [...articles, ...competitiveSeed.articles],
   tournaments: [

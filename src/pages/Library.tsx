@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight, Heart, Search, Target } from "lucide-react";
 import { useStore } from "../lib/store";
+import { trainingCategories } from "../lib/training";
 import { labels } from "../lib/types";
 import { Badge, CopyCode, Empty, Heading, Source } from "../components/ui";
 export default function Library() {
@@ -96,8 +97,35 @@ export default function Library() {
             )}
             <h2>Como praticar</h2>
             <p>{selected.instructions}</p>
+            {selected.video_url && (
+              <p>
+                <a
+                  href={selected.video_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Vídeo do criador: rotina de treinos (referência de 2025)
+                </a>
+              </p>
+            )}
             <h2>O que registrar</h2>
             <p>{selected.metric}</p>
+            {selected.measurement && (
+              <section>
+                <h3>Benchmark individual</h3>
+                <p>{selected.measurement.procedure}</p>
+                <p>
+                  Unidade: {selected.measurement.unit} · limites:{" "}
+                  {selected.measurement.min} a {selected.measurement.max} ·
+                  protocolo {selected.measurement.version}.{" "}
+                  {selected.measurement.direction === "higher"
+                    ? "Um valor maior indica mais ocorrências da métrica."
+                    : "Um valor menor indica menos tempo ou erros."}{" "}
+                  O significado depende da configuração e não corresponde a um
+                  rank de habilidade.
+                </p>
+              </section>
+            )}
             <div className="alert">
               Compare apenas tentativas com a mesma arma, cenário e
               configuração. Resultados de treino não equivalem a resultados de
@@ -142,11 +170,21 @@ export default function Library() {
     );
   const list = s.catalog.exercises.filter(
     (e) =>
-      [e.title, e.description, e.creator, e.map_code || ""]
+      [
+        e.title,
+        e.description,
+        e.creator,
+        e.map_code || "",
+        ...(e.skills || []),
+        ...(e.tags || []),
+      ]
         .join(" ")
         .toLowerCase()
         .includes(query.toLowerCase()) &&
-      (category === "all" || e.category === category) &&
+      (category === "all" ||
+        (e.categories?.length ? e.categories : [e.category]).includes(
+          category,
+        )) &&
       (level === "all" || e.level === level) &&
       (mode === "all" || e.mode === mode || e.mode === "both") &&
       (!favorite || bookmarked(e.id)),
@@ -178,13 +216,11 @@ export default function Library() {
           onChange={(e) => setCategory(e.target.value)}
         >
           <option value="all">Todas as habilidades</option>
-          {["aim", "mechanics", "piece", "competitive", "decisions", "vod"].map(
-            (c) => (
-              <option value={c} key={c}>
-                {labels[c]}
-              </option>
-            ),
-          )}
+          {Object.entries(trainingCategories).map(([c, label]) => (
+            <option value={c} key={c}>
+              {label}
+            </option>
+          ))}
         </select>
         <select
           aria-label="Dificuldade"
@@ -254,7 +290,14 @@ export default function Library() {
                 <p>{e.description}</p>
                 <div className="row between">
                   {e.map_code ? (
-                    <CopyCode code={e.map_code} />
+                    <CopyCode
+                      code={e.map_code}
+                      label={
+                        e.measurement
+                          ? `Copiar código de ${e.title}`
+                          : undefined
+                      }
+                    />
                   ) : (
                     <Badge>Sem mapa</Badge>
                   )}

@@ -46,7 +46,8 @@ export default function Reports() {
   const distribution = sessions
     .filter((x) => x.status === "completed")
     .reduce<Record<string, number>>((acc, session) => {
-      for (const step of session.steps) {
+      for (const [index, step] of session.steps.entries()) {
+        if (session.results[index]?.status === "skipped") continue;
         const category =
           step.exercise?.category ||
           s.catalog.exercises.find((e) => e.id === step.exercise_id)?.category;
@@ -90,6 +91,9 @@ export default function Reports() {
           </button>
         }
       />
+      <Link className="button" to="/app/training">
+        Histórico detalhado e metas mensuráveis
+      </Link>
       <AnimatedTabs
         className="page-tabs"
         label="Período do relatório"
@@ -284,6 +288,7 @@ export default function Reports() {
               {groups.map((g) => (
                 <option key={g.key} value={g.key}>
                   {g.configuration} · {g.metric}
+                  {g.version ? ` · ${g.version}` : ""}
                 </option>
               ))}
             </select>

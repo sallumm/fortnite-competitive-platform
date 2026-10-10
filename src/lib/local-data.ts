@@ -12,15 +12,14 @@ export function clearLocalProductData(local: Storage, session: Storage) {
 }
 
 export interface SessionDraft {
+  activeStep?: number;
+  saved_at?: number;
+  stepElapsed?: number[];
+  stepSince?: number | null;
   elapsed: number;
   since: number | null;
   done: boolean[];
-  results: {
-    exercise_id: string;
-    value: number | null;
-    note: string;
-    configuration?: string;
-  }[];
+  results: import("./types").Result[];
 }
 /** Local storage is untrusted and may contain an old or partially written draft. */
 export function validSessionDraft(
@@ -30,8 +29,24 @@ export function validSessionDraft(
   if (!value || typeof value !== "object") return false;
   const draft = value as SessionDraft;
   return (
+    (draft.stepElapsed === undefined ||
+      (Array.isArray(draft.stepElapsed) &&
+        draft.stepElapsed.length === exerciseIds.length &&
+        draft.stepElapsed.every(
+          (n) => Number.isInteger(n) && n >= 0 && n <= 86400,
+        ))) &&
+    (draft.stepSince === undefined ||
+      draft.stepSince === null ||
+      (Number.isFinite(draft.stepSince) &&
+        draft.stepSince > 0 &&
+        draft.stepSince <= Date.now())) &&
+    (draft.activeStep === undefined ||
+      (Number.isInteger(draft.activeStep) &&
+        draft.activeStep >= 0 &&
+        draft.activeStep < exerciseIds.length)) &&
     Number.isFinite(draft.elapsed) &&
     draft.elapsed >= 0 &&
+    draft.elapsed <= 86400 &&
     (draft.since === null ||
       (Number.isFinite(draft.since) &&
         draft.since! > 0 &&

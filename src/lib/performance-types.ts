@@ -5,19 +5,19 @@ export const skills = {
   shotgun: "Shotgun accuracy",
   building: "Building",
   editing: "Editing",
-  piece: "Piece control",
+  piece: "Piece Control",
   movement: "Movement",
-  decisions: "Game sense",
+  decisions: "Noção de Jogo",
   rotations: "Rotations",
   endgame: "Endgame",
-  vod: "VOD analysis",
+  vod: "VOD Review",
 } as const;
 export type Skill = keyof typeof skills;
 export const difficulties = {
   tracking: "Tracking",
   accuracy: "Precisão",
   editing: "Edição",
-  piece: "Piece control",
+  piece: "Piece Control",
   movement: "Movimentação",
   rotations: "Rotações",
   endgame: "Endgame",
