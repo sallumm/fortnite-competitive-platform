@@ -31,12 +31,14 @@ import {
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/client";
 const nav = [
-  ["/app", "Visão geral", Home],
+  ["/app", "Meu Dia", Home],
   ["/app/planner", "Planejador", CalendarDays],
   ["/library", "Exercícios", Target],
   ["/competitive", "Competitivo", Trophy],
   ["/news", "Notícias e análises", Compass],
   ["/academy", "Academy", GraduationCap],
+  ["/app/skills", "Minhas Habilidades", Target],
+  ["/app/week", "Minha Semana", CalendarDays],
   ["/app/reports", "Minha evolução", BarChart3],
   ["/app/progression", "Progressão", Layers],
   ["/help", "Central de ajuda", HelpCircle],

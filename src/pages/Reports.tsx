@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   BarChart,
   Bar,
@@ -12,26 +13,26 @@ import {
 } from "recharts";
 import { Download, Plus, Target } from "lucide-react";
 import { useStore } from "../lib/store";
-import {
-  comparableResults,
-  dateLabel,
-  download,
-  progression,
-  stats,
-} from "../lib/logic";
+import { dateLabel, download, progression, stats } from "../lib/logic";
 import { labels } from "../lib/types";
 import { Badge, Empty, Heading, Progress } from "../components/ui";
-import { localDate } from "../components/Calendar";
+import { dateInZone } from "../lib/calendar";
+import { periodBounds, resultGroups, summarize } from "../lib/performance";
+import { difficulties } from "../lib/performance-types";
 export default function Reports() {
   const s = useStore();
   const [period, setPeriod] = useState(30);
   const [exercise, setExercise] = useState(s.catalog.exercises[0]?.id || "");
   const [goal, setGoal] = useState("");
   const [target, setTarget] = useState(3);
-  const cutoff = Date.now() - period * 864e5;
-  const sessions = s.data.sessions.filter(
-    (x) => new Date(x.started_at).getTime() >= cutoff,
-  );
+  const profile = s.data.profile!;
+  const [configuration, setConfiguration] = useState("");
+  const bounds = periodBounds(period, profile.timezone);
+  const sessions = s.data.sessions.filter((x) => {
+    const date = dateInZone(x.completed_at || x.started_at, profile.timezone);
+    return date >= bounds.from && date <= bounds.to;
+  });
+  const summary = summarize(s.data, bounds.from, bounds.to);
   const metrics = stats(sessions);
   const distribution = sessions
     .filter((x) => x.status === "completed")
@@ -48,33 +49,12 @@ export default function Reports() {
     name: labels[c],
     minutos: m,
   }));
-  const trend = comparableResults(
-    sessions,
-    exercise,
-    s.catalog.exercises.find((e) => e.id === exercise)?.metric,
-  ).map((x) => ({ data: dateLabel(x.date), resultado: x.value }));
-  const profile = s.data.profile!;
-  const due = s.data.schedules.filter(
-    (x) =>
-      new Date(x.starts_at).getTime() >= cutoff &&
-      new Date(x.starts_at).getTime() <= Date.now(),
-  );
-  const matched = new Set<string>();
-  let adhered = 0;
-  due.forEach((schedule) => {
-    const match = sessions.find(
-      (session) =>
-        session.status === "completed" &&
-        session.plan_id === schedule.plan_id &&
-        !matched.has(session.id) &&
-        localDate(session.started_at, profile.timezone) ===
-          localDate(schedule.starts_at, profile.timezone),
-    );
-    if (match) {
-      matched.add(match.id);
-      adhered++;
-    }
-  });
+  const groups = resultGroups(sessions, exercise);
+  const selected = groups.find((g) => g.key === configuration) || groups[0];
+  const trend = (selected?.points || []).map((x) => ({
+    data: dateLabel(x.date, profile.timezone),
+    resultado: x.value,
+  }));
   return (
     <>
       <Heading
@@ -119,15 +99,65 @@ export default function Reports() {
         </article>
         <article className="metric">
           <strong>
-            {due.length ? Math.round((adhered / due.length) * 100) + "%" : "—"}
+            {summary.planned
+              ? Math.round((summary.adhered / summary.planned) * 100) + "%"
+              : "—"}
           </strong>
-          <span>Aderência: mesmo plano e dia</span>
+          <span>Conclusão explícita da agenda</span>
         </article>
         <article className="metric">
           <strong>{metrics.xp}</strong>
           <span>XP no período</span>
         </article>
       </div>
+      <section className="panel report-insights">
+        <div className="section-title">
+          <h2>Leitura do período</h2>
+          <Link className="text-link" to="/app/week">
+            Minha Semana
+          </Link>
+        </div>
+        <p>
+          {summary.planned} atividades de treino planejadas até agora ·{" "}
+          {summary.practiceDays} dias de prática. Período anterior:{" "}
+          {summary.previousCompleted} sessões (períodos parciais não são
+          equivalentes).
+        </p>
+        {summary.estimated > 0 && (
+          <p>
+            {summary.estimated} correspondências antigas estimadas por plano e
+            dia, apresentadas separadamente da aderência explícita.
+          </p>
+        )}
+        <ul>
+          {summary.observations.map((line, i) => (
+            <li key={i}>{line}</li>
+          ))}
+        </ul>
+        {summary.difficulties.length > 0 && (
+          <p>
+            Dificuldades relatadas:{" "}
+            {summary.difficulties
+              .map((d) => `${difficulties[d.key]} (${d.count})`)
+              .join(", ")}
+            .
+          </p>
+        )}
+        <details>
+          <summary>Como ler este relatório e próximos passos</summary>
+          <p>
+            Contagens derivadas dos registros autodeclarados. Aderência
+            explícita usa vínculo com atividade, ou marcação manual. Categorias
+            usam minutos planejados, sem medir tempo por habilidade.
+            Cancelamentos são excluídos do denominador.
+          </p>
+          <ul>
+            {summary.suggestions.map((line, i) => (
+              <li key={i}>{line}</li>
+            ))}
+          </ul>
+        </details>
+      </section>
       <div className="two-grid">
         <section className="panel chart-panel">
           <h2>Distribuição do planejamento realizado</h2>
@@ -178,7 +208,10 @@ export default function Reports() {
             Exercício
             <select
               value={exercise}
-              onChange={(e) => setExercise(e.target.value)}
+              onChange={(e) => {
+                setExercise(e.target.value);
+                setConfiguration("");
+              }}
             >
               {s.catalog.exercises.map((e) => (
                 <option key={e.id} value={e.id}>
@@ -187,9 +220,26 @@ export default function Reports() {
               ))}
             </select>
           </label>
+          <label>
+            Configuração e métrica comparáveis
+            <select
+              value={selected?.key || ""}
+              onChange={(e) => setConfiguration(e.target.value)}
+            >
+              {!groups.length && (
+                <option value="">Sem grupo identificado</option>
+              )}
+              {groups.map((g) => (
+                <option key={g.key} value={g.key}>
+                  {g.configuration} · {g.metric}
+                </option>
+              ))}
+            </select>
+          </label>
           <p className="muted small-text">
-            {s.catalog.exercises.find((e) => e.id === exercise)?.metric}.
-            Compare somente configurações equivalentes.
+            Dados autodeclarados. Resultados antigos sem identificação continuam
+            no histórico, mas não geram comparação automática. Variação de valor
+            não implica melhoria para todas as métricas.
           </p>
           {trend.length >= 2 ? (
             <>
@@ -232,7 +282,7 @@ export default function Reports() {
           )}
         </section>
       </div>
-      <section className="panel goals-panel">
+      <section id="metas" className="panel goals-panel">
         <h2>Minhas metas</h2>
         <p className="muted">
           Defina a intenção e marque a conclusão quando cumprir. Sem bônus de XP
@@ -332,6 +382,16 @@ export default function Reports() {
                   {Math.round(session.duration_seconds / 60)} minutos ativos · +
                   {session.xp} XP
                 </p>
+                {session.status !== "active" && (
+                  <Link
+                    className="button small"
+                    to={"/app/journal/" + session.id}
+                  >
+                    {s.data.journals.some((j) => j.session_id === session.id)
+                      ? "Revisar diário"
+                      : "Escrever diário opcional"}
+                  </Link>
+                )}
                 {session.results.map((r, i) => (
                   <div className="result-detail" key={i}>
                     <strong>
@@ -342,7 +402,10 @@ export default function Reports() {
                           ?.title ||
                         "Exercício"}
                     </strong>
-                    <span>Resultado: {r.value ?? "Não informado"}</span>
+                    <span>
+                      Resultado autodeclarado: {r.value ?? "Não informado"} ·
+                      configuração: {r.configuration || "não identificada"}
+                    </span>
                     <p>{r.note || "Sem observações."}</p>
                   </div>
                 ))}
