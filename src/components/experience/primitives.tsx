@@ -299,9 +299,7 @@ export function TrainingStepTransition({
     <m.div
       key={identity}
       initial={
-        effective === "essential"
-          ? false
-          : { opacity: 0.8, x: effective === "full" ? 10 : 0 }
+        effective === "full" ? { opacity: 1, x: 10 } : false
       }
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.18 }}
