@@ -20,7 +20,8 @@ export async function exportPlayerData(
         key.startsWith("clutchfolio-plan-draft:" + owner + ":") ||
         key.startsWith("clutchfolio-session-" + owner + ":") ||
         key === "clutchfolio-competitive-demo" ||
-        key === "clutchfolio-road-demo-v1" || key === "clutchfolio-academy-demo-v1",
+        key === "clutchfolio-road-demo-v1" ||
+        key === "clutchfolio-academy-demo-v1",
     )) {
       try {
         additional[key] = JSON.parse(local.getItem(key) || "null");
@@ -41,6 +42,8 @@ export async function exportPlayerData(
       "coach_messages",
       "coach_actions",
       "competitive_preferences",
+      "evolution_settings",
+      "evolution_batches",
       "learning_journeys",
       "learning_journey_events",
       "learning_journey_batches",
@@ -56,7 +59,12 @@ export async function exportPlayerData(
         const result = await client
           .from(table)
           .select("*")
-          .eq(table.endsWith("preferences") ? "id" : "user_id", owner)
+          .eq(
+            table.endsWith("preferences") || table === "evolution_settings"
+              ? "id"
+              : "user_id",
+            owner,
+          )
           .order(table === "competition_preparations" ? "tournament_id" : "id")
           .range(offset, offset + 499);
         if (result.error)

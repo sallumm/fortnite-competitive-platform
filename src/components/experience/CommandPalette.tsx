@@ -32,6 +32,7 @@ export function CommandPalette() {
           ["Meu Dia", "/app"],
           ["Planejador", "/app/planner"],
           ["Training Center", "/app/training"],
+          ["Criar meu plano de evolução", "/app/evolution-plan"],
           ["Meta Training Center", "/app/meta-training"],
           ["Minhas equipes", "/app/teams"],
           ["kyrven coach", "/app/coach"],
@@ -43,7 +44,7 @@ export function CommandPalette() {
       : []),
     ...s.catalog.exercises.map((e) => ({
       title: e.title,
-      url: "/library",
+      url: "/library/" + e.id,
       kind: "Exercício",
     })),
   ];

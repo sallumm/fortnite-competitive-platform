@@ -1,5 +1,6 @@
 import type { Exercise, Profile } from "./types";
 import type { Skill } from "./performance-types";
+import { reviewPending } from "./exercise-review";
 const terms: Record<Skill, RegExp> = {
   aim: /aim|mira|clicking|tracking|microcorrec|shotgun|crosshair/,
   tracking: /tracking/,
@@ -38,6 +39,8 @@ export function compatibleExercises(
   return exercises.filter(
     (e) =>
       e.published &&
+      !reviewPending(e) &&
+      (profile.level !== "beginner" || e.level !== "advanced") &&
       (e.mode === "both" || e.mode === profile.mode) &&
       matchesSkill(e, skill),
   );

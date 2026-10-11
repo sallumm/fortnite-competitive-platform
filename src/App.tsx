@@ -95,7 +95,13 @@ function Guard({
       />
     );
   if (onboard && !s.data.profile?.onboarded)
-    return <Navigate to="/onboarding" replace />;
+    return (
+      <Navigate
+        to="/onboarding"
+        state={{ from: location.pathname + location.search }}
+        replace
+      />
+    );
   return <>{children}</>;
 }
 function Reminders() {
@@ -259,9 +265,30 @@ function Application() {
                 </Guard>
               }
             />
-            <Route path="/app/meta-training" element={<Guard><MetaTraining /></Guard>} />
-            <Route path="/app/road" element={<Guard><Road /></Guard>} />
-            <Route path="/app/teams" element={<Guard><Teams /></Guard>} />
+            <Route
+              path="/app/meta-training"
+              element={
+                <Guard>
+                  <MetaTraining />
+                </Guard>
+              }
+            />
+            <Route
+              path="/app/road"
+              element={
+                <Guard>
+                  <Road />
+                </Guard>
+              }
+            />
+            <Route
+              path="/app/teams"
+              element={
+                <Guard>
+                  <Teams />
+                </Guard>
+              }
+            />
             <Route path="/library" element={<Library />} />
             <Route path="/library/:id" element={<Library />} />
             <Route path="/competitive/meta" element={<MetaCenter />} />
@@ -295,7 +322,14 @@ function Application() {
             <Route path="/academy" element={<Academy />} />
             <Route path="/academy/:slug" element={<Editorial academy />} />
             <Route path="/knowledge" element={<Knowledge />} />
-            <Route path="/admin/ai" element={<Guard onboard={false}><KnowledgeAdmin /></Guard>} />
+            <Route
+              path="/admin/ai"
+              element={
+                <Guard onboard={false}>
+                  <KnowledgeAdmin />
+                </Guard>
+              }
+            />
             <Route path="/help" element={<Help />} />
             <Route path="/community" element={<Community />} />
             <Route path="/legal/:type" element={<Legal />} />

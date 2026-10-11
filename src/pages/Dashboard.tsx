@@ -1,4 +1,6 @@
 import { RoadAccess } from "../components/RoadAccess";
+import { DevelopmentOverview } from "../components/DevelopmentOverview";
+import { goalState } from "../lib/intelligence";
 import { AnimatedCard, StatCounter } from "../components/experience/primitives";
 import { CoachSummary } from "../components/CoachSummary";
 import { CoachAccess } from "../components/CoachAccess";
@@ -37,14 +39,25 @@ export default function Dashboard() {
     (o) => dateInZone(o.starts_at, p.timezone) === today,
   );
   const primary = todayAgenda.find(
-    (o) => o.kind === "training" && o.status === "planned",
+    (o) =>
+      o.kind === "training" &&
+      o.status === "planned" &&
+      s.data.plans.some((p) => p.id === o.plan_id && !p.archived),
   );
   const next =
     primary ||
-    agenda.find((o) => o.kind === "training" && o.status === "planned");
+    agenda.find(
+      (o) =>
+        o.kind === "training" &&
+        o.status === "planned" &&
+        s.data.plans.some((p) => p.id === o.plan_id && !p.archived),
+    );
   const active = s.data.sessions.find((x) => x.status === "active");
   const plan =
-    s.data.plans.find((x) => x.id === next?.plan_id) || s.data.plans[0];
+    s.data.plans.find((x) => x.id === next?.plan_id && !x.archived) ||
+    s.data.plans.find(
+      (x) => !x.archived && (x.mode === "both" || !x.mode || x.mode === p.mode),
+    );
   const last = s.data.sessions
     .filter((x) => x.status !== "active")
     .sort((a, b) =>
@@ -152,7 +165,7 @@ export default function Dashboard() {
               ) || p.minutes}{" "}
               min planejados
             </span>
-            {next && (
+            {!active && next && (
               <span>
                 <CalendarDays size={16} />
                 {timeLabel(next.starts_at, p.timezone)}
@@ -214,6 +227,7 @@ export default function Dashboard() {
           </Link>
         )}
       </div>
+      <DevelopmentOverview />
       <div className="two-grid">
         <AnimatedCard className="panel">
           <div className="section-title">
@@ -266,9 +280,9 @@ export default function Dashboard() {
         </AnimatedCard>
         <AnimatedCard className="panel">
           <h2>Meu foco e minhas metas</h2>
-          {s.data.goals.filter((g) => !g.completed).length ? (
+          {s.data.goals.filter((g) => goalState(g) === "active").length ? (
             s.data.goals
-              .filter((g) => !g.completed)
+              .filter((g) => goalState(g) === "active")
               .slice(0, 3)
               .map((g) => (
                 <div className="list-row" key={g.id}>
@@ -276,7 +290,9 @@ export default function Dashboard() {
                   <div>
                     <strong>{g.title}</strong>
                     <small>
-                      Quantidade desejada: {g.target} · conclusão autodeclarada
+                      {g.measurement
+                        ? `Alvo: ${g.measurement.desired} ${g.measurement.unit} · protocolo ${g.measurement.version}`
+                        : `Quantidade desejada: ${g.target} · conclusão autodeclarada`}
                     </small>
                   </div>
                 </div>

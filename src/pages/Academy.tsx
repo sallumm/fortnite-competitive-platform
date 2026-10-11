@@ -1,4 +1,5 @@
 import { KnowledgeAccess } from "../components/KnowledgeAccess";
+import { currentStudy } from "../lib/development";
 import { RoadAccess } from "../components/RoadAccess";
 import { loadPaths, type AcademyPath } from "../lib/academy-paths";
 import { useEffect, useState } from "react";
@@ -34,11 +35,12 @@ export default function Academy() {
     };
   }, [s.demo]);
   const lessons = curriculumLessons(s.catalog.articles);
-  const completed = lessons.filter((a) =>
-    ["completed", "reviewed"].includes(
-      lessonState(study.data.records, a.id) || "",
-    ),
-  );
+  const progressLessons = s.data.profile
+    ? lessons.filter((a) => a.curriculum!.modes.includes(s.data.profile!.mode))
+    : lessons;
+  const completed = s.data.profile
+    ? currentStudy(progressLessons, s.data.profile.mode, study.data.records)
+    : [];
   const list =
     start === "all"
       ? lessons
@@ -53,7 +55,7 @@ export default function Academy() {
     ? list.filter((a) => a.curriculum!.modes.includes(s.data.profile!.mode))
     : list;
   const next =
-    compatible.find((a) => !lessonState(study.data.records, a.id)) ||
+    compatible.find((a) => !completed.some((c) => c.id === a.id)) ||
     compatible[0];
   const last = study.data.records.at(-1);
   useSEO(
@@ -68,7 +70,8 @@ export default function Academy() {
         title="Compreenda uma decisão. Aplique. Revise."
         description="Uma sequência flexível de estudo e prática. Conclusão de aula, avaliação conceitual e desempenho em treino são registros diferentes."
       />
-      <div className="row"><RoadAccess />
+      <div className="row">
+        <RoadAccess />
         <Link className="button" to="/academy/curriculum">
           Buscar todas as aulas
         </Link>
@@ -121,8 +124,8 @@ export default function Academy() {
         {study.enabled ? (
           <>
             <p role="status">
-              {completed.length} de {lessons.length} aulas com estudo concluído
-              ou revisado ·{" "}
+              {completed.length} de {progressLessons.length} aulas com estudo
+              concluído ou revisado na versão atual ·{" "}
               {
                 study.data.records.filter((r) => r.action === "assessment")
                   .length
@@ -131,13 +134,14 @@ export default function Academy() {
               {study.data.notes.filter((n) => n.favorite).length} favoritas.
             </p>
             <progress
-              max={lessons.length || 1}
+              max={progressLessons.length || 1}
               value={completed.length}
               aria-label="Aulas com estudo concluído"
             />
             <p>
-              O progresso considera as aulas atualmente publicadas. Registros de
-              versões anteriores continuam no histórico.
+              O progresso considera a modalidade do perfil, a versão e a
+              validade editorial das aulas publicadas. Registros de versões
+              anteriores continuam no histórico.
             </p>
             {study.error && (
               <p role="alert">

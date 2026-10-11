@@ -1,6 +1,7 @@
 import { TrainingStepTransition } from "../components/experience/primitives";
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useLocation } from "react-router-dom";
+import { appDestination } from "../lib/navigation";
 import {
   ArrowLeft,
   ArrowRight,
@@ -17,6 +18,7 @@ import { Heading, Progress } from "../components/ui";
 export default function Onboarding() {
   const store = useStore();
   const navigate = useNavigate();
+  const route = useLocation();
   const [step, setStep] = useState(0);
   const [p, setP] = useState<Profile>(
     store.data.profile || {
@@ -66,11 +68,11 @@ export default function Onboarding() {
             steps,
           });
       }
-      navigate("/app");
+      navigate(appDestination(route.state?.from));
     });
   return (
     <div className="onboarding panel">
-      <span className="eyebrow">BEM-VINDO À CLUTCHFOLIO</span>
+      <span className="eyebrow">BEM-VINDO À KYRVEN</span>
       <div className="onboarding-steps">
         {[Layers, Trophy, Target, Clock].map((Icon, i) => (
           <span className={i <= step ? "active" : ""} key={i}>
@@ -96,7 +98,17 @@ export default function Onboarding() {
                   aria-pressed={p[field] === c}
                   className={p[field] === c ? "selected" : ""}
                   key={c}
-                  onClick={() => setP({ ...p, [field]: c })}
+                  onClick={() =>
+                    setP({
+                      ...p,
+                      [field]: c,
+                      ...(field === "mode" &&
+                      c === "zero" &&
+                      p.objective === "mechanics"
+                        ? { objective: "aim" as const }
+                        : {}),
+                    })
+                  }
                 >
                   <strong>{labels[c]}</strong>
                   {p[field] === c && <Check size={18} />}

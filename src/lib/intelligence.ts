@@ -33,6 +33,9 @@ export function ownedPerformanceData(data: PlayerData): PlayerData {
   const owner = data.profile?.id;
   return {
     ...data,
+    plans: data.plans.filter((r) => r.user_id === owner),
+    bookmarks: data.bookmarks.filter((r) => r.user_id === owner),
+    xp: data.xp.filter((r) => r.user_id === owner),
     sessions: data.sessions.filter((r) => r.user_id === owner),
     goals: data.goals.filter((r) => r.user_id === owner),
     journals: data.journals.filter((r) => r.user_id === owner),

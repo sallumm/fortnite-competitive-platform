@@ -4,7 +4,7 @@ Evolução do projeto existente, em português brasileiro. Marca visível kyrven
 
 ## Estado da entrega
 
-A experiência premium está na branch `feat/premium-interactive`, sobre a versão 5.0 (`feat/product-excellence`). Preserva Clutch Coach, inteligência competitiva e organização pessoal. Inclui Motion, editor com arraste/teclado e desfazer, reagendamento confirmado, execução focada, busca rápida, temas e preferências de movimento. Veja [INTERACTIVE-EXPERIENCE.md](docs/INTERACTIVE-EXPERIENCE.md) para decisões, verificação e limites e [PRODUCTION-READINESS.md](docs/PRODUCTION-READINESS.md) para publicação. As PRs estão empilhadas e devem ser integradas na ordem de dependência. Hospedagem e configuração de produção continuam pendentes.
+A ponta cumulativa agora está em `feat/development-ecosystem`, baseada na PR16 (`feat/fortnite-knowledge`), preservando a pilha anterior. A integração conecta estudo da Academy, Road, Skill Maxing, exercícios, agenda, execução e relatórios com IDs/versionamento e registros reais. Veja [arquitetura e auditoria](docs/DEVELOPMENT_ECOSYSTEM.md), [inventário funcional](docs/FEATURE_INVENTORY.md) e [validação/checklist](docs/ECOSYSTEM_VALIDATION.md). As PRs devem ser integradas em ordem de dependência. Não houve publicação; configuração e validação hospedada continuam pendentes. Os números dos documentos anteriores são históricos de cada entrega.
 
 ## Organização pessoal 2.0
 
@@ -28,8 +28,8 @@ Veja o roteiro completo em [VALIDATION-V2.md](VALIDATION-V2.md).
 | Sessões, cronômetro, pausa, retomada, conclusão/interrupção | Rascunho neste navegador; snapshot de conteúdo no banco |
 | Resultados, notas, histórico e exportação dos dados | Dados autodeclarados, privados por RLS |
 | Relatórios, metas, XP, ranks e conquistas derivadas | XP por RPC atômico; limite diário; sem penalidade por descanso |
-| Catálogo, busca, filtros, favoritos e cópia de códigos | 8 exercícios; fontes verificadas; sem gameplay testado |
-| Central competitiva e calendário | 4 eventos editoriais iniciais; lista incompleta, atualização manual |
+| Catálogo, busca, filtros, favoritos e cópia de códigos | Catálogo ampliado nas etapas seguintes; revisão datada; sem gameplay testado |
+| Central competitiva e calendário | Eventos editoriais datados; lista incompleta, atualização manual |
 | Páginas de eventos, favoritos, exportação `.ics` | Sem horário confirmado: evento de dia inteiro, sem conversão inventada |
 | Vínculo entre preparação para evento e agenda | Treino agendado com referência ao torneio |
 | Notícias, análises, Academy, glossário e busca | 4 conteúdos iniciais originais com fontes e contexto |

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "../lib/store";
 import { Heading, Badge, Empty, Modal } from "../components/ui";
-import { stepExercise, trainingCategories } from "../lib/training";
+import { stepExercise, trainingCategories, resultState } from "../lib/training";
 import { resultGroups } from "../lib/performance";
 import { download } from "../lib/logic";
 import type { Result, Training } from "../lib/types";
@@ -62,8 +62,12 @@ export default function TrainingCenter() {
       <Link className="button primary" to="/app/evolution-plan">
         Criar meu plano de evolução
       </Link>
-      <Link className="button" to="/app/meta-training">Meta Training Center</Link>
-      <Link className="button" to="/app/teams">Minhas equipes</Link>
+      <Link className="button" to="/app/meta-training">
+        Meta Training Center
+      </Link>
+      <Link className="button" to="/app/teams">
+        Minhas equipes
+      </Link>
       <div className="three-grid">
         <article className="panel">
           <h2>Seu próximo passo</h2>
@@ -129,9 +133,7 @@ export default function TrainingCenter() {
             {latest.steps.map((st, i) => (
               <li key={st.id || i}>
                 {stepExercise(st, s.catalog.exercises)?.title} ·{" "}
-                {latest.results[i]?.status === "skipped"
-                  ? "pulado"
-                  : "registrado"}
+                {resultState(latest.results[i])}
               </li>
             ))}
           </ul>
@@ -355,10 +357,7 @@ export default function TrainingCenter() {
                         {st.notes && <p>Notas do plano: {st.notes}</p>}
                         <p>
                           {st.minutes} min planejados
-                          {st.block ? ` · ${st.block}` : ""} ·{" "}
-                          {r?.status === "skipped"
-                            ? "Pulado"
-                            : "Conclusão registrada"}
+                          {st.block ? ` · ${st.block}` : ""} · {resultState(r)}
                         </p>
                         <p>
                           Resultado: {r?.value ?? "não registrado"}{" "}

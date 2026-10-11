@@ -5,6 +5,7 @@ import type { PlanningPreference } from "../lib/performance-types";
 import { skills, type Skill, difficulties } from "../lib/performance-types";
 import { personalPlan } from "../lib/performance";
 import { Badge } from "./ui";
+import { currentEvent } from "../lib/competitive";
 export function PlanningAssistant({
   onSchedule,
 }: {
@@ -30,6 +31,7 @@ export function PlanningAssistant({
   ];
   const favorite = s.catalog.tournaments.find(
     (t) =>
+      currentEvent(t) &&
       t.status === "scheduled" &&
       s.data.bookmarks.some(
         (b) => b.kind === "tournament" && b.target_id === t.id,

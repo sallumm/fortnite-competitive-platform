@@ -2,6 +2,7 @@
 import { beforeEach, afterEach, describe, it, expect, vi } from "vitest";
 import {
   cleanup,
+  configure,
   render,
   screen,
   within,
@@ -12,6 +13,9 @@ import userEvent from "@testing-library/user-event";
 import App from "../src/App";
 import { demoPlayer, seed, uid } from "../src/lib/seed";
 import { dateInZone, shiftDate, weekday } from "../src/lib/calendar";
+// Lazy imports compile alongside Postgres/DOM workers on the CI runner.
+// Wait for the actual UI with a bounded timeout, without sleeps or retries.
+configure({ asyncUtilTimeout: 5000 });
 vi.stubGlobal("scrollTo", () => {});
 vi.stubGlobal(
   "ResizeObserver",
@@ -63,7 +67,11 @@ describe("Fluxos pessoais 2.0 e persistência em DOM", () => {
     const user = await demo();
     await user.click(screen.getByRole("link", { name: "Planejador" }));
     // The lazy route may compile alongside PostgreSQL/DOM workers in CI.
-    await screen.findByRole("heading", { name: "Seu treino, com direção." }, { timeout: 5000 });
+    await screen.findByRole(
+      "heading",
+      { name: "Seu treino, com direção." },
+      { timeout: 5000 },
+    );
     await user.click(screen.getByRole("button", { name: "Agendar" }));
     const day = dateInZone(new Date(), "America/Sao_Paulo");
     await user.click(screen.getByLabelText("Repetir semanalmente"));

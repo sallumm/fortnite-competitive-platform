@@ -18,6 +18,7 @@ import {
 import type { Article, Exercise, Tournament } from "../lib/types";
 import { labels } from "../lib/types";
 import { Badge, Empty, Heading, Modal } from "../components/ui";
+import { catalogIssues } from "../lib/development";
 type Table = "exercises" | "articles" | "tournaments";
 type Row = Exercise | Article | Tournament;
 const names = {
@@ -93,6 +94,7 @@ export default function Admin() {
         Uma conta com papel administrativo atribuído no banco é necessária.
       </Empty>
     );
+  const integrity = catalogIssues(s.editorial);
   const create = () => {
     const now = new Date().toISOString();
     const common = {
@@ -225,7 +227,9 @@ export default function Admin() {
       <Link className="button" to="/admin/academy">
         Organizar trilhas da Academy
       </Link>
-      <Link className="button" to="/admin/ai">Inteligência Artificial</Link>
+      <Link className="button" to="/admin/ai">
+        Inteligência Artificial
+      </Link>
       <Link className="button" to="/admin/meta">
         Gerenciar Meta
       </Link>
@@ -258,6 +262,31 @@ export default function Admin() {
           Somente exercícios com revisão pendente ou vencida
         </label>
       )}
+      <details className="panel">
+        <summary>
+          Integridade dos vínculos editoriais · {integrity.length} alertas
+        </summary>
+        <p>
+          Diagnóstico do catálogo carregado: fontes, datas e vínculos entre
+          aulas e exercícios. Não verifica disponibilidade de páginas externas
+          nem altera registros automaticamente.
+        </p>
+        {integrity.length ? (
+          <ul>
+            {integrity.map((i) => (
+              <li key={i.key}>
+                <strong>{i.title}</strong>: {i.detail}{" "}
+                <Link to={i.to}>Revisar conteúdo</Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>
+            Nenhuma inconsistência encontrada nestes metadados. Isso não
+            confirma a atualidade das fontes externas.
+          </p>
+        )}
+      </details>
       <section className="panel">
         {s.editorial[table]
           .filter(

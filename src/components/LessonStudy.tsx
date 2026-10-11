@@ -245,7 +245,10 @@ export function LessonStudy({ lesson }: { lesson: Article }) {
                       (e) =>
                         e.id === id &&
                         e.published &&
-                        e.research?.review_status !== "retired",
+                        (e.mode === "both" ||
+                          e.mode === s.data.profile!.mode) &&
+                        e.research?.review_status === "verified" &&
+                        Date.parse(e.research.review_due_at) > Date.now(),
                     );
                     return e ? [e] : [];
                   },
@@ -260,10 +263,7 @@ export function LessonStudy({ lesson }: { lesson: Article }) {
                   title: `Estudo: ${lesson.title}`.slice(0, 80),
                   description: `Aplicação da aula ${lesson.slug}, versão ${lesson.curriculum!.version}.`,
                   objective: lesson.curriculum!.objectives[0],
-                  mode:
-                    lesson.curriculum!.modes.length === 2
-                      ? "both"
-                      : lesson.curriculum!.modes[0],
+                  mode: s.data.profile!.mode,
                   steps: exercises.map((e) => ({
                     id: crypto.randomUUID(),
                     exercise_id: e.id,

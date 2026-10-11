@@ -60,18 +60,18 @@ describe("Performance Intelligence: evidências e validação", () => {
   it("associa habilidades específicas e respeita Construção Zero", () => {
     const d = player();
     expect(
-      compatibleExercises(trainingCatalog, "tracking", d.profile!).every((e) =>
+      compatibleExercises(seed.exercises, "tracking", d.profile!).every((e) =>
         /tracking/i.test(e.title),
       ),
     ).toBe(true);
     expect(
-      compatibleExercises(trainingCatalog, "building", {
+      compatibleExercises(seed.exercises, "building", {
         ...d.profile!,
         mode: "zero",
       }),
     ).toEqual([]);
     expect(
-      compatibleExercises(trainingCatalog, "box_fighting", d.profile!).some(
+      compatibleExercises(seed.exercises, "box_fighting", d.profile!).some(
         (e) => e.title === "Box Fight",
       ),
     ).toBe(true);

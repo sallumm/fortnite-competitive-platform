@@ -1,4 +1,5 @@
 import { fold } from "./calendar";
+import { reviewPending } from "./exercise-review";
 import type { Exercise, Profile, Step, Training, Tournament } from "./types";
 export const rankNames = [
   "Rookie",
@@ -17,9 +18,19 @@ export function progression(xp: number) {
     next: 500,
   };
 }
-export function recommendations(exercises: Exercise[], p: Profile) {
+export function recommendations(
+  exercises: Exercise[],
+  p: Profile,
+  now = new Date(),
+) {
   return exercises
-    .filter((e) => e.mode === "both" || e.mode === p.mode)
+    .filter(
+      (e) =>
+        e.published &&
+        (e.mode === "both" || e.mode === p.mode) &&
+        !reviewPending(e, now.getTime()) &&
+        (p.level !== "beginner" || e.level !== "advanced"),
+    )
     .sort(
       (a, b) =>
         Number(b.category === p.objective) -
