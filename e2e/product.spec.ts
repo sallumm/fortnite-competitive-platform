@@ -28,7 +28,7 @@ test("public discovery, disabled accounts, responsive navigation and both themes
 }) => {
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: /Seu próximo nível/ }),
+    page.getByRole("heading", { name: /Aprender é o início/ }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Ativar tema claro" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
@@ -126,7 +126,7 @@ test("training, reports, coach and complete local deletion", async ({
   await page.getByLabel("Confirmação", { exact: true }).fill("EXCLUIR");
   await page.getByRole("button", { name: "Excluir definitivamente" }).click();
   await expect(
-    page.getByRole("heading", { name: /Seu próximo nível/ }),
+    page.getByRole("heading", { name: /Aprender é o início/ }),
   ).toBeVisible();
   expect(
     await page.evaluate(() =>

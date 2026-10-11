@@ -1,3 +1,4 @@
+import { useMotionLevel } from "./experience/MotionSystem";
 import * as m from "motion/react-m";
 import { ProgressIndicator } from "./experience/primitives";
 import { useEffect, useRef, useId, type ReactNode } from "react";
@@ -9,21 +10,29 @@ export function Heading({
   title,
   description,
   action,
+  level = 1,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   action?: ReactNode;
+  level?: 1 | 2;
 }) {
+  const { effective } = useMotionLevel();
   return (
-    <div className="page-heading">
+    <m.div
+      className="page-heading"
+      initial={effective === "full" ? { opacity: 1, y: 12 } : false}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 180, damping: 26 }}
+    >
       <div>
         {eyebrow && <span className="eyebrow">{eyebrow}</span>}
-        <h1>{title}</h1>
+        {level === 1 ? <h1>{title}</h1> : <h2>{title}</h2>}
         {description && <p>{description}</p>}
       </div>
       {action}
-    </div>
+    </m.div>
   );
 }
 export function Empty({
@@ -120,14 +129,17 @@ export function Modal({
     <dialog
       className={variant === "drawer" ? "animated-drawer" : "animated-modal"}
       ref={ref}
-      onCancel={onClose}
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
       aria-labelledby={titleId}
     >
       <m.div
-        initial={{ opacity: 0.8 }}
+        initial={{ opacity: 1 }}
         animate={{ opacity: 1 }}
         className="modal-content"
       >

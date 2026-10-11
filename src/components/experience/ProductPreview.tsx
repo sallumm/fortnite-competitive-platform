@@ -1,3 +1,4 @@
+import { BrandSymbol } from "../brand/Brand";
 import { useState } from "react";
 import { CalendarDays, Target, ArrowRight } from "lucide-react";
 import {
@@ -17,7 +18,7 @@ export function ProductPreview({ onExplore }: { onExplore: () => void }) {
   return (
     <div className="product-preview">
       <div className="preview-top">
-        <span className="brand-mark">C</span>
+        <BrandSymbol />
         <strong>SEU PLANO DE JOGO</strong>
         <span className="badge green">INTERATIVO</span>
       </div>

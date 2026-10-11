@@ -1,3 +1,4 @@
+import { JourneyNav } from "../components/experience/JourneyNav";
 import { KnowledgeAccess } from "../components/KnowledgeAccess";
 import { currentStudy } from "../lib/development";
 import { RoadAccess } from "../components/RoadAccess";
@@ -123,6 +124,7 @@ export default function Academy() {
         <h2>Meu percurso</h2>
         {study.enabled ? (
           <>
+      <JourneyNav />
             <p role="status">
               {completed.length} de {progressLessons.length} aulas com estudo
               concluído ou revisado na versão atual ·{" "}

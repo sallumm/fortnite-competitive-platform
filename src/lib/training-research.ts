@@ -1,6 +1,15 @@
-import corpus from "../data/training-knowledge.json" with { type: "json" };
+import rawCorpus from "../data/training-knowledge.json" with { type: "json" };
 import type { Exercise } from "./types";
 
+import { brandText } from "./brand";
+const corpus = {
+  ...rawCorpus,
+  references: rawCorpus.references.map((r) => ({
+    ...r,
+    title: brandText(r.title),
+    limitations: brandText(r.limitations),
+  })),
+};
 export const knowledge = corpus;
 export const evidenceLabels: Record<string, string> = {
   scientific: "Evidência científica",

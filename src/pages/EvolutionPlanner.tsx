@@ -1,3 +1,4 @@
+import { JourneyNav } from "../components/experience/JourneyNav";
 import type { Plan } from "../lib/types";
 import { loadCompetitivePreferences } from "../lib/meta-training/service";
 import { loadMeta } from "../lib/meta-service";
@@ -355,6 +356,7 @@ export default function EvolutionPlanner() {
         <p role="status">Consultando preferências…</p>
       ) : (
         <>
+      <JourneyNav />
           <nav className="row" aria-label="Etapas do plano de evolução">
             {[
               "Perfil e habilidades",

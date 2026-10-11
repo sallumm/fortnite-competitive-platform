@@ -1,3 +1,4 @@
+import { JourneyNav } from "../components/experience/JourneyNav";
 import { RoadAccess } from "../components/RoadAccess";
 import { TeamCalendar } from "../components/meta-training/TeamCalendar";
 import { TrainingBuilder } from "../components/TrainingBuilder";
@@ -64,6 +65,7 @@ export default function Planner() {
   const schedule = (plan: Plan) => setAgendaIntent(plan);
   return (
     <>
+      <JourneyNav />
       <CoachAccess
         question="Ajude a organizar meus treinos nesta semana."
         label="Ajudar a organizar"

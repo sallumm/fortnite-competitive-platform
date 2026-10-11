@@ -14,6 +14,15 @@ import { Layout } from "./components/Layout";
 import { Empty } from "./components/ui";
 import { currentEvent } from "./lib/competitive";
 import { dateInZone } from "./lib/calendar";
+const Esports = lazy(() => import("./pages/Esports"));
+const Recruitment = lazy(() => import("./pages/Recruitment"));
+const EsportsWorkspace = lazy(() => import("./pages/EsportsWorkspace"));
+const EsportsTrials = lazy(() => import("./pages/EsportsTrials"));
+const EsportsAssessmentsAdmin = lazy(
+  () => import("./pages/EsportsAssessmentsAdmin"),
+);
+const EsportsDevelopment = lazy(() => import("./pages/EsportsDevelopment"));
+const EsportsAdmin = lazy(() => import("./pages/EsportsAdmin"));
 const Knowledge = lazy(() => import("./pages/Knowledge"));
 const KnowledgeAdmin = lazy(() => import("./pages/KnowledgeAdmin"));
 const Landing = lazy(() => import("./pages/Landing"));
@@ -144,6 +153,56 @@ function Application() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Landing />} />
+            <Route
+              path="/app/esports/trials"
+              element={
+                <Guard>
+                  <EsportsTrials />
+                </Guard>
+              }
+            />
+            <Route
+              path="/app/esports/development"
+              element={
+                <Guard>
+                  <EsportsDevelopment />
+                </Guard>
+              }
+            />
+            <Route
+              path="/admin/esports/assessments"
+              element={
+                <Guard onboard={false}>
+                  <EsportsAssessmentsAdmin />
+                </Guard>
+              }
+            />
+            <Route
+              path="/admin/esports/development"
+              element={
+                <Guard onboard={false}>
+                  <EsportsDevelopment />
+                </Guard>
+              }
+            />
+            <Route path="/esports" element={<Esports />} />
+            <Route path="/be-kyrven" element={<Recruitment />} />
+            <Route
+              path="/app/esports"
+              element={
+                <Guard>
+                  <EsportsWorkspace />
+                </Guard>
+              }
+            />
+            <Route
+              path="/admin/esports"
+              element={
+                <Guard onboard={false}>
+                  <EsportsAdmin />
+                </Guard>
+              }
+            />
             <Route path="/auth" element={<Auth />} />
             <Route
               path="/onboarding"

@@ -11,7 +11,8 @@
     "format": "prettier --write src tests scripts *.json *.ts *.html",
     "test:e2e": "playwright test",
     "check:production": "node scripts/production-check.mjs",
-    "report:bundle": "node scripts/bundle-report.mjs"
+    "report:bundle": "node scripts/bundle-report.mjs",
+    "check:brand": "node scripts/brand-check.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

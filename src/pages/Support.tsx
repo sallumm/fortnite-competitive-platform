@@ -416,6 +416,30 @@ export function Legal() {
             logs. O Coach pode errar, não identifica causas de oscilações de
             desempenho e não fornece diagnóstico médico.
           </p>
+          <h2>Dados privados de esports</h2>
+          <p>
+            Quando o recrutamento estiver operacionalmente liberado,
+            candidaturas incluem nickname, Epic declarado, modalidade,
+            experiência, região ampla, objetivos, disponibilidade, links
+            opcionais e faixa etária declarada. Regras e aviso de privacidade
+            são registrados na versão aceita. As informações não são publicadas
+            como perfil de elenco.
+          </p>
+          <p>
+            Provas registram respostas, início, prazo, salvamentos, envio e
+            revisões; não monitoram outras abas ou programas. Gabaritos e notas
+            internas são protegidos. Avaliadores recebem somente candidaturas
+            designadas e dados necessários do programa, sem acesso automático ao
+            diário, conversas com IA ou treinos pessoais.
+          </p>
+          <p>
+            A bolsa temporária exige aceite e não gera cobrança, contratação ou
+            ingresso automático no elenco. Seu espaço esports permite exportar
+            dados compartilháveis e solicitar exclusão. O pedido revoga os
+            acessos de esports e depende da execução administrativa; retenção,
+            atendimento e backups precisam de configuração operacional e revisão
+            jurídica antes da abertura.
+          </p>
           <h2>Armazenamento local</h2>
           <p>
             A demonstração usa armazenamento neste navegador. A preferência de
@@ -462,10 +486,10 @@ export function Legal() {
           </p>
           <h2>Identidade e propriedade intelectual</h2>
           <p>
-            Não há afiliação com a Epic Games. kyrven é uma plataforma independente.
-            A monetização de conteúdo relacionado à propriedade intelectual da
-            Epic exige avaliação e permissões adequadas; o aviso de
-            independência não concede licença comercial.
+            Não há afiliação com a Epic Games. kyrven é uma plataforma
+            independente. A monetização de conteúdo relacionado à propriedade
+            intelectual da Epic exige avaliação e permissões adequadas; o aviso
+            de independência não concede licença comercial.
           </p>
         </>
       )}

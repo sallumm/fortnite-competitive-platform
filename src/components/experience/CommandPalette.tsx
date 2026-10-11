@@ -24,6 +24,8 @@ export function CommandPalette() {
       ["kyrven academy", "/academy"],
       ["Notícias", "/news"],
       ["Ajuda", "/help"],
+      ["kyrven esports", "/esports"],
+      ["be kyrven.", "/be-kyrven"],
       ["Fortnite Knowledge", "/knowledge"],
     ].map(([title, url]) => ({ title, url, kind: "Explorar" })),
     ...(s.data.profile

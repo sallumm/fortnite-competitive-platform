@@ -195,7 +195,7 @@ test("public and private page coverage, search, light theme and reduced motion",
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "reduced");
   await expect(
-    page.getByRole("heading", { name: /Seu próximo nível/ }),
+    page.getByRole("heading", { name: /Aprender é o início/ }),
   ).toBeVisible();
   await page.screenshot({
     path: info.outputPath("landing-dark.png"),

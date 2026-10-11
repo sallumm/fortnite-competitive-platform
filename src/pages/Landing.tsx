@@ -30,15 +30,14 @@ export default function Landing() {
             SEU COMPETITIVO, COM DIREÇÃO
           </div>
           <h1>
-            Seu próximo nível
+            Aprender é o início.
             <br />
-            começa com um
-            <br />
-            <em>plano de jogo.</em>
+            <em>Evoluir é o plano.</em>
           </h1>
           <p>
-            Treine com propósito. Entenda o cenário. Acompanhe sua evolução. Um
-            espaço para transformar vontade de melhorar em prática organizada.
+            A kyrven conecta estudo de Fortnite, exercícios, planejamento e
+            análise dos seus registros. Para quem está começando e para quem
+            busca competir com mais direção.
           </p>
           <div className="hero-actions">
             <Link className="button primary" to="/auth">
@@ -72,6 +71,92 @@ export default function Landing() {
               <br />
               mais que horas de jogo.
             </p>
+          </div>
+        </div>
+      </SectionReveal>
+      <SectionReveal className="landing-section">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">SEU CICLO DE DESENVOLVIMENTO</span>
+            <h2>
+              Uma próxima ação.
+              <br />
+              Em cada etapa.
+            </h2>
+          </div>
+          <p>
+            Planejamento manual ou Skill Maxing: você escolhe suas prioridades,
+            revisa a proposta e confirma a agenda.
+          </p>
+        </div>
+        <div className="landing-path">
+          {[
+            [
+              "01",
+              "Aprenda com contexto",
+              "Aulas, competências e perguntas para entender o que praticar.",
+              "/academy",
+              "Explorar a academy",
+            ],
+            [
+              "02",
+              "Construa seu treino",
+              "Exercícios combinados em rotinas editáveis, com instruções e resultados.",
+              "/library",
+              "Encontrar exercícios",
+            ],
+            [
+              "03",
+              "Organize sua semana",
+              "Skill Maxing considera preferências e disponibilidade; você confirma o plano.",
+              "/app/evolution-plan",
+              "Conhecer Skill Maxing",
+            ],
+            [
+              "04",
+              "Revise suas evidências",
+              "Relatórios distinguem participação, estudo declarado e resultados comparáveis.",
+              "/app/reports",
+              "Ver meus relatórios",
+            ],
+          ].map(([n, t, d, to, label]) => (
+            <article className="path-card" key={n}>
+              <span className="path-number">{n}</span>
+              <h3>{t}</h3>
+              <p>{d}</p>
+              <Link to={to}>
+                {label} <ArrowRight size={14} />
+              </Link>
+            </article>
+          ))}
+        </div>
+      </SectionReveal>
+      <SectionReveal className="landing-section">
+        <div className="brand-campaign">
+          <div>
+            <span className="eyebrow">
+              kyrven esports / ORGANIZAÇÃO EM DESENVOLVIMENTO
+            </span>
+            <h2>be kyrven.</h2>
+            <p>
+              Uma estrutura para avaliar potencial, apoiar a aprendizagem e
+              acompanhar talentos. A plataforma continua aberta a quem deseja
+              organizar a própria evolução.
+            </p>
+            <Link to="/esports" className="button primary">
+              Conhecer a organização <ArrowUpRight size={18} />
+            </Link>
+          </div>
+          <div className="campaign-side">
+            <h3>Seu caminho tem contexto.</h3>
+            <p>
+              Trialist, bolsa de desenvolvimento e elenco são etapas distintas,
+              com decisão humana e critérios informados. Não há promessa de
+              contratação ou promoção.
+            </p>
+            <Link to="/be-kyrven" className="text-link">
+              Entender o processo <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </SectionReveal>

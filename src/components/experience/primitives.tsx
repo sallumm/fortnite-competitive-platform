@@ -22,10 +22,14 @@ export function PageTransition({
     <m.div
       key={identity}
       className="page-transition"
+      transition={{
+        duration: effective === "full" ? 0.32 : 0,
+        ease: [0.22, 1, 0.36, 1],
+      }}
       initial={
         effective === "essential"
           ? false
-          : { opacity: 0.85, y: effective === "full" ? 8 : 0 }
+          : { opacity: 1, y: effective === "full" ? 8 : 0 }
       }
       animate={{ opacity: 1, y: 0 }}
     >
@@ -83,7 +87,7 @@ export function SectionReveal({
       initial={false}
       whileInView={
         effective === "full" && typeof IntersectionObserver !== "undefined"
-          ? { y: [10, 0], opacity: [0.85, 1] }
+          ? { y: [10, 0] }
           : undefined
       }
       viewport={{ once: true, amount: 0.1 }}

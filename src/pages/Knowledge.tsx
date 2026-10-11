@@ -86,11 +86,11 @@ export default function Knowledge() {
     <div className="knowledge-page">
       <Heading
         title="Fortnite Knowledge"
-        description="Entenda conceitos, encontre fontes e escolha o que estudar. Para analisar seus registros e organizar a agenda, use o Clutch Coach."
+        description="Entenda conceitos, encontre fontes e escolha o que estudar. Para analisar seus registros e organizar a agenda, use o kyrven coach."
       />
       <div className="row">
         <Link className="button ghost" to="/app/coach">
-          Abrir Clutch Coach
+          Abrir kyrven coach
         </Link>
         <Link className="button ghost" to="/academy/research">
           Habilidades e glossário

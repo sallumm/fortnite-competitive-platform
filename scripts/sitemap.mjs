@@ -19,6 +19,8 @@ const paths = [
   "/competitive/meta",
   "/news",
   "/academy",
+  "/esports",
+  "/be-kyrven",
   "/academy/research",
   "/academy/curriculum",
   "/help",

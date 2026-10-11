@@ -4,13 +4,21 @@ export function appDestination(value: unknown) {
     typeof value !== "string" ||
     value.length > 2000 ||
     /[\\\u0000-\u001f]/.test(value) ||
-    !/^\/app(?:\/|\?|#|$)/.test(value)
+    !/^\/(?:app(?:\/|\?|#|$)|be-kyrven(?:\?|#|$)|admin\/esports(?:\/|\?|#|$))/.test(
+      value,
+    )
   )
     return "/app";
   try {
     const url = new URL(value, "https://kyrven.invalid");
     return url.origin === "https://kyrven.invalid" &&
-      /^\/app(?:\/|$)/.test(url.pathname)
+      (/^\/app(?:\/|$)/.test(url.pathname) ||
+        [
+          "/be-kyrven",
+          "/admin/esports",
+          "/admin/esports/assessments",
+          "/admin/esports/development",
+        ].includes(url.pathname))
       ? url.pathname + url.search + url.hash
       : "/app";
   } catch {

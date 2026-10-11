@@ -1,3 +1,4 @@
+import { Brand } from "./brand/Brand";
 import * as m from "motion/react-m";
 import { useMotionLevel } from "./experience/MotionSystem";
 import { CommandPalette } from "./experience/CommandPalette";
@@ -40,6 +41,10 @@ import {
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/client";
 const additionalTitles: Record<string, string> = {
+  "/app/esports": "Meu espaço esports",
+  "/admin/esports": "Administração esports",
+  "/be-kyrven": "be kyrven.",
+  "/esports": "kyrven esports",
   "/app/meta-training": "Meta Training Center",
   "/app/road": "Road to Competitive",
   "/app/teams": "Minhas equipes",
@@ -63,6 +68,9 @@ const nav = [
   ["/app/progression", "Progressão", Layers],
   ["/help", "Central de ajuda", HelpCircle],
   ["/community", "Comunidade", Users],
+  ["/esports", "kyrven esports", Trophy],
+  ["/be-kyrven", "be kyrven.", Users],
+  ["/app/esports", "Meu espaço esports", Shield],
 ] as const;
 function RouteFocus() {
   const location = useLocation();
@@ -195,7 +203,7 @@ export function Layout() {
       {landing ? (
         <header className="public-header">
           <Link to="/" className="brand">
-            <span className="brand-mark">k</span>kyrven
+            <Brand />
             <span className="beta">BETA</span>
           </Link>
           <nav aria-label="Menu público">
@@ -203,7 +211,7 @@ export function Layout() {
             <Link to="/competitive/meta">Meta</Link>
             <Link to="/library">Treinamento</Link>
             <Link to="/academy">Academy</Link>
-            <Link to="/news">Notícias</Link>
+            <Link to="/esports">Esports</Link>
           </nav>
           <div className="row">
             <CommandPalette />
@@ -219,7 +227,7 @@ export function Layout() {
             className={`sidebar ${open ? "open" : ""} ${collapsed ? "collapsed" : ""}`}
           >
             <Link to="/" className="brand">
-              <span className="brand-mark">k</span>kyrven
+              <Brand />
             </Link>
             <button
               className="sidebar-collapse button small"
@@ -439,6 +447,7 @@ export function Layout() {
           <Link to="/legal/privacy">Privacidade</Link>
           <Link to="/legal/terms">Termos</Link>
           <Link to="/community">Suporte</Link>
+          <Link to="/esports">kyrven esports</Link>
           <Link to="/help">Fontes e ajuda</Link>
         </div>
         <p className="disclaimer">
