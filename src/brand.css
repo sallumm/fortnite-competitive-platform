@@ -1,0 +1,20 @@
+:root {
+  --bg:#10131b; --panel:#181d28; --panel-alt:#202737; --border:#333d50;
+  --text:#f2f4f8; --muted:#b1bacb; --accent:#cdff70; --accent-ink:#19210c;
+  --purple:#bdb1ff; --danger:#ffb7bf;
+  --radius-sm:8px; --radius:16px; --radius-lg:24px;
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-6:24px; --space-8:32px;
+  --shadow:0 14px 40px #00000016; --ease:cubic-bezier(.22,1,.36,1);
+  --motion-fast:140ms; --motion-normal:260ms; --motion-slow:420ms;
+}
+:root[data-theme="light"] {
+  --bg:#f2f3f0; --panel:#fff; --panel-alt:#e9ede5; --border:#cbd1c4;
+  --text:#18231b; --muted:#52604f; --accent:#386309; --accent-ink:#fff;
+  --purple:#6552a4; --danger:#a02135; --shadow:0 12px 36px #18231b0a;
+}
+.brand-lockup {display:inline-flex;align-items:center;gap:10px;color:var(--text)}
+.brand-symbol {color:var(--accent);flex:none}
+.brand-wordmark {font-family:ui-sans-serif,system-ui,sans-serif;font-size:25px;font-weight:800;letter-spacing:-.07em;line-height:1}
+.brand-wordmark small {display:block;margin-top:7px;font-weight:500;letter-spacing:.12em;font-size:10px}
+.brand-lockup .brand-symbol {width:29px;height:29px}
+.collapsed .brand-wordmark {display:none}

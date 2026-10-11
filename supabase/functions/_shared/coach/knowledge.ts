@@ -107,7 +107,7 @@ export const knowledge = [
   [
     "ranked",
     "Ranked",
-    "Modo ranqueado do Fortnite; o XP do Clutchfolio não representa o ranque do jogo.",
+    "Modo ranqueado do Fortnite; o XP do kyrven não representa o ranque do jogo.",
     "https://www.fortnite.com/competitive/discover-competitive/fortnite-ranked-play-explained",
   ],
   [

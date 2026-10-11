@@ -109,7 +109,7 @@
       "published_at": null,
       "verified_at": "2026-10-10",
       "claim": "A listagem descreve cenários de mira, edição, Piece Control, peeks e Box Fight.",
-      "limitations": "Disponibilidade e opções podem mudar. Protocolos e métricas do Clutchfolio são editoriais, não foram testados na ilha."
+      "limitations": "Disponibilidade e opções podem mudar. Protocolos e métricas do kyrven são editoriais, não foram testados na ilha."
     },
     {
       "id": "jivan-piece",
@@ -142,7 +142,7 @@
       "published_at": null,
       "verified_at": "2026-10-10",
       "claim": "A listagem anuncia alternância entre Build Fights, Realistics, Zone Wars e Box Fights.",
-      "limitations": "Não é matchmaking do Clutchfolio. Loot anunciado pelo criador deve ser conferido novamente antes de comparar sessões."
+      "limitations": "Não é matchmaking do kyrven. Loot anunciado pelo criador deve ser conferido novamente antes de comparar sessões."
     },
     {
       "id": "persa",
@@ -201,7 +201,7 @@
     },
     {
       "id": "editorial",
-      "title": "Metodologia Clutchfolio — versão 1",
+      "title": "Metodologia kyrven — versão 1",
       "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/feat/training-research/docs/research/TRAINING_METHODOLOGY.md",
       "kind": "editorial",
       "access": "original",

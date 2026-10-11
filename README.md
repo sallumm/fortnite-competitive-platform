@@ -156,16 +156,16 @@ Os registros de revisão ficam em `content_revision_history` e são legíveis so
 - Recorrência inicialmente semanal por dias, com horário local e fuso IANA. Não há regras mensais, múltiplos fusos por formulário ou sincronização bidirecional com Google/Outlook. A exportação ICS é uma cópia do intervalo visível, não uma assinatura automática.
 - Rascunhos do treino ficam neste navegador; ao trocar dispositivo, a sessão ativa permanece, mas timer e resultados em preenchimento precisam ser retomados manualmente. Limite atual de tempo ativo: 24 horas por sessão.
 - Comparações exigem exercício, métrica do snapshot e identificação de configuração iguais. A identificação ainda é texto autodeclarado; equivalência real de cenário/arma/sensibilidade não é verificada automaticamente. Não se presume que aumentar um valor seja melhorar.
-- Notificações são avisos ao abrir o site, sem push, e-mail ou monitoramento de fundo. O Clutch Coach oferece regras e orientação generativa opcional; não há pagamentos ou coaching humano.
+- Notificações são avisos ao abrir o site, sem push, e-mail ou monitoramento de fundo. O kyrven coach oferece regras e orientação generativa opcional; não há pagamentos ou coaching humano.
 - Termos e privacidade são preliminares. Identifique operador e canal de direitos, revise proteção de adolescentes e condições de IP antes de operação pública/comercial.
 - SPA limita SEO de crawlers sem JavaScript e cartões sociais por artigo. Próxima etapa: SSR/prerender de conteúdo público e sitemap vinculado ao banco.
 - Uso gratuito de infraestrutura depende dos limites e condições dos provedores. Os custos estimados do Coach estão documentados separadamente; domínio e escala de infraestrutura dependem da configuração.
 
-## Clutch Coach 3.0
+## kyrven coach 3.0
 
 Chat contextual, relatórios conversacionais e propostas de agenda com confirmação, preservando a arquitetura e os dados 2.0. Sem chave, assistência claramente identificada por regras. Veja [funcionamento, segurança, configuração e custos verificados](docs/CLUTCH_COACH.md).
 
-## Clutchfolio 5.0 — preparação de produção
+## kyrven 5.0 — preparação de produção
 
 Auditoria, correções implementadas, limitações verificadas e checklist em [docs/PRODUCTION-READINESS.md](docs/PRODUCTION-READINESS.md).
 

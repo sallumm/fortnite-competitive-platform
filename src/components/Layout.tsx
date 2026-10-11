@@ -1,3 +1,4 @@
+import { Brand } from "./brand/Brand";
 import * as m from "motion/react-m";
 import { useMotionLevel } from "./experience/MotionSystem";
 import { CommandPalette } from "./experience/CommandPalette";
@@ -195,7 +196,7 @@ export function Layout() {
       {landing ? (
         <header className="public-header">
           <Link to="/" className="brand">
-            <span className="brand-mark">k</span>kyrven
+            <Brand />
             <span className="beta">BETA</span>
           </Link>
           <nav aria-label="Menu público">
@@ -203,7 +204,7 @@ export function Layout() {
             <Link to="/competitive/meta">Meta</Link>
             <Link to="/library">Treinamento</Link>
             <Link to="/academy">Academy</Link>
-            <Link to="/news">Notícias</Link>
+            <Link to="/esports">Esports</Link>
           </nav>
           <div className="row">
             <CommandPalette />
@@ -219,7 +220,7 @@ export function Layout() {
             className={`sidebar ${open ? "open" : ""} ${collapsed ? "collapsed" : ""}`}
           >
             <Link to="/" className="brand">
-              <span className="brand-mark">k</span>kyrven
+              <Brand />
             </Link>
             <button
               className="sidebar-collapse button small"
