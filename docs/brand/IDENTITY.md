@@ -15,3 +15,9 @@ Compatibilidade: nome técnico do pacote, chaves `clutchfolio-*`, função `clut
 Assets: favicon SVG, símbolo SVG reutilizável, PNGs 180/192/512 e imagem social 1200×630. Manifest expressa instalação standalone, sem prometer sincronização offline ou service worker. SEO de produção depende de domínio real; confirmar URL absoluta da imagem no setup.
 
 Validação A: check:brand aprovado; 2 testes de marca/compatibilidade aprovados; build aprovado. Validação B registrada no relatório de entrega após os testes de navegador. Capturas reais de landing e workspace são usadas na revisão visual.
+
+## Fechamento E recuperado
+
+Os seeds canônicos são preservados em seu conteúdo histórico. `brandText`, `brandCatalog`, catálogo de aulas e referências de treinamento adaptam a apresentação sem modificar IDs, URLs, snapshots ou migrations. Os testes de marca atuais são três; a contagem de dois acima registra a etapa A original.
+
+A auditoria de recuperação cobre 47 rotas representativas em dark/light e desktop/tablet/mobile. As capturas são artefatos de teste e o resultado efetivo consta em `docs/PROMPT18_REPORT.md`; não considerar o escopo planejado como aprovação antecipada. Administração real, leitor de tela e dispositivos físicos exigem validação posterior.

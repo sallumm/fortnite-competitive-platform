@@ -10,4 +10,4 @@ As páginas públicas `/esports` e `/be-kyrven`, espaço `/app/esports` e admini
 
 Validação local da etapa: build aprovado, 7 testes PostgreSQL/PGlite aprovados (migrations completas, RLS e RPCs), 6 testes Playwright aprovados em desktop/tablet/mobile incluindo axe em dois temas, bloqueio público e rotas privadas. Nenhuma migration foi aplicada ao Supabase remoto. Testes ponta a ponta com Auth, SMTP e usuários reais em staging continuam necessários.
 
-Provas, bolsas, metas e decisões de elenco pertencem à etapa D, ainda não validadas neste checkpoint. LivePix e qualquer cobrança permanecem fora desta implementação.
+Provas, bolsas, metas e decisões de Academy Roster foram acrescentadas na etapa D; consulte ASSESSMENTS_DEVELOPMENT.md. Formalização de elenco profissional permanece pendente. LivePix e qualquer cobrança continuam fora desta implementação. A validação cumulativa atual está no [relatório do Prompt 18](../PROMPT18_REPORT.md).

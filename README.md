@@ -207,3 +207,9 @@ Jornada flexível de quatro etapas, integrada a Academy, Skill Maxing, calendár
 ### Fortnite Knowledge
 
 Assistente especializado e painel **Inteligência Artificial** para ensinar, revisar, testar e publicar conhecimentos com fontes e versões. Migration incremental 024 e função `fortnite-knowledge`; modos determinístico e externo claramente identificados. Consulte [implementação, evidências e rollout](docs/FORTNITE_KNOWLEDGE.md).
+
+## kyrven esports e transformação da marca — Prompt 18
+
+Identidade compartilhada, recrutamento fechado, avaliações privadas e programas temporários de desenvolvimento foram acrescentados sem substituir os módulos anteriores. Migrations 025–028 são incrementais; as 24 originais permanecem preservadas. Supabase hospedado, operação de adolescentes, banco editorial de provas e equipe humana dependem de configuração/revisão. Nenhum pagamento ou recrutamento real foi ativado.
+
+Consulte o [relatório de recuperação e validação](docs/PROMPT18_REPORT.md), o [roteiro manual antes da operação](docs/esports/MANUAL_SETUP.md), os [contratos de recrutamento](docs/esports/RECRUITMENT.md), as [avaliações e bolsas](docs/esports/ASSESSMENTS_DEVELOPMENT.md) e a [identidade visual](docs/brand/IDENTITY.md). A PR permanece draft e não autoriza publicação.
