@@ -1,4 +1,5 @@
-import { clearLocalProductData } from "./local-data";
+import { clearLocalProductData, PRIVACY_SIGNAL } from "./local-data";
+import { sessionBoundary } from "./session-boundary";
 import { brandCatalog } from "./brand";
 import type { VodReview, Readiness } from "./intelligence-types";
 import {
@@ -192,41 +193,82 @@ export function Provider({ children }: { children: ReactNode }) {
   const generation = useRef(0);
   const lock = useRef(false);
   const identity = useRef<string | null>(null);
+  const boundary = useRef("anonymous");
+  const authGeneration = useRef(0);
+  const [privacyEpoch, setPrivacyEpoch] = useState(0);
   const [hydratedUser, setHydratedUser] = useState<string | null>(null);
+  const renderActor = authGeneration.current;
   useEffect(() => {
     if (!supabase) return;
     let active = true;
+    let events = 0;
+    const acceptSession = (next: Session | null, broadcast = true) => {
+      if (!active) return;
+      const nextBoundary = sessionBoundary(next);
+      if (boundary.current !== nextBoundary) {
+        // Invalidate pending reads synchronously, before the next React effect.
+        generation.current++;
+        authGeneration.current++;
+        if (next) setDemo(false);
+        if (identity.current)
+          clearLocalProductData(localStorage, sessionStorage, broadcast);
+        setData(emptyPlayer());
+        setAdmin(false);
+        setCatalog((c) => ({
+          exercises: c.exercises.filter((x) => x.published),
+          tournaments: c.tournaments.filter((x) => x.published),
+          articles: c.articles.filter(
+            (x) => x.published && new Date(x.published_at) <= new Date(),
+          ),
+        }));
+        setHydratedUser(null);
+        setLoading(true);
+        setError("");
+        setNotice("");
+        lock.current = false;
+        setBusy(false);
+        boundary.current = nextBoundary;
+        identity.current = next?.user.id || null;
+        setPrivacyEpoch((n) => n + 1);
+      }
+      setSession(next);
+    };
     supabase.auth.getSession().then(({ data, error }) => {
-      if (active) {
+      if (active && events === 0) {
         if (error) setError("Não foi possível restaurar sua sessão.");
-        if (identity.current !== (data.session?.user.id || null)) {
-          setLoading(true);
-          setData(emptyPlayer());
-          setAdmin(false);
-          identity.current = data.session?.user.id || null;
-        }
-        setSession(data.session);
+        acceptSession(data.session);
       }
     });
     const { data: listener } = supabase.auth.onAuthStateChange((_event, s) => {
-      if (active) {
-        if (identity.current !== (s?.user.id || null)) {
-          if (identity.current)
-            clearLocalProductData(localStorage, sessionStorage);
-          setLoading(true);
-          setData(emptyPlayer());
-          setAdmin(false);
-          identity.current = s?.user.id || null;
-        }
-        setSession(s);
-      }
+      events++;
+      acceptSession(s);
     });
+    const privacyChanged = (event: StorageEvent) => {
+      if (event.key !== PRIVACY_SIGNAL || !event.newValue) return;
+      clearLocalProductData(localStorage, sessionStorage, false);
+      setDemo(false);
+      // Wait for the SDK's new Auth state rather than restoring the old identity.
+      events++;
+      acceptSession(null, false);
+      const ticket = events;
+      // Storage and SDK BroadcastChannel events have no guaranteed ordering.
+      // Reconcile through the SDK instead of waiting indefinitely for another event.
+      void supabase!.auth.getSession().then(({ data, error }) => {
+        if (active && events === ticket && !error)
+          acceptSession(data.session, false);
+      });
+    };
+    window.addEventListener("storage", privacyChanged);
     return () => {
       active = false;
+      generation.current++;
+      authGeneration.current++;
+      window.removeEventListener("storage", privacyChanged);
       listener.subscription.unsubscribe();
     };
   }, []);
   const refresh = useCallback(async () => {
+    if (renderActor !== authGeneration.current) return;
     const ticket = ++generation.current;
     if (demo || !supabase) {
       setLoading(true);
@@ -337,7 +379,7 @@ export function Provider({ children }: { children: ReactNode }) {
     } finally {
       if (ticket === generation.current) setLoading(false);
     }
-  }, [demo, session?.user.id]);
+  }, [demo, session?.user.id, privacyEpoch]);
   useEffect(() => {
     refresh().catch(() =>
       setError(
@@ -355,15 +397,18 @@ export function Provider({ children }: { children: ReactNode }) {
     success: string | false = "Ação concluída.",
   ): Promise<T | undefined> => {
     if (lock.current) return;
+    const actor = authGeneration.current;
     lock.current = true;
     setBusy(true);
     setError("");
     setNotice("");
     try {
       const result = await fn();
+      if (actor !== authGeneration.current) return;
       if (success) setNotice(success);
       return result;
     } catch (e) {
+      if (actor !== authGeneration.current) return;
       const raw =
         e instanceof Error
           ? e.message
@@ -377,11 +422,15 @@ export function Provider({ children }: { children: ReactNode }) {
       );
       return undefined;
     } finally {
-      lock.current = false;
-      setBusy(false);
+      if (actor === authGeneration.current) {
+        lock.current = false;
+        setBusy(false);
+      }
     }
   };
   const persist = (next: PlayerData) => {
+    if (renderActor !== authGeneration.current)
+      throw new Error("kyrven: a sessão mudou. Reabra a operação.");
     localStorage.setItem(KEY, JSON.stringify(next));
     setData(next);
   };
@@ -393,6 +442,7 @@ export function Provider({ children }: { children: ReactNode }) {
     }
   };
   const save = async (table: Entity, row: Row) => {
+    const actor = authGeneration.current;
     if (table === "vodReviews")
       (await import("./intelligence-validation")).validateVod(
         row as VodReview,
@@ -421,6 +471,8 @@ export function Provider({ children }: { children: ReactNode }) {
       const errors = validatePlan(row as Plan, catalog.exercises);
       if (errors.length) throw new Error("kyrven: " + errors.join(" "));
     }
+    if (actor !== authGeneration.current)
+      throw new Error("kyrven: a sessão mudou. Reabra a operação.");
     if (demo) {
       const current = restore();
       if (
@@ -807,6 +859,7 @@ export function Provider({ children }: { children: ReactNode }) {
     draft: import("./local-data").SessionDraft,
     version: number,
   ) => {
+    const actor = authGeneration.current;
     if (demo) {
       const current = restore(),
         active = current.sessions.find((x) => x.id === session.id);
@@ -835,6 +888,10 @@ export function Provider({ children }: { children: ReactNode }) {
         p_version: version,
       }),
     )) as Training;
+    if (actor !== authGeneration.current)
+      throw new Error(
+        "kyrven: a sessão mudou; o resultado anterior foi descartado.",
+      );
     setData((current) => ({
       ...current,
       sessions: current.sessions.map((x) =>
@@ -935,6 +992,7 @@ export function Provider({ children }: { children: ReactNode }) {
   );
   return (
     <Context.Provider
+      key={privacyEpoch}
       value={{
         catalog: publicCatalog,
         editorial: catalog,
@@ -955,6 +1013,10 @@ export function Provider({ children }: { children: ReactNode }) {
           setData(restore());
         },
         exitDemo: () => {
+          generation.current++;
+          authGeneration.current++;
+          clearLocalProductData(localStorage, sessionStorage);
+          setPrivacyEpoch((n) => n + 1);
           localStorage.removeItem(DEMO_ACTIVE);
           setDemo(false);
           setData(emptyPlayer());

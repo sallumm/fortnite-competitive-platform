@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Check, Pause, Play, Square } from "lucide-react";
 import { useStore } from "../lib/store";
-import { validSessionDraft } from "../lib/local-data";
+import { currentPrivacyGeneration, validSessionDraft } from "../lib/local-data";
 import type { Result } from "../lib/types";
 import {
   Badge,
@@ -30,6 +30,7 @@ export default function Training() {
   const session = store.data.sessions.find((s) => s.id === id);
   const navigate = useNavigate();
   const key = "clutchfolio-session-" + store.data.profile?.id + ":" + id;
+  const privacyGeneration = useRef(currentPrivacyGeneration());
   const [draft, setDraft] = useState<Draft>(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(key) || "null");
@@ -98,7 +99,8 @@ export default function Training() {
   }, []);
   useEffect(() => {
     try {
-      localStorage.setItem(key, JSON.stringify(draft));
+      if (privacyGeneration.current === currentPrivacyGeneration())
+        localStorage.setItem(key, JSON.stringify(draft));
     } catch {
       /* Session remains usable if browser storage is unavailable. */
     }
@@ -106,7 +108,11 @@ export default function Training() {
   useEffect(() => {
     if (!session || session.status !== "active") return;
     const timer = setTimeout(async () => {
-      if (syncing.current) return;
+      if (
+        syncing.current ||
+        privacyGeneration.current !== currentPrivacyGeneration()
+      )
+        return;
       syncing.current = true;
       try {
         revision.current = await store.checkpoint(

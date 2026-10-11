@@ -178,7 +178,10 @@ export default function EsportsAdmin() {
           <AnimatedTabs
             label="Administração esports"
             value={tab}
-            onChange={setTab}
+            onChange={(value) => {
+              setTab(value);
+              setOffset(0);
+            }}
             items={[
               { value: "applications", label: "Candidaturas" },
               ...(data.settings
@@ -403,7 +406,7 @@ export default function EsportsAdmin() {
           )}
           {tab === "audit" && (
             <section className="panel">
-              <h2>Últimas 100 operações</h2>
+              <h2>Histórico de operações</h2>
               <p>
                 Auditoria interna com responsável e momento. Histórico de cargos
                 e candidatos não é público.
@@ -421,6 +424,29 @@ export default function EsportsAdmin() {
                 </article>
               ))}
             </section>
+          )}
+          {(tab === "roles" || tab === "audit") && (
+            <nav className="row wrap" aria-label="Paginação administrativa">
+              <button
+                className="button"
+                disabled={loading || offset === 0}
+                onClick={() => setOffset(Math.max(0, offset - 100))}
+              >
+                Página anterior
+              </button>
+              <span>Página {offset / 100 + 1}</span>
+              <button
+                className="button"
+                disabled={
+                  loading ||
+                  (tab === "roles" ? data.roles.length : data.audit.length) <
+                    100
+                }
+                onClick={() => setOffset(offset + 100)}
+              >
+                Próxima página
+              </button>
+            </nav>
           )}
           {app && (
             <Modal
