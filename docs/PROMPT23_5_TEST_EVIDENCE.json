@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "scope": "Prompt 23.5 implementation; synthetic/local tests; not a production certification",
+  "base": "961783a5317e222938599e64c0632eb8835842a1",
+  "codeSha": "3f27145e23f5815c78c871c68cb06092a5301afe",
+  "branch": "feat/post-audit-hardening",
+  "pr": "https://github.com/sallumm/fortnite-competitive-platform/pull/21",
+  "vitest": {
+    "passed": 385,
+    "failed": 0,
+    "total": 385,
+    "success": true,
+    "files": 65,
+    "nodeLocal": "22.23.3",
+    "command": "rtk proxy node --require ../windows-realpath.cjs node_modules/vitest/vitest.mjs run --maxWorkers=1 --reporter=default --reporter=json --outputFile=../../outputs/PROMPT23_5_VITEST_FINAL.json",
+    "log": "PROMPT23_5_VITEST_FINAL.json"
+  },
+  "playwright": {
+    "total": 81,
+    "expected": 81,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "ok": true,
+    "projects": [
+      "desktop",
+      "tablet",
+      "mobile"
+    ],
+    "command": "rtk proxy node --require ../windows-realpath.cjs node_modules/@playwright/test/cli.js test --workers=2",
+    "runtime": "Windows local, outside sandbox, 127.0.0.1 only; Supabase env empty",
+    "initial": {
+      "passed": 80,
+      "failed": 1,
+      "cause": "Transient opacity in TrainingStepTransition produced 4.49:1 badge contrast on light /app/skills",
+      "evidenceDirectory": "PROMPT23_5_BROWSER_INITIAL_FAILURE"
+    },
+    "finalReportDirectory": "PROMPT23_5_PLAYWRIGHT_JSON",
+    "frontendSha": "949500da7b47509f1b9b3b75e2cdeabaaa1562d4",
+    "frontendUnchangedThrough": "3f27145e23f5815c78c871c68cb06092a5301afe"
+  },
+  "build": {
+    "passed": true,
+    "command": "rtk proxy npm run build",
+    "finalLocalFrontendSha": "949500da7b47509f1b9b3b75e2cdeabaaa1562d4",
+    "notes": [
+      "Supabase chunk empty because no configuration",
+      "Sitemap/prerender optional disabled without public URL",
+      "Zod Rollup annotation warnings"
+    ]
+  },
+  "staticChecks": {
+    "security": true,
+    "brand": true,
+    "catalog": {
+      "tables": 94,
+      "policies": 131,
+      "functions": 145,
+      "tablesWithoutRls": [],
+      "definersWithoutEmptySearchPath": [],
+      "helpersGrantedToAuthenticated": [
+        "team_member",
+        "valid_weekdays",
+        "valid_competitive_phases",
+        "valid_competitive_checklist",
+        "valid_skills"
+      ]
+    },
+    "log": "PROMPT23_5_DATABASE_CATALOG.json",
+    "ciCatalog": "PROMPT23_5_CI_CATALOG/kyrven-database-catalog.json"
+  },
+  "migrations": {
+    "unchangedHistorical": 29,
+    "new": "202610110030_post_audit_reads.sql",
+    "remoteApplied": false,
+    "integrityLog": "PROMPT23_5_MIGRATION_INTEGRITY.json",
+    "normalization": "LF; also git diff --exit-code verifies no historical Git changes"
+  },
+  "uiFlakeInvestigation": {
+    "line": "tests/ui.test.tsx:91",
+    "reproduced": false,
+    "isolatedPassed": 4,
+    "controlledRepeats": [
+      {
+        "passed": 4,
+        "failed": 0
+      },
+      {
+        "passed": 4,
+        "failed": 0
+      },
+      {
+        "passed": 4,
+        "failed": 0
+      }
+    ],
+    "concurrentBuildPassed": true,
+    "timeoutsChanged": false,
+    "expectationsChanged": false,
+    "rootCauseClosed": false
+  },
+  "focused": {
+    "privacyIntegrated": 9,
+    "paginationUi": 3,
+    "editorialRpcFile": 8,
+    "securityDatabaseFile": 8,
+    "esportsAssessmentsFile": 16,
+    "sqlAfterAtomicProfileLock": {
+      "passed": 24,
+      "failed": 0
+    }
+  },
+  "independentReview": {
+    "prePatch": "post_audit_investigator",
+    "postCandidate": "post_audit_candidate_review",
+    "reviewCycles": 1,
+    "confirmedRegression": "Auth/storage event ordering could leave valid identity anonymous; corrected and tested",
+    "tooling": "Codex Security fix-finding; no new exhaustive scan"
+  },
+  "githubActions": {
+    "codeSha": "3f27145e23f5815c78c871c68cb06092a5301afe",
+    "run": 38169490584,
+    "url": "https://github.com/sallumm/fortnite-competitive-platform/actions/runs/38169490584",
+    "node": "24.21.0",
+    "testBuild": "success",
+    "vitestPassed": 385,
+    "browser": "success",
+    "logs": [
+      "PROMPT23_5_CI_FINAL_TEST_BUILD.log",
+      "PROMPT23_5_CI_FINAL_BROWSER.log"
+    ],
+    "conclusion": "success",
+    "browserPassed": 81
+  },
+  "counts": {
+    "Aberto": 6,
+    "Corrigido e verificado": 18,
+    "Dependente de verificação externa": 13,
+    "Parcialmente corrigido": 12
+  },
+  "deferredTechnical": [
+    "KYR-022 remaining administration",
+    "KYR-039 on-demand histories",
+    "KYR-040 alternative to 10000-row cap",
+    "KYR-038 real two authenticated browser tabs",
+    "KYR-034 historic lost-test cause",
+    "OBS23-002 historic intermittent UI failure"
+  ],
+  "external": {
+    "supabaseProject": null,
+    "stagingUrl": null,
+    "productionUrl": null,
+    "cloudflareZone": null,
+    "noThirdPartyProjectsQueried": true,
+    "noDeploy": true,
+    "noMerge": true,
+    "noPayments": true,
+    "noRecruitmentOpening": true,
+    "noCommercialRightsChanges": true
+  },
+  "goNoGo": {
+    "localSyntheticCodeReview": "GO",
+    "authenticatedStaging": "NO-GO",
+    "production": "NO-GO",
+    "paymentsAndRecruitment": "NO-GO"
+  }
+}
