@@ -49,6 +49,10 @@ begin
  if auth.uid() is null or not(public.esports_is_admin() or private.esports_staff_access()) then
   raise exception 'Administrative role required';
  end if;
+ -- The shared quota serializes on the caller's profile row; require that row.
+ if not exists(select 1 from public.profiles where id=auth.uid()) then
+  raise exception 'Profile required';
+ end if;
  perform private.esports_write_limit();
  select greatest(0,120-count(*))::integer into remaining from private.esports_audit
   where actor_id=auth.uid() and created_at>now()-interval '1 minute';

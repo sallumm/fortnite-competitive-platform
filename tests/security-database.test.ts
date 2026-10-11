@@ -124,6 +124,9 @@ it("requires AAL2 plus a server role and keeps MFA bootstrap reachable", async (
     (await db.query<{ ok: boolean }>("select public.is_admin() ok")).rows[0].ok,
   ).toBe(false);
   await as(admin, "aal2");
+  await expect(
+    db.query("select public.esports_expire_assessments()"),
+  ).rejects.toThrow("Profile required");
   expect(
     (await db.query<{ ok: boolean }>("select public.is_admin() ok")).rows[0].ok,
   ).toBe(true);
