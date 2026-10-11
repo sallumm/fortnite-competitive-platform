@@ -10,11 +10,13 @@ export function Heading({
   title,
   description,
   action,
+  level = 1,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   action?: ReactNode;
+  level?: 1 | 2;
 }) {
   const { effective } = useMotionLevel();
   return (
@@ -26,7 +28,7 @@ export function Heading({
     >
       <div>
         {eyebrow && <span className="eyebrow">{eyebrow}</span>}
-        <h1>{title}</h1>
+        {level === 1 ? <h1>{title}</h1> : <h2>{title}</h2>}
         {description && <p>{description}</p>}
       </div>
       {action}

@@ -41,6 +41,10 @@ import {
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/client";
 const additionalTitles: Record<string, string> = {
+  "/app/esports": "Meu espaço esports",
+  "/admin/esports": "Administração esports",
+  "/be-kyrven": "be kyrven.",
+  "/esports": "kyrven esports",
   "/app/meta-training": "Meta Training Center",
   "/app/road": "Road to Competitive",
   "/app/teams": "Minhas equipes",
@@ -64,6 +68,9 @@ const nav = [
   ["/app/progression", "Progressão", Layers],
   ["/help", "Central de ajuda", HelpCircle],
   ["/community", "Comunidade", Users],
+  ["/esports", "kyrven esports", Trophy],
+  ["/be-kyrven", "be kyrven.", Users],
+  ["/app/esports", "Meu espaço esports", Shield],
 ] as const;
 function RouteFocus() {
   const location = useLocation();
@@ -440,6 +447,7 @@ export function Layout() {
           <Link to="/legal/privacy">Privacidade</Link>
           <Link to="/legal/terms">Termos</Link>
           <Link to="/community">Suporte</Link>
+          <Link to="/esports">kyrven esports</Link>
           <Link to="/help">Fontes e ajuda</Link>
         </div>
         <p className="disclaimer">

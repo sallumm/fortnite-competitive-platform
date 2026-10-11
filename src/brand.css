@@ -419,3 +419,121 @@ progress {
 :root[data-motion="reduced"] .path-card:hover {
   transform: none;
 }
+.esports-hero {
+  position: relative;
+  padding: 56px 48px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(125deg, var(--panel), var(--panel-alt));
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+.esports-hero .brand-lockup {
+  display: flex;
+  margin-bottom: 28px;
+}
+.esports-hero h1 {
+  font-size: clamp(44px, 6vw, 76px);
+  margin: 26px 0;
+  letter-spacing: -0.07em;
+  line-height: 1.05;
+  max-width: 16ch;
+}
+.esports-hero h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+.esports-hero > p {
+  max-width: 65ch;
+}
+.esports-coordinate {
+  position: absolute;
+  right: 24px;
+  top: 28px;
+  writing-mode: vertical-rl;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+}
+.recruitment-hero h1 {
+  font-size: clamp(58px, 8vw, 110px);
+}
+.application-card {
+  display: block;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  margin: 14px 0;
+  text-align: left;
+  width: 100%;
+  color: var(--text);
+}
+.application-card > small {
+  display: block;
+  color: var(--muted);
+  margin-top: 12px;
+}
+.esports-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.esports-list .application-card {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.preserve-lines {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.status-timeline {
+  padding-left: 24px;
+  border-left: 2px solid var(--border);
+  list-style: none;
+}
+.status-timeline li {
+  position: relative;
+  padding: 12px 0;
+}
+.status-timeline li::before {
+  content: "";
+  position: absolute;
+  left: -30px;
+  top: 19px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.status-timeline p {
+  margin: 8px 0;
+}
+dt {
+  font-weight: 650;
+  color: var(--muted);
+  margin-top: 14px;
+}
+dd {
+  margin: 4px 0;
+}
+@media (max-width: 600px) {
+  .esports-hero {
+    padding: 32px 24px;
+  }
+  .esports-coordinate {
+    display: none;
+  }
+  .esports-list {
+    grid-template-columns: 1fr;
+  }
+  .application-card {
+    padding: 18px;
+  }
+  .esports-hero h1 {
+    font-size: 48px;
+  }
+}
