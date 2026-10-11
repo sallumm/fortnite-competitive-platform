@@ -1,0 +1,1053 @@
+[
+  {
+    "id": "00000000-0000-4000-8000-000000008800",
+    "revision": 1,
+    "payload": {
+      "subject": "surge",
+      "title": "Storm Surge",
+      "category": "competitivo",
+      "body": "Storm Surge é um mecanismo relacionado à quantidade de jogadores sobreviventes em determinadas fases da tempestade. Quando a condição de população se aplica, jogadores abaixo de um limite de dano causado podem receber dano periódico até a população ficar dentro do limite. Não é o dano normal de ficar fora da zona segura.",
+      "aliases": [
+        "surge",
+        "storm surge"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "official",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "Epic Games · explicação histórica de Storm Surge",
+          "url": "https://www.fortnite.com/news/fortnite-chapter-3-season-3-competitive-storm-surge-update",
+          "kind": "official",
+          "published_on": "2022-07-20"
+        }
+      ],
+      "limitations": "A fonte é de 2022 e sustenta o conceito, não números atuais. Limiares, fases e valores exigem verificação do modo e da versão atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008801",
+    "revision": 1,
+    "payload": {
+      "subject": "igl",
+      "title": "IGL",
+      "category": "equipe",
+      "body": "IGL (in-game leader) é o integrante que coordena decisões durante a partida, como rotações, posicionamento e escolha de confrontos. A equipe combina responsabilidades; os demais jogadores continuam fornecendo informação e tomando decisões. Exemplo: sinalizar uma rotação e confirmar se todos têm recursos para acompanhá-la.",
+      "aliases": [
+        "igl",
+        "in game leader"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · definições editoriais de conhecimento",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/feat/fortnite-knowledge/docs/FORTNITE_KNOWLEDGE.md",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Definição editorial de uma função de equipe; não é cargo oficial nem regra de torneio.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008802",
+    "revision": 1,
+    "payload": {
+      "subject": "tracking",
+      "title": "Tracking",
+      "category": "aim",
+      "body": "Manter a mira sobre um alvo em movimento. Contexto: Combate com disparos contínuos. Exemplo: Acompanhar deslocamento lateral sem mudar a distância do teste.",
+      "aliases": [
+        "tracking",
+        "tracking"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008803",
+    "revision": 1,
+    "payload": {
+      "subject": "crosshair",
+      "title": "Crosshair Placement",
+      "category": "aim",
+      "body": "Preparar a posição da mira para uma saída provável. Contexto: Antes de abrir um ângulo ou receber um peek. Exemplo: Revisar se a mira já estava na altura da ameaça esperada.",
+      "aliases": [
+        "crosshair",
+        "crosshair placement"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008804",
+    "revision": 1,
+    "payload": {
+      "subject": "freebuild",
+      "title": "Freebuild",
+      "category": "mechanics",
+      "body": "Praticar sequências de construção sem combate obrigatório. Contexto: Exploração e consolidação de sequências. Exemplo: Executar uma sequência conhecida e anotar interrupções.",
+      "aliases": [
+        "freebuild",
+        "freebuild"
+      ],
+      "mode": "build",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008805",
+    "revision": 1,
+    "payload": {
+      "subject": "movement",
+      "title": "Movimentação",
+      "category": "mechanics",
+      "body": "Escolher trajetórias e ações de deslocamento compatíveis com a situação. Contexto: Combate, travessia e busca de cobertura. Exemplo: Revisar uma saída sem atribuir toda falha à velocidade.",
+      "aliases": [
+        "movement",
+        "movimentação"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008806",
+    "revision": 1,
+    "payload": {
+      "subject": "box-fight",
+      "title": "Box Fight",
+      "category": "combat",
+      "body": "Combate envolvendo estruturas, aberturas e disputa de peças. Contexto: Lutas em espaços fechados. Exemplo: Revisar a exposição ao tomar parede e finalizar.",
+      "aliases": [
+        "box fight",
+        "box fight"
+      ],
+      "mode": "build",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008807",
+    "revision": 1,
+    "payload": {
+      "subject": "realistic",
+      "title": "Realistic",
+      "category": "combat",
+      "body": "Prática de combate em cenários que simulam algumas condições de partida. Contexto: Aplicação de mecânicas contra adversário. Exemplo: Registrar recursos iniciais; cenários diferentes não formam o mesmo benchmark.",
+      "aliases": [
+        "realistic",
+        "realistic"
+      ],
+      "mode": "build",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008808",
+    "revision": 1,
+    "payload": {
+      "subject": "positioning",
+      "title": "Posicionamento",
+      "category": "decisions",
+      "body": "Escolher onde ficar considerando informação, cobertura e próximos movimentos. Contexto: Antes de uma luta ou mudança de zona. Exemplo: Comparar duas posições usando apenas informação disponível naquele momento.",
+      "aliases": [
+        "positioning",
+        "posicionamento"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008809",
+    "revision": 1,
+    "payload": {
+      "subject": "deadside",
+      "title": "Deadside",
+      "category": "decisions",
+      "body": "Lado com menor concentração observável de jogadores. Contexto: Escolha de rotação. Exemplo: Tratar a baixa presença como informação parcial, não garantia de segurança.",
+      "aliases": [
+        "deadside",
+        "deadside"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008810",
+    "revision": 1,
+    "payload": {
+      "subject": "tarping",
+      "title": "Tarpar / Tarping",
+      "category": "endgame",
+      "body": "Avançar construindo um caminho de proteção. Contexto: Movimentação sob pressão na zona. Exemplo: Revisar falhas de cobertura e materiais consumidos.",
+      "aliases": [
+        "tarping",
+        "tarpar / tarping"
+      ],
+      "mode": "build",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008811",
+    "revision": 1,
+    "payload": {
+      "subject": "refresh",
+      "title": "Refresh",
+      "category": "endgame",
+      "body": "Buscar recursos por uma oportunidade de combate ou coleta no fim da partida. Contexto: Recursos escassos em endgame. Exemplo: Comparar risco da luta com alternativas de continuar a rotação.",
+      "aliases": [
+        "refresh",
+        "refresh"
+      ],
+      "mode": "build",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008812",
+    "revision": 1,
+    "payload": {
+      "subject": "scrims",
+      "title": "Scrims",
+      "category": "competitive",
+      "body": "Partidas de treinamento organizadas por uma comunidade ou grupo. Contexto: Praticar objetivos coletivos e situações competitivas. Exemplo: Registrar regras da sala e revisar uma rotação; regras de scrim podem diferir do torneio.",
+      "aliases": [
+        "scrims",
+        "scrims"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008813",
+    "revision": 1,
+    "payload": {
+      "subject": "self-review",
+      "title": "VOD Review próprio",
+      "category": "vod",
+      "body": "Revisar a própria gravação para reconstruir decisões e padrões. Contexto: Após uma sessão ou erro recorrente. Exemplo: Pausar antes da decisão e escrever uma alternativa testável.",
+      "aliases": [
+        "self review",
+        "vod review próprio"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008814",
+    "revision": 1,
+    "payload": {
+      "subject": "shotgun",
+      "title": "Shotgun Aim",
+      "category": "aim",
+      "body": "Alinhar e temporizar um disparo de shotgun em uma janela útil. Contexto: Combate próximo com exposição curta. Exemplo: Anotar arma, distância, acerto e cobertura após o tiro.",
+      "aliases": [
+        "shotgun",
+        "shotgun aim"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008815",
+    "revision": 1,
+    "payload": {
+      "subject": "editing",
+      "title": "Editing / Edit Course",
+      "category": "mechanics",
+      "body": "Modificar peças com controle de seleção e confirmação. Contexto: Abrir passagem ou linha de tiro. Exemplo: Repetir o mesmo percurso registrando tempo e erros separadamente.",
+      "aliases": [
+        "editing",
+        "editing / edit course"
+      ],
+      "mode": "build",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008816",
+    "revision": 1,
+    "payload": {
+      "subject": "retake",
+      "title": "Retake",
+      "category": "mechanics",
+      "body": "Tentar recuperar altura usando construção e movimento. Contexto: Disputa vertical. Exemplo: Revisar custo, proteção e alternativa de não disputar altura.",
+      "aliases": [
+        "retake",
+        "retake"
+      ],
+      "mode": "build",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008817",
+    "revision": 1,
+    "payload": {
+      "subject": "piece-ownership",
+      "title": "Piece Control",
+      "category": "piece",
+      "body": "Obter estruturas que permitem controlar espaço ou saídas. Contexto: Preparação de uma luta de curta distância. Exemplo: Anotar quais peças estavam sob seu controle antes da abertura.",
+      "aliases": [
+        "piece ownership",
+        "controle de peças",
+        "piece control"
+      ],
+      "mode": "build",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008818",
+    "revision": 1,
+    "payload": {
+      "subject": "rotation",
+      "title": "Rotação",
+      "category": "decisions",
+      "body": "Planejar e ajustar o deslocamento entre posições úteis. Contexto: Mudanças de zona e pressão adversária. Exemplo: Anotar cobertura, tempo e ameaça conhecida em duas rotas.",
+      "aliases": [
+        "rotation",
+        "rotação"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008819",
+    "revision": 1,
+    "payload": {
+      "subject": "resources",
+      "title": "Gestão de recursos",
+      "category": "decisions",
+      "body": "Decidir como usar vida, munição, mobilidade e recursos disponíveis. Contexto: Preparação para movimentos ou lutas. Exemplo: Registrar o recurso necessário que faltou na decisão seguinte.",
+      "aliases": [
+        "resources",
+        "gestão de recursos"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008820",
+    "revision": 1,
+    "payload": {
+      "subject": "information",
+      "title": "Noção de Jogo",
+      "category": "decisions",
+      "body": "Integrar informação observada, riscos e objetivos para decidir. Contexto: Ao longo de toda a partida. Exemplo: Separar o que era conhecido do que só o replay revelou.",
+      "aliases": [
+        "information",
+        "noção de jogo"
+      ],
+      "mode": "both",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008821",
+    "revision": 1,
+    "payload": {
+      "subject": "zone-wars",
+      "title": "Zone Wars",
+      "category": "endgame",
+      "body": "Praticar situações de zona móvel em uma ilha configurada para isso. Contexto: Aplicação parcial de decisões de fim de partida. Exemplo: Registrar regras da ilha e evitar equiparar o resultado a uma final.",
+      "aliases": [
+        "zone wars",
+        "zone wars"
+      ],
+      "mode": "build",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008822",
+    "revision": 1,
+    "payload": {
+      "subject": "layers",
+      "title": "Layers / camadas",
+      "category": "endgame",
+      "body": "Escolher e mudar a altura relativa aos outros jogadores. Contexto: Zona móvel com múltiplos níveis. Exemplo: Revisar congestionamento, cobertura e recursos ao trocar de camada.",
+      "aliases": [
+        "layers",
+        "layers / camadas"
+      ],
+      "mode": "build",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008823",
+    "revision": 1,
+    "payload": {
+      "subject": "zero-cover",
+      "title": "Uso de cobertura",
+      "category": "zero",
+      "body": "Usar terreno e objetos para limitar linhas de tiro adversárias. Contexto: Preparação e saída de uma troca. Exemplo: Identificar a próxima cobertura antes de abandonar a atual.",
+      "aliases": [
+        "zero cover",
+        "uso de cobertura"
+      ],
+      "mode": "zero",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000008824",
+    "revision": 1,
+    "payload": {
+      "subject": "zero-endgame",
+      "title": "Construção Zero: Endgame",
+      "category": "zero",
+      "body": "Combinar terreno, mobilidade e informação na zona final. Contexto: Poucas coberturas e decisões sob pressão. Exemplo: Revisar uma movimentação sem recomendar tarping ou edição.",
+      "aliases": [
+        "zero endgame",
+        "construção zero: endgame"
+      ],
+      "mode": "zero",
+      "scope": "concept",
+      "season": "",
+      "version": "",
+      "region": "",
+      "evidence": "editorial",
+      "verified_at": "2026-10-11T00:28:00.000Z",
+      "valid_until": "2027-04-10T00:00:00.000Z",
+      "sources": [
+        {
+          "title": "kyrven · taxonomia editorial pesquisada",
+          "url": "https://github.com/sallumm/fortnite-competitive-platform/blob/e8b3c3543e4b61e77fda1c1cacf03b93f62be841/src/data/training-knowledge.json",
+          "kind": "editorial",
+          "published_on": null
+        }
+      ],
+      "limitations": "Síntese editorial; não estabelece regras ou valores da temporada atual.",
+      "related": [
+        {
+          "title": "Explorar habilidades e glossário",
+          "path": "/academy/research"
+        },
+        {
+          "title": "Biblioteca de exercícios",
+          "path": "/library"
+        }
+      ]
+    },
+    "origin": "knowledge"
+  }
+]

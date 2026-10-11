@@ -14,6 +14,8 @@ import { Layout } from "./components/Layout";
 import { Empty } from "./components/ui";
 import { currentEvent } from "./lib/competitive";
 import { dateInZone } from "./lib/calendar";
+const Knowledge = lazy(() => import("./pages/Knowledge"));
+const KnowledgeAdmin = lazy(() => import("./pages/KnowledgeAdmin"));
 const Landing = lazy(() => import("./pages/Landing"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
@@ -292,6 +294,8 @@ function Application() {
             <Route path="/academy/research" element={<TrainingResearch />} />
             <Route path="/academy" element={<Academy />} />
             <Route path="/academy/:slug" element={<Editorial academy />} />
+            <Route path="/knowledge" element={<Knowledge />} />
+            <Route path="/admin/ai" element={<Guard onboard={false}><KnowledgeAdmin /></Guard>} />
             <Route path="/help" element={<Help />} />
             <Route path="/community" element={<Community />} />
             <Route path="/legal/:type" element={<Legal />} />

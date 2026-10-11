@@ -1,3 +1,4 @@
+import { KnowledgeAccess } from "../components/KnowledgeAccess";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Badge, Empty, Heading } from "../components/ui";
@@ -213,6 +214,7 @@ export default function MetaCenter() {
   };
   return (
     <>
+      <KnowledgeAccess />
       <Heading
         eyebrow="COMPETITIVE INTELLIGENCE"
         title="Meta com contexto."

@@ -1,3 +1,4 @@
+import { KnowledgeAccess } from "../components/KnowledgeAccess";
 import { MotionPreferences } from "../components/experience/MotionSystem";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -27,6 +28,7 @@ export function Help() {
   );
   return (
     <>
+      <KnowledgeAccess />
       <Heading
         eyebrow="CENTRAL DE AJUDA"
         title="Encontre uma orientação clara."

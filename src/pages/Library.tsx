@@ -1,3 +1,4 @@
+import { KnowledgeAccess } from "../components/KnowledgeAccess";
 import { CoachAccess } from "../components/CoachAccess";
 import { useSEO } from "../lib/seo";
 import { useState } from "react";
@@ -63,7 +64,8 @@ export default function Library() {
           <ArrowLeft size={16} />
           Biblioteca de exercícios
         </Link>
-        <Heading
+        <KnowledgeAccess />
+      <Heading
           eyebrow={labels[selected.category]}
           title={selected.title}
           description={selected.description}
