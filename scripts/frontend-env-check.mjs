@@ -1,7 +1,11 @@
 import { loadEnv } from "vite";
 import { productionIssues } from "./production-check.mjs";
 const env = {
-  ...loadEnv("production", process.cwd(), "VITE_"),
+  ...loadEnv(
+    process.env.KYRVEN_BUILD_TARGET === "staging" ? "staging" : "production",
+    process.cwd(),
+    "VITE_",
+  ),
   ...process.env,
 };
 const issues = productionIssues(env).filter((issue) =>

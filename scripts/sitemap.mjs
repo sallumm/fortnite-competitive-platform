@@ -1,4 +1,8 @@
 import { loadEnv } from "vite";
+if (process.env.KYRVEN_BUILD_TARGET === "staging") {
+  console.info("Staging: sitemap público desativado.");
+  process.exit(0);
+}
 const env = {
   ...loadEnv("production", process.cwd(), "VITE_"),
   ...process.env,
