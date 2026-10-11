@@ -112,8 +112,20 @@ export const answerExam = (
     p_expected: attempt.version,
     p_answers: answers,
   });
-export const loadAssessments = () =>
-  esportsRPC<AssessmentAdmin>("esports_assessment_admin");
+export const loadAssessments = (
+  offset = 0,
+  query = "",
+  reviewOffset = 0,
+  attempt: string | null = null,
+) =>
+  esportsRPC<AssessmentAdmin>("esports_assessment_page", {
+    p_offset: offset,
+    p_query: query,
+    p_review_offset: reviewOffset,
+    p_attempt: attempt,
+  });
+export const expireAssessments = () =>
+  esportsRPC<number>("esports_expire_assessments");
 export const assessmentAction = (
   action: string,
   id: string | null,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { Heading, Badge, Modal, Empty } from "../components/ui";
 import { AnimatedTabs } from "../components/experience/primitives";
@@ -12,12 +12,14 @@ import {
 } from "./EsportsAdmin";
 import {
   loadAssessments,
+  expireAssessments,
   assessmentAction,
   type Question,
   type Exam,
   type Attempt,
   type Blueprint,
 } from "../lib/esports/assessments";
+import { useStore } from "../lib/store";
 import { useEsportsQuery } from "../lib/esports/useEsportsQuery";
 const lines = (v: FormDataEntryValue | null) =>
   String(v || "")
@@ -30,12 +32,19 @@ const difficultyLabels = {
   advanced: "Avançado",
 };
 export default function EsportsAssessmentsAdmin() {
-  const { data, error, loading, refresh } = useEsportsQuery(loadAssessments);
+  const s = useStore();
   const [tab, setTab] = useState("attempts"),
     [question, setQuestion] = useState<Question | null | undefined>(),
     [exam, setExam] = useState<Exam | null | undefined>(),
     [attempt, setAttempt] = useState<Attempt | null>(null),
     [filter, setFilter] = useState("");
+  const [offset, setOffset] = useState(0);
+  const [reviewOffset, setReviewOffset] = useState(0);
+  const load = useCallback(
+    () => loadAssessments(offset, filter, reviewOffset, attempt?.id || null),
+    [offset, filter, reviewOffset, attempt?.id],
+  );
+  const { data, error, loading, refresh } = useEsportsQuery(load, true);
   const act = async (
     name: string,
     id: string | null,
@@ -68,7 +77,10 @@ export default function EsportsAssessmentsAdmin() {
           <AnimatedTabs
             label="Gestão de provas"
             value={tab}
-            onChange={setTab}
+            onChange={(value) => {
+              setTab(value);
+              setOffset(0);
+            }}
             items={[
               { value: "attempts", label: "Respostas e revisão" },
               ...(data.admin
@@ -99,7 +111,11 @@ export default function EsportsAssessmentsAdmin() {
                 Filtrar enunciado ou categoria
                 <input
                   value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
+                  maxLength={120}
+                  onChange={(e) => {
+                    setFilter(e.target.value);
+                    setOffset(0);
+                  }}
                 />
               </label>
               {data.questions
@@ -238,6 +254,18 @@ export default function EsportsAssessmentsAdmin() {
           {tab === "attempts" && (
             <section className="panel">
               <h2>Tentativas enviadas</h2>
+              <button
+                className="button"
+                disabled={s.busy}
+                onClick={() =>
+                  void s.run(async () => {
+                    await expireAssessments();
+                    await refresh();
+                  }, "Expiração processada pelo servidor.")
+                }
+              >
+                Processar provas com prazo encerrado
+              </button>
               <p>
                 Respostas em andamento não aparecem nesta área. Avaliadores
                 consultam somente candidaturas designadas.
@@ -261,13 +289,43 @@ export default function EsportsAssessmentsAdmin() {
                   <p>
                     Pontuação objetiva: {a.objective_points} / {a.objective_max}
                   </p>
-                  <button className="button" onClick={() => setAttempt(a)}>
+                  <button
+                    className="button"
+                    onClick={() => {
+                      setAttempt(a);
+                      setReviewOffset(0);
+                    }}
+                  >
                     Consultar respostas e revisar
                   </button>
                 </article>
               ))}
             </section>
           )}
+          <nav className="row wrap" aria-label="Paginação de avaliações">
+            <button
+              className="button"
+              disabled={loading || offset === 0}
+              onClick={() => setOffset(Math.max(0, offset - 50))}
+            >
+              Página anterior
+            </button>
+            <span>Página {offset / 50 + 1}</span>
+            <button
+              className="button"
+              disabled={
+                loading ||
+                (tab === "attempts"
+                  ? data.attempts.length < 50
+                  : tab === "questions"
+                    ? data.questions.length < 50
+                    : data.exams.length < 50 && data.assignments.length < 50)
+              }
+              onClick={() => setOffset(offset + 50)}
+            >
+              Próxima página
+            </button>
+          </nav>
           {question !== undefined && (
             <QuestionEditor
               initial={question}
@@ -420,6 +478,25 @@ export default function EsportsAssessmentsAdmin() {
                 />
               </Form>
               <h3>Histórico de revisões humanas</h3>
+              <nav className="row wrap" aria-label="Paginação de revisões">
+                <button
+                  className="button"
+                  disabled={loading || reviewOffset === 0}
+                  onClick={() =>
+                    setReviewOffset(Math.max(0, reviewOffset - 50))
+                  }
+                >
+                  Revisões anteriores
+                </button>
+                <span>Página {reviewOffset / 50 + 1}</span>
+                <button
+                  className="button"
+                  disabled={loading || data.review_history.length < 50}
+                  onClick={() => setReviewOffset(reviewOffset + 50)}
+                >
+                  Próximas revisões
+                </button>
+              </nav>
               {data.review_history
                 .filter((r) => r.attempt_id === attempt.id)
                 .map((r) => (

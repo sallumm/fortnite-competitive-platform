@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useStore } from "../store";
-export function useEsportsQuery<T>(load: () => Promise<T>) {
+export function useEsportsQuery<T>(
+  load: () => Promise<T>,
+  retainWhileLoading = false,
+) {
   const s = useStore(),
     seq = useRef(0);
   const [data, setData] = useState<T | null>(null),
@@ -25,11 +28,11 @@ export function useEsportsQuery<T>(load: () => Promise<T>) {
     }
   }, [load, s.session?.user.id, s.demo]);
   useEffect(() => {
-    setData(null);
+    if (!retainWhileLoading) setData(null);
     void refresh();
     return () => {
       seq.current++;
     };
-  }, [refresh]);
+  }, [refresh, retainWhileLoading]);
   return { data, error, loading, refresh };
 }

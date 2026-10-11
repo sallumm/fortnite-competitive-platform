@@ -470,6 +470,132 @@ it("purges expired retained applications without touching an active evaluation o
   ).toBe(true);
 });
 
+it("paginates questions and per-attempt reviews without leaking staff or ordinary-user data", async () => {
+  await db.exec("reset role; begin");
+  try {
+    await db.query(
+      "insert into private.esports_questions select (jsonb_populate_record(null::private.esports_questions,to_jsonb(q)||jsonb_build_object('id',gen_random_uuid(),'prompt','Page regression question '||lpad(i::text,3,'0')))).* from private.esports_questions q cross join generate_series(1,51) i where q.id=$1",
+      [question],
+    );
+    await db.query(
+      "insert into private.esports_attempt_reviews(attempt_id,reviewer_id,attempt_version,grades,review_note,feedback,released) select $1,$2,1,'{}','Paginated private review','Test feedback',false from generate_series(1,51)",
+      [attempt.id, staff],
+    );
+    await as(admin);
+    const first = await rpc(
+      "public.esports_assessment_page(0,'Page regression',0,$1)",
+      [attempt.id],
+    );
+    const second = await rpc(
+      "public.esports_assessment_page(50,'Page regression',50,$1)",
+      [attempt.id],
+    );
+    expect(first.questions).toHaveLength(50);
+    expect(second.questions).toHaveLength(1);
+    expect(first.review_history).toHaveLength(50);
+    expect(second.review_history.length).toBeGreaterThan(0);
+    expect(
+      new Set([...first.questions, ...second.questions].map((q: any) => q.id))
+        .size,
+    ).toBe(51);
+    expect(
+      new Set(
+        [...first.review_history, ...second.review_history].map(
+          (r: any) => r.id,
+        ),
+      ).size,
+    ).toBe(first.review_history.length + second.review_history.length);
+    expect(
+      (await rpc("public.esports_assessment_page()")).review_history,
+    ).toEqual([]);
+    await db.exec("savepoint denial");
+    await expect(rpc("public.esports_assessment_page(-1)")).rejects.toThrow(
+      "Invalid search",
+    );
+    await db.exec("rollback to savepoint denial");
+    await as(staff);
+    expect(
+      (await rpc("public.esports_assessment_page(0,'',0,$1)", [attempt.id]))
+        .questions,
+    ).toEqual([]);
+    await as(other);
+    await db.exec("savepoint denial");
+    await expect(
+      rpc("public.esports_assessment_page(0,'',0,$1)", [attempt.id]),
+    ).rejects.toThrow("Administrative role required");
+    await db.exec("rollback to savepoint denial");
+    await as(staff);
+    await db.query(
+      "select set_config('request.jwt.claims','{\"aal\":\"aal1\"}',false)",
+    );
+    await db.exec("savepoint denial");
+    await expect(rpc("public.esports_assessment_page()")).rejects.toThrow(
+      "Administrative role required",
+    );
+    await db.exec("rollback to savepoint denial");
+  } finally {
+    await db.exec("rollback; reset role");
+  }
+});
+it("administrative reads preserve expired attempts until an authorized explicit expiration", async () => {
+  await db.exec("reset role; begin");
+  try {
+    const id = crypto.randomUUID();
+    await db.query(
+      "insert into private.esports_attempts select (jsonb_populate_record(null::private.esports_attempts,to_jsonb(a)||jsonb_build_object('id',$1::text,'number',999,'status','active','deadline',now()-interval '1 second'))).* from private.esports_attempts a where a.id=$2",
+      [id, attempt.id],
+    );
+    await as(admin);
+    await rpc("public.esports_assessment_admin()");
+    await rpc("public.esports_assessment_page()");
+    await db.exec("reset role");
+    expect(
+      (
+        await db.query<{ status: string }>(
+          "select status from private.esports_attempts where id=$1",
+          [id],
+        )
+      ).rows[0].status,
+    ).toBe("active");
+    await as(other);
+    await db.exec("savepoint denial");
+    await expect(rpc("public.esports_expire_assessments()")).rejects.toThrow(
+      "Administrative role required",
+    );
+    await db.exec("rollback to savepoint denial");
+    await as(staff);
+    await db.query(
+      "select set_config('request.jwt.claims','{\"aal\":\"aal1\"}',false)",
+    );
+    await db.exec("savepoint denial");
+    await expect(rpc("public.esports_expire_assessments()")).rejects.toThrow(
+      "Administrative role required",
+    );
+    await db.exec("rollback to savepoint denial");
+    await as(admin);
+    expect(await rpc("public.esports_expire_assessments()")).toBe(1);
+    expect(await rpc("public.esports_expire_assessments()")).toBe(0);
+    await db.exec("reset role");
+    expect(
+      (
+        await db.query<{ status: string }>(
+          "select status from private.esports_attempts where id=$1",
+          [id],
+        )
+      ).rows[0].status,
+    ).toBe("submitted");
+    expect(
+      (
+        await db.query(
+          "select id from private.esports_audit where target_id=$1 and action='exam_submitted'",
+          [id],
+        )
+      ).rows,
+    ).toHaveLength(1);
+  } finally {
+    await db.exec("rollback; reset role");
+  }
+});
 it("exports only own shareable data and queues erasure with explicit administrative execution", async () => {
   await as(learner);
   const exported = await rpc("public.esports_export()");
@@ -503,6 +629,9 @@ it("bounds administrative writes and expires assigned evaluator access immediate
   );
   await as(staff);
   await expect(action("grade", attempt.id, 1, {})).rejects.toThrow(
+    /rate limit/,
+  );
+  await expect(rpc("public.esports_expire_assessments()")).rejects.toThrow(
     /rate limit/,
   );
   await db.exec("reset role");
