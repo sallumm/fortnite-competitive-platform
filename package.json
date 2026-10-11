@@ -12,7 +12,9 @@
     "test:e2e": "playwright test",
     "check:production": "node scripts/production-check.mjs",
     "report:bundle": "node scripts/bundle-report.mjs",
-    "check:brand": "node scripts/brand-check.mjs"
+    "check:brand": "node scripts/brand-check.mjs",
+    "check:security": "node scripts/security-check.mjs",
+    "lint": "tsc -b && tsc -p tsconfig.coach.json && node scripts/security-check.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

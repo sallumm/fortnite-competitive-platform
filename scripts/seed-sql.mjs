@@ -1,5 +1,18 @@
-import { writeFileSync } from "node:fs";
-import { seed } from "../src/lib/seed.ts";
+import { historicalSeed } from "./historical-seed.mjs";
+
+import { createServer } from "vite";
+const loader = await createServer({
+  configFile: false,
+  optimizeDeps: { noDiscovery: true, entries: [] },
+  server: { middlewareMode: true, preTransformRequests: false },
+  appType: "custom",
+});
+let seed;
+try {
+  ({ seed } = await loader.ssrLoadModule("/src/lib/seed.ts"));
+} finally {
+  await loader.close();
+}
 const quote = (v) =>
   v === null
     ? "null"
@@ -16,7 +29,7 @@ for (const table of ["exercises", "articles", "tournaments"])
       `insert into public.${table} (${keys.join(",")}) values (${keys.map((k) => quote(row[k])).join(",")}) on conflict(id) do nothing;`,
     );
   }
-writeFileSync(
+historicalSeed(
   "supabase/migrations/202610100002_seed.sql",
   output.join("\n") + "\n",
 );

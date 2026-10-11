@@ -1,0 +1,3412 @@
+{
+  "environment": "PGlite isolated catalog; not Supabase hosted",
+  "tables": [
+    {
+      "schema": "private",
+      "name": "captcha_quota",
+      "rls": true,
+      "force_rls": false,
+      "grants": null
+    },
+    {
+      "schema": "private",
+      "name": "captcha_tickets",
+      "rls": true,
+      "force_rls": false,
+      "grants": null
+    },
+    {
+      "schema": "private",
+      "name": "coach_global_usage",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "coach_usage",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_attempt_reviews",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_attempts",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_audit",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_authorizations",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_benefit_grants",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_development_goals",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_development_reviews",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_erasure_requests",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_exam_assignments",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_exams",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_launch_gate",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_questions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_reviewers",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_reviews",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_role_grants",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_roster_decisions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "esports_scholarships",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "knowledge_usage",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "meta_editor_limits",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "private",
+      "name": "user_roles",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "academy_notes",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "academy_path_history",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "academy_paths",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "academy_records",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "account_acceptances",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "activity_series",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "articles",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "bookmarks",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "calendar_exceptions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "coach_actions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=rd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "coach_conversations",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=rd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "coach_messages",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=rd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "coach_preferences",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "competition_preparations",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "competition_proposals",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=rd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "competitive_preferences",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "content_revision_history",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "esports_applications",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "esports_cycles",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "esports_settings",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "esports_status_events",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "evolution_batches",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "evolution_settings",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "exercises",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "goal_revisions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "knowledge_diagnostics",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "knowledge_drafts",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "knowledge_revisions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "knowledge_settings",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "learning_journey_batches",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "learning_journey_events",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "learning_journeys",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_assets",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=r/postgres,service_role=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_contexts",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=ar/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_draft_history",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_drafts",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_editions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_editorial_audit",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_entries",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=ar/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_formats",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=ar/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_links",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=ar/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_media_audit",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_modes",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=ar/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_plan_approvals",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_seasons",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=ar/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_sources",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=ar/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_study_notes",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "meta_versions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=ar/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "personal_goals",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "planning_preferences",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "profiles",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arw/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "road_programs",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "scheduled_sessions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "skill_reviews",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "tournaments",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "training_journals",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "training_knowledge",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,anon=r/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "training_plans",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "training_readiness",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "training_result_revisions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "training_sessions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "training_team_invites",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "training_team_members",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "training_team_participation",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "training_team_resources",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "training_team_sessions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "training_teams",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "vod_reviews",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "weekly_reports",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=arwd/postgres}"
+    },
+    {
+      "schema": "public",
+      "name": "xp_transactions",
+      "rls": true,
+      "force_rls": false,
+      "grants": "{postgres=arwdDxtm/postgres,authenticated=r/postgres}"
+    }
+  ],
+  "policies": [
+    {
+      "schemaname": "public",
+      "tablename": "academy_notes",
+      "policyname": "own_notes",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "academy_path_history",
+      "policyname": "admin_path_history",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "academy_paths",
+      "policyname": "admin_paths",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "ALL",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "academy_paths",
+      "policyname": "read_paths",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(published OR ( SELECT is_admin() AS is_admin))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "academy_records",
+      "policyname": "own_study",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "account_acceptances",
+      "policyname": "own_acceptances",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "activity_series",
+      "policyname": "own_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "activity_series",
+      "policyname": "own_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "activity_series",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "activity_series",
+      "policyname": "own_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "articles",
+      "policyname": "admin_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "articles",
+      "policyname": "admin_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "articles",
+      "policyname": "admin_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "articles",
+      "policyname": "published_read",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "((published AND (published_at <= now())) OR ( SELECT is_admin() AS is_admin))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "bookmarks",
+      "policyname": "own_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "bookmarks",
+      "policyname": "own_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "bookmarks",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "bookmarks",
+      "policyname": "own_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "calendar_exceptions",
+      "policyname": "own_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "calendar_exceptions",
+      "policyname": "own_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "calendar_exceptions",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "calendar_exceptions",
+      "policyname": "own_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "coach_actions",
+      "policyname": "owner_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "coach_actions",
+      "policyname": "owner_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "coach_conversations",
+      "policyname": "owner_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "coach_conversations",
+      "policyname": "owner_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "coach_messages",
+      "policyname": "owner_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "coach_messages",
+      "policyname": "owner_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "coach_preferences",
+      "policyname": "owner_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "coach_preferences",
+      "policyname": "owner_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(id = auth.uid())"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "coach_preferences",
+      "policyname": "owner_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "coach_preferences",
+      "policyname": "owner_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(id = auth.uid())",
+      "with_check": "(id = auth.uid())"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "competition_preparations",
+      "policyname": "owner_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "competition_preparations",
+      "policyname": "owner_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(user_id = auth.uid())"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "competition_preparations",
+      "policyname": "owner_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "competition_preparations",
+      "policyname": "owner_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = auth.uid())",
+      "with_check": "(user_id = auth.uid())"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "competition_proposals",
+      "policyname": "owner_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "competition_proposals",
+      "policyname": "owner_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "competitive_preferences",
+      "policyname": "owner_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "competitive_preferences",
+      "policyname": "owner_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(id = auth.uid())"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "competitive_preferences",
+      "policyname": "owner_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "competitive_preferences",
+      "policyname": "owner_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(id = auth.uid())",
+      "with_check": "(id = auth.uid())"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "content_revision_history",
+      "policyname": "admin_audit",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "esports_applications",
+      "policyname": "esports_owner_or_reviewer",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "((user_id = ( SELECT auth.uid() AS uid)) OR esports_can_review(id))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "esports_status_events",
+      "policyname": "esports_event_owner",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM esports_applications a\n  WHERE ((a.id = esports_status_events.application_id) AND ((a.user_id = ( SELECT auth.uid() AS uid)) OR esports_can_review(a.id)))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "evolution_batches",
+      "policyname": "own_evolution_batches",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "evolution_settings",
+      "policyname": "own_evolution_settings",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "exercises",
+      "policyname": "admin_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "exercises",
+      "policyname": "admin_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "exercises",
+      "policyname": "admin_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "exercises",
+      "policyname": "published_read",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(published OR ( SELECT is_admin() AS is_admin))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "goal_revisions",
+      "policyname": "goal_revision_owner",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "knowledge_diagnostics",
+      "policyname": "knowledge_admin_diagnostics",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "knowledge_drafts",
+      "policyname": "knowledge_admin_drafts",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "knowledge_revisions",
+      "policyname": "knowledge_admin_revisions",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "knowledge_settings",
+      "policyname": "knowledge_status",
+      "roles": [
+        "public"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "learning_journey_batches",
+      "policyname": "own_journey_batches",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "learning_journey_events",
+      "policyname": "own_journey_events",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "learning_journeys",
+      "policyname": "own_journeys",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_assets",
+      "policyname": "assets_read",
+      "roles": [
+        "public"
+      ],
+      "cmd": "SELECT",
+      "qual": "meta_asset_visible(id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_contexts",
+      "policyname": "editor_append",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_contexts",
+      "policyname": "public_knowledge",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_draft_history",
+      "policyname": "draft_history_admin",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "is_admin()",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_drafts",
+      "policyname": "drafts_admin",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "is_admin()",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_editions",
+      "policyname": "editions_read",
+      "roles": [
+        "public"
+      ],
+      "cmd": "SELECT",
+      "qual": "(is_admin() OR meta_entry_visible(entry_id))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_editorial_audit",
+      "policyname": "editorial_audit",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_entries",
+      "policyname": "editor_append",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_entries",
+      "policyname": "public_knowledge",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_formats",
+      "policyname": "editor_append",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_formats",
+      "policyname": "public_knowledge",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_links",
+      "policyname": "editor_append",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_links",
+      "policyname": "public_knowledge",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_media_audit",
+      "policyname": "media_audit_admin",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "is_admin()",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_modes",
+      "policyname": "editor_append",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_modes",
+      "policyname": "public_knowledge",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_plan_approvals",
+      "policyname": "own_meta_approvals",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_seasons",
+      "policyname": "seasons_editor",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "is_admin()"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_seasons",
+      "policyname": "seasons_read",
+      "roles": [
+        "public"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_sources",
+      "policyname": "editor_append",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_sources",
+      "policyname": "public_knowledge",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_study_notes",
+      "policyname": "own_meta_notes",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "ALL",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_versions",
+      "policyname": "editor_append",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "meta_versions",
+      "policyname": "public_knowledge",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "personal_goals",
+      "policyname": "own_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "personal_goals",
+      "policyname": "own_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "personal_goals",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "personal_goals",
+      "policyname": "own_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "planning_preferences",
+      "policyname": "own_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "planning_preferences",
+      "policyname": "own_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "planning_preferences",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "planning_preferences",
+      "policyname": "own_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "profiles",
+      "policyname": "own_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "profiles",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "profiles",
+      "policyname": "own_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "road_programs",
+      "policyname": "public_road_programs",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "scheduled_sessions",
+      "policyname": "own_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "scheduled_sessions",
+      "policyname": "own_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "scheduled_sessions",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "scheduled_sessions",
+      "policyname": "own_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "skill_reviews",
+      "policyname": "own_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "skill_reviews",
+      "policyname": "own_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "skill_reviews",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "skill_reviews",
+      "policyname": "own_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "tournaments",
+      "policyname": "admin_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "tournaments",
+      "policyname": "admin_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "tournaments",
+      "policyname": "admin_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "( SELECT is_admin() AS is_admin)",
+      "with_check": "( SELECT is_admin() AS is_admin)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "tournaments",
+      "policyname": "published_read",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(published OR ( SELECT is_admin() AS is_admin))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_journals",
+      "policyname": "own_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_journals",
+      "policyname": "own_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_journals",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_journals",
+      "policyname": "own_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_knowledge",
+      "policyname": "public_knowledge",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_plans",
+      "policyname": "own_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_plans",
+      "policyname": "own_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_plans",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_plans",
+      "policyname": "own_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_readiness",
+      "policyname": "owner_access",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "ALL",
+      "qual": "(user_id = auth.uid())",
+      "with_check": "(user_id = auth.uid())"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_result_revisions",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_sessions",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_team_invites",
+      "policyname": "owner_invites",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM training_teams t\n  WHERE ((t.id = training_team_invites.team_id) AND (t.owner_id = ( SELECT auth.uid() AS uid)))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_team_members",
+      "policyname": "member_roster",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "private.team_member(team_id, ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_team_participation",
+      "policyname": "member_participation",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM training_team_sessions s\n  WHERE ((s.id = training_team_participation.session_id) AND private.team_member(s.team_id, ( SELECT auth.uid() AS uid)))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_team_resources",
+      "policyname": "member_resources",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "private.team_member(team_id, ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_team_sessions",
+      "policyname": "member_sessions",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "private.team_member(team_id, ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "training_teams",
+      "policyname": "member_teams",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "private.team_member(id, ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "vod_reviews",
+      "policyname": "owner_access",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "ALL",
+      "qual": "(user_id = auth.uid())",
+      "with_check": "(user_id = auth.uid())"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "weekly_reports",
+      "policyname": "own_delete",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "DELETE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "weekly_reports",
+      "policyname": "own_insert",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "weekly_reports",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "weekly_reports",
+      "policyname": "own_update",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "UPDATE",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "xp_transactions",
+      "policyname": "own_read",
+      "roles": [
+        "authenticated"
+      ],
+      "cmd": "SELECT",
+      "qual": "(user_id = ( SELECT auth.uid() AS uid))",
+      "with_check": null
+    }
+  ],
+  "functions": [
+    {
+      "signature": "accept_account_documents(text,text,boolean)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "accept_training_invite(text,text,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "cancel_training_team_session(uuid,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "clear_academy_study()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "close_training_team(uuid,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "coach_competitive_event(uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "coach_competitive_profile()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "coach_confirm(uuid,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "coach_context(text,integer,text,uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "coach_learning_journey(uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "coach_meta_context(text,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "coach_propose(jsonb)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "coach_reserve(boolean)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "coach_save_turn(text,jsonb,uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "competition_confirm(uuid,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "competition_preview(uuid,jsonb)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "configure_knowledge(boolean,integer,integer,boolean,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "confirm_evolution_plan(uuid,date,integer,jsonb,jsonb,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "confirm_learning_plan(uuid,integer,uuid,date,jsonb,jsonb,text,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "confirm_meta_evolution_plan(uuid,date,integer,jsonb,jsonb,text,text,text[],text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "correct_training_result(uuid,integer,jsonb,integer)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "create_learning_journey(uuid,jsonb)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "create_training_team(text,integer,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "delete_learning_journey(uuid,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "delete_training_team_resource(uuid,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_admin_action(text,uuid,integer,jsonb)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_admin_data(text,integer)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_answer_exam(uuid,text,integer,jsonb)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_assessment_action(text,uuid,integer,jsonb)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_assessment_admin()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_benefits()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_can_review(uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_development(boolean)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_development_action(text,uuid,integer,jsonb)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_export()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_is_admin()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_portal()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_purge(uuid,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_request_erasure()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_start_exam(uuid,uuid,boolean)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_submit(uuid,jsonb,uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_trials()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_withdraw(uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_workspace()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "finish_training(uuid,jsonb,integer,boolean)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "invite_training_member(uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "is_admin()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "issue_captcha_ticket(uuid,uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,service_role=X/postgres}"
+    },
+    {
+      "signature": "knowledge_diagnostic(text,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "knowledge_editorial(text,text,text,text,text,boolean)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "leave_training_team(uuid,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "manage_knowledge(uuid,integer,text,text,integer)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "meta_asset_removable(uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "meta_asset_visible(uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "meta_editor_media_quota()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "meta_entry_visible(text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "private.aal2()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.audit_academy_path()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.audit_editorial()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.audit_goal()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.audit_meta()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.bind_game_context()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.bind_learning_plan()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.bind_learning_session()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.coach_agenda(uuid,date,date)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.coach_validate_action(jsonb,uuid)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.competition_activity(uuid,jsonb,uuid)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_admin_action_internal(text,uuid,integer,jsonb)",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_application_delete_audit()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_assessment_action_internal(text,uuid,integer,jsonb)",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_audit(text,uuid,jsonb)",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_development_action_internal(text,uuid,integer,jsonb)",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_finish_attempt(uuid)",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_participation(uuid,uuid)",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_profile_delete_audit()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_role(text,uuid)",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_safe_attempt(uuid)",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_scholar(uuid,uuid)",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_staff_access()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_submit_internal(uuid,jsonb)",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_trial(uuid)",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_validate_answers(jsonb,jsonb)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.esports_write_limit()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.evolution_agenda(uuid,date,date)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.evolution_instant(date,time without time zone,text)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.game_context(text,text[])",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.goal_lifecycle()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.knowledge_current(jsonb,text)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.lock_curriculum_graph()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.meta_editor_gate()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.meta_immutable()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.meta_registry_gate()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.meta_serialize()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.protect_series_history()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.require_account_acceptance()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.snapshot_session_context()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.team_member(uuid,uuid)",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "private.valid_competitive_checklist(jsonb)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "private.valid_competitive_phases(jsonb)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "private.valid_skills(text[])",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "private.valid_weekdays(integer[])",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "private.validate_academy_path()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_academy_questions()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_competitive_preferences()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_curriculum()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_evolution_config(jsonb)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_exception()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_exercise_research()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_exercise_training_metadata()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_journal()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_knowledge(jsonb,boolean)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_meta_content(jsonb,boolean)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_meta_entry()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_meta_link()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_profile()",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_steps()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_training_goal()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_training_result(jsonb,jsonb,boolean)",
+      "schema": "private",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "private.validate_vod()",
+      "schema": "private",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "publish_meta_draft(uuid,integer,boolean)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "record_academy_study(uuid,text,jsonb)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "record_learning_journey(uuid,text,uuid,jsonb,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "refresh_knowledge()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "register_meta_asset(text,integer,jsonb,uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,service_role=X/postgres}"
+    },
+    {
+      "signature": "reserve_captcha_request()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "reserve_knowledge(boolean)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "reserve_meta_asset_remove(uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "respond_training_session(uuid,text,text,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "restore_meta_draft(uuid,integer,integer)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "retrieve_knowledge(text,boolean,text,text,text,text,boolean)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "revise_series(uuid,date,jsonb)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "revoke_training_invite(uuid,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "save_academy_note(uuid,text,text,boolean)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "save_evolution_config(jsonb)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "save_knowledge(uuid,integer,jsonb)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "save_meta_draft(jsonb,text,uuid,integer)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "save_training_checkpoint(uuid,jsonb,integer)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "save_training_team_resource(uuid,text,text,text,text,boolean,text,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "schedule_training_team(uuid,text,text,timestamp with time zone,integer,uuid[],text,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "security_status()",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "start_scheduled_training(uuid,uuid,uuid,date)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "start_training(uuid)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "update_learning_journey(uuid,jsonb,text)",
+      "schema": "public",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "grants": "{postgres=X/postgres,authenticated=X/postgres}"
+    }
+  ],
+  "checks": {
+    "tablesWithoutRls": [],
+    "definersWithoutEmptySearchPath": []
+  }
+}

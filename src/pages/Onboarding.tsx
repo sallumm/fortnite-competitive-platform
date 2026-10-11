@@ -1,5 +1,6 @@
 import { TrainingStepTransition } from "../components/experience/primitives";
 import { useState } from "react";
+import { supabase } from "../lib/client";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { appDestination } from "../lib/navigation";
 import {
@@ -20,6 +21,7 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const route = useLocation();
   const [step, setStep] = useState(0);
+  const [accepted, setAccepted] = useState(false);
   const [p, setP] = useState<Profile>(
     store.data.profile || {
       id: store.session?.user.id || "demo",
@@ -52,6 +54,18 @@ export default function Onboarding() {
   const finish = () =>
     store.run(async () => {
       const profile = { ...p, onboarded: true };
+      if (!store.demo) {
+        if (!accepted)
+          throw Error(
+            "kyrven: leia e aceite os documentos antes de continuar.",
+          );
+        const { error } = await supabase!.rpc("accept_account_documents", {
+          p_terms: "2026-10-11-prelaunch",
+          p_privacy: "2026-10-11-prelaunch",
+          p_accepted: true,
+        });
+        if (error) throw error;
+      }
       await store.saveProfile(profile);
       if (!store.data.plans.length) {
         const { starterSteps } = await import("../lib/logic");
@@ -179,6 +193,25 @@ export default function Onboarding() {
           </div>
         )}
       </TrainingStepTransition>
+      {step === 3 && !store.demo && (
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            checked={accepted}
+            onChange={(e) => setAccepted(e.target.checked)}
+          />
+          Li os{" "}
+          <a href="/legal/terms" target="_blank" rel="noopener noreferrer">
+            termos
+          </a>{" "}
+          e o{" "}
+          <a href="/legal/privacy" target="_blank" rel="noopener noreferrer">
+            aviso de privacidade
+          </a>
+          , versão preliminar 2026-10-11. Cadastros públicos dependem de revisão
+          do operador.
+        </label>
+      )}
       <div className="row between">
         <button
           className="button"

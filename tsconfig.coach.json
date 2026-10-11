@@ -17,6 +17,9 @@
     "supabase/functions/_shared/meta-media.ts",
     "supabase/functions/meta-media/index.ts",
     "supabase/functions/_shared/knowledge",
-    "supabase/functions/fortnite-knowledge/index.ts"
+    "supabase/functions/fortnite-knowledge/index.ts",
+    "supabase/functions/_shared/recruitment.ts",
+    "supabase/functions/recruitment-submit/index.ts",
+    "supabase/functions/_shared/billing.ts"
   ]
 }

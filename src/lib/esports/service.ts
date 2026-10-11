@@ -47,11 +47,22 @@ export const loadAdmin = (query = "", offset = 0) =>
     p_query: query,
     p_offset: offset,
   });
-export function submitApplication(cycle: string, payload: unknown) {
-  return esportsRPC<string>("esports_submit", {
-    p_cycle: cycle,
-    p_payload: applicationSchema.parse(payload),
-  });
+export async function submitApplication(
+  cycle: string,
+  payload: unknown,
+  captcha: string,
+) {
+  if (!supabase || !captcha)
+    throw new Error("kyrven: conclua a verificação de segurança.");
+  const { data, error } = await supabase.functions.invoke(
+    "recruitment-submit",
+    { body: { cycle, payload: applicationSchema.parse(payload), captcha } },
+  );
+  if (error || !data?.id)
+    throw new Error(
+      "kyrven: candidatura não concluída. Atualize os dados e tente novamente; se houver limite, aguarde dez minutos.",
+    );
+  return data.id as string;
 }
 export const withdrawApplication = (id: string) =>
   esportsRPC<void>("esports_withdraw", { p_application: id });

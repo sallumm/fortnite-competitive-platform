@@ -31,6 +31,9 @@ beforeAll(async () => {
   for (const id of [a, b]) {
     await user(id);
     await db.query(
+      "select public.accept_account_documents('2026-10-11-prelaunch','2026-10-11-prelaunch',true)",
+    );
+    await db.query(
       "insert into public.profiles values($1,'Jogador','build','intermediate','aim',30,'kbm','America/Sao_Paulo',true,true)",
       [id],
     );

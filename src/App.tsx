@@ -27,6 +27,7 @@ const Knowledge = lazy(() => import("./pages/Knowledge"));
 const KnowledgeAdmin = lazy(() => import("./pages/KnowledgeAdmin"));
 const Landing = lazy(() => import("./pages/Landing"));
 const Auth = lazy(() => import("./pages/Auth"));
+const Security = lazy(() => import("./pages/Security"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Coach = lazy(() => import("./pages/Coach"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -204,6 +205,14 @@ function Application() {
               }
             />
             <Route path="/auth" element={<Auth />} />
+            <Route
+              path="/security"
+              element={
+                <Guard onboard={false}>
+                  <Security />
+                </Guard>
+              }
+            />
             <Route
               path="/onboarding"
               element={

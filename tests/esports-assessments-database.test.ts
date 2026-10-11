@@ -18,9 +18,28 @@ async function as(id: string | null, role = "authenticated") {
   await db.query("select set_config('request.jwt.claim.sub',$1,false)", [
     id || "",
   ]);
+  await db.query("select set_config('request.jwt.claims',$1,false)", [
+    JSON.stringify({ aal: id === admin || id === staff ? "aal2" : "aal1" }),
+  ]);
   await db.exec("set role " + role);
 }
 async function rpc(sql: string, args: unknown[] = []) {
+  // Isolated fixture for the server-issued proof. Unauthorized issuance is tested separately.
+  if (sql === "public.esports_submit($1,$2)") {
+    const { rows } = await db.query<{ id: string }>("select auth.uid() id");
+    if (rows[0].id) {
+      await db.exec("reset role");
+      const ticket = (
+        await db.query<{ id: string }>(
+          "select public.issue_captcha_ticket($1,$2) id",
+          [rows[0].id, args[0]],
+        )
+      ).rows[0].id;
+      await db.exec("set role authenticated");
+      sql = "public.esports_submit($1,$2,$3)";
+      args = [...args, ticket];
+    }
+  }
   return (await db.query<{ r: any }>("select " + sql + " as r", args)).rows[0]
     .r;
 }

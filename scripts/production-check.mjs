@@ -6,6 +6,7 @@ export function productionIssues(env) {
     "VITE_SUPABASE_URL",
     "VITE_SUPABASE_ANON_KEY",
     "VITE_SITE_URL",
+    "VITE_TURNSTILE_SITE_KEY",
   ])
     if (!env[name]) issues.push(`${name}: obrigatório para produção`);
   for (const name of ["VITE_SUPABASE_URL", "VITE_SITE_URL"]) {
@@ -26,6 +27,8 @@ export function productionIssues(env) {
     }
   }
   const key = env.VITE_SUPABASE_ANON_KEY || "";
+  if (/^[123]x0{10,}/.test(env.VITE_TURNSTILE_SITE_KEY || ""))
+    issues.push("VITE_TURNSTILE_SITE_KEY: não use chave de teste em produção");
   let role;
   try {
     role = JSON.parse(

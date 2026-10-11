@@ -1,3 +1,4 @@
+import { clearLocalProductData } from "./local-data";
 import { brandCatalog } from "./brand";
 import type { VodReview, Readiness } from "./intelligence-types";
 import {
@@ -210,6 +211,8 @@ export function Provider({ children }: { children: ReactNode }) {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, s) => {
       if (active) {
         if (identity.current !== (s?.user.id || null)) {
+          if (identity.current)
+            clearLocalProductData(localStorage, sessionStorage);
           setLoading(true);
           setData(emptyPlayer());
           setAdmin(false);

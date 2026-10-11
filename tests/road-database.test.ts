@@ -26,6 +26,9 @@ async function asUser(id: string | null, role = "authenticated") {
   await db.query("select set_config('request.jwt.claim.sub',$1,false)", [
     id || "",
   ]);
+  await db.query("select set_config('request.jwt.claims',$1,false)", [
+    JSON.stringify({ aal: id === editor ? "aal2" : "aal1" }),
+  ]);
   await db.exec("set role " + role);
 }
 async function rpc(sql: string, args: unknown[] = []) {

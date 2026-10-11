@@ -12,6 +12,9 @@ async function asUser(id: string | null, role = "authenticated") {
   await db.query("select set_config('request.jwt.claim.sub',$1,false)", [
     id || "",
   ]);
+  await db.query("select set_config('request.jwt.claims',$1,false)", [
+    JSON.stringify({ aal: id === editor ? "aal2" : "aal1" }),
+  ]);
   await db.exec("set role " + role);
 }
 beforeAll(async () => {
@@ -35,6 +38,9 @@ beforeAll(async () => {
   await db.query("insert into auth.users values($1),($2)", [editor, player]);
   for (const id of [editor, player]) {
     await asUser(id);
+    await db.query(
+      "select public.accept_account_documents('2026-10-11-prelaunch','2026-10-11-prelaunch',true)",
+    );
     await db.query(
       "insert into public.profiles values($1,'Jogador','build','intermediate','aim',30,'kbm','America/Sao_Paulo',true,true)",
       [id],

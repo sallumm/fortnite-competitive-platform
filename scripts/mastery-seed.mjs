@@ -1,3 +1,4 @@
+import { historicalSeed } from "./historical-seed.mjs";
 import { readFileSync, writeFileSync } from "node:fs";
 const lessons = JSON.parse(
   readFileSync("src/data/mastery-lessons.json", "utf8"),
@@ -34,7 +35,4 @@ const sql =
     .join("\n") +
   "\n";
 const path = "supabase/migrations/202610100013_mastery_seed.sql";
-if (process.argv.includes("--check")) {
-  if (readFileSync(path, "utf8") !== sql)
-    throw new Error("Mastery seed diverges from canonical lessons");
-} else writeFileSync(path, sql);
+historicalSeed(path, sql);

@@ -1,3 +1,4 @@
+import { historicalSeed } from "./historical-seed.mjs";
 import { readFileSync, writeFileSync } from "node:fs";
 const data = JSON.parse(readFileSync("src/data/meta-knowledge.json", "utf8"));
 const scalar = (v) =>
@@ -27,7 +28,4 @@ for (const key of [
     sql += `insert into public.meta_${key}(${columns.join(",")}) values(${values.join(",")}) on conflict(id) do nothing;\n`;
   }
 const path = "supabase/migrations/202610100015_meta_seed.sql";
-if (process.argv.includes("--check")) {
-  if (readFileSync(path, "utf8") !== sql)
-    throw new Error("Meta seed differs from canonical corpus");
-} else writeFileSync(path, sql);
+historicalSeed(path, sql);
