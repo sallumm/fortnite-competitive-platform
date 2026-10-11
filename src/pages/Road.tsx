@@ -1,3 +1,4 @@
+import { JourneyNav } from "../components/experience/JourneyNav";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "../lib/store";
@@ -167,6 +168,7 @@ export default function Road() {
       )}
       {j && progress && report && (
         <>
+      <JourneyNav />
           <section className="panel">
             <div className="row">
               <h2>Meu ciclo de aprendizagem</h2>

@@ -38,7 +38,7 @@ describe("Fluxos funcionais do MVP em DOM simulado", () => {
   it("landing, tema e bloqueio de cadastro sem backend", async () => {
     const user = userEvent.setup();
     render(<App />);
-    await screen.findByRole("heading", { name: /Seu próximo nível/ });
+    await screen.findByRole("heading", { name: /Aprender é o início/ });
     await user.click(screen.getByRole("button", { name: "Ativar tema claro" }));
     expect(document.documentElement.dataset.theme).toBe("light");
     await user.click(
@@ -56,7 +56,7 @@ describe("Fluxos funcionais do MVP em DOM simulado", () => {
   it("demonstração completa onboarding, cria rotina, executa sessão e registra histórico", async () => {
     const user = userEvent.setup();
     render(<App />);
-    await screen.findByRole("heading", { name: /Seu próximo nível/ });
+    await screen.findByRole("heading", { name: /Aprender é o início/ });
     await user.click(
       screen.getByRole("button", { name: "Explorar demonstração" }),
     );

@@ -22,6 +22,10 @@ export function PageTransition({
     <m.div
       key={identity}
       className="page-transition"
+      transition={{
+        duration: effective === "full" ? 0.32 : 0,
+        ease: [0.22, 1, 0.36, 1],
+      }}
       initial={
         effective === "essential"
           ? false

@@ -1,3 +1,4 @@
+import { JourneyNav } from "../components/experience/JourneyNav";
 import { RoadAccess } from "../components/RoadAccess";
 import { LearningReport } from "../components/LearningReport";
 import { validPeriod } from "../lib/intelligence";
@@ -80,6 +81,7 @@ export default function Reports() {
   }));
   return (
     <>
+      <JourneyNav />
       <RoadAccess />
       <CoachAccess
         question={`Como foi minha evolução nos últimos ${period} dias?`}

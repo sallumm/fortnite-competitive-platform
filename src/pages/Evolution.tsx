@@ -1,3 +1,4 @@
+import { JourneyNav } from "../components/experience/JourneyNav";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -82,6 +83,7 @@ export default function Evolution() {
   const rank = progression(s.data.xp.reduce((n, x) => n + x.amount, 0));
   return (
     <>
+      <JourneyNav />
       <Heading
         eyebrow="PERFORMANCE INTELLIGENCE"
         title="Minha Evolução"
