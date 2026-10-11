@@ -1,5 +1,29 @@
 import { describe, expect, it, vi } from "vitest";
 import { deletionHandler } from "../supabase/functions/_shared/delete-account";
+import { sessionAuthenticationTime } from "../supabase/functions/_shared/session-authentication";
+it("does not turn a refresh or TOTP challenge into a recent primary login", () => {
+  expect(
+    sessionAuthenticationTime({
+      amr: [
+        { method: "token_refresh", timestamp: 200 },
+        { method: "totp", timestamp: 200 },
+      ],
+    }),
+  ).toBeUndefined();
+  expect(
+    sessionAuthenticationTime({
+      amr: [
+        { method: "password", timestamp: 100 },
+        { method: "token_refresh", timestamp: 200 },
+      ],
+    }),
+  ).toBe(new Date(100000).toISOString());
+  expect(
+    sessionAuthenticationTime({
+      amr: [{ method: "password", timestamp: Infinity }],
+    }),
+  ).toBeUndefined();
+});
 const now = Date.parse("2026-10-10T12:00:00Z");
 function setup(lastSignIn = new Date(now).toISOString()) {
   const backend = {
@@ -21,6 +45,27 @@ const request = (
     body: JSON.stringify(body),
   });
 describe("Account deletion boundary", () => {
+  it("requires administrative MFA even after a recent password login", async () => {
+    const backend = {
+      user: async () => ({
+        id: "admin",
+        last_sign_in_at: new Date(now).toISOString(),
+        mfaRequired: true,
+        mfaVerified: false,
+      }),
+      deleteUser: vi.fn(async () => true),
+    };
+    expect(
+      (
+        await deletionHandler(
+          backend,
+          "https://example.com",
+          () => now,
+        )(request())
+      ).status,
+    ).toBe(403);
+    expect(backend.deleteUser).not.toHaveBeenCalled();
+  });
   it("deletes only the authenticated identity after explicit confirmation", async () => {
     const { backend, handle } = setup();
     expect((await handle(request())).status).toBe(200);

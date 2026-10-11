@@ -5,6 +5,7 @@ const publicEnv = {
   VITE_SITE_URL: "https://example.com",
   VITE_SUPABASE_URL: "https://example.supabase.co",
   VITE_SUPABASE_ANON_KEY: "sb_publishable_example",
+  VITE_TURNSTILE_SITE_KEY: "configured-public-widget",
 };
 it("allows public keys and refuses frontend secrets without printing their values", () => {
   expect(productionIssues(publicEnv)).toEqual([]);
@@ -17,7 +18,7 @@ it("allows public keys and refuses frontend secrets without printing their value
   expect(JSON.stringify(issues)).not.toContain("PRIVATE");
 });
 it("requires production origins and rejects unsafe invite URLs", () => {
-  expect(productionIssues({}).length).toBe(3);
+  expect(productionIssues({}).length).toBe(4);
   expect(
     productionIssues({
       ...publicEnv,

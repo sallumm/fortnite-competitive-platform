@@ -84,4 +84,26 @@ create function public.esports_submit(p_cycle uuid,p_payload jsonb,p_ticket uuid
 revoke all on function public.issue_captcha_ticket(uuid,uuid),public.reserve_captcha_request(),public.esports_submit(uuid,jsonb,uuid) from public,anon,authenticated;
 grant execute on function public.reserve_captcha_request(),public.esports_submit(uuid,jsonb,uuid) to authenticated;
 do $$begin if exists(select 1 from pg_roles where rolname='service_role') then grant execute on function public.issue_captcha_ticket(uuid,uuid) to service_role;end if;end;$$;
+-- Versioned acknowledgement is not age assurance or a legal compliance claim.
+create table public.account_acceptances (
+ id uuid primary key default gen_random_uuid(),user_id uuid not null references auth.users(id) on delete cascade,
+ terms_version text not null,privacy_version text not null,accepted_at timestamptz not null default now(),
+ unique(user_id,terms_version,privacy_version)
+);
+alter table public.account_acceptances enable row level security;
+revoke all on public.account_acceptances from public,anon,authenticated;
+grant select on public.account_acceptances to authenticated;
+create policy own_acceptances on public.account_acceptances for select to authenticated using(user_id=auth.uid());
+create function public.accept_account_documents(p_terms text,p_privacy text,p_accepted boolean) returns void language plpgsql security definer set search_path='' as $$begin
+ if auth.uid() is null or p_accepted is distinct from true or p_terms is distinct from '2026-10-11-prelaunch' or p_privacy is distinct from '2026-10-11-prelaunch' then raise exception 'Explicit current acceptance required';end if;
+ insert into public.account_acceptances(user_id,terms_version,privacy_version) values(auth.uid(),p_terms,p_privacy) on conflict(user_id,terms_version,privacy_version) do nothing;
+end;$$;
+revoke all on function public.accept_account_documents(text,text,boolean) from public,anon;
+grant execute on function public.accept_account_documents(text,text,boolean) to authenticated;
+create function private.require_account_acceptance() returns trigger language plpgsql set search_path='' as $$begin
+ if current_user='authenticated' and new.onboarded and (tg_op='INSERT' or not old.onboarded) and not exists(select 1 from public.account_acceptances where user_id=auth.uid() and terms_version='2026-10-11-prelaunch' and privacy_version='2026-10-11-prelaunch') then raise exception 'Explicit current acceptance required';end if;
+ return new;
+end;$$;
+revoke all on function private.require_account_acceptance() from public,anon,authenticated;
+create trigger require_account_acceptance before insert or update on public.profiles for each row execute function private.require_account_acceptance();
 commit;

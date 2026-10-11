@@ -198,7 +198,7 @@ export default function Security() {
           </p>
         </>
       )}
-      <Link to="/profile">Voltar ao perfil</Link>
+      <Link to="/app/profile">Voltar ao perfil</Link>
     </section>
   );
 }

@@ -1,6 +1,86 @@
 import { beforeAll, afterAll, it, expect } from "vitest";
 import { PGlite } from "@electric-sql/pglite";
 import { readdirSync, readFileSync } from "node:fs";
+it("binds CAPTCHA tickets to user/cycle/expiry and consumes a successful proof exactly once", async () => {
+  await db.exec("reset role");
+  await db.exec(
+    "update private.esports_launch_gate set reviewed=true;update public.esports_settings set recruitment_enabled=true;",
+  );
+  const cycle = (
+    await db.query<{ id: string }>(
+      "insert into public.esports_cycles(title,mode,format,criteria,rules,privacy_notice,policy_version,retention_days,starts_at,ends_at,published,is_open) values('Test cycle','build','solo','Test criteria','Test rules detailed','Test privacy notice','v1',30,now()-interval '1 day',now()+interval '1 day',true,true) returning id",
+    )
+  ).rows[0].id;
+  await db.query(
+    "insert into public.profiles(id,display_name,mode,level,objective,minutes,input) values($1,'Player','build','beginner','aim',30,'kbm') on conflict(id) do nothing",
+    [user],
+  );
+  const ticket = (
+    await db.query<{ id: string }>(
+      "select public.issue_captcha_ticket($1,$2) id",
+      [user, cycle],
+    )
+  ).rows[0].id;
+  await as(admin, "aal2");
+  await expect(
+    db.query("select public.esports_submit($1,'{}',$2)", [cycle, ticket]),
+  ).rejects.toThrow("CAPTCHA required");
+  await as(user);
+  await expect(
+    db.query("select public.esports_submit($1,'{}',$2)", [user, ticket]),
+  ).rejects.toThrow("CAPTCHA required");
+  const payload = {
+    nickname: "Player",
+    epic_nick: "Epic",
+    mode: "build",
+    format: "solo",
+    experience: "intermediate",
+    objectives: "Learn",
+    availability: "Saturday",
+    region: "Brazil",
+    motivation: "Improve",
+    age_band: "adult",
+    accepted: true,
+    policy_version: "v1",
+    rules_version: "1",
+    links: [],
+  };
+  expect(
+    (
+      await db.query("select public.esports_submit($1,$2,$3)", [
+        cycle,
+        payload,
+        ticket,
+      ])
+    ).rows,
+  ).toHaveLength(1);
+  await expect(
+    db.query("select public.esports_submit($1,$2,$3)", [
+      cycle,
+      payload,
+      ticket,
+    ]),
+  ).rejects.toThrow("CAPTCHA required");
+  await db.exec("reset role");
+  const expired = (
+    await db.query<{ id: string }>(
+      "select public.issue_captcha_ticket($1,$2) id",
+      [user, cycle],
+    )
+  ).rows[0].id;
+  await db.query(
+    "update private.captcha_tickets set expires_at=now()-interval '1 second' where id=$1",
+    [expired],
+  );
+  await as(user);
+  await expect(
+    db.query("select public.esports_submit($1,$2,$3)", [
+      cycle,
+      payload,
+      expired,
+    ]),
+  ).rejects.toThrow("CAPTCHA required");
+});
 let db: PGlite;
 const admin = "10000000-0000-4000-8000-000000000001",
   user = "10000000-0000-4000-8000-000000000002";
@@ -126,7 +206,7 @@ it("denies direct CAPTCHA bypass and issuer access; bounds quota per authenticat
 it("blocks staff shortcuts without MFA and preserves their AAL2 flow", async () => {
   await db.exec("reset role");
   await db.query(
-    "insert into public.profiles(id,display_name,mode,level,objective,minutes,input) values($1,'Player','build','beginner','aim',30,'kbm')",
+    "insert into public.profiles(id,display_name,mode,level,objective,minutes,input) values($1,'Player','build','beginner','aim',30,'kbm') on conflict(id) do nothing",
     [user],
   );
   await db.query(

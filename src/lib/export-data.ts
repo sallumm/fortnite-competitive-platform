@@ -35,6 +35,7 @@ export async function exportPlayerData(
         "kyrven: a exportação está indisponível. Tente novamente.",
       );
     for (const table of [
+      "account_acceptances",
       "training_result_revisions",
       "goal_revisions",
       "coach_preferences",
