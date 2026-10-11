@@ -533,6 +533,20 @@ it("paginates questions and per-attempt reviews without leaking staff or ordinar
       "Administrative role required",
     );
     await db.exec("rollback to savepoint denial");
+    await db.exec("reset role");
+    await db.query(
+      "delete from private.esports_reviewers where application_id=$1 and user_id=$2",
+      [app, staff],
+    );
+    await as(staff);
+    expect((await rpc("public.esports_assessment_page()")).attempts).toEqual(
+      [],
+    );
+    await db.exec("savepoint denial");
+    await expect(
+      rpc("public.esports_assessment_page(0,'',50,$1)", [attempt.id]),
+    ).rejects.toThrow("Attempt unavailable");
+    await db.exec("rollback to savepoint denial");
   } finally {
     await db.exec("rollback; reset role");
   }
