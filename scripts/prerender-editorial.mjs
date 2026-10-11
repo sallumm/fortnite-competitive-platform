@@ -125,6 +125,8 @@ export async function prerender(env = process.env, fetcher = fetch) {
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href)
   await prerender({
-    ...loadEnv("production", process.cwd(), ""),
+    ...(process.env.KYRVEN_BUILD_TARGET === "staging"
+      ? {}
+      : loadEnv("production", process.cwd(), "")),
     ...process.env,
   });
