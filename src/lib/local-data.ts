@@ -1,8 +1,27 @@
 let privacyGeneration = 0;
-export const currentPrivacyGeneration = () => privacyGeneration;
+export const PRIVACY_SIGNAL = "kyrven-privacy-boundary";
+export const currentPrivacyGeneration = () => {
+  try {
+    return `${privacyGeneration}:${localStorage.getItem(PRIVACY_SIGNAL) || ""}`;
+  } catch {
+    return String(privacyGeneration);
+  }
+};
 /** Removes product caches without touching authentication tokens or unrelated sites. */
-export function clearLocalProductData(local: Storage, session: Storage) {
+export function clearLocalProductData(
+  local: Storage,
+  session: Storage,
+  broadcast = true,
+) {
   privacyGeneration++;
+  // Readers check this shared stamp even before their storage event is delivered.
+  if (broadcast) {
+    try {
+      local.setItem(PRIVACY_SIGNAL, crypto.randomUUID());
+    } catch {
+      // A full storage quota must not prevent removal of existing private data.
+    }
+  }
   for (const storage of [local, session]) {
     const keys = Array.from({ length: storage.length }, (_, index) =>
       storage.key(index),

@@ -171,6 +171,110 @@ it("denies private table/functions and retains authenticated constraint validato
     ).rows[0].ok,
   ).toBe(true);
 });
+it("enforces real articles INSERT, UPDATE and DELETE across role and assurance changes", async () => {
+  const article = "10000000-0000-4000-8000-000000000034";
+  const insert =
+    "insert into public.articles(id,slug,title,kind,category,summary,body,author,source_url,verified_at,published) values($1,'mfa-editorial-regression','Original article','analysis','aim','A sufficiently long summary','A sufficiently long editorial body for regression.','Test author','https://example.com/test',now(),true) returning id";
+  await db.exec("reset role");
+  await db.query(insert, [article]);
+  for (const [id, aal] of [
+    [user, "aal1"],
+    [user, "aal2"],
+    [admin, "aal1"],
+  ]) {
+    await as(id, aal);
+    await expect(db.query(insert, [crypto.randomUUID()])).rejects.toThrow();
+    expect(
+      (
+        await db.query(
+          "update public.articles set title='Forbidden change' where id=$1 returning id",
+          [article],
+        )
+      ).rows,
+    ).toEqual([]);
+    expect(
+      (
+        await db.query("delete from public.articles where id=$1 returning id", [
+          article,
+        ])
+      ).rows,
+    ).toEqual([]);
+    expect(
+      (
+        await db.query<{ title: string }>(
+          "select title from public.articles where id=$1",
+          [article],
+        )
+      ).rows[0].title,
+    ).toBe("Original article");
+  }
+  await as(admin, "aal2");
+  expect(
+    (
+      await db.query(
+        "update public.articles set title='Legitimate change' where id=$1 returning id",
+        [article],
+      )
+    ).rows,
+  ).toHaveLength(1);
+  const second = crypto.randomUUID();
+  expect(
+    (
+      await db.query(
+        insert.replace("mfa-editorial-regression", "mfa-editorial-second"),
+        [second],
+      )
+    ).rows,
+  ).toHaveLength(1);
+  await as(admin, "aal1");
+  expect(
+    (
+      await db.query(
+        "update public.articles set title='Downgrade change' where id=$1 returning id",
+        [article],
+      )
+    ).rows,
+  ).toEqual([]);
+  expect(
+    (
+      await db.query("delete from public.articles where id=$1 returning id", [
+        second,
+      ])
+    ).rows,
+  ).toEqual([]);
+  await as(admin, "aal2");
+  expect(
+    (
+      await db.query<{ title: string }>(
+        "select title from public.articles where id=$1",
+        [article],
+      )
+    ).rows[0].title,
+  ).toBe("Legitimate change");
+  expect(
+    (
+      await db.query("delete from public.articles where id=$1 returning id", [
+        second,
+      ])
+    ).rows,
+  ).toHaveLength(1);
+  await db.exec("reset role");
+  await db.query("delete from private.user_roles where user_id=$1", [admin]);
+  await as(admin, "aal2");
+  expect(
+    (
+      await db.query(
+        "update public.articles set title='Removed role change' where id=$1 returning id",
+        [article],
+      )
+    ).rows,
+  ).toEqual([]);
+  await expect(
+    db.query("select public.esports_admin_data()"),
+  ).rejects.toThrow();
+  await db.exec("reset role");
+  await db.query("insert into private.user_roles values($1,'admin')", [admin]);
+});
 it("denies direct CAPTCHA bypass and issuer access; bounds quota per authenticated account", async () => {
   await as(user);
   await expect(

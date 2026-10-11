@@ -2,6 +2,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import {
   clearLocalProductData,
+  PRIVACY_SIGNAL,
   validSessionDraft,
 } from "../src/lib/local-data";
 afterEach(() => {
@@ -21,7 +22,9 @@ describe("Local privacy and untrusted drafts", () => {
       localStorage.setItem(key, "test");
     sessionStorage.setItem("clutchfolio-session-demo:session", "private");
     clearLocalProductData(localStorage, sessionStorage);
-    expect(localStorage.length).toBe(2);
+    expect(localStorage.length).toBe(3);
+    expect(localStorage.getItem(PRIVACY_SIGNAL)).toBeTruthy();
+    expect(localStorage.getItem("another-app")).toBe("test");
     expect(sessionStorage.length).toBe(0);
     expect(localStorage.getItem("clutchfolio-theme")).toBe("test");
   });

@@ -84,6 +84,44 @@ beforeAll(async () => {
 afterAll(async () => {
   await db.close();
 });
+it("requires role and AAL2 for real editorial RPCs, including a downgrade after draft creation", async () => {
+  await as(editor);
+  const draft = await save(payload(), "review");
+  for (const [id, aal] of [
+    [player, "aal1"],
+    [player, "aal2"],
+    [editor, "aal1"],
+  ]) {
+    await as(id);
+    await db.query("select set_config('request.jwt.claims',$1,false)", [
+      JSON.stringify({ aal }),
+    ]);
+    await expect(save(payload(), "draft")).rejects.toThrow();
+    await expect(publish(draft.id, draft.version)).rejects.toThrow();
+  }
+  await as(editor);
+  const unchanged = (
+    await db.query<{ version: number; status: string }>(
+      "select version,status from public.meta_drafts where id=$1",
+      [draft.id],
+    )
+  ).rows[0];
+  expect(unchanged).toEqual({ version: draft.version, status: "review" });
+  const published = await publish(draft.id, draft.version);
+  expect(published).toBeTruthy();
+  await db.query("select set_config('request.jwt.claims',$1,false)", [
+    JSON.stringify({ aal: "aal1" }),
+  ]);
+  await expect(save(payload(), "draft")).rejects.toThrow();
+  await as(editor);
+  expect(
+    (
+      await db.query("select id from public.meta_entries where id=$1", [
+        published,
+      ])
+    ).rows,
+  ).toHaveLength(1);
+});
 it("keeps drafts, unpublished media and editor identities private; rejects all ordinary-user mutations", async () => {
   await as(editor);
   const d = await save(payload(), "draft");
