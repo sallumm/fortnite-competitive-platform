@@ -20,6 +20,17 @@ export function editorialSnapshot(template, article, origin, now = new Date()) {
     !/^https:\/\/[^\s]+$/.test(article.source_url)
   )
     return null;
+  // Display compatibility for historical records; stored IDs/content are preserved.
+  const normalize = (v) =>
+    String(v)
+      .replace(/Clutchfolio/gi, "kyrven")
+      .replace(/Clutch Coach/gi, "kyrven coach");
+  article = {
+    ...article,
+    title: normalize(article.title),
+    summary: normalize(article.summary),
+    body: normalize(article.body),
+  };
   const path = `/${article.kind === "lesson" ? "academy" : "news"}/${article.slug}`;
   const canonical = new URL(path, origin).href;
   const stale =
@@ -36,7 +47,7 @@ export function editorialSnapshot(template, article, origin, now = new Date()) {
   );
   html = html.replace(
     "</head>",
-    `<meta name="description" content="${escapeHTML(article.summary)}"><meta property="og:title" content="${escapeHTML(article.title)}"><meta property="og:description" content="${escapeHTML(article.summary)}"><meta property="og:type" content="article"><meta property="og:url" content="${escapeHTML(canonical)}"><link rel="canonical" href="${escapeHTML(canonical)}"></head>`,
+    `<meta name="description" content="${escapeHTML(article.summary)}"><meta property="og:title" content="${escapeHTML(article.title)}"><meta property="og:description" content="${escapeHTML(article.summary)}"><meta property="og:image" content="${escapeHTML(new URL("/brand/social.png", origin).href)}"><meta property="og:type" content="article"><meta property="og:url" content="${escapeHTML(canonical)}"><link rel="canonical" href="${escapeHTML(canonical)}"></head>`,
   );
   html = html.replace(
     '<div id="root"></div>',

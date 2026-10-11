@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useRef,
+  useMemo,
   useState,
   type ReactNode,
 } from "react";
@@ -918,13 +919,17 @@ export function Provider({ children }: { children: ReactNode }) {
     await check(supabase!.from(table).delete().eq("id", id));
     await refresh();
   };
-  const publicCatalog: Catalog = brandCatalog({
-    exercises: catalog.exercises.filter((x) => x.published),
-    tournaments: catalog.tournaments.filter((x) => x.published),
-    articles: catalog.articles.filter(
-      (x) => x.published && new Date(x.published_at) <= new Date(),
-    ),
-  });
+  const publicCatalog: Catalog = useMemo(
+    () =>
+      brandCatalog({
+        exercises: catalog.exercises.filter((x) => x.published),
+        tournaments: catalog.tournaments.filter((x) => x.published),
+        articles: catalog.articles.filter(
+          (x) => x.published && new Date(x.published_at) <= new Date(),
+        ),
+      }),
+    [catalog],
+  );
   return (
     <Context.Provider
       value={{

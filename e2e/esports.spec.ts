@@ -9,9 +9,7 @@ test("esports public surfaces stay closed and accessible in both themes", async 
   for (const route of ["/esports", "/be-kyrven"]) {
     await page.goto(route);
     await expect(page.locator("main h1").first()).toBeVisible();
-    await expect(
-      page.getByText(/Recrutamento público fechado/),
-    ).toBeVisible();
+    await expect(page.getByText(/Recrutamento público fechado/)).toBeVisible();
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -44,7 +42,14 @@ test("esports public surfaces stay closed and accessible in both themes", async 
   expect(errors).toEqual([]);
 });
 test("private esports paths require authentication", async ({ page }) => {
-  for (const path of ["/app/esports", "/admin/esports"]) {
+  for (const path of [
+    "/app/esports",
+    "/admin/esports",
+    "/app/esports/trials",
+    "/app/esports/development",
+    "/admin/esports/assessments",
+    "/admin/esports/development",
+  ]) {
     await page.goto(path);
     await expect(page).toHaveURL(/\/auth/);
     await expect(page.locator("main h1").first()).toBeVisible();

@@ -1,9 +1,15 @@
+import { useState } from "react";
+import { useStore } from "../lib/store";
+import { esportsRPC } from "../lib/esports/service";
+import { downloadEsports } from "../lib/esports/development";
 import { Link } from "react-router-dom";
 import { Heading, Badge, Empty } from "../components/ui";
 import { Brand } from "../components/brand/Brand";
 import { useEsports } from "../lib/esports/useEsports";
 import { roleLabels, statusLabels } from "../lib/esports/domain";
 export default function EsportsWorkspace() {
+  const s = useStore();
+  const [erase, setErase] = useState(false);
   const { workspace, loading, error, refresh } = useEsports();
   return (
     <>
@@ -65,11 +71,65 @@ export default function EsportsWorkspace() {
               A área de avaliações exige um convite Trialist ativo no servidor.
             </p>
           )}
-          {workspace.roles.some((r) => r.role === "development_scholar") && (
+          {workspace.applications.length > 0 && (
             <Link className="button primary" to="/app/esports/development">
               Meu desenvolvimento
             </Link>
           )}
+          <section className="panel">
+            <h2>Meus dados de esports</h2>
+            <p>
+              Exporte candidaturas, respostas e dados compartilháveis do
+              programa. A exclusão de esports revoga acessos imediatamente e
+              aguarda execução administrativa. Não exclui a conta ou treinos
+              pessoais.
+            </p>
+            <button
+              className="button"
+              disabled={s.busy}
+              onClick={() =>
+                void s.run(async () =>
+                  downloadEsports(
+                    await esportsRPC("esports_export"),
+                    "kyrven-esports.json",
+                  ),
+                )
+              }
+            >
+              Exportar meus dados esports
+            </button>
+            <button className="button" onClick={() => setErase(true)}>
+              Solicitar exclusão de esports
+            </button>
+            {erase && (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void s.run(async () => {
+                    await esportsRPC("esports_request_erasure");
+                    setErase(false);
+                    await refresh();
+                  }, "Solicitação registrada e acessos revogados.");
+                }}
+              >
+                <label className="checkbox">
+                  <input type="checkbox" required />
+                  Entendo que minha participação e os acessos de esports serão
+                  retirados.
+                </label>
+                <button className="button danger" disabled={s.busy}>
+                  Confirmar solicitação de exclusão
+                </button>
+                <button
+                  type="button"
+                  className="button"
+                  onClick={() => setErase(false)}
+                >
+                  Cancelar
+                </button>
+              </form>
+            )}
+          </section>
           <section className="panel">
             <h2>Etapas registradas</h2>
             {workspace.applications.map((a) => (

@@ -5,6 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { Link } from "react-router-dom";
 import { Heading, Modal, Badge, Empty } from "../components/ui";
 import { AnimatedTabs } from "../components/experience/primitives";
 import { useStore } from "../lib/store";
@@ -166,6 +167,14 @@ export default function EsportsAdmin() {
       )}
       {data && (
         <>
+          <div className="row wrap">
+            <Link className="button" to="/admin/esports/assessments">
+              Provas e revisões
+            </Link>
+            <Link className="button" to="/admin/esports/development">
+              Bolsas e desenvolvimento
+            </Link>
+          </div>
           <AnimatedTabs
             label="Administração esports"
             value={tab}
@@ -522,6 +531,12 @@ export default function EsportsAdmin() {
                       multiline
                     />
                   </Form>
+                  <Link
+                    className="button"
+                    to={`/admin/esports/development?application_id=${app.id}&version=${app.version}`}
+                  >
+                    Consultar desenvolvimento e oferecer bolsa
+                  </Link>
                   <h3>Delegar avaliação</h3>
                   <Form
                     save={(f) =>

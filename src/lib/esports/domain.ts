@@ -50,14 +50,9 @@ export const nextStatuses: Record<string, string[]> = {
   under_review: ["trial_invited", "not_selected"],
   trial_invited: ["trial_in_progress", "not_selected"],
   trial_in_progress: ["trial_completed", "not_selected"],
-  trial_completed: [
-    "development_offered",
-    "academy_selected",
-    "not_selected",
-    "trial_invited",
-  ],
-  development_offered: ["trial_completed", "not_selected"],
-  development_active: ["academy_selected", "trial_completed", "not_selected"],
+  trial_completed: ["not_selected", "trial_invited"],
+  development_offered: ["not_selected"],
+  development_active: ["not_selected"],
   not_selected: ["under_review"],
 };
 export type Cycle = {

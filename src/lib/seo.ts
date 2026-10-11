@@ -9,6 +9,7 @@ export function useSEO(title: string, description: string, article?: Article) {
       "og:description": description,
       "og:type": article ? "article" : "website",
       "og:url": location.href,
+      "og:image": new URL("/brand/social.png", location.origin).href,
     };
     if (article) {
       values["article:published_time"] = article.published_at;

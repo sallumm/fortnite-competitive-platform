@@ -199,7 +199,7 @@ it("enforces transitions, optimistic versions and explicit scoped role grants", 
       message: "Escolhido",
       reason: "Escolhido",
     }),
-  ).rejects.toThrow(/transition/);
+  ).rejects.toThrow(/explicit scholarship or roster/);
   await action("status", application, 1, {
     status: "under_review",
     message: "Analisando candidatura",
