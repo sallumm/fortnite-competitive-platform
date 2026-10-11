@@ -10,3 +10,7 @@ verify_jwt = false
 [functions.meta-media]
 verify_jwt = false
 # Auth.getUser and is_admin are verified inside the handler before any service-role storage operation.
+
+[functions.fortnite-knowledge]
+verify_jwt = false
+# Handler validates the user with Auth.getUser and uses the caller JWT for RLS/RPCs.

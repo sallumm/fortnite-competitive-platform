@@ -1,3 +1,4 @@
+import { boundedText } from "./bounded-body.ts";
 export type MediaInfo = {
   alt: string;
   source_url: string;
@@ -119,7 +120,19 @@ export function mediaHandler(d: MediaDependencies, origin: string) {
       if (!(await d.quota(token)))
         return reply(429, { error: "Editorial limit reached" });
       if (req.method === "DELETE") {
-        const body = await req.json();
+        let body;
+        try {
+          body = JSON.parse(await boundedText(req, 1024));
+        } catch (error) {
+          return reply(
+            error instanceof Error && error.message === "body_limit"
+              ? 413
+              : 400,
+            { error: "Invalid media request" },
+          );
+        }
+        if (!body || typeof body !== "object")
+          return reply(400, { error: "Invalid media" });
         if (typeof body.id !== "string" || !/^[a-f0-9-]{36}$/.test(body.id))
           return reply(400, { error: "Invalid media" });
         const asset = await d.removable(token, body.id);

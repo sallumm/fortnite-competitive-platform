@@ -1,4 +1,5 @@
 import type { Answer, Query } from "./domain.ts";
+import { boundedText } from "../bounded-body.ts";
 import { guidanceSchema } from "./schema.ts";
 export interface CoachProvider {
   name: string;
@@ -66,9 +67,7 @@ export class OpenAIProvider implements CoachProvider {
       },
     );
     if (!response.ok) throw new Error("provider_unavailable");
-    const text = await response.text();
-    if (new TextEncoder().encode(text).length > 40000)
-      throw new Error("provider_size");
+    const text = await boundedText(response, 40000);
     const result = JSON.parse(text);
     if (result.status !== "completed") throw new Error("provider_incomplete");
     const outputs =
