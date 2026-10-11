@@ -27,6 +27,11 @@ import {
 import { validatePlan } from "../training";
 import type { Catalog, Plan, PlayerData } from "../types";
 import type { Series } from "../performance-types";
+import {
+  currentStudy,
+  learningForExercise,
+  type LearningContext,
+} from "../development";
 const rulesSchema = z
   .object({
     version: z.string().max(60),
@@ -294,10 +299,15 @@ export function generateEvolution(
   now = new Date(),
   meta?: { catalog: MetaCatalog; selection: MetaSelection },
   practiceFormat: NonNullable<Plan["practice_format"]> = "unspecified",
+  learning?: LearningContext,
 ): EvolutionProposal {
   config = evolutionConfigSchema.parse(config);
   data = ownedPerformanceData(data);
   if (!data.profile) throw new Error("Entre em sua conta para planejar.");
+  const studied =
+    learning?.owner_id === data.profile.id
+      ? currentStudy(catalog.articles, config.mode, learning.records, now)
+      : [];
   if (
     !validDate(from) ||
     weekday(from) !== 1 ||
@@ -430,6 +440,7 @@ export function generateEvolution(
                   .length * w.goal
               : 0) +
             (goalIds.has(e.id) ? w.goal : 0) +
+            (learningForExercise(e, studied).length ? w.goal : 0) +
             (e.research!.competency_ids.some((id) => difficult.has(id))
               ? w.difficulty
               : 0) +
@@ -452,6 +463,10 @@ export function generateEvolution(
       reasons.push(
         `${best.title}: relacionado a ${knowledge.competencies.find((k) => k.id === focus.id)?.title || focus.id} (importância ${focus.weight}/5); ${purposeLabels[best.research!.purpose]}. ${goalIds.has(best.id) ? "Relacionado a uma meta ativa. " : ""}${best.research!.competency_ids.some((id) => difficult.has(id)) ? "Há dificuldade autodeclarada relacionada no diário. " : ""}${count.get(best.id) || 0} sessões recentes registradas; frequência não mede domínio. ${best.level !== config.level ? "Nível editorial do exercício diferente do perfil: revise instruções e bases antes de executar. " : ""}${best.measurement ? `Métrica: ${best.metric}; mantenha cenário, dispositivo, sensibilidade, unidade e versão constantes.` : "Registre decisões e dificuldades observáveis."}`,
       );
+      for (const lesson of learningForExercise(best, studied))
+        reasons.push(
+          `${best.title}: aplicação vinculada editorialmente à aula ${lesson.title} (${lesson.slug}, versão ${lesson.curriculum!.version}), com estudo concluído ou revisado registrado. Isto não comprova domínio da habilidade. Consulte /academy/${lesson.slug} e suas fontes.`,
+        );
     }
     if (!chosen.length) {
       warnings.push(
@@ -480,7 +495,23 @@ export function generateEvolution(
           level: config.level,
           objective: config.objective,
           practice_format: practiceFormat,
-          description: `Proposta editorial ${rules.version}. Tempo escolhido pelo usuário; sem promessa de evolução.`,
+          description: (
+            `Proposta editorial ${rules.version}. Tempo escolhido pelo usuário; sem promessa de evolução.` +
+            (studied.some((a) =>
+              chosen.some((e) => a.curriculum!.exercise_ids.includes(e.id)),
+            )
+              ? ` Aplicação de estudo registrado: ${studied
+                  .filter((a) =>
+                    chosen.some((e) =>
+                      a.curriculum!.exercise_ids.includes(e.id),
+                    ),
+                  )
+                  .map((a) => `${a.slug} (${a.curriculum!.version})`)
+                  .join(
+                    "; ",
+                  )}. Vínculo editorial; leitura não comprova domínio.`
+              : "")
+          ).slice(0, 1000),
           steps: chosen.map((e, i) => ({
             id: crypto.randomUUID(),
             exercise_id: e.id,

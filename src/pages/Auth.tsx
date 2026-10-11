@@ -4,15 +4,13 @@ import { ArrowRight, LockKeyhole } from "lucide-react";
 import { supabase, configured } from "../lib/client";
 import { useStore } from "../lib/store";
 import { Heading } from "../components/ui";
+import { appDestination } from "../lib/navigation";
 export default function Auth() {
   const store = useStore();
   const navigate = useNavigate();
   const route = useLocation();
   const requested = route.state?.from;
-  const destination =
-    typeof requested === "string" && /^\/app(?:\/|\?|$)/.test(requested)
-      ? requested
-      : "/app";
+  const destination = appDestination(requested);
   const [mode, setMode] = useState<"login" | "signup" | "reset" | "update">(
     location.hash.includes("type=recovery") ||
       location.search.includes("recovery=1")
@@ -28,9 +26,7 @@ export default function Auth() {
     e.preventDefault();
     store.run(async () => {
       if (!supabase)
-        throw new Error(
-          "kyrven: configure o Supabase para habilitar contas.",
-        );
+        throw new Error("kyrven: configure o Supabase para habilitar contas.");
       if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({
           email,

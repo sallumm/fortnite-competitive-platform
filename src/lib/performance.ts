@@ -4,6 +4,7 @@ import {
   practiceLabel,
 } from "./meta-training/context";
 import { compatibleExercises, matchesSkill } from "./skill-match";
+import { reviewPending } from "./exercise-review";
 import type {
   Category,
   Exercise,
@@ -263,6 +264,8 @@ export function personalPlan(
       (e) =>
         (e.mode === "both" || e.mode === profile.mode) &&
         e.published &&
+        !reviewPending(e) &&
+        (profile.level !== "beginner" || e.level !== "advanced") &&
         e.category !== "wellbeing",
     )
     .sort(

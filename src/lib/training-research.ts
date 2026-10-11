@@ -26,13 +26,7 @@ export const purposeLabels: Record<string, string> = {
   competitive: "Prática competitiva",
   review: "Análise / VOD Review",
 };
-export function reviewPending(e: Exercise, now = Date.now()) {
-  return (
-    !e.research ||
-    e.research.review_status !== "verified" ||
-    Date.parse(e.research.review_due_at) <= now
-  );
-}
+export { reviewPending } from "./exercise-review";
 const normalize = (s: string) =>
   s
     .normalize("NFD")

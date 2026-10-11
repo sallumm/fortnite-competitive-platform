@@ -12,11 +12,13 @@ export function useStudy() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const refresh = useCallback(async () => {
+    const current = ++generation.current;
     if (!enabled) {
       setData(emptyStudy());
+      setLoading(false);
+      setLoadedOwner(owner);
       return;
     }
-    const current = generation.current;
     setLoading(true);
     try {
       const loaded = await loadStudy(s.demo);
@@ -31,35 +33,20 @@ export function useStudy() {
     } finally {
       if (current === generation.current) setLoading(false);
     }
-  }, [enabled, s.demo, s.session?.user.id]);
+  }, [enabled, s.demo, owner]);
   useEffect(() => {
-    generation.current++;
-    let active = true;
     setData(emptyStudy());
     setLoadedOwner(owner);
     setError("");
-    if (!enabled) return;
-    setLoading(true);
-    loadStudy(s.demo)
-      .then((d) => {
-        if (active) setData(d);
-      })
-      .catch(() => {
-        if (active)
-          setError("Não foi possível consultar seu estudo. Tente novamente.");
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
+    void refresh();
     return () => {
-      active = false;
       generation.current++;
     };
-  }, [enabled, s.demo, s.session?.user.id]);
+  }, [refresh, owner]);
   return {
     data: loadedOwner === owner ? data : emptyStudy(),
-    error,
-    loading,
+    error: loadedOwner === owner ? error : "",
+    loading: loadedOwner !== owner || loading,
     enabled,
     refresh,
   };

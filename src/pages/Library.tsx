@@ -1,4 +1,5 @@
 import { KnowledgeAccess } from "../components/KnowledgeAccess";
+import { relatedLessons } from "../lib/development";
 import { CoachAccess } from "../components/CoachAccess";
 import { useSEO } from "../lib/seo";
 import { useState } from "react";
@@ -55,6 +56,9 @@ export default function Library() {
     selected?.description ||
       "Exercícios com códigos verificados e objetivos claros.",
   );
+  if (s.loading) return <p role="status">Carregando a biblioteca…</p>;
+  if (s.error && !selected)
+    return <Empty title="A biblioteca não pôde ser carregada" to="/library" />;
   if (id && !selected)
     return <Empty title="Exercício não encontrado" to="/library" />;
   if (selected)
@@ -65,7 +69,7 @@ export default function Library() {
           Biblioteca de exercícios
         </Link>
         <KnowledgeAccess />
-      <Heading
+        <Heading
           eyebrow={labels[selected.category]}
           title={selected.title}
           description={selected.description}
@@ -216,9 +220,23 @@ export default function Library() {
               Consultar fonte
               <ArrowUpRight size={16} />
             </a>
-            <Link to="/app/planner" className="button primary full">
+            <Link
+              to={`/app/planner?exercise=${selected.id}`}
+              className="button primary full"
+            >
               Adicionar a uma rotina
             </Link>
+            {relatedLessons(selected, s.catalog.articles).length > 0 && (
+              <section aria-label="Aulas relacionadas ao exercício">
+                <h3>Entender antes de praticar</h3>
+                <p>Vínculos editoriais entre a aula e este exercício.</p>
+                {relatedLessons(selected, s.catalog.articles).map((a) => (
+                  <p key={a.id}>
+                    <Link to={`/academy/${a.slug}`}>{a.title}</Link>
+                  </p>
+                ))}
+              </section>
+            )}
             <Link to="/academy" className="text-link">
               Estudar a habilidade
               <ArrowUpRight size={16} />

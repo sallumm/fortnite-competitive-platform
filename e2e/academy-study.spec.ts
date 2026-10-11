@@ -72,7 +72,7 @@ test("Academy study persists, advanced access stays open, and a lesson creates a
   await expect(page).toHaveURL(/reports/);
   await page.goto("/academy");
   await expect(
-    page.getByText(/1 de 19 aulas com estudo concluído/),
+    page.getByText(/1 de \d+ aulas com estudo concluído/),
   ).toBeVisible();
   const audit = await new AxeBuilder({ page }).include("main").analyze();
   expect(

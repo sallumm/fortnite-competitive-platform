@@ -1,4 +1,5 @@
 import { RoadAccess } from "../components/RoadAccess";
+import { LearningReport } from "../components/LearningReport";
 import { validPeriod } from "../lib/intelligence";
 import { ReportEvidence } from "../components/ReportEvidence";
 import { reportEvidence } from "../lib/intelligence-report";
@@ -152,6 +153,7 @@ export default function Reports() {
       <Link className="button" to="/app/training">
         Histórico detalhado e metas mensuráveis
       </Link>
+      <LearningReport from={bounds.from} to={bounds.to} />
       <AnimatedTabs
         className="page-tabs"
         label="Período do relatório"

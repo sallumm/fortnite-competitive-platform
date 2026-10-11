@@ -29,8 +29,10 @@ import { SkillPreferences } from "../components/skill-maxing/SkillPreferences";
 import { EvolutionPreview } from "../components/skill-maxing/EvolutionPreview";
 import { WeeklyReview } from "../components/skill-maxing/WeeklyReview";
 import { Heading, Modal } from "../components/ui";
+import { useStudy } from "../lib/useStudy";
 export default function EvolutionPlanner() {
   const s = useStore(),
+    study = useStudy(),
     p = s.data.profile!,
     navigate = useNavigate();
   const [config, setConfig] = useState(() => defaultEvolutionConfig(p));
@@ -150,6 +152,9 @@ export default function EvolutionPlanner() {
                 }
               : undefined,
             practiceFormat,
+            study.error || study.loading
+              ? undefined
+              : { owner_id: p.id, records: study.data.records },
           ),
         );
       else {
@@ -296,6 +301,24 @@ export default function EvolutionPlanner() {
         title="Criar meu plano de evolução"
         description="Combine habilidades, escolha uma disponibilidade possível e revise uma proposta explicável. Regras editoriais, sem seleção aleatória ou promessa de resultados."
       />
+      {study.loading ? (
+        <p role="status">
+          Consultando aulas estudadas para relacionar teoria e prática…
+        </p>
+      ) : study.error ? (
+        <p role="alert">
+          {study.error} O plano pode ser gerado sem esse contexto.{" "}
+          <button className="button small" onClick={() => void study.refresh()}>
+            Consultar estudo novamente
+          </button>
+        </p>
+      ) : (
+        <p className="muted">
+          Aulas estudadas na versão atual podem priorizar exercícios vinculados
+          editorialmente. Isso não mede domínio e não impede escolher outras
+          atividades.
+        </p>
+      )}
       <div className="row">
         <button
           className={`button ${!manual ? "primary" : ""}`}

@@ -5,6 +5,8 @@ import { seed, demoPlayer } from "../src/lib/seed";
 const mocked = vi.hoisted(() => ({
   profile: null as unknown,
   fail: false,
+  exercises: null as unknown[] | null,
+  filters: [] as string[],
   session: { user: { id: "00000000-0000-4000-8000-000000009999" } },
 }));
 vi.mock("../src/lib/client", () => ({
@@ -21,11 +23,20 @@ vi.mock("../src/lib/client", () => ({
     },
     from: (table: string) => {
       let single = false;
+      let first = 0,
+        last = 499;
       const chain = {
         select: () => chain,
-        eq: () => chain,
+        eq: (key: string, value: string) => {
+          mocked.filters.push(`${table}:${key}:${value}`);
+          return chain;
+        },
         order: () => chain,
-        range: () => chain,
+        range: (from: number, to: number) => {
+          first = from;
+          last = to;
+          return chain;
+        },
         maybeSingle: () => {
           single = true;
           return chain;
@@ -37,7 +48,7 @@ vi.mock("../src/lib/client", () => ({
               table === "profiles"
                 ? mocked.profile
                 : table === "exercises"
-                  ? seed.exercises
+                  ? (mocked.exercises || seed.exercises).slice(first, last + 1)
                   : table === "articles"
                     ? seed.articles
                     : table === "tournaments"
@@ -54,6 +65,8 @@ import App from "../src/App";
 vi.stubGlobal("scrollTo", () => {});
 afterEach(() => {
   mocked.fail = false;
+  mocked.exercises = null;
+  mocked.filters = [];
   cleanup();
 });
 describe("Integração Auth com adaptador simulado", () => {
@@ -107,4 +120,28 @@ it("offers retry instead of an endless spinner after private data fails to load"
   mocked.fail = false;
   screen.getByRole("button", { name: "Tentar novamente" }).click();
   expect(await screen.findByRole("heading", { name: "Meu Dia" })).toBeTruthy();
+});
+
+it("loads public catalog beyond one thousand rows and scopes private reads to the owner", async () => {
+  mocked.profile = {
+    ...demoPlayer().profile!,
+    id: mocked.session.user.id,
+    onboarded: true,
+  };
+  mocked.exercises = Array.from({ length: 1001 }, (_, i) => ({
+    ...seed.exercises[0],
+    id: `exercise-${i}`,
+    title: `Exercício ${i}`,
+  }));
+  window.history.replaceState({}, "", "/library/exercise-1000");
+  render(<App />);
+  expect(
+    await screen.findByRole("heading", { name: "Exercício 1000" }),
+  ).toBeTruthy();
+  expect(mocked.filters).toContain(
+    `training_plans:user_id:${mocked.session.user.id}`,
+  );
+  expect(mocked.filters).toContain(
+    `xp_transactions:user_id:${mocked.session.user.id}`,
+  );
 });

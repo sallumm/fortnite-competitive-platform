@@ -1,3 +1,5 @@
+> Relatório histórico de uma etapa anterior. Para o estado cumulativo, migrations 001–024 e pendências atuais, consulte [ECOSYSTEM_VALIDATION.md](ECOSYSTEM_VALIDATION.md) e [FEATURE_INVENTORY.md](FEATURE_INVENTORY.md).
+
 # Clutchfolio 5.0 — auditoria e preparação para publicação
 
 Auditoria em 10/10/2026. Base: `feat/competitive-intelligence`, commit `2e2eaed`. Não houve migração de arquitetura, substituição do banco, ativação de serviços pagos ou publicação pública. Os PRs anteriores continuam em sequência; mergear 2.0 → 3.0 → 4.0 → 5.0, ajustando as bases conforme necessário.

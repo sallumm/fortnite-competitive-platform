@@ -175,6 +175,7 @@ export function stageProposal(
   catalog: Catalog,
   from: string,
   now = new Date(),
+  events: RoadEvent[] = [],
 ): EvolutionProposal {
   if (j.status !== "active")
     throw new Error("Retome a jornada antes de planejar.");
@@ -222,6 +223,13 @@ export function stageProposal(
     now,
     undefined,
     "solo",
+    {
+      owner_id: j.user_id,
+      records: journeyRecords(
+        j,
+        events.filter((e) => e.user_id === j.user_id),
+      ),
+    },
   );
   for (const s of p.sessions) {
     s.plan.title = `Road · Etapa ${stage} · ${s.plan.title}`.slice(0, 120);

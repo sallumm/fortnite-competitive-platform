@@ -20,6 +20,13 @@ export function stepExercise(step: Step, exercises: Exercise[]) {
     exercises.find((e) => e.id === step.exercise_id)
   );
 }
+export function resultState(result: Result | undefined) {
+  return !result
+    ? "Sem conclusão registrada"
+    : result.status === "skipped"
+      ? "Pulado"
+      : "Conclusão registrada";
+}
 export function validatePlan(plan: Plan, exercises: Exercise[]): string[] {
   const errors: string[] = [];
   const seen = new Set<string>();

@@ -11,8 +11,11 @@ export function useRoad() {
     [error, setError] = useState(""),
     [loading, setLoading] = useState(false);
   const refresh = useCallback(async () => {
-    const e = epoch.current;
-    if (!owner) return;
+    const e = ++epoch.current;
+    if (!owner) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const d = await loadRoad(s.demo);
@@ -40,8 +43,8 @@ export function useRoad() {
   }, [refresh, owner]);
   return {
     data: loaded === owner ? data : emptyRoad(),
-    error,
-    loading,
+    error: loaded === owner ? error : "",
+    loading: loaded !== owner || loading,
     refresh,
   };
 }

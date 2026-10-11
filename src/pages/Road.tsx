@@ -380,7 +380,16 @@ export default function Road() {
               onClick={() =>
                 void s.run(async () => {
                   setProposal(
-                    stageProposal(j, stage, j.config, s.data, s.catalog, from),
+                    stageProposal(
+                      j,
+                      stage,
+                      j.config,
+                      s.data,
+                      s.catalog,
+                      from,
+                      new Date(),
+                      road.data.events,
+                    ),
                   );
                   setToken(crypto.randomUUID());
                 }, false)

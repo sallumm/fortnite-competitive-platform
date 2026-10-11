@@ -85,19 +85,28 @@ async function check<T>(
   if (error) throw error;
   return data;
 }
-async function readRows(table: string) {
+async function readRows(
+  table: string,
+  order = "id",
+  ascending = true,
+  owner?: string,
+) {
   const rows: unknown[] = [];
-  for (let from = 0; ; from += 500) {
-    const page = await check(
-      supabase!
-        .from(table)
-        .select("*")
-        .order("id")
-        .range(from, from + 499),
-    );
+  for (let from = 0; from < 10000; from += 500) {
+    let query = supabase!
+      .from(table)
+      .select("*")
+      .order(order, { ascending })
+      .order("id")
+      .range(from, from + 499);
+    if (owner) query = query.eq("user_id", owner);
+    const page = await check(query);
     rows.push(...(page || []));
     if (!page || page.length < 500) return rows;
   }
+  throw new Error(
+    "kyrven: o volume desta consulta exige filtros adicionais. Nenhum conjunto incompleto será exibido.",
+  );
 }
 function restore(): PlayerData {
   try {
@@ -237,14 +246,9 @@ export function Provider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
       const [exercises, tournaments, articles] = await Promise.all([
-        check(supabase.from("exercises").select("*").order("title")),
-        check(supabase.from("tournaments").select("*").order("start_date")),
-        check(
-          supabase
-            .from("articles")
-            .select("*")
-            .order("published_at", { ascending: false }),
-        ),
+        readRows("exercises", "title"),
+        readRows("tournaments", "start_date"),
+        readRows("articles", "published_at", false),
       ]);
       if (ticket !== generation.current) return;
       setCatalog({
@@ -279,12 +283,12 @@ export function Provider({ children }: { children: ReactNode }) {
               .eq("id", session.user.id)
               .maybeSingle(),
           ),
-          readRows("training_plans"),
-          readRows("scheduled_sessions"),
-          readRows("training_sessions"),
-          readRows("personal_goals"),
-          readRows("xp_transactions"),
-          readRows("bookmarks"),
+          readRows("training_plans", "id", true, session.user.id),
+          readRows("scheduled_sessions", "id", true, session.user.id),
+          readRows("training_sessions", "id", true, session.user.id),
+          readRows("personal_goals", "id", true, session.user.id),
+          readRows("xp_transactions", "id", true, session.user.id),
+          readRows("bookmarks", "id", true, session.user.id),
           check(supabase.rpc("is_admin")),
           ...[
             "activity_series",
@@ -296,7 +300,7 @@ export function Provider({ children }: { children: ReactNode }) {
             "vod_reviews",
             "goal_revisions",
             "training_readiness",
-          ].map((table) => readRows(table)),
+          ].map((table) => readRows(table, "id", true, session.user.id)),
         ]);
         if (ticket !== generation.current) return;
         setData({

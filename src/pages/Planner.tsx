@@ -2,8 +2,8 @@ import { RoadAccess } from "../components/RoadAccess";
 import { TeamCalendar } from "../components/meta-training/TeamCalendar";
 import { TrainingBuilder } from "../components/TrainingBuilder";
 import { CoachAccess } from "../components/CoachAccess";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CalendarDays, Copy, Edit3, Play, Plus, Trash2 } from "lucide-react";
 import { useStore } from "../lib/store";
 import type { Plan } from "../lib/types";
@@ -17,9 +17,41 @@ export default function Planner() {
   const s = useStore();
   const p = s.data.profile!;
   const navigate = useNavigate();
+  const [params, setParams] = useSearchParams();
   const [edit, setEdit] = useState<Plan | null>(null);
   const [agendaIntent, setAgendaIntent] = useState<Plan | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const exerciseIntent = params.get("exercise");
+  const [intentError, setIntentError] = useState("");
+  useEffect(() => {
+    if (!exerciseIntent) return;
+    const e = s.catalog.exercises.find(
+      (e) =>
+        e.id === exerciseIntent &&
+        e.published &&
+        e.research?.review_status !== "retired",
+    );
+    if (!e || (e.mode !== "both" && e.mode !== p.mode)) {
+      setIntentError(
+        "Este exercício está indisponível ou não corresponde à modalidade do seu perfil. Escolha uma atividade compatível na biblioteca.",
+      );
+    } else {
+      setIntentError("");
+      setEdit({
+        id: crypto.randomUUID(),
+        user_id: p.id,
+        title: `Prática: ${e.title}`.slice(0, 80),
+        mode: p.mode,
+        level: p.level,
+        steps: [{ id: crypto.randomUUID(), exercise_id: e.id, minutes: 5 }],
+        description:
+          "Proposta aberta pela biblioteca. Revise duração e etapas antes de salvar.",
+      });
+    }
+    const next = new URLSearchParams(params);
+    next.delete("exercise");
+    setParams(next, { replace: true });
+  }, [exerciseIntent, p.id, p.mode, s.catalog.exercises, params, setParams]);
   const create = () =>
     setEdit({
       id: crypto.randomUUID(),
@@ -37,6 +69,11 @@ export default function Planner() {
         label="Ajudar a organizar"
       />
       <RoadAccess />
+      {intentError && (
+        <p role="alert">
+          {intentError} <Link to="/library">Abrir biblioteca</Link>
+        </p>
+      )}
       <Heading
         eyebrow="PLANEJAMENTO"
         title="Seu treino, com direção."
