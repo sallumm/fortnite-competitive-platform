@@ -5,14 +5,17 @@ export function CoachAccess({
   label = "Conversar com o kyrven coach",
   exerciseId,
   tournamentId,
+  journeyId,
 }: {
   question?: string;
   label?: string;
   exerciseId?: string;
   tournamentId?: string;
+  journeyId?: string;
 }) {
   const params = new URLSearchParams({ q: question });
   if (exerciseId) params.set("exercise", exerciseId);
+  if (journeyId) params.set("journey", journeyId);
   if (tournamentId) params.set("tournament", tournamentId);
   return (
     <Link className="button coach-access" to={"/app/coach?" + params}>

@@ -1,3 +1,4 @@
+import { RoadAccess } from "../components/RoadAccess";
 import { validPeriod } from "../lib/intelligence";
 import { ReportEvidence } from "../components/ReportEvidence";
 import { reportEvidence } from "../lib/intelligence-report";
@@ -78,6 +79,7 @@ export default function Reports() {
   }));
   return (
     <>
+      <RoadAccess />
       <CoachAccess
         question={`Como foi minha evolução nos últimos ${period} dias?`}
         label="Analisar minha evolução"

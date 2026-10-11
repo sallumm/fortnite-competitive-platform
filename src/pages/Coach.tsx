@@ -1,3 +1,6 @@
+import { appendRoadAnswer } from "../../supabase/functions/_shared/coach/road";
+import { loadRoad } from "../lib/road/service";
+import { journeyReport } from "../lib/road/domain";
 import { loadCompetitivePreferences } from "../lib/meta-training/service";
 import { appendMetaAnswer } from "../../supabase/functions/_shared/coach/meta";
 import { loadMeta } from "../lib/meta-service";
@@ -195,6 +198,7 @@ export default function Coach() {
             exercise_id: exercise,
             tournament_id: params.get("tournament") || undefined,
             meta_context_id: metaContext || undefined,
+            journey_id: params.get("journey") || undefined,
             conversation_id: pref.history_enabled ? conversation : undefined,
           })) as Answer);
       if (
@@ -226,6 +230,11 @@ export default function Coach() {
           metaAnswerData(meta, question, metaContext),
           metaContext,
         );
+      }
+      if(s.demo && pref.context_enabled && params.get("journey") && !/senha|credencial|diagn[oó]stico|rem[eé]dio|sem dormir|dados.*outro|outra conta/i.test(question)) {
+        const road=await loadRoad(true),j=road.journeys.find(j=>j.id===params.get("journey"));
+        const report=j?journeyReport(j,road,s.data):null;
+        appendRoadAnswer(answer,j&&report?{mode:j.config.mode,status:j.status,objective:j.config.objective,studied:report.progress.studied,skipped:report.progress.skipped,assessments:report.progress.assessments.length,completed_sessions:report.completed}:null);
       }
       if (!alive.current) return;
       let id = answer.conversation_id || conversation;

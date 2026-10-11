@@ -1,3 +1,4 @@
+import { appendRoadAnswer, type RoadSummary } from "./road.ts";
 import { appendMetaAnswer, type MetaReferenceData } from "./meta.ts";
 import {
   classify,
@@ -176,6 +177,9 @@ export function coachHandler(deps: {
           references as MetaReferenceData[],
           input.meta_context_id,
         );
+      }
+      if (input.journey_id && pref.context_enabled && !blocked) {
+        appendRoadAnswer(answer, await db.rpc("coach_learning_journey", {p_journey:input.journey_id}) as RoadSummary | null);
       }
       if (external) {
         try {

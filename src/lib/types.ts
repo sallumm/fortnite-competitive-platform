@@ -72,6 +72,7 @@ export interface Step {
   exercise?: Exercise;
 }
 export interface Plan {
+  learning_journey_id?: string | null;
   practice_format?: "solo" | "duo" | "trio" | "squad" | "unspecified" | null;
   meta_context_id?: string | null;
   meta_entry_ids?: string[];
@@ -115,6 +116,7 @@ export interface Result {
   configuration?: string;
 }
 export interface Training {
+  learning_journey_id?: string | null;
   plan_snapshot?: Pick<
     Plan,
     | "title"

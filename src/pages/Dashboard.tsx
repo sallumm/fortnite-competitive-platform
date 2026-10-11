@@ -1,3 +1,4 @@
+import { RoadAccess } from "../components/RoadAccess";
 import { AnimatedCard, StatCounter } from "../components/experience/primitives";
 import { CoachSummary } from "../components/CoachSummary";
 import { CoachAccess } from "../components/CoachAccess";
@@ -118,6 +119,7 @@ export default function Dashboard() {
           </Link>
         }
       />
+      <RoadAccess />
       <CoachSummary />
       <div className="dashboard-top">
         <AnimatedCard className="next-training">

@@ -148,7 +148,7 @@ const marker = () => ({
 });
 it("VOD manual persiste e valida autorização, timestamps e identidade", async () => {
   await db.query(
-    "insert into public.vod_reviews(id,user_id,title,match_date,video_url,video_authorized,duration_seconds,markers,skills,exercise_ids) values($1,$2,'Partida',current_date,'https://www.youtube.com/watch?v=example',true,60,$3,array['building'],$4)",
+    "insert into public.vod_reviews(id,user_id,title,match_date,video_url,video_authorized,duration_seconds,markers,skills,exercise_ids) values($1,$2,'Partida',((now() at time zone 'America/Sao_Paulo')::date),'https://www.youtube.com/watch?v=example',true,60,$3,array['building'],$4)",
     [vod, a, JSON.stringify([marker()]), [exercise.id]],
   );
   await expect(
@@ -203,7 +203,7 @@ it("VOD privado não pode ser consultado ou forjado por outro usuário ou visita
   ).toHaveLength(0);
   await expect(
     db.query(
-      "insert into public.vod_reviews(user_id,title,match_date) values($1,'Forjado',current_date)",
+      "insert into public.vod_reviews(user_id,title,match_date) values($1,'Forjado',((now() at time zone 'America/Sao_Paulo')::date))",
       [a],
     ),
   ).rejects.toThrow();
@@ -301,12 +301,12 @@ it("contexto mínimo do Coach depende de consentimento e exclui notas VOD/readin
 it("limite diário de VOD é por conta e não bloqueia edição", async () => {
   await user(a);
   await db.query(
-    "insert into public.vod_reviews(id,user_id,title,match_date) select gen_random_uuid(),$1,'Revisão adicional',current_date from generate_series(1,59)",
+    "insert into public.vod_reviews(id,user_id,title,match_date) select gen_random_uuid(),$1,'Revisão adicional',((now() at time zone 'America/Sao_Paulo')::date) from generate_series(1,59)",
     [a],
   );
   await expect(
     db.query(
-      "insert into public.vod_reviews(user_id,title,match_date) values($1,'Excedente',current_date)",
+      "insert into public.vod_reviews(user_id,title,match_date) values($1,'Excedente',((now() at time zone 'America/Sao_Paulo')::date))",
       [a],
     ),
   ).rejects.toThrow(/limite diário/);
@@ -316,7 +316,7 @@ it("limite diário de VOD é por conta e não bloqueia edição", async () => {
   );
   await user(b);
   await db.query(
-    "insert into public.vod_reviews(user_id,title,match_date) values($1,'Outra conta',current_date)",
+    "insert into public.vod_reviews(user_id,title,match_date) values($1,'Outra conta',((now() at time zone 'America/Sao_Paulo')::date))",
     [b],
   );
   await user(a);

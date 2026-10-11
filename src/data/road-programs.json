@@ -1,0 +1,147 @@
+[
+  {
+    "id": "road-build",
+    "version": "road-2026-10-10.1",
+    "mode": "build",
+    "sources": [
+      {
+        "title": "Epic: apresentação de Construção Zero (histórico, 2022)",
+        "url": "https://www.fortnite.com/news/fortnite-zero-build-take-the-offensive-in-this-no-build-battle-royale?lang=pt-BR",
+        "kind": "official",
+        "access": "page",
+        "limitation": "Apresentação histórica da modalidade, não confirma itens ou regras da temporada atual."
+      },
+      {
+        "title": "Trumble et al., revisão sistemática de prática distribuída e recuperação",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37615780/",
+        "kind": "scientific",
+        "access": "abstract",
+        "limitation": "Educação em saúde; não valida prática motora nem um programa de 30 dias para Fortnite."
+      },
+      {
+        "title": "Prática concentrada e aprendizagem de habilidades motoras seriais",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40778584/",
+        "kind": "scientific",
+        "access": "abstract",
+        "limitation": "Tarefa motora específica; ressalta que espaçamento ideal depende da tarefa, sem prescrição universal."
+      }
+    ],
+    "modules": [
+      {
+        "stage": 1,
+        "title": "Fundamentos",
+        "objective": "Entender os controles e experimentar uma habilidade por vez.",
+        "slugs": [
+          "primeira-partida",
+          "controles-interface",
+          "inventario-tempestade",
+          "mira-movimento",
+          "materiais-mats",
+          "pecas-edicao"
+        ],
+        "review": "Antes de reler, explique uma decisão com suas próprias palavras. Compare com a aula e registre uma dúvida.",
+        "completion": "Marque somente o estudo realmente feito. Uma prática só conta quando você a conclui manualmente no player.",
+        "next": "Use os registros desta etapa para escolher uma habilidade para revisar; avance ou repita quando preferir."
+      },
+      {
+        "stage": 2,
+        "title": "Controle e aplicação",
+        "objective": "Combinar proteção, mira e uma decisão simples em situações controladas.",
+        "slugs": ["peeks-trocas", "piece-box-realistic"],
+        "review": "Antes de reler, explique uma decisão com suas próprias palavras. Compare com a aula e registre uma dúvida.",
+        "completion": "Marque somente o estudo realmente feito. Uma prática só conta quando você a conclui manualmente no player.",
+        "next": "Use os registros desta etapa para escolher uma habilidade para revisar; avance ou repita quando preferir."
+      },
+      {
+        "stage": 3,
+        "title": "Tomada de decisão",
+        "objective": "Explicar escolhas de rota, confronto e Endgame usando informações disponíveis.",
+        "slugs": ["early-drop", "mid-rotacoes", "endgame-camadas"],
+        "review": "Antes de reler, explique uma decisão com suas próprias palavras. Compare com a aula e registre uma dúvida.",
+        "completion": "Marque somente o estudo realmente feito. Uma prática só conta quando você a conclui manualmente no player.",
+        "next": "Use os registros desta etapa para escolher uma habilidade para revisar; avance ou repita quando preferir."
+      },
+      {
+        "stage": 4,
+        "title": "Integração e avaliação",
+        "objective": "Repetir um procedimento comparável, revisar uma partida e escolher o próximo objetivo.",
+        "slugs": ["vod-hipoteses", "ranked-scrims-torneios"],
+        "review": "Antes de reler, explique uma decisão com suas próprias palavras. Compare com a aula e registre uma dúvida.",
+        "completion": "Marque somente o estudo realmente feito. Uma prática só conta quando você a conclui manualmente no player.",
+        "next": "Use os registros desta etapa para escolher uma habilidade para revisar; avance ou repita quando preferir."
+      }
+    ]
+  },
+  {
+    "id": "road-zero",
+    "version": "road-2026-10-10.1",
+    "mode": "zero",
+    "sources": [
+      {
+        "title": "Epic: apresentação de Construção Zero (histórico, 2022)",
+        "url": "https://www.fortnite.com/news/fortnite-zero-build-take-the-offensive-in-this-no-build-battle-royale?lang=pt-BR",
+        "kind": "official",
+        "access": "page",
+        "limitation": "Apresentação histórica da modalidade, não confirma itens ou regras da temporada atual."
+      },
+      {
+        "title": "Trumble et al., revisão sistemática de prática distribuída e recuperação",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37615780/",
+        "kind": "scientific",
+        "access": "abstract",
+        "limitation": "Educação em saúde; não valida prática motora nem um programa de 30 dias para Fortnite."
+      },
+      {
+        "title": "Prática concentrada e aprendizagem de habilidades motoras seriais",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40778584/",
+        "kind": "scientific",
+        "access": "abstract",
+        "limitation": "Tarefa motora específica; ressalta que espaçamento ideal depende da tarefa, sem prescrição universal."
+      }
+    ],
+    "modules": [
+      {
+        "stage": 1,
+        "title": "Fundamentos",
+        "objective": "Entender os controles e experimentar uma habilidade por vez.",
+        "slugs": [
+          "primeira-partida",
+          "controles-interface",
+          "inventario-tempestade",
+          "mira-movimento",
+          "zero-cobertura"
+        ],
+        "review": "Antes de reler, explique uma decisão com suas próprias palavras. Compare com a aula e registre uma dúvida.",
+        "completion": "Marque somente o estudo realmente feito. Uma prática só conta quando você a conclui manualmente no player.",
+        "next": "Use os registros desta etapa para escolher uma habilidade para revisar; avance ou repita quando preferir."
+      },
+      {
+        "stage": 2,
+        "title": "Controle e aplicação",
+        "objective": "Combinar proteção, mira e uma decisão simples em situações controladas.",
+        "slugs": ["peeks-trocas", "early-drop"],
+        "review": "Antes de reler, explique uma decisão com suas próprias palavras. Compare com a aula e registre uma dúvida.",
+        "completion": "Marque somente o estudo realmente feito. Uma prática só conta quando você a conclui manualmente no player.",
+        "next": "Use os registros desta etapa para escolher uma habilidade para revisar; avance ou repita quando preferir."
+      },
+      {
+        "stage": 3,
+        "title": "Tomada de decisão",
+        "objective": "Explicar escolhas de rota, confronto e Endgame usando informações disponíveis.",
+        "slugs": ["mid-rotacoes", "zero-endgame"],
+        "review": "Antes de reler, explique uma decisão com suas próprias palavras. Compare com a aula e registre uma dúvida.",
+        "completion": "Marque somente o estudo realmente feito. Uma prática só conta quando você a conclui manualmente no player.",
+        "next": "Use os registros desta etapa para escolher uma habilidade para revisar; avance ou repita quando preferir."
+      },
+      {
+        "stage": 4,
+        "title": "Integração e avaliação",
+        "objective": "Repetir um procedimento comparável, revisar uma partida e escolher o próximo objetivo.",
+        "slugs": ["vod-hipoteses", "ranked-scrims-torneios"],
+        "review": "Antes de reler, explique uma decisão com suas próprias palavras. Compare com a aula e registre uma dúvida.",
+        "completion": "Marque somente o estudo realmente feito. Uma prática só conta quando você a conclui manualmente no player.",
+        "next": "Use os registros desta etapa para escolher uma habilidade para revisar; avance ou repita quando preferir."
+      }
+    ]
+  }
+]
