@@ -1,3 +1,4 @@
+import { RoadAccess } from "../components/RoadAccess";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "../lib/store";
@@ -47,6 +48,7 @@ export default function TrainingCenter() {
     s.data.plans.find((x) => !x.archived);
   return (
     <>
+      <RoadAccess />
       <Heading
         eyebrow="SKILL MAXING"
         title="Training Center"

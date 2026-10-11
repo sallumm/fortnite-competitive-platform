@@ -31,6 +31,7 @@ const MetaCenter = lazy(() => import("./pages/MetaCenter"));
 const Competitive = lazy(() => import("./pages/Competitive"));
 const EvolutionPlanner = lazy(() => import("./pages/EvolutionPlanner"));
 const AcademyAdmin = lazy(() => import("./pages/AcademyAdmin"));
+const Road = lazy(() => import("./pages/Road"));
 const Academy = lazy(() => import("./pages/Academy"));
 const Curriculum = lazy(() => import("./pages/Curriculum"));
 const TrainingResearch = lazy(() => import("./pages/TrainingResearch"));
@@ -257,6 +258,7 @@ function Application() {
               }
             />
             <Route path="/app/meta-training" element={<Guard><MetaTraining /></Guard>} />
+            <Route path="/app/road" element={<Guard><Road /></Guard>} />
             <Route path="/app/teams" element={<Guard><Teams /></Guard>} />
             <Route path="/library" element={<Library />} />
             <Route path="/library/:id" element={<Library />} />

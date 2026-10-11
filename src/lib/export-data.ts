@@ -19,7 +19,8 @@ export async function exportPlayerData(
         key.startsWith("clutchfolio-result-revisions:" + owner) ||
         key.startsWith("clutchfolio-plan-draft:" + owner + ":") ||
         key.startsWith("clutchfolio-session-" + owner + ":") ||
-        key === "clutchfolio-competitive-demo",
+        key === "clutchfolio-competitive-demo" ||
+        key === "clutchfolio-road-demo-v1" || key === "clutchfolio-academy-demo-v1",
     )) {
       try {
         additional[key] = JSON.parse(local.getItem(key) || "null");
@@ -40,6 +41,11 @@ export async function exportPlayerData(
       "coach_messages",
       "coach_actions",
       "competitive_preferences",
+      "learning_journeys",
+      "learning_journey_events",
+      "learning_journey_batches",
+      "academy_records",
+      "academy_notes",
       "meta_study_notes",
       "meta_plan_approvals",
       "competition_preparations",

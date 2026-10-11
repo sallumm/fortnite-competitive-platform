@@ -628,6 +628,7 @@ export function Provider({ children }: { children: ReactNode }) {
         id: crypto.randomUUID(),
         user_id: "demo",
         plan_id: p.id,
+        learning_journey_id: p.learning_journey_id || null,
         title: p.title,
         plan_snapshot: {
           game_context: owned.game_context || null,

@@ -27,6 +27,7 @@ export function CommandPalette() {
     ].map(([title, url]) => ({ title, url, kind: "Explorar" })),
     ...(s.data.profile
       ? [
+          ["Road to Competitive", "/app/road"],
           ["Meu Dia", "/app"],
           ["Planejador", "/app/planner"],
           ["Training Center", "/app/training"],

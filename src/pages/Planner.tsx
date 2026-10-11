@@ -1,3 +1,4 @@
+import { RoadAccess } from "../components/RoadAccess";
 import { TeamCalendar } from "../components/meta-training/TeamCalendar";
 import { TrainingBuilder } from "../components/TrainingBuilder";
 import { CoachAccess } from "../components/CoachAccess";
@@ -35,6 +36,7 @@ export default function Planner() {
         question="Ajude a organizar meus treinos nesta semana."
         label="Ajudar a organizar"
       />
+      <RoadAccess />
       <Heading
         eyebrow="PLANEJAMENTO"
         title="Seu treino, com direção."

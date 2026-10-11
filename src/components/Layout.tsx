@@ -41,6 +41,7 @@ import { useStore } from "../lib/store";
 import { supabase } from "../lib/client";
 const additionalTitles: Record<string, string> = {
   "/app/meta-training": "Meta Training Center",
+  "/app/road": "Road to Competitive",
   "/app/teams": "Minhas equipes",
   "/app/evolution-plan": "Plano de evolução",
 };

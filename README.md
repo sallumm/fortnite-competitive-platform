@@ -199,3 +199,7 @@ Base de meta contextual: [pesquisa e implementação](docs/meta/CURRENT_META_RES
 A marca visível passa a ser **kyrven**, com **kyrven academy** e **kyrven coach**. O repositório, URLs, funções de servidor, chaves locais e identificadores antigos foram preservados para compatibilidade. Não há módulo de recrutamento ou publicação automática.
 
 Consulte [Meta-aware Skill Maxing](docs/META_AWARE_MASTERY.md) para preferências competitivas, contexto de versão em planos/sessões/VODs, recomendações explicadas, equipes privadas com aceite e migrations incrementais 021–022. A publicação continua pendente de validação em staging e decisão posterior.
+
+## Road to Competitive
+
+Jornada flexível de quatro etapas, integrada a Academy, Skill Maxing, calendário, sessões e relatórios. [Implementação, pesquisa e validação](docs/ROAD_TO_COMPETITIVE.md). Migração incremental 023; sem publicação do site.

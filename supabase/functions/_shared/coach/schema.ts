@@ -53,6 +53,7 @@ export const requestSchema = z.discriminatedUnion("op", [
       message: z.string().trim().min(1).max(2000),
       exercise_id: uuid.optional(),
       tournament_id: uuid.optional(),
+      journey_id: uuid.optional(),
       meta_context_id: z.string().regex(/^[a-z0-9-]{2,100}$/).optional(),
       conversation_id: uuid.optional(),
     })

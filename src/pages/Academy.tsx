@@ -1,3 +1,4 @@
+import { RoadAccess } from "../components/RoadAccess";
 import { loadPaths, type AcademyPath } from "../lib/academy-paths";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -65,7 +66,7 @@ export default function Academy() {
         title="Compreenda uma decisão. Aplique. Revise."
         description="Uma sequência flexível de estudo e prática. Conclusão de aula, avaliação conceitual e desempenho em treino são registros diferentes."
       />
-      <div className="row">
+      <div className="row"><RoadAccess />
         <Link className="button" to="/academy/curriculum">
           Buscar todas as aulas
         </Link>
