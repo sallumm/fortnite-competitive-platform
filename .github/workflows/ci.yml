@@ -23,6 +23,8 @@ jobs:
       - run: npm run check:brand
       - run: npm test
       - run: npm run build
+      - run: npm run build:staging
+      - run: npm run check:staging-artifact
   browser:
     runs-on: ubuntu-latest
     steps:

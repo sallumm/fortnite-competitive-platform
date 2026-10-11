@@ -63,6 +63,10 @@ export function editorialSnapshot(template, article, origin, now = new Date()) {
   return { path, html };
 }
 export async function prerender(env = process.env, fetcher = fetch) {
+  if (env.KYRVEN_BUILD_TARGET === "staging") {
+    console.info("Staging: pré-renderização remota desativada.");
+    return;
+  }
   if (env.PRERENDER_PUBLIC !== "1") {
     console.info("Pré-renderização editorial opcional desativada.");
     return;

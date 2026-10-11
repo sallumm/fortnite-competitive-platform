@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "node scripts/frontend-env-check.mjs && tsc -b && tsc -p tsconfig.coach.json && vite build && node scripts/sitemap.mjs && node scripts/prerender-editorial.mjs",
+    "build:staging": "node scripts/staging-build.mjs",
+    "check:staging": "node scripts/staging-check.mjs",
+    "check:staging-artifact": "node scripts/staging-artifact.mjs --check",
     "preview": "vite preview --host 0.0.0.0",
     "test": "vitest run",
     "format": "prettier --write src tests scripts *.json *.ts *.html",
