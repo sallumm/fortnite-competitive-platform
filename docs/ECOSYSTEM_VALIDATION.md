@@ -44,3 +44,5 @@ Nenhum item desta lista foi marcado como concluído por mera presença de códig
 - Sitemap não gerado sem URL pública; pré-renderização editorial opcional desativada neste ambiente.
 
 Capturas de Dashboard claro em desktop e mobile foram inspecionadas; os testes também exercitam tablet, tema escuro e movimento reduzido. Isto não equivale a testes manuais de todas as páginas em cada combinação de dispositivo e tema.
+
+O primeiro CI de PR também revelou dois timeouts de navegação em `performance-ui.test.tsx` (espera padrão de 1 segundo por rotas lazy), enquanto o CI de push do mesmo commit aprovou os 299 testes. A espera desta suíte DOM passou a 5 segundos, limitada e orientada à condição real, sem sleeps, remoção de asserções ou retries. A verificação final é feita no commit atualizado.
