@@ -225,6 +225,7 @@ export default function Admin() {
       <Link className="button" to="/admin/academy">
         Organizar trilhas da Academy
       </Link>
+      <Link className="button" to="/admin/ai">Inteligência Artificial</Link>
       <Link className="button" to="/admin/meta">
         Gerenciar Meta
       </Link>

@@ -1,3 +1,4 @@
+import { KnowledgeAccess } from "../components/KnowledgeAccess";
 import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
@@ -33,6 +34,7 @@ export default function TrainingResearch() {
       <Link to="/academy" className="text-link">
         Voltar à Academy
       </Link>
+      <KnowledgeAccess />
       <Heading
         eyebrow="BASE DE CONHECIMENTO"
         title="Entenda o que você está treinando."

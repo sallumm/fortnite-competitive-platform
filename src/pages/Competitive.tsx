@@ -1,3 +1,4 @@
+import { KnowledgeAccess } from "../components/KnowledgeAccess";
 import { CompetitivePreferences } from "../components/CompetitivePreferences";
 import { currentEvent, recentArticles } from "../lib/competitive";
 import { dateInZone } from "../lib/calendar";
@@ -154,7 +155,8 @@ export default function Competitive() {
           tournamentId={selected.id}
           label="Preparar com o Coach"
         />
-        <Heading
+        <KnowledgeAccess />
+      <Heading
           eyebrow={`${selected.category} / ${selected.region}`}
           title={selected.title}
           description={selected.description}

@@ -203,3 +203,7 @@ Consulte [Meta-aware Skill Maxing](docs/META_AWARE_MASTERY.md) para preferência
 ## Road to Competitive
 
 Jornada flexível de quatro etapas, integrada a Academy, Skill Maxing, calendário, sessões e relatórios. [Implementação, pesquisa e validação](docs/ROAD_TO_COMPETITIVE.md). Migração incremental 023; sem publicação do site.
+
+### Fortnite Knowledge
+
+Assistente especializado e painel **Inteligência Artificial** para ensinar, revisar, testar e publicar conhecimentos com fontes e versões. Migration incremental 024 e função `fortnite-knowledge`; modos determinístico e externo claramente identificados. Consulte [implementação, evidências e rollout](docs/FORTNITE_KNOWLEDGE.md).

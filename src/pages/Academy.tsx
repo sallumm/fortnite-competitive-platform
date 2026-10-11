@@ -1,3 +1,4 @@
+import { KnowledgeAccess } from "../components/KnowledgeAccess";
 import { RoadAccess } from "../components/RoadAccess";
 import { loadPaths, type AcademyPath } from "../lib/academy-paths";
 import { useEffect, useState } from "react";
@@ -61,6 +62,7 @@ export default function Academy() {
   );
   return (
     <div className="academy-page">
+      <KnowledgeAccess />
       <Heading
         eyebrow="MASTERY ACADEMY"
         title="Compreenda uma decisão. Aplique. Revise."

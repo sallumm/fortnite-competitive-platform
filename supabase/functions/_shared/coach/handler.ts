@@ -1,3 +1,5 @@
+import { appendKnowledgeToCoach } from "../knowledge/coach.ts";
+import { tokens,isCurrentQuestion,type KnowledgeRow } from "../knowledge/domain.ts";
 import { appendRoadAnswer, type RoadSummary } from "./road.ts";
 import { appendMetaAnswer, type MetaReferenceData } from "./meta.ts";
 import {
@@ -180,6 +182,11 @@ export function coachHandler(deps: {
       }
       if (input.journey_id && pref.context_enabled && !blocked) {
         appendRoadAnswer(answer, await db.rpc("coach_learning_journey", {p_journey:input.journey_id}) as RoadSummary | null);
+      }
+      if (!blocked && ["knowledge", "exercise"].includes(q.intent)) {
+        // Optional during staged rollout; the established Coach remains available before migration 024.
+        const rows = await db.rpc("retrieve_knowledge", {p_query:tokens(q.message).join(" ")||q.message,p_preview:false,p_current:isCurrentQuestion(q.message)}).catch(()=>[]);
+        appendKnowledgeToCoach(answer,q.message,rows as KnowledgeRow[]);
       }
       if (external) {
         try {
