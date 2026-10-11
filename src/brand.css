@@ -601,3 +601,42 @@ dd {
     min-width: 44px;
   }
 }
+
+/* Keep adjacent-month dates readable; their surface conveys the distinction. */
+.calendar-day.other-month {
+  opacity: 1;
+  background: var(--panel-alt);
+}
+
+/* The expanded public navigation needs its own row on tablet widths. */
+@media (min-width: 641px) and (max-width: 1100px) {
+  .public-header {
+    height: auto;
+    min-height: 82px;
+    padding: 18px 24px;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .public-header nav {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+
+/* State is communicated by labels, borders and color, without dimming text. */
+.journey-nav .journey-number {
+  opacity: 1;
+}
+.skill-nav button[aria-pressed="true"] {
+  color: var(--accent-ink);
+}
+.achievement:not(.unlocked) {
+  opacity: 1;
+  border-style: dashed;
+}
+.calendar .event.cancelled {
+  opacity: 1;
+}
