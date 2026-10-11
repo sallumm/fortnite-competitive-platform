@@ -10,6 +10,7 @@ import {
 } from "@testing-library/react";
 import type { Session } from "@supabase/supabase-js";
 import { demoPlayer, seed } from "../src/lib/seed";
+import type { Training as TrainingRow } from "../src/lib/types";
 HTMLDialogElement.prototype.showModal = function () {
   this.setAttribute("open", "");
 };
@@ -26,10 +27,18 @@ const auth = vi.hoisted(() => ({
   delayedProfile: null as Promise<unknown> | null,
   reads: 0,
   current: null as Session | null,
+  trainings: [] as TrainingRow[],
+  checkpointPending: null as Promise<{ data: TrainingRow; error: null }> | null,
 }));
 vi.mock("../src/lib/client", () => ({
   supabase: {
     auth: {
+      signOut: async () => {
+        auth.current = auth.initial = null;
+        for (const callback of [...auth.callbacks])
+          callback("SIGNED_OUT", null);
+        return { error: null };
+      },
       getSession: () =>
         auth.initialPending ||
         Promise.resolve({ data: { session: auth.initial }, error: null }),
@@ -65,7 +74,12 @@ vi.mock("../src/lib/client", () => ({
             return auth.delayedProfile.then(resolve);
           const data =
             table === "profiles"
-              ? { ...demoPlayer().profile, id: owner, display_name: owner }
+              ? {
+                  ...demoPlayer().profile,
+                  id: owner,
+                  display_name: owner,
+                  onboarded: true,
+                }
               : table === "exercises"
                 ? seed.exercises
                 : table === "tournaments"
@@ -84,23 +98,29 @@ vi.mock("../src/lib/client", () => ({
                           },
                         ]
                       : []
-                    : [];
+                    : table === "training_sessions"
+                      ? auth.trainings
+                      : [];
           return Promise.resolve(resolve({ data, error: null }));
         },
       };
       return chain;
     },
-    rpc: async () => ({
-      data: Boolean(
-        auth.current &&
-        JSON.parse(atob(auth.current.access_token.split(".")[1])).aal ===
-          "aal2",
-      ),
-      error: null,
-    }),
+    rpc: async (name: string) =>
+      name === "save_training_checkpoint" && auth.checkpointPending
+        ? auth.checkpointPending
+        : {
+            data: Boolean(
+              auth.current &&
+              JSON.parse(atob(auth.current.access_token.split(".")[1])).aal ===
+                "aal2",
+            ),
+            error: null,
+          },
   },
 }));
 import { Provider, useStore } from "../src/lib/store";
+import App from "../src/App";
 import { TrainingBuilder } from "../src/components/TrainingBuilder";
 import { PRIVACY_SIGNAL } from "../src/lib/local-data";
 const account = (id: string, aal = "aal2", rotation = "first") =>
@@ -108,8 +128,10 @@ const account = (id: string, aal = "aal2", rotation = "first") =>
     user: { id },
     access_token: `header.${btoa(JSON.stringify({ aal, rotation }))}.signature`,
   }) as Session;
+let activeStore: ReturnType<typeof useStore>;
 function Probe({ editor = false }: { editor?: boolean }) {
   const s = useStore();
+  activeStore = s;
   return (
     <>
       <output data-testid="state">
@@ -118,6 +140,7 @@ function Probe({ editor = false }: { editor?: boolean }) {
           profile: s.data.profile?.id,
           admin: s.admin,
           loading: s.loading,
+          sessions: s.data.sessions.map((x) => x.id),
           private: s.editorial.articles.some((a) => !a.published),
         })}
       </output>
@@ -149,6 +172,9 @@ beforeEach(() => {
   auth.delayedProfile = null;
   auth.reads = 0;
   auth.current = auth.initial;
+  auth.trainings = [];
+  auth.checkpointPending = null;
+  vi.stubGlobal("scrollTo", () => {});
   localStorage.clear();
   sessionStorage.clear();
 });
@@ -157,6 +183,67 @@ afterEach(() => {
   vi.useRealTimers();
 });
 describe("Integrated session privacy boundaries", () => {
+  it("cleans private storage through the actual application's normal logout button", async () => {
+    window.history.replaceState({}, "", "/app");
+    render(<App />);
+    const logout = await screen.findByRole("button", { name: "Sair" });
+    localStorage.setItem("clutchfolio-plan-draft:account-A:new", "private");
+    sessionStorage.setItem("clutchfolio-private-tab", "private");
+    fireEvent.click(logout);
+    await waitFor(() =>
+      expect(
+        localStorage.getItem("clutchfolio-plan-draft:account-A:new"),
+      ).toBeNull(),
+    );
+    expect(sessionStorage.getItem("clutchfolio-private-tab")).toBeNull();
+    await waitFor(() => expect(window.location.pathname).toBe("/"));
+  });
+  it("discards an in-flight training checkpoint after logout instead of recreating private session state", async () => {
+    const training: TrainingRow = {
+      id: "training-A",
+      user_id: "account-A",
+      plan_id: null,
+      title: "Private training",
+      steps: [{ exercise_id: seed.exercises[0].id, minutes: 10 }],
+      started_at: new Date().toISOString(),
+      completed_at: null,
+      duration_seconds: 0,
+      results: [],
+      status: "active",
+      xp: 0,
+    };
+    auth.trainings = [training];
+    let resolve!: (value: { data: TrainingRow; error: null }) => void;
+    auth.checkpointPending = new Promise((done) => {
+      resolve = done;
+    });
+    render(
+      <Provider>
+        <Probe />
+      </Provider>,
+    );
+    await waitFor(() => expect(state().sessions).toEqual([training.id]));
+    const pending = activeStore.checkpoint(
+      training,
+      {
+        elapsed: 0,
+        since: null,
+        done: [false],
+        results: [
+          { exercise_id: seed.exercises[0].id, value: null, note: "private" },
+        ],
+      },
+      0,
+    );
+    const outcome = expect(pending).rejects.toThrow("sessão mudou");
+    await emit(null, "SIGNED_OUT");
+    await act(async () => {
+      resolve({ data: { ...training, checkpoint_version: 1 }, error: null });
+      await outcome;
+    });
+    expect(state().sessions).toEqual([]);
+    expect(state().profile).toBeUndefined();
+  });
   it.each(["SIGNED_OUT", "REMOTE_SIGNED_OUT"])(
     "removes editor copies and prevents pending autosave after %s",
     async (event) => {
