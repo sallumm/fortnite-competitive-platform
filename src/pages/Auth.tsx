@@ -39,6 +39,7 @@ export default function Auth() {
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
+          options: { captchaToken },
         });
         if (error)
           throw new Error(

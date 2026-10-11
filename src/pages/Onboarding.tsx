@@ -201,11 +201,11 @@ export default function Onboarding() {
             onChange={(e) => setAccepted(e.target.checked)}
           />
           Li os{" "}
-          <a href="/terms" target="_blank" rel="noopener noreferrer">
+          <a href="/legal/terms" target="_blank" rel="noopener noreferrer">
             termos
           </a>{" "}
           e o{" "}
-          <a href="/privacy" target="_blank" rel="noopener noreferrer">
+          <a href="/legal/privacy" target="_blank" rel="noopener noreferrer">
             aviso de privacidade
           </a>
           , versão preliminar 2026-10-11. Cadastros públicos dependem de revisão

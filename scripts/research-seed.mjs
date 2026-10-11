@@ -1,3 +1,4 @@
+import { historicalSeed } from "./historical-seed.mjs";
 // Deterministic offline generator. Never connects to a database or changes historical seeds.
 import fs from "node:fs";
 import ts from "typescript";
@@ -52,10 +53,7 @@ for (const row of exercises) {
 }
 const output = lines.join("\n") + "\n";
 const target = "supabase/migrations/202610100011_training_research_seed.sql";
-if (process.argv.includes("--check")) {
-  if (fs.readFileSync(target, "utf8") !== output)
-    throw Error("Research seed out of sync");
-} else fs.writeFileSync(target, output);
+historicalSeed(target, output);
 
 const index =
   JSON.stringify(

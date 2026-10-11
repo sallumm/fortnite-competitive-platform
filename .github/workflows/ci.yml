@@ -14,6 +14,12 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm audit --audit-level=high
       - run: npm run check:security
+      - run: node scripts/security-database-inventory.mjs > /tmp/kyrven-database-catalog.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: database-security-catalog
+          path: /tmp/kyrven-database-catalog.json
+          retention-days: 7
       - run: npm run check:brand
       - run: npm test
       - run: npm run build
