@@ -1,3 +1,4 @@
+import { clearLocalProductData } from "../lib/local-data";
 import { Brand } from "./brand/Brand";
 import * as m from "motion/react-m";
 import { useMotionLevel } from "./experience/MotionSystem";
@@ -215,6 +216,7 @@ export function Layout() {
           </nav>
           <div className="row">
             <CommandPalette />
+            {store.session && <Link to="/security">Segurança</Link>}
             {themeButton}
             {auth}
           </div>
@@ -371,6 +373,7 @@ export function Layout() {
                         const { error } = await supabase.auth.signOut();
                         if (error) throw error;
                       }
+                      clearLocalProductData(localStorage, sessionStorage);
                       store.exitDemo();
                       navigate("/");
                     })

@@ -8,6 +8,9 @@ const admin = "00000000-0000-4000-8000-000000009881",
 async function as(id: string, role = "authenticated") {
   await db.exec("reset role");
   await db.query("select set_config('request.jwt.claim.sub',$1,false)", [id]);
+  await db.query("select set_config('request.jwt.claims',$1,false)", [
+    JSON.stringify({ aal: id === admin ? "aal2" : "aal1" }),
+  ]);
   await db.exec("set role " + role);
 }
 const payload = () => ({

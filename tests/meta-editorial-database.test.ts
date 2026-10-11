@@ -15,6 +15,9 @@ async function as(id: string | null, role = "authenticated") {
   await db.query("select set_config('request.jwt.claim.sub',$1,false)", [
     id || "",
   ]);
+  await db.query("select set_config('request.jwt.claims',$1,false)", [
+    JSON.stringify({ aal: id === editor || id === other ? "aal2" : "aal1" }),
+  ]);
   await db.exec("set role " + role);
 }
 function payload() {

@@ -1,3 +1,4 @@
+import { currentPrivacyGeneration } from "../lib/local-data";
 import { ContextSelector } from "./meta-training/ContextSelector";
 import {
   attachContext,
@@ -237,6 +238,7 @@ export function TrainingBuilder({
     ":" +
     (onCommit || existing ? plan.id : "new");
   const saved = useRef(false);
+  const privacyGeneration = useRef(currentPrivacyGeneration());
   const [draft, setDraft] = useState(() => ({
     ...structuredClone(plan),
     steps: identifySteps(plan.steps),
@@ -258,7 +260,8 @@ export function TrainingBuilder({
   useEffect(() => {
     const timer = setTimeout(() => {
       try {
-        localStorage.setItem(key, JSON.stringify(draft));
+        if (privacyGeneration.current === currentPrivacyGeneration())
+          localStorage.setItem(key, JSON.stringify(draft));
         setDraftError(false);
       } catch {
         setDraftError(true);
@@ -266,7 +269,7 @@ export function TrainingBuilder({
     }, 500);
     return () => {
       clearTimeout(timer);
-      if (!saved.current) {
+      if (!saved.current && privacyGeneration.current === currentPrivacyGeneration()) {
         try {
           localStorage.setItem(key, JSON.stringify(draft));
         } catch {

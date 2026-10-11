@@ -1,3 +1,4 @@
+import { Turnstile } from "../components/Turnstile";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Heading, Badge, Modal, Empty } from "../components/ui";
@@ -266,6 +267,8 @@ function ApplicationForm({
   saved: () => Promise<void>;
 }) {
   const s = useStore();
+  const [captcha, setCaptcha] = useState("");
+  const [captchaEpoch, setCaptchaEpoch] = useState(0);
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [review, setReview] = useState<Record<string, unknown> | null>(null);
   return (
@@ -273,6 +276,13 @@ function ApplicationForm({
       title={review ? "Confirmar candidatura" : `Candidatura — ${cycle.title}`}
       onClose={close}
     >
+      {review && (
+        <Turnstile
+          key={captchaEpoch}
+          action="recruitment"
+          onToken={setCaptcha}
+        />
+      )}
       {review ? (
         <>
           <p>
@@ -287,7 +297,12 @@ function ApplicationForm({
             disabled={s.busy}
             onClick={() =>
               s.run(async () => {
-                await submitApplication(cycle.id, review);
+                try {
+                  await submitApplication(cycle.id, review, captcha);
+                } finally {
+                  setCaptcha("");
+                  setCaptchaEpoch((n) => n + 1);
+                }
                 await saved();
               }, "Candidatura recebida pelo servidor.")
             }

@@ -14,3 +14,7 @@ verify_jwt = false
 [functions.fortnite-knowledge]
 verify_jwt = false
 # Handler validates the user with Auth.getUser and uses the caller JWT for RLS/RPCs.
+
+[functions.recruitment-submit]
+verify_jwt = false
+# Auth.getUser, persisted per-user quota, Siteverify and one-use DB ticket are required.

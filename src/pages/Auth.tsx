@@ -1,3 +1,4 @@
+import { Turnstile } from "../components/Turnstile";
 import { useState, type FormEvent } from "react";
 import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { ArrowRight, LockKeyhole } from "lucide-react";
@@ -17,16 +18,23 @@ export default function Auth() {
       ? "update"
       : "login",
   );
+  const [captcha, setCaptcha] = useState("");
+  const [captchaEpoch, setCaptchaEpoch] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   if (store.session && mode !== "update")
-    return <Navigate to={destination} replace />;
+    return <Navigate to="/security" state={{ from: destination }} replace />;
   const submit = (e: FormEvent) => {
     e.preventDefault();
     store.run(async () => {
       if (!supabase)
         throw new Error("kyrven: configure o Supabase para habilitar contas.");
+      if (mode !== "update" && !captcha)
+        throw new Error("kyrven: conclua a verificação de segurança.");
+      const captchaToken = captcha;
+      setCaptcha("");
+      setCaptchaEpoch((n) => n + 1);
       if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -36,12 +44,12 @@ export default function Auth() {
           throw new Error(
             "kyrven: não foi possível entrar. Confira os dados e a confirmação de e-mail.",
           );
-        navigate(destination);
+        navigate("/security", { state: { from: destination } });
       } else if (mode === "signup") {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: location.origin + "/auth" },
+          options: { emailRedirectTo: location.origin + "/auth", captchaToken },
         });
         if (error)
           throw new Error(
@@ -53,6 +61,7 @@ export default function Auth() {
       } else if (mode === "reset") {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: location.origin + "/auth?recovery=1",
+          captchaToken,
         });
         if (error) throw error;
         setMessage(
@@ -126,6 +135,13 @@ export default function Auth() {
           )}
         </div>
         <form onSubmit={submit}>
+          {mode !== "update" && (
+            <Turnstile
+              key={mode + captchaEpoch}
+              action="auth"
+              onToken={setCaptcha}
+            />
+          )}
           {mode !== "update" && (
             <label>
               E-mail

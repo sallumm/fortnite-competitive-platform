@@ -1,5 +1,8 @@
+let privacyGeneration = 0;
+export const currentPrivacyGeneration = () => privacyGeneration;
 /** Removes product caches without touching authentication tokens or unrelated sites. */
 export function clearLocalProductData(local: Storage, session: Storage) {
+  privacyGeneration++;
   for (const storage of [local, session]) {
     const keys = Array.from({ length: storage.length }, (_, index) =>
       storage.key(index),
