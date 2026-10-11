@@ -1,3 +1,4 @@
+import { brandText } from "../lib/brand";
 import { JourneyNav } from "../components/experience/JourneyNav";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -168,7 +169,7 @@ export default function Road() {
       )}
       {j && progress && report && (
         <>
-      <JourneyNav />
+          <JourneyNav />
           <section className="panel">
             <div className="row">
               <h2>Meu ciclo de aprendizagem</h2>
@@ -883,7 +884,7 @@ export default function Road() {
           )}
           <h3>Explicação, exemplos e atividade guiada</h3>
           {lesson.article.body.split(/\n\n/).map((p, i) => (
-            <p key={i}>{p}</p>
+            <p key={i}>{brandText(p)}</p>
           ))}
           <h3>Critério de conclusão e avaliação</h3>
           <ul>

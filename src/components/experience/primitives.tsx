@@ -29,7 +29,7 @@ export function PageTransition({
       initial={
         effective === "essential"
           ? false
-          : { opacity: 0.85, y: effective === "full" ? 8 : 0 }
+          : { opacity: 1, y: effective === "full" ? 8 : 0 }
       }
       animate={{ opacity: 1, y: 0 }}
     >
@@ -87,7 +87,7 @@ export function SectionReveal({
       initial={false}
       whileInView={
         effective === "full" && typeof IntersectionObserver !== "undefined"
-          ? { y: [10, 0], opacity: [0.85, 1] }
+          ? { y: [10, 0] }
           : undefined
       }
       viewport={{ once: true, amount: 0.1 }}

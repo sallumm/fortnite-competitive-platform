@@ -7,6 +7,13 @@ export const brandText = (value: string) =>
 export function brandCatalog(c: Catalog): Catalog {
   return {
     ...c,
+    exercises: c.exercises.map((e) => ({
+      ...e,
+      title: brandText(e.title),
+      creator: brandText(e.creator),
+      description: brandText(e.description),
+      instructions: brandText(e.instructions),
+    })),
     articles: c.articles.map((a) => ({
       ...a,
       title: brandText(a.title),

@@ -22,7 +22,7 @@ export function Heading({
   return (
     <m.div
       className="page-heading"
-      initial={effective === "full" ? { opacity: 0.8, y: 12 } : false}
+      initial={effective === "full" ? { opacity: 1, y: 12 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 180, damping: 26 }}
     >
@@ -139,7 +139,7 @@ export function Modal({
       aria-labelledby={titleId}
     >
       <m.div
-        initial={{ opacity: 0.8 }}
+        initial={{ opacity: 1 }}
         animate={{ opacity: 1 }}
         className="modal-content"
       >
