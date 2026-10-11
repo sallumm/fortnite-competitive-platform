@@ -50,7 +50,8 @@ begin
   raise exception 'Administrative role required';
  end if;
  -- The shared quota serializes on the caller's profile row; require that row.
- if not exists(select 1 from public.profiles where id=auth.uid()) then
+ perform 1 from public.profiles where id=auth.uid() for update;
+ if not found then
   raise exception 'Profile required';
  end if;
  perform private.esports_write_limit();
