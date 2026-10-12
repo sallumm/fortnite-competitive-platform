@@ -1,6 +1,8 @@
 import { defineConfig } from "@playwright/test";
 import { requirePrivateReporting } from "./privacy-config";
 requirePrivateReporting();
+// Retired private Test runner: its late hook/fixture errors can write raw error-context.
+throw new Error("Hosted Auth runner disabled pending independent privacy approval; use the synthetic private launcher.");
 // Verified against the locked Playwright runtime: suppress error-context page snapshots.
 process.env.PLAYWRIGHT_NO_COPY_PROMPT = "1";
 const origin = process.env.KYRVEN_AUTH_TEST_ORIGIN;

@@ -8,6 +8,9 @@ lock table public.academy_records,public.coach_actions in share row exclusive mo
 -- Exact 030 source contracts: abort transaction on any unexpected catalog drift.
 do $contract$ declare item text[]; begin
  foreach item slice 1 in array array[
+ array['public.esports_start_exam(uuid,uuid,boolean)','60c62f6db4baa157f1f639bf08ea70bb'],
+ array['public.esports_submit(uuid,jsonb,uuid)','19c14a28b3414de8cfda6bfa40116178'],
+ array['public.esports_expire_assessments()','83a778d1ae377c8b9afc6b8d0e7a2148'],
  array['private.esports_write_limit()','3143ebdf0206930ad62586b068054275'],
  array['public.esports_admin_action(text,uuid,integer,jsonb)','87844b9edbd219fbcbe9bd120c26f8da'],
  array['public.esports_answer_exam(uuid,text,integer,jsonb)','561c3c4d0d2313a2f787464df01e17dc'],
@@ -191,4 +194,61 @@ create or replace function public.esports_request_erasure() returns void languag
  update private.esports_benefit_grants set revoked_at=now() where user_id=auth.uid() and revoked_at is null;
  insert into private.esports_erasure_requests(user_id) values(auth.uid()) on conflict(user_id) do update set status='requested',requested_at=now(),handled_at=null,handled_by=null;
  perform private.esports_audit('erasure_requested',auth.uid());end;$$;
+
+-- A2422-01: all supported esports writers enter a shared maintenance fence FIRST.
+-- Purge/physical maintenance take its exclusive form before rows/FKs. Reserved key.
+-- This is not permission to perform uncoordinated privileged SQL or hosted deletion.
+do $fence$ declare signature text;definition text;begin
+ foreach signature in array array[
+ 'private.esports_write_limit()',
+ 'public.esports_withdraw(uuid)',
+ 'public.esports_request_erasure()',
+ 'public.esports_start_exam(uuid,uuid,boolean)',
+ 'public.esports_answer_exam(uuid,text,integer,jsonb)',
+ 'public.esports_submit(uuid,jsonb,uuid)',
+ 'public.esports_expire_assessments()'
+ ] loop
+ definition:=pg_get_functiondef(signature::regprocedure);
+ if position('begin' in definition)=0 then raise exception 'Missing writer entry: %',signature;end if;
+ -- Fixed signatures and exact pre-upgrade contracts above. Insert once, at first BEGIN.
+ definition:=regexp_replace(definition,'begin','begin perform pg_catalog.pg_advisory_xact_lock_shared(2423,31);');
+ execute definition;
+ end loop;
+end;$fence$;
+
+create or replace function public.esports_purge(p_user uuid default null,p_confirmation text default '') returns integer language plpgsql security definer set search_path='' as $$
+ declare ids uuid[];cnt integer;
+ begin
+ if not public.esports_is_admin() or p_confirmation is distinct from 'EXCLUIR DADOS ESPORTS' then raise exception 'Administrator and explicit confirmation required';end if;
+ -- New snapshots after lock waits are required. Stronger isolation must not reuse old eligibility.
+ if current_setting('transaction_isolation')<>'read committed' then raise exception 'Purge requires READ COMMITTED';end if;
+ if exists(select 1 from pg_catalog.pg_locks where pid=pg_catalog.pg_backend_pid() and locktype='advisory' and classid=2423 and objid=31 and objsubid=2 and mode='ShareLock' and granted) then raise exception 'Purge requires a fresh transaction without prior esports writes';end if;
+ perform pg_catalog.pg_advisory_xact_lock(2423,31);
+ -- Recheck the responsible actor AFTER waiting; privilege may have been revoked.
+ if not public.esports_is_admin() then raise exception 'Administrator required after maintenance wait';end if;
+ -- Supported writers, including cycle/authorization/grant mutations, are now drained.
+ -- All candidate rows are locked in UUID order BEFORE any destructive eligibility decision.
+ perform 1 from public.esports_applications where p_user is null or user_id=p_user order by id for update;
+ if p_user is not null then
+  perform 1 from private.esports_erasure_requests where user_id=p_user and status='requested' for update;
+  if not found then raise exception 'Erasure request required';end if;
+ end if;
+ select coalesce(array_agg(a.id),'{}') into ids from public.esports_applications a join public.esports_cycles c on c.id=a.cycle_id
+ where (p_user is not null and a.user_id=p_user) or
+ (p_user is null and not exists(select 1 from private.esports_role_grants r where r.application_id=a.id and r.role<>'applicant' and r.revoked_at is null and r.ends_at>now())
+ and not exists(select 1 from private.esports_scholarships ss where ss.application_id=a.id and ss.status in('offered','accepted') and ss.ends_at>now())
+ and now()>greatest(c.ends_at,a.updated_at)+make_interval(days=>coalesce((a.consent_snapshot->>'retention_days')::integer,c.retention_days)));
+ -- Explicit erasure intentionally removes own esports records even with a live grant.
+ -- Bulk retention intentionally preserves current scholarships/grants/recent activity.
+ delete from private.esports_audit where target_id=any(ids) or target_id in(select id from private.esports_attempts where application_id=any(ids)) or target_id in(select id from private.esports_scholarships where application_id=any(ids));
+ delete from private.esports_authorizations where (p_user is not null and user_id=p_user) or (revoked_at is not null and expires_at<now()-interval '30 days');
+ delete from public.esports_applications where id=any(ids);get diagnostics cnt=row_count;
+ if p_user is not null then
+  delete from private.esports_role_grants where user_id=p_user;
+  delete from private.esports_audit where actor_id=p_user or target_id=p_user or detail->>'user_id'=p_user::text;
+  update private.esports_erasure_requests set status='handled',handled_at=now(),handled_by=auth.uid() where user_id=p_user;
+ end if;
+ perform private.esports_audit('retention_purge',null,jsonb_build_object('records',cnt));return cnt;
+ end;$$;
+
 commit;
