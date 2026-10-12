@@ -1,3 +1,5 @@
+> Registro histórico da missão 24.1. A revisão atual da 031 e os riscos estão em [24.2.1](PROMPT24_2_1_IMPLEMENTATION.md) e [matriz atual](PROMPT24_2_1_RISK_MATRIX.md). Evidências antigas não representam automaticamente o novo HEAD.
+
 # KYRVEN — Missão 24.1: implementação e evidências
 
 Data de início: 11/10/2026, Brasília. Base imutável: `573c7aa9f93814a5dcfc77dad59598b6732bc9a7`, branch `feat/staging-foundation`, PR #22 aberta/draft/sem merge. Branch de trabalho: `feat/rpc-quotas-auth-readiness`, derivada dessa base, sem uso de main.

@@ -1,0 +1,29 @@
+{
+  "scope": "local tests; synthetic UID/AAL and offline browser; no hosted Auth",
+  "vitest": {
+    "passed": 398,
+    "files": 68,
+    "workers": 1,
+    "durationSeconds": 132.08
+  },
+  "playwright": {
+    "passed": 81,
+    "workers": 3,
+    "durationMinutesRounded": 8.7,
+    "retries": 0
+  },
+  "acceptanceTypeScript": "passed: tsc -p tsconfig.acceptance.json",
+  "build": "normal and staging passed; includes application TypeScript",
+  "stagingArtifact": "passed; not hosted validation",
+  "dependencyAudit": "zero reported vulnerabilities",
+  "securityAndBrand": "static checks passed; not a complete security audit",
+  "history": "001-030 byte-identical to recorded base; also independently compared to Git blobs at delivery",
+  "migration031sha256": "1523a229d8e61d9bd5dcbe1c791c67c47f4f750c1c4df8759ba70004fe67b530",
+  "incidents": [
+    "Two UI findByRole waits failed during concurrent local workloads, including a two-worker rerun; both passed isolated and the entire suite passed with one worker and free resources. No test assertion/timeouts changed.",
+    "A revision introduced one invalid SQL DO closing delimiter. Native tests and an intermediate CI rejected it; a new published commit corrected it without rewriting history. Subsequent native runs passed.",
+    "First redaction regression found a page snapshot in error-context.md. Snapshot suppression and error sanitization were added; five deliberate failures then contained no fictitious marker in logs/artifacts.",
+    "Initial AAL1 negative fixture expected an MFA-specific message; actual Administrative role required was a valid denial. Assertion updated to the actual gate; authorization was not changed."
+  ],
+  "remote": "only metadata SELECT for two functions in hqhkaewpkkgpagcvgfmb; no mutations, hosted Auth, merge or deploy"
+}

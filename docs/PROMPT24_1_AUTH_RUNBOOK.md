@@ -1,3 +1,5 @@
+> Registro histórico da missão 24.1. A revisão atual da 031 e os riscos estão em [24.2.1](PROMPT24_2_1_IMPLEMENTATION.md) e [matriz atual](PROMPT24_2_1_RISK_MATRIX.md). Evidências antigas não representam automaticamente o novo HEAD.
+
 # Auth privado — preparação posterior à Missão 24.1
 
 Nenhuma etapa hospedada abaixo foi executada. Exige autorizações próprias; não iniciar pelo simples aceite da PR. Alvo futuro exclusivo: hqhkaewpkkgpagcvgfmb / hdmpqaxbbfzxzitcjpub.

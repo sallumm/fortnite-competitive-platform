@@ -1,3 +1,5 @@
+> Registro histórico da missão 24.1. A revisão atual da 031 e os riscos estão em [24.2.1](PROMPT24_2_1_IMPLEMENTATION.md) e [matriz atual](PROMPT24_2_1_RISK_MATRIX.md). Evidências antigas não representam automaticamente o novo HEAD.
+
 # Missão 24.1 — matriz de achados e riscos
 
 Classificações abaixo são locais; nenhuma correção está instalada no projeto hospedado. Gates de lançamento permanecem NO-GO.
