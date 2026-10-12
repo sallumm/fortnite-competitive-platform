@@ -1,6 +1,32 @@
 -- Mission 24.1. Local engineering only: hosted application needs separate authorization.
 -- Rolling limits preserve 030 semantics (120/one hour and 60/24 hours), not UTC buckets.
 begin;
+-- A242-01: drain earlier writers, then exclude INSERT/UPDATE/DELETE until COMMIT.
+-- Reads remain available. Abort instead of waiting indefinitely on a busy service.
+set local lock_timeout='5s';
+lock table public.academy_records,public.coach_actions in share row exclusive mode;
+-- Exact 030 source contracts: abort transaction on any unexpected catalog drift.
+do $contract$ declare item text[]; begin
+ foreach item slice 1 in array array[
+ array['private.esports_write_limit()','3143ebdf0206930ad62586b068054275'],
+ array['public.esports_admin_action(text,uuid,integer,jsonb)','87844b9edbd219fbcbe9bd120c26f8da'],
+ array['public.esports_answer_exam(uuid,text,integer,jsonb)','561c3c4d0d2313a2f787464df01e17dc'],
+ array['public.esports_development_action(text,uuid,integer,jsonb)','26bc3455776205b473f534f0515f0f8c'],
+ array['public.esports_purge(uuid,text)','14f90d00c39afc133ef1b1f6085ae975'],
+ array['public.esports_request_erasure()','f33d6fb9f96a0de56649dad528920426'],
+ array['public.esports_withdraw(uuid)','24e995b61a03f9d9c2b2a8a8e9279691'],
+ array['private.esports_admin_action_internal(text,uuid,integer,jsonb)','b84c75103d4f6c84d1ffe1dbc6a35964'],
+ array['private.esports_assessment_action_internal(text,uuid,integer,jsonb)','1cb5c16ac8c0b32c0af8a5ff60f28a50'],
+ array['private.esports_development_action_internal(text,uuid,integer,jsonb)','295bc1eb73e33f647138e92b7c724a08'],
+ array['public.publish_meta_draft(uuid,integer,boolean)','7393b9ad568db3e79647ce40f9e4af40'],
+ array['public.save_meta_draft(jsonb,text,uuid,integer)','7839f87db7fa856eaa1655f493628c0b']
+ ] loop
+ if not exists(select 1 from pg_proc where oid=item[1]::regprocedure and
+ md5(prosrc)=item[2] and prosecdef and proconfig=array['search_path=""'] and
+ pg_get_userbyid(proowner)='postgres') then
+ raise exception 'Unexpected 030 source contract: %',item[1];end if;
+ end loop;
+end;$contract$;
 create table private.resource_quota (
  user_id uuid not null references auth.users(id) on delete cascade,
  kind text not null check(kind in ('academy','coach_proposal')),
@@ -29,8 +55,11 @@ create function private.resource_quota_insert() returns trigger language plpgsql
  if tg_table_schema='public' and tg_table_name='academy_records' then k:='academy';duration:=interval '1 hour';cap:=120;
  elsif tg_table_schema='public' and tg_table_name='coach_actions' then k:='coach_proposal';duration:=interval '1 day';cap:=60;
  else raise exception 'Invalid quota boundary';end if;
- insert into private.resource_quota(user_id,kind) values(new.user_id,k) on conflict do nothing;
- select consumed_at into times from private.resource_quota where user_id=new.user_id and kind=k for update;
+ -- A242-02: UPSERT owns the row lock until transaction end, including prune races.
+ insert into private.resource_quota as quota(user_id,kind) values(new.user_id,k)
+ on conflict(user_id,kind) do update set consumed_at=quota.consumed_at
+ returning consumed_at into times;
+ if not found or times is null then raise exception 'Quota reservation unavailable';end if;
  -- Wall clock AFTER waiting: a long-lived transaction cannot reuse its old now() window.
  at_time:=clock_timestamp();
  select coalesce(array_agg(t order by t),'{}'::timestamptz[]) into times from unnest(times) t where t>at_time-duration;
@@ -38,6 +67,7 @@ create function private.resource_quota_insert() returns trigger language plpgsql
  if k='academy' then raise exception 'Study limit reached';else raise exception 'Action limit';end if;
  end if;
  update private.resource_quota set consumed_at=array_append(times,at_time) where user_id=new.user_id and kind=k;
+ if not found then raise exception 'Quota accounting unavailable';end if;
  return new;
  end;$$;
 revoke all on function private.resource_quota_insert() from public,anon,authenticated;
@@ -58,7 +88,7 @@ create or replace function public.esports_withdraw(p_application uuid) returns v
  begin
  if auth.uid() is null then raise exception 'Authentication required';end if;
  -- Match development_action's actor profile lock before application/scholarship locks.
- perform 1 from public.profiles where id=auth.uid() for update;
+ perform 1 from public.profiles where id=auth.uid() for no key update;
  select * into a from public.esports_applications where id=p_application and user_id=auth.uid() for update;
  if not found then raise exception 'Application unavailable';end if;
  update private.esports_scholarships set status='revoked',version=version+1 where application_id=a.id and status in ('offered','accepted');
@@ -91,14 +121,65 @@ do $$declare signature text;definition text;before_text text;begin
  definition:=pg_get_functiondef('public.esports_purge(uuid,text)'::regprocedure);
  if position('p_confirmation<>''EXCLUIR DADOS ESPORTS''' in definition)=0 then raise exception 'Expected purge confirmation missing';end if;
  execute replace(definition,'p_confirmation<>''EXCLUIR DADOS ESPORTS''','p_confirmation is distinct from ''EXCLUIR DADOS ESPORTS''');
- -- Acceptance must acquire/recheck the application before locking the scholarship.
- -- This also aligns with the existing admin offer/status application-first order.
+ -- A242-03: every development writer locks application before scholarship/goal.
  definition:=pg_get_functiondef('private.esports_development_action_internal(text,uuid,integer,jsonb)'::regprocedure);
  before_text:='if p_action in(''accept'',''decline'') then';
  if position(before_text in definition)=0 then raise exception 'Expected acceptance boundary missing';end if;
- execute replace(definition,before_text,before_text||'
+ definition:=replace(definition,before_text,before_text||'
  perform 1 from public.esports_applications application_row join private.esports_scholarships scholarship_row on scholarship_row.application_id=application_row.id
  where scholarship_row.id=p_id and application_row.user_id=auth.uid() for update of application_row;
  if not found then raise exception ''Offer unavailable'';end if;');
-end;$$;
+ before_text:='elsif p_action in(''revoke'',''end'',''extend'') then';
+ if position(before_text in definition)=0 then raise exception 'Expected administration boundary missing';end if;
+ definition:=replace(definition,before_text,before_text||'
+ perform 1 from public.esports_applications application_row join private.esports_scholarships scholarship_row on scholarship_row.application_id=application_row.id
+ where scholarship_row.id=p_id for update of application_row;
+ if not found then raise exception ''Scholarship unavailable'';end if;');
+ before_text:='if p_action in(''goal'',''review'') then';
+ if position(before_text in definition)=0 then raise exception 'Expected review boundary missing';end if;
+ definition:=replace(definition,before_text,before_text||'
+ perform 1 from public.esports_applications application_row join private.esports_scholarships scholarship_row on scholarship_row.application_id=application_row.id
+ where scholarship_row.id=(p_payload->>''scholarship_id'')::uuid for update of application_row;');
+ before_text:='elsif p_action=''progress'' then';
+ if position(before_text in definition)=0 then raise exception 'Expected progress boundary missing';end if;
+ definition:=replace(definition,before_text,before_text||'
+ perform 1 from public.esports_applications application_row join private.esports_scholarships scholarship_row on scholarship_row.application_id=application_row.id
+ join private.esports_development_goals goal_row on goal_row.scholarship_id=scholarship_row.id
+ where goal_row.id=p_id and application_row.user_id=auth.uid() for update of application_row;');
+ -- Do not append a misleading trial_completed event when no application transitioned.
+ definition:=replace(definition,'insert into public.esports_status_events(application_id,status,message) values(s.application_id,''trial_completed'',''Bolsa encerrada ou revogada. Assinaturas pessoais não são alteradas.'');end if;',
+ 'if found then insert into public.esports_status_events(application_id,status,message) values(s.application_id,''trial_completed'',''Bolsa encerrada ou revogada. Assinaturas pessoais não são alteradas.'');end if;end if;');
+ execute definition;
+ -- Purge must lock applications before deleting their audit/child rows.
+ definition:=pg_get_functiondef('public.esports_purge(uuid,text)'::regprocedure);
+ execute replace(definition,'-- Audit targets associated',
+ 'perform 1 from public.esports_applications where id=any(ids) order by id for update;
+ -- Audit targets associated');
+ -- Authorization revocation also touches multiple applications: lock in UUID order.
+ definition:=pg_get_functiondef('public.esports_admin_action(text,uuid,integer,jsonb)'::regprocedure);
+ execute replace(definition,'result:=private.esports_admin_action_internal',
+ 'if p_action=''revoke_authorization'' then
+ perform 1 from public.esports_applications where cycle_id=p_id and user_id=(p_payload->>''user_id'')::uuid and payload->>''age_band''=''adolescent'' order by id for update;
+ end if;
+ result:=private.esports_admin_action_internal');
+ -- Actor serialization does not change profile keys. Permit FK KEY SHARE from grants.
+ -- FOR UPDATE would invert profile/app locks when an administrator inserts a grant.
+ definition:=pg_get_functiondef('private.esports_write_limit()'::regprocedure);
+ execute replace(definition,'perform 1 from public.profiles where id=auth.uid() for update;',
+ 'perform 1 from public.profiles where id=auth.uid() for no key update;');
+end;$;
+
+-- Same owner actor lock; all applications in UUID order precede children and request.
+-- Pending erasure never leaves an active scholarship status or live grants behind.
+create or replace function public.esports_request_erasure() returns void language plpgsql security definer set search_path='' as $$
+ begin
+ if auth.uid() is null then raise exception 'Authentication required';end if;
+ perform 1 from public.profiles where id=auth.uid() for no key update;
+ perform 1 from public.esports_applications where user_id=auth.uid() order by id for update;
+ update public.esports_applications set status='withdrawn',version=version+1,updated_at=now() where user_id=auth.uid() and status<>'withdrawn';
+ update private.esports_scholarships set status='revoked',version=version+1 where user_id=auth.uid() and status in('offered','accepted');
+ update private.esports_role_grants set revoked_at=now() where user_id=auth.uid() and revoked_at is null;
+ update private.esports_benefit_grants set revoked_at=now() where user_id=auth.uid() and revoked_at is null;
+ insert into private.esports_erasure_requests(user_id) values(auth.uid()) on conflict(user_id) do update set status='requested',requested_at=now(),handled_at=null,handled_by=null;
+ perform private.esports_audit('erasure_requested',auth.uid());end;$$;
 commit;
