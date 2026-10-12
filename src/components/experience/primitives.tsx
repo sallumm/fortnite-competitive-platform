@@ -21,15 +21,15 @@ export function PageTransition({
   return (
     <m.div
       key={identity}
-      className="page-transition"
+      className={`page-transition ${identity.startsWith("/admin") ? "surface-admin" : identity.startsWith("/app/reports") || identity.startsWith("/app/evolution") ? "surface-reports" : identity.startsWith("/competitive/meta") ? "surface-meta" : identity.startsWith("/app/session") ? "surface-session" : identity.startsWith("/app/vod") ? "surface-vod" : identity.startsWith("/academy/") || identity.startsWith("/news/") ? "surface-editorial" : /help|community|profile|legal/.test(identity) ? "surface-support" : ""}`}
       transition={{
-        duration: effective === "full" ? 0.32 : 0,
+        duration: effective === "full" ? 0.16 : 0,
         ease: [0.22, 1, 0.36, 1],
       }}
       initial={
         effective === "essential"
           ? false
-          : { opacity: 1, y: effective === "full" ? 8 : 0 }
+          : { opacity: 1, y: 0 }
       }
       animate={{ opacity: 1, y: 0 }}
     >
@@ -46,12 +46,11 @@ export function AnimatedCard({
   className?: string;
   id?: string;
 }) {
-  const { effective } = useMotionLevel();
   return (
     <m.article
       {...rest}
       className={`panel interactive-card ${className}`}
-      whileHover={effective === "full" ? { y: -3 } : undefined}
+      whileHover={undefined}
       transition={{ type: "spring", stiffness: 380, damping: 32 }}
     >
       {children}
@@ -79,18 +78,11 @@ export function SectionReveal({
   className?: string;
   id?: string;
 }) {
-  const { effective } = useMotionLevel();
   return (
     <m.section
       id={id}
       className={className}
       initial={false}
-      whileInView={
-        effective === "full" && typeof IntersectionObserver !== "undefined"
-          ? { y: [10, 0] }
-          : undefined
-      }
-      viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.35 }}
     >
       {children}

@@ -1,9 +1,8 @@
-import { useMotionLevel } from "./experience/MotionSystem";
 import * as m from "motion/react-m";
 import { ProgressIndicator } from "./experience/primitives";
 import { useEffect, useRef, useId, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Check, Copy, Target, X } from "lucide-react";
+import { ArrowUpRight, Check, Copy, X } from "lucide-react";
 import { useStore } from "../lib/store";
 export function Heading({
   eyebrow,
@@ -18,11 +17,10 @@ export function Heading({
   action?: ReactNode;
   level?: 1 | 2;
 }) {
-  const { effective } = useMotionLevel();
   return (
     <m.div
       className="page-heading"
-      initial={effective === "full" ? { opacity: 1, y: 12 } : false}
+      initial={false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 180, damping: 26 }}
     >
@@ -48,7 +46,7 @@ export function Empty({
 }) {
   return (
     <div className="empty">
-      <Target size={30} />
+      <span className="empty-mark" aria-hidden="true">—</span>
       <h3>{title}</h3>
       <p>{children}</p>
       {to && (

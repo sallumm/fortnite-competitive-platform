@@ -1,5 +1,5 @@
+import { AppearanceSettings } from "../components/experience/Appearance";
 import { KnowledgeAccess } from "../components/KnowledgeAccess";
-import { MotionPreferences } from "../components/experience/MotionSystem";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
@@ -109,7 +109,7 @@ export function Help() {
   );
 }
 export function Community() {
-  const invite = import.meta.env.VITE_DISCORD_INVITE;
+  const invite = import.meta.env.VITE_DISCORD_INVITE || "https://discord.gg/9WBqfSftrw";
   const valid =
     invite && /^https:\/\/(discord\.gg\/|discord\.com\/invite\/)/.test(invite);
   return (
@@ -183,7 +183,7 @@ export function ProfilePage() {
       />
       <section className="panel motion-settings">
         <h2>Uma experiência no seu ritmo</h2>
-        <MotionPreferences />
+        <AppearanceSettings />
       </section>
       <section className="panel profile-form">
         <form

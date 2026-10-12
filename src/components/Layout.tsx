@@ -1,3 +1,4 @@
+import { AppearanceButton, useAppearance } from "./experience/Appearance";
 import { clearLocalProductData } from "../lib/local-data";
 import { Brand } from "./brand/Brand";
 import * as m from "motion/react-m";
@@ -56,6 +57,8 @@ const nav = [
   ["/app/coach", "kyrven coach", MessageSquare],
   ["/app/training", "Training Center", Target],
   ["/app/planner", "Planejador", CalendarDays],
+  ["/app/evolution-plan", "Skill Maxing", Layers],
+  ["/app/road", "Road to Competitive", Compass],
   ["/library", "Exercícios", Target],
   ["/competitive", "Competitivo", Trophy],
   ["/competitive/meta", "Meta", Compass],
@@ -93,15 +96,7 @@ function RouteFocus() {
 export function Layout() {
   const store = useStore();
   const { effective } = useMotionLevel();
-  const [theme, setTheme] = useState(() => {
-    try {
-      return localStorage.getItem("clutchfolio-theme") === "light"
-        ? "light"
-        : "dark";
-    } catch {
-      return "dark";
-    }
-  });
+  const {theme, setTheme} = useAppearance();
   const menu = useRef<HTMLElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
   const [online, setOnline] = useState(() => navigator.onLine);
@@ -119,14 +114,6 @@ export function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const landing = location.pathname === "/";
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    try {
-      localStorage.setItem("clutchfolio-theme", theme);
-    } catch {
-      /* Theme remains usable without storage. */
-    }
-  }, [theme]);
   useEffect(() => {
     setOpen(false);
     window.scrollTo(0, 0);
@@ -217,7 +204,7 @@ export function Layout() {
           <div className="row">
             <CommandPalette />
             {store.session && <Link to="/security">Segurança</Link>}
-            {themeButton}
+            {themeButton}<AppearanceButton />
             {auth}
           </div>
         </header>
@@ -238,7 +225,7 @@ export function Layout() {
             >
               <ChevronRight size={16} />
             </button>
-            <span className="sidebar-label">SEU PRÓXIMO NÍVEL</span>
+            <span className="sidebar-label">CADERNO DE PERFORMANCE</span>
             <nav aria-label="Navegação principal">
               {nav.map(([to, title, Icon], index) => (
                 <div key={to}>
@@ -246,9 +233,9 @@ export function Layout() {
                     {
                       0: "Meu espaço",
                       2: "Treinamento",
-                      5: "Explorar",
-                      9: "Minha evolução",
-                      15: "Ajuda",
+                      7: "Explorar",
+                      11: "Minha evolução",
+                      17: "Comunidade",
                     } as Record<number, string>
                   )[index] && (
                     <span className="nav-group">
@@ -257,9 +244,9 @@ export function Layout() {
                           {
                             0: "Meu espaço",
                             2: "Treinamento",
-                            5: "Explorar",
-                            9: "Minha evolução",
-                            15: "Ajuda",
+                            7: "Explorar",
+                            11: "Minha evolução",
+                            17: "Comunidade",
                           } as Record<number, string>
                         )[index]
                       }
@@ -361,7 +348,7 @@ export function Layout() {
             </div>
             <div className="row">
               <CommandPalette />
-              {themeButton}
+              {themeButton}<AppearanceButton />
               {auth}
               {(store.session || store.demo) && (
                 <button
@@ -435,6 +422,7 @@ export function Layout() {
           </PageTransition>
         </Suspense>
       </main>
+      {!landing && <nav className="mobile-dock" aria-label="Acesso rápido mobile"><NavLink to="/app" end><Home size={19}/>Hoje</NavLink><NavLink to="/app/training"><Target size={19}/>Treinar</NavLink><NavLink to="/app/planner"><CalendarDays size={19}/>Agenda</NavLink><NavLink to="/academy"><GraduationCap size={19}/>Estudar</NavLink><button onClick={() => setOpen(true)} aria-label="Mais destinos"><Menu size={19}/>Mais</button></nav>}
       <footer
         className={
           landing ? "public-footer" : `app-footer ${collapsed ? "compact" : ""}`

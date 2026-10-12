@@ -13,10 +13,9 @@ export function BrandSymbol({
       aria-hidden="true"
     >
       <path
-        d="M5 4h7v11L23 4h8L18 17l13 11h-9L12 19v9H5V4Z"
+        d="M4 5h7v9L22 5h8L16 17l14 10h-9L11 20v7H4Z"
         fill="currentColor"
       />
-      <path d="M2 28h6" stroke="currentColor" strokeWidth="2" />
     </svg>
   );
 }
