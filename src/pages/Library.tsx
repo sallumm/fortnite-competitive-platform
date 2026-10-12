@@ -92,7 +92,7 @@ export default function Library() {
           exerciseId={selected.id}
           label="Como este exercício me ajuda?"
         />
-        <div className="detail-grid">
+        <div className="detail-grid exercise-detail">
           <article className="panel article-body">
             <div className="row">
               <Badge>{labels[selected.mode]}</Badge>
@@ -202,7 +202,7 @@ export default function Library() {
             </p>
           </article>
           <aside className="panel detail-aside">
-            <div className="map-art" aria-hidden="true">
+            <div className="map-art compact-map-art" aria-hidden="true">
               <Target size={64} />
               <span>{labels[selected.category]}</span>
             </div>
@@ -283,7 +283,7 @@ export default function Library() {
       <Link className="button" to="/academy/research">
         Explorar habilidades e metodologia
       </Link>
-      <div className="filters panel">
+      <div className="filters panel library-filters">
         <select
           aria-label="Competência específica"
           value={competency}
@@ -368,7 +368,7 @@ export default function Library() {
         <span className="muted">Sem promessas de evolução garantida</span>
       </div>
       {list.length ? (
-        <div className="three-grid library-grid">
+        <div className="exercise-index library-grid">
           {list.map((e, i) => (
             <article className="panel exercise-card" key={e.id}>
               <Link

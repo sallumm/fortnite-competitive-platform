@@ -49,7 +49,7 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
           <ArrowLeft size={16} />
           {academy ? "Academy" : "Notícias e análises"}
         </Link>
-        <article className="reading-page">
+        <article className="reading-page editorial-reading">
           <div className="reading-header">
             <div className="row">
               <Badge>
@@ -107,10 +107,7 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
             question={`Mostre conteúdos sobre ${selected.tags?.[0] || selected.category}.`}
             label="Estudar este assunto com o Coach"
           />
-          <div className="reading-art">
-            <BookOpen size={60} />
-            <span>{labels[selected.category]}</span>
-          </div>
+          <div className="reading-category"><BookOpen size={16} /><span>{labels[selected.category]}</span></div>
           <div className="article-body">
             {selected.body.split("\n\n").map((p, i) => (
               <p key={i}>{p}</p>
@@ -251,7 +248,7 @@ export default function Editorial({ academy = false }: { academy?: boolean }) {
           </select>
         )}
       </div>
-      <div className="editorial-grid">
+      <div className="editorial-grid editorial-index">
         {list.map((a, i) => (
           <Link
             to={(academy ? "/academy/" : "/news/") + a.slug}

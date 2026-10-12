@@ -1,520 +1,57 @@
-import { ProductPreview } from "../components/experience/ProductPreview";
-import { SectionReveal } from "../components/experience/primitives";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Target,
-  CalendarDays,
-  Trophy,
-  ChartNoAxesCombined,
-  Play,
-  ShieldCheck,
-  Layers,
-} from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { BrandSymbol } from "../components/brand/Brand";
 import { useStore } from "../lib/store";
-import { CheckLine } from "../components/ui";
+import { ProductPreview } from "../components/experience/ProductPreview";
 export default function Landing() {
   const { enterDemo, catalog } = useStore();
   const navigate = useNavigate();
-  const demo = () => {
-    enterDemo();
-    navigate("/onboarding");
-  };
-  return (
-    <>
-      <SectionReveal className="hero">
-        <div className="hero-copy">
-          <div className="pill">
-            <span className="dot" />
-            SEU COMPETITIVO, COM DIREÇÃO
-          </div>
-          <h1>
-            Aprender é o início.
-            <br />
-            <em>Evoluir é o plano.</em>
-          </h1>
-          <p>
-            A kyrven conecta estudo de Fortnite, exercícios, planejamento e
-            análise dos seus registros. Para quem está começando e para quem
-            busca competir com mais direção.
-          </p>
-          <div className="hero-actions">
-            <Link className="button primary" to="/auth">
-              Construir meu plano <ArrowUpRight size={18} />
-            </Link>
-            <button className="button" onClick={demo}>
-              <Play size={15} />
-              Explorar demonstração
-            </button>
-          </div>
-          <div className="hero-proof">
-            <ShieldCheck size={16} />
-            Comece gratuitamente
-            <span />
-            Construção e Zero Build
-          </div>
-        </div>
-        <div
-          className="hero-visual"
-          aria-label="Prévia ilustrativa do planejador"
-        >
-          <div className="visual-grid" />
-          <div className="orbit orbit-one" />
-          <div className="orbit orbit-two" />
-          <div className="visual-coordinate">TRAIN WITH INTENT / 01</div>
-          <ProductPreview onExplore={demo} />
-          <div className="floating-note">
-            <span className="green-text">PLANEJE. PRATIQUE. REVISE.</span>
-            <p>
-              Seu progresso merece
-              <br />
-              mais que horas de jogo.
-            </p>
-          </div>
-        </div>
-      </SectionReveal>
-      <SectionReveal className="landing-section">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">SEU CICLO DE DESENVOLVIMENTO</span>
-            <h2>
-              Uma próxima ação.
-              <br />
-              Em cada etapa.
-            </h2>
-          </div>
-          <p>
-            Planejamento manual ou Skill Maxing: você escolhe suas prioridades,
-            revisa a proposta e confirma a agenda.
-          </p>
-        </div>
-        <div className="landing-path">
-          {[
-            [
-              "01",
-              "Aprenda com contexto",
-              "Aulas, competências e perguntas para entender o que praticar.",
-              "/academy",
-              "Explorar a academy",
-            ],
-            [
-              "02",
-              "Construa seu treino",
-              "Exercícios combinados em rotinas editáveis, com instruções e resultados.",
-              "/library",
-              "Encontrar exercícios",
-            ],
-            [
-              "03",
-              "Organize sua semana",
-              "Skill Maxing considera preferências e disponibilidade; você confirma o plano.",
-              "/app/evolution-plan",
-              "Conhecer Skill Maxing",
-            ],
-            [
-              "04",
-              "Revise suas evidências",
-              "Relatórios distinguem participação, estudo declarado e resultados comparáveis.",
-              "/app/reports",
-              "Ver meus relatórios",
-            ],
-          ].map(([n, t, d, to, label]) => (
-            <article className="path-card" key={n}>
-              <span className="path-number">{n}</span>
-              <h3>{t}</h3>
-              <p>{d}</p>
-              <Link to={to}>
-                {label} <ArrowRight size={14} />
-              </Link>
-            </article>
-          ))}
-        </div>
-      </SectionReveal>
-      <SectionReveal className="landing-section">
-        <div className="brand-campaign">
-          <div>
-            <span className="eyebrow">
-              kyrven esports / ORGANIZAÇÃO EM DESENVOLVIMENTO
-            </span>
-            <h2>be kyrven.</h2>
-            <p>
-              Uma estrutura para avaliar potencial, apoiar a aprendizagem e
-              acompanhar talentos. A plataforma continua aberta a quem deseja
-              organizar a própria evolução.
-            </p>
-            <Link to="/esports" className="button primary">
-              Conhecer a organização <ArrowUpRight size={18} />
-            </Link>
-          </div>
-          <div className="campaign-side">
-            <h3>Seu caminho tem contexto.</h3>
-            <p>
-              Trialist, bolsa de desenvolvimento e elenco são etapas distintas,
-              com decisão humana e critérios informados. Não há promessa de
-              contratação ou promoção.
-            </p>
-            <Link to="/be-kyrven" className="text-link">
-              Entender o processo <ArrowRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </SectionReveal>
-      <div className="feature-strip">
-        <span>
-          <Target />
-          Treinamento estruturado
-        </span>
-        <span>
-          <Trophy />
-          Contexto competitivo
-        </span>
-        <span>
-          <CalendarDays />
-          Agenda unificada
-        </span>
-        <span>
-          <ChartNoAxesCombined />
-          Registros que fazem sentido
-        </span>
+  const demo = () => { enterDemo(); navigate("/onboarding"); };
+  return <div className="reinvention-landing">
+    <section className="folio-hero">
+      <div>
+        <div className="folio-intro">kyrven / performance em Fortnite</div>
+        <h1>Aprender é o início.<br/><em>Evoluir é o plano.</em></h1>
+        <p>Seu espaço para estudar, organizar o treino e entender os próprios registros. Uma prática com intenção, do primeiro exercício à preparação competitiva.</p>
+        <div className="folio-actions"><button className="button primary" onClick={demo}>Explorar demonstração <ArrowUpRight size={18}/></button><Link className="button" to="/academy">Conhecer a academy <ArrowRight size={18}/></Link></div>
+        <span className="folio-caption">Demonstração neste navegador · Construção e Zero Build</span>
       </div>
-      <SectionReveal className="landing-section">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">MAIS CLAREZA. MAIS INTENÇÃO.</span>
-            <h2>
-              Uma plataforma.
-              <br />
-              Todo o seu desenvolvimento.
-            </h2>
-          </div>
-          <p>
-            Do primeiro treino à preparação para um campeonato: conecte o que
-            você estuda com o que pratica.
-          </p>
-        </div>
-        <div className="feature-grid">
-          <article className="feature-large">
-            <CalendarDays />
-            <h3>Seu tempo, bem planejado.</h3>
-            <p>
-              Monte rotinas, organize a semana e execute sessões passo a passo.
-              Ajuste o plano quando sua vida mudar.
-            </p>
-            <div className="week-preview">
-              {["SEG", "TER", "QUA", "QUI", "SEX"].map((d, i) => (
-                <div key={d}>
-                  <small>{d}</small>
-                  <span>{12 + i}</span>
-                  {i % 2 === 0 ? (
-                    <div className="calendar-block">
-                      Treino
-                      <br />
-                      <strong>30 min</strong>
-                    </div>
-                  ) : (
-                    <div className="rest-block">Descanso</div>
-                  )}
-                </div>
-              ))}
-            </div>
-            <span className="muted small-text">
-              Exemplo ilustrativo de uma semana planejada.
-            </span>
-            <button className="text-link" onClick={demo}>
-              Experimentar o planejador <ArrowRight size={16} />
-            </button>
-          </article>
-          <article>
-            <Target />
-            <h3>Pratique a habilidade certa.</h3>
-            <p>
-              Exercícios com instruções, métricas definidas e códigos de ilhas
-              conferidos em fontes oficiais.
-            </p>
-            <Link to="/library" className="text-link">
-              Explorar exercícios <ArrowRight size={16} />
-            </Link>
-          </article>
-          <article>
-            <Trophy />
-            <h3>Entenda o competitivo.</h3>
-            <p>
-              Campeonatos, notícias e regulamentos com origem e data de
-              verificação. Sem resultados inventados.
-            </p>
-            <Link to="/competitive" className="text-link">
-              Abrir central competitiva <ArrowRight size={16} />
-            </Link>
-          </article>
-        </div>
-      </SectionReveal>
-      <SectionReveal className="landing-section split-section">
-        <div>
-          <span className="eyebrow">PROGRESSO COM CONTEXTO</span>
-          <h2>
-            Saiba o que mudou.
-            <br />
-            Decida o que vem depois.
-          </h2>
-          <p>
-            Seu dashboard começa vazio e cresce com seus próprios registros.
-            Compare o mesmo exercício, identifique padrões e planeje a próxima
-            sessão.
-          </p>
-          <CheckLine>Histórico de treinos e resultados individuais</CheckLine>
-          <CheckLine>Relatórios por habilidade e período</CheckLine>
-          <CheckLine>XP por conclusão, com limite diário</CheckLine>
-          <CheckLine>
-            Ranks internos de participação, sem penalizar descanso
-          </CheckLine>
-          <button className="button" onClick={demo}>
-            Conhecer meu painel <ArrowUpRight size={16} />
-          </button>
-        </div>
-        <div className="progress-visual">
-          <div className="row between">
-            <span className="eyebrow">SUA EVOLUÇÃO</span>
-            <Layers className="green-text" />
-          </div>
-          <h3>
-            O próximo passo
-            <br />é observável.
-          </h3>
-          <div className="rank-track">
-            <div className="rank-shape">I</div>
-            <div>
-              <strong>Rookie</strong>
-              <small>O começo da sua jornada</small>
-            </div>
-          </div>
-          <div className="rank-label">
-            <span>0 XP</span>
-            <span>Contender · 500 XP</span>
-          </div>
-          <progress value={0} max={500} />
-          <div className="progress-empty">
-            <ChartNoAxesCombined />
-            <p>
-              Seu primeiro registro inicia
-              <br />
-              sua história de evolução.
-            </p>
-          </div>
-          <span className="muted small-text">
-            Prévia de uma conta nova. Sem estatísticas demonstrativas.
-          </span>
-        </div>
-      </SectionReveal>
-      <SectionReveal className="landing-section">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">ACADEMY</span>
-            <h2>Entenda antes de executar.</h2>
-          </div>
-          <Link className="button" to="/academy">
-            Explorar conteúdos
-            <ArrowRight size={16} />
-          </Link>
-        </div>
-        <div className="three-grid">
-          {[
-            [
-              "01",
-              "Mecânicas com propósito",
-              "Controle de peças, ângulos e exposição.",
-            ],
-            [
-              "02",
-              "Decisões em contexto",
-              "VOD review, posicionamento e rotações.",
-            ],
-            [
-              "03",
-              "Uma rotina sustentável",
-              "Pausas, sono e limites da evidência.",
-            ],
-          ].map(([n, t, d]) => (
-            <Link className="academy-preview" to="/academy" key={n}>
-              <span>{n}</span>
-              <h3>{t}</h3>
-              <p>{d}</p>
-              <ArrowUpRight />
-            </Link>
-          ))}
-        </div>
-      </SectionReveal>
-      <SectionReveal className="landing-section">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">TRAINING CENTER</span>
-            <h2>Da intenção à prática.</h2>
-          </div>
-          <Link to="/library" className="button">
-            Abrir biblioteca <ArrowRight size={16} />
-          </Link>
-        </div>
-        <div className="three-grid">
-          {catalog.exercises.slice(0, 3).map((exercise) => (
-            <article className="panel landing-exercise" key={exercise.id}>
-              <Target className="green-text" size={24} />
-              <h3>{exercise.title}</h3>
-              <p>{exercise.description}</p>
-              <small className="muted">
-                {exercise.map_code
-                  ? `Ilha ${exercise.map_code}`
-                  : "Exercício sem mapa"}{" "}
-                · Verificado em {exercise.verified_at.slice(0, 10)}
-              </small>
-              <Link to="/library" className="text-link">
-                Consultar instruções <ArrowRight size={16} />
-              </Link>
-            </article>
-          ))}
-        </div>
-      </SectionReveal>
-      <SectionReveal className="landing-section">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">INTELIGÊNCIA COMPETITIVA</span>
-            <h2>Preparação começa com informação.</h2>
-          </div>
-          <Link to="/competitive" className="button">
-            Central competitiva <ArrowRight size={16} />
-          </Link>
-        </div>
-        <p className="muted">
-          Registros editoriais com fonte e data. Eventos antigos permanecem como
-          contexto histórico; confira a validade antes de se preparar.
-        </p>
-        <div className="three-grid">
-          {catalog.tournaments.slice(0, 3).map((event) => (
-            <article className="panel landing-event" key={event.id}>
-              <span className="badge">{event.region}</span>
-              <h3>{event.title}</h3>
-              <p>{event.format}</p>
-              <small className="muted">
-                Período registrado: {event.start_date} a {event.end_date}.
-                Verificado: {event.verified_at.slice(0, 10)}.
-              </small>
-              <Link to={"/competitive/" + event.slug} className="text-link">
-                Formato, fontes e preparação <ArrowRight size={16} />
-              </Link>
-            </article>
-          ))}
-        </div>
-      </SectionReveal>
-      <SectionReveal className="landing-section" id="plans">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">COMECE PELO ESSENCIAL</span>
-            <h2>
-              Uma base gratuita.
-              <br />
-              Espaço para crescer.
-            </h2>
-          </div>
-        </div>
-        <div className="three-grid plans">
-          {[
-            [
-              "FREE",
-              "Gratuito",
-              "Treinos, calendário e sua evolução.",
-              [
-                "Conta e planejamento",
-                "Biblioteca de exercícios",
-                "Relatórios e progressão",
-              ],
-            ],
-            [
-              "PRO",
-              "Em desenvolvimento",
-              "Mais profundidade para seu treinamento.",
-              [
-                "Rotinas especializadas",
-                "Conteúdo próprio avançado",
-                "Relatórios adicionais",
-              ],
-            ],
-            [
-              "ELITE",
-              "Em desenvolvimento",
-              "Acompanhamento humano personalizado.",
-              [
-                "Análise humana de VODs",
-                "Orientação individual",
-                "Capacidade ainda em definição",
-              ],
-            ],
-          ].map(([name, price, desc, items], i) => (
-            <article
-              key={String(name)}
-              className={i === 0 ? "featured-plan" : ""}
-            >
-              <span className="eyebrow">{name as string}</span>
-              <h3>{price as string}</h3>
-              <p>{desc as string}</p>
-              {(items as string[]).map((x) => (
-                <CheckLine key={x}>{x}</CheckLine>
-              ))}
-              {i === 0 ? (
-                <Link className="button primary full" to="/auth">
-                  Começar grátis
-                  <ArrowRight size={16} />
-                </Link>
-              ) : (
-                <span className="badge">
-                  Sem vendas ou pagamentos nesta versão
-                </span>
-              )}
-            </article>
-          ))}
-        </div>
-      </SectionReveal>
-      <SectionReveal className="landing-section faq">
-        <span className="eyebrow">PERGUNTAS FREQUENTES</span>
-        <h2>Antes de começar.</h2>
+      <div className="practice-map" aria-label="Ciclo de prática kyrven">
+        <header><span>UM CICLO, NÃO UM ATALHO</span><span>01 — 03</span></header>
+        <BrandSymbol />
+        <ol><li><span>01 / ENTENDER</span><Link to="/academy">Estude a decisão</Link></li><li><span>02 / APLICAR</span><Link to="/library">Pratique com foco</Link></li><li><span>03 / OBSERVAR</span><Link to="/app/reports">Revise o registro</Link></li></ol>
+        <footer><span>be kyrven.</span><span>PRÁTICA + CONTEXTO</span></footer>
+      </div>
+    </section>
+    <section className="folio-index">
+      <div><h2>Menos dispersão.<br/>Mais direção.</h2><p>Estudo, treino e revisão pertencem à mesma rotina. Escolha por onde começar.</p></div>
+      <div className="folio-index-list">
         {[
-          [
-            "É uma plataforma oficial do Fortnite?",
-            "Não. Este é um projeto independente, sem afiliação ou endosso da Epic Games.",
-          ],
-          [
-            "Preciso de cadastro para explorar?",
-            "Não. Biblioteca, Academy e central competitiva são públicas. A demonstração permite testar o planejamento neste navegador.",
-          ],
-          [
-            "O rank mede minha habilidade?",
-            "Não. Os ranks internos representam participação registrada. Não equivalem a ranks, PR ou classificação oficial do Fortnite.",
-          ],
-          [
-            "Existe análise automática das minhas partidas?",
-            "Os relatórios usam dados que você registra. O kyrven coach oferece assistência baseada em regras; respostas generativas dependem de um provedor configurado e de consentimento. Não há leitura automática das partidas.",
-          ],
-          [
-            "O calendário é atualizado em tempo real?",
-            "Não. Cada registro tem fonte e data de verificação. Mudanças precisam de revisão editorial; confirme horários no calendário oficial ou na aba Competir.",
-          ],
-        ].map(([q, a]) => (
-          <details key={q}>
-            <summary>{q}</summary>
-            <p>{a}</p>
-          </details>
-        ))}
-      </SectionReveal>
-      <SectionReveal className="closing-cta">
-        <span className="eyebrow">PRATIQUE COM DIREÇÃO</span>
-        <h2>
-          A próxima sessão
-          <br />
-          pode ter um objetivo.
-        </h2>
-        <button className="button primary" onClick={demo}>
-          Criar meu primeiro plano
-          <ArrowUpRight size={18} />
-        </button>
-      </SectionReveal>
-    </>
-  );
+          ["01","Training Center","Combine exercícios em rotinas. Inicie, retome e registre cada sessão.","/app/training"],
+          ["02","Skill Maxing","Revise uma proposta com suas prioridades e disponibilidade antes de confirmar a agenda.","/app/evolution-plan"],
+          ["03","kyrven academy","Leia, estude e aplique. Seu percurso pode voltar às bases ou avançar por assunto.","/academy"],
+          ["04","Contexto competitivo","Consulte o meta, regulamentos e fontes. A data de verificação acompanha a informação.","/competitive/meta"],
+          ["05","Minha evolução","Compare registros equivalentes. Revise VODs e planeje o próximo foco.","/app/evolution"],
+        ].map(([n,title,description,to])=><Link key={n} to={to}><span className="index-number">{n}</span><div><h3>{title}</h3><p>{description}</p></div><ArrowUpRight size={20}/></Link>)}
+      </div>
+    </section>
+    <section className="folio-demo"><div><h2>Experimente antes<br/>de organizar.</h2><p>Altere os dias, a duração e os registros de exemplo. Esta prévia não salva sessões nem altera sua conta.</p><Link className="text-link" to="/app/planner">Abrir meu planejador <ArrowRight size={16}/></Link></div><ProductPreview onExplore={demo}/></section>
+    <section className="folio-library">
+      <header><h2>A prática começa aqui.</h2><Link className="text-link" to="/library">Biblioteca de exercícios <ArrowRight size={16}/></Link></header>
+      <div className="folio-library-list">{catalog.exercises.slice(0,3).map(exercise=><article key={exercise.id}><small>{exercise.map_code ? `Ilha ${exercise.map_code}` : "Exercício sem mapa"}</small><h3>{exercise.title}</h3><p>{exercise.description}</p><Link to={`/library/${exercise.id}`}>Consultar instruções <ArrowUpRight size={15}/></Link><small>Verificado em {exercise.verified_at.slice(0,10)}</small></article>)}</div>
+    </section>
+    <section className="folio-community">
+      <div><h2>O treino é seu.<br/>A troca é coletiva.</h2><p>Estudos, atualizações e conversas sobre prática responsável na comunidade kyrven.</p><a className="button" href="https://discord.gg/9WBqfSftrw" target="_blank" rel="noopener noreferrer">Abrir Discord <ArrowUpRight size={17}/></a></div>
+      <div><span className="folio-caption">kyrven esports / em desenvolvimento</span><h2>be kyrven.</h2><p>Conheça a proposta da organização e as etapas de desenvolvimento. Trialist, bolsa e elenco têm critérios distintos e decisão humana, sem promessa de contratação.</p><Link className="text-link" to="/esports">Conhecer a organização <ArrowRight size={16}/></Link><br/><Link className="text-link" to="/be-kyrven">Entender o processo <ArrowRight size={16}/></Link></div>
+    </section>
+    <section className="folio-faq"><h2>Antes de começar.</h2>{[
+      ["Preciso de cadastro para explorar?","Biblioteca, academy e central competitiva são públicas. A demonstração usa apenas este navegador. Contas dependem da configuração e disponibilidade do ambiente."],
+      ["O que os relatórios medem?","Os relatórios usam os registros que você insere. Participação, estudo declarado e desempenho comparável são informações distintas. XP não equivale a rank ou classificação oficial de Fortnite."],
+      ["Existe análise automática das minhas partidas?","Não há leitura automática das partidas. O kyrven coach usa regras; respostas generativas dependem de provedor configurado e consentimento."],
+      ["Os eventos são atualizados em tempo real?","Não. Consulte a fonte e a data de verificação de cada registro. Confirme horários e regras na fonte oficial antes de competir."],
+      ["Quais planos estão disponíveis?","O escopo gratuito reúne planejamento, exercícios e registros. Pro e Elite estão em desenvolvimento, sem vendas ou pagamentos nesta versão."],
+      ["A kyrven é oficial do Fortnite?","Não. A kyrven é um projeto independente, sem afiliação ou endosso da Epic Games."],
+    ].map(([q,a])=><details key={q}><summary>{q}</summary><p>{a}</p></details>)}</section>
+    <section className="folio-end"><h2>Uma sessão.<br/>Um próximo passo.</h2><button className="button primary" onClick={demo}>Criar meu primeiro plano <ArrowUpRight size={18}/></button></section>
+  </div>;
 }

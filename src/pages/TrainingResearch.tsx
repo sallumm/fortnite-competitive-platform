@@ -98,7 +98,7 @@ export default function TrainingResearch() {
           <p role="status">
             {list.length} competências · definições e exemplos editoriais
           </p>
-          <div className="two-grid">
+          <div className="research-index">
             {list.map((c) => (
               <article className="panel" key={c.id}>
                 <span className="eyebrow">
@@ -262,7 +262,7 @@ export default function TrainingResearch() {
           </div>
           <div className="two-grid">
             {knowledge.references.map((r) => (
-              <article id={r.id} className="panel research-source" key={r.id}>
+              <article id={r.id} className="panel research-source source-record" key={r.id}>
                 <Badge>{evidenceLabels[r.kind]}</Badge>
                 <h2>{r.title}</h2>
                 <p>{r.claim}</p>
