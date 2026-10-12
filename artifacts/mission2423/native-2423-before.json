@@ -1,0 +1,153 @@
+{
+  "container": "kyrven-a2423-pg",
+  "db": "a2423_1791778946994",
+  "scope": "Local synthetic SQL auth.uid/AAL settings, not JWT or hosted Auth",
+  "evidence": [
+    {
+      "case": "030 upgrade preserves owners ACLs OIDs RLS/security path",
+      "result": "PASS",
+      "functions": 145,
+      "hostedContracts": 15,
+      "historicalTablesSecurity": 94
+    },
+    {
+      "case": "A2422-01 offer first / bulk purge; another eligible owner",
+      "result": "FAIL reproduced: new rights deleted",
+      "rows": [
+        {
+          "ok": true,
+          "output": "{\"id\": \"b0bcb508-e76c-40f7-88dc-eeeddc856e74\"}"
+        },
+        {
+          "ok": true,
+          "output": "2"
+        }
+      ],
+      "protectedApplications": 0
+    },
+    {
+      "case": "A2422-01 grant first / bulk purge; another eligible owner",
+      "result": "FAIL reproduced: new rights deleted",
+      "rows": [
+        {
+          "ok": true,
+          "output": "{\"id\": \"a109538a-e453-4290-95e2-1b5fffab6d84\"}"
+        },
+        {
+          "ok": true,
+          "output": "2"
+        }
+      ],
+      "protectedApplications": 0
+    },
+    {
+      "case": "A2422-01 roster first / bulk purge; another eligible owner",
+      "result": "FAIL reproduced: new rights deleted",
+      "rows": [
+        {
+          "ok": true,
+          "output": "{}"
+        },
+        {
+          "ok": true,
+          "output": "2"
+        }
+      ],
+      "protectedApplications": 0
+    },
+    {
+      "case": "A2422-01 bulk purge first / offer",
+      "result": "PASS deleted candidate unavailable",
+      "inverse": [
+        {
+          "ok": true,
+          "output": "1"
+        },
+        {
+          "ok": false,
+          "sqlstate": "P0001",
+          "error": "ERROR:  P0001: Completed human evaluation required\nCONTEXT:  PL/pgSQL function private.esports_development_action_internal(text,uuid,integer,jsonb) line 45 at RAISE\nPL/pgSQL function public.esports_development_action(text,uuid,integer,jsonb) line 1 at RETURN\nLOCATION:  exec_stmt_raise, pl_exec.c:3897\n"
+        }
+      ]
+    },
+    {
+      "case": "A2422-01 cycle retention increased during waiting",
+      "result": "FAIL reproduced: obsolete retention",
+      "crows": [
+        {
+          "ok": true,
+          "output": "{\"id\": \"24220000-0000-4000-8000-000000000012\", \"mode\": \"both\", \"rules\": \"Synthetic rules\", \"title\": \"Synthetic\", \"format\": \"solo\", \"ends_at\": \"2026-09-02T04:22:43.319089+00:00\", \"is_open\": false, \"version\": 2, \"criteria\": \"Synthetic criteria\", \"published\": false, \"starts_at\": \"2026-08-13T04:22:43.319089+00:00\", \"created_at\": \"2026-10-12T04:22:43.319089+00:00\", \"allow_minors\": false, \"policy_version\": \"v1\", \"privacy_notice\": \"Synthetic privacy\", \"retention_days\": 730}"
+        },
+        {
+          "ok": true,
+          "output": "1"
+        }
+      ],
+      "kept": 0
+    },
+    {
+      "case": "A2422-01 recent activity changes while purge waits",
+      "result": "FAIL reproduced: obsolete eligibility",
+      "rows": [
+        {
+          "ok": true,
+          "output": ""
+        },
+        {
+          "ok": true,
+          "output": "1"
+        }
+      ]
+    },
+    {
+      "case": "A2422-01 consent retention changes while purge waits",
+      "result": "FAIL reproduced: obsolete eligibility",
+      "rows": [
+        {
+          "ok": true,
+          "output": ""
+        },
+        {
+          "ok": true,
+          "output": "1"
+        }
+      ]
+    },
+    {
+      "case": "R2422-04 grant first / physical deletion",
+      "result": "FAIL reproduced: 40P01",
+      "physical": [
+        {
+          "ok": true,
+          "output": "{\"id\": \"11038fb2-6fcc-45db-bcbe-075ada291ff5\"}"
+        },
+        {
+          "ok": false,
+          "sqlstate": "40P01",
+          "error": "ERROR:  40P01: deadlock detected\nDETAIL:  Process 25860 waits for ShareLock on transaction 18288; blocked by process 25847.\nProcess 25847 waits for ShareLock on transaction 18289; blocked by process 25860.\nHINT:  See server log for query details.\nCONTEXT:  while locking tuple (0,15) in relation \"esports_applications\"\nSQL statement \"DELETE FROM ONLY \"public\".\"esports_applications\" WHERE $1 OPERATOR(pg_catalog.=) \"user_id\"\"\nLOCATION:  DeadLockReport, deadlock.c:1130\n"
+        }
+      ]
+    },
+    {
+      "case": "R2422-04 physical deletion first / grant",
+      "result": "PASS removed profile/application grant denied",
+      "reverse": [
+        {
+          "ok": true,
+          "output": ""
+        },
+        {
+          "ok": false,
+          "sqlstate": "P0001",
+          "error": "ERROR:  P0001: Application unavailable\nCONTEXT:  PL/pgSQL function private.esports_admin_action_internal(text,uuid,integer,jsonb) line 38 at RAISE\nPL/pgSQL function public.esports_admin_action(text,uuid,integer,jsonb) line 9 at assignment\nLOCATION:  exec_stmt_raise, pl_exec.c:3897\n"
+        }
+      ]
+    },
+    {
+      "case": "Environment",
+      "result": "COMPLETE",
+      "mode": "audited2422",
+      "postgres": "PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.2.0, 64-bit"
+    }
+  ]
+}

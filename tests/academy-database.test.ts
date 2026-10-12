@@ -162,6 +162,9 @@ it("supports real path publishing and enforces per-player study bounds", async (
     db.query("select public.record_academy_study($1,'reviewed')", [lesson]),
   ).rejects.toThrow("limit");
   await db.query("select public.clear_academy_study()");
+  await expect(
+    db.query("select public.record_academy_study($1,'reviewed')", [lesson]),
+  ).rejects.toThrow("Study limit");
   expect(
     (await db.query("select * from public.academy_records")).rows,
   ).toHaveLength(0);

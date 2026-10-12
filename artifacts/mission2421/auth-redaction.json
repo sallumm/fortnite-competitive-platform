@@ -1,0 +1,13 @@
+{
+  "scope": "offline Chromium; fictitious marker; no hosted Auth",
+  "before": {
+    "matcherLeaks": true
+  },
+  "after": {
+    "intentionalFailures": 5,
+    "nonzeroExit": true,
+    "logsAndArtifactsLeak": false,
+    "unsafeReporterOverrideBlocked": true
+  },
+  "result": "PASS"
+}

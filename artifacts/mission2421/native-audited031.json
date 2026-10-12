@@ -1,0 +1,79 @@
+{
+  "mode": "audited031",
+  "db": "audit2421_1791772474328",
+  "environment": "PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.2.0, 64-bit",
+  "scope": "isolated native PostgreSQL; synthetic UID/AAL; no hosted Auth",
+  "evidence": [
+    {
+      "case": "A242-01 Academy + Coach concurrent API writers during backfill",
+      "counters": "1,1",
+      "committed": "2,2",
+      "writerElapsedMs": 2212,
+      "result": "FAIL reproduced: undercount"
+    },
+    {
+      "case": "upgrade with existing data and observed hosted function/table ACLs",
+      "functions": 12,
+      "result": "PASS; OID/owner/ACL/security/path retained"
+    },
+    {
+      "case": "A242-02 prune after upsert before timestamp filtering",
+      "counterRows": "0",
+      "result": "FAIL reproduced: committed unmetered action"
+    },
+    {
+      "case": "A242-03 revoke / withdrawal admin-first",
+      "results": [
+        {
+          "ok": false,
+          "deadlock": true,
+          "version": false
+        },
+        {
+          "ok": true
+        }
+      ],
+      "final": {
+        "application": "withdrawn",
+        "scholarship": "revoked",
+        "roles": 0,
+        "benefits": 0
+      },
+      "result": "FAIL reproduced: deadlock"
+    },
+    {
+      "case": "A242-03 revoke / withdrawal withdraw-first",
+      "results": [
+        {
+          "ok": true
+        },
+        {
+          "ok": false,
+          "deadlock": true,
+          "version": true
+        }
+      ],
+      "final": {
+        "application": "trial_completed",
+        "scholarship": "revoked",
+        "roles": 0,
+        "benefits": 0
+      },
+      "result": "FAIL reproduced: deadlock"
+    },
+    {
+      "case": "admin roster / withdrawal: profile FK KEY SHARE versus actor lock",
+      "result": "FAIL reproduced: FK/profile lock deadlock",
+      "rosterOutcomes": [
+        {
+          "ok": false,
+          "deadlock": true,
+          "version": false
+        },
+        {
+          "ok": true
+        }
+      ]
+    }
+  ]
+}

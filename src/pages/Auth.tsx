@@ -2,7 +2,13 @@ import { Turnstile } from "../components/Turnstile";
 import { useState, type FormEvent } from "react";
 import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { ArrowRight, LockKeyhole } from "lucide-react";
-import { supabase, configured } from "../lib/client";
+import {
+  supabase,
+  configured,
+  authPasswordFlow,
+  clearAuthPasswordFlow,
+} from "../lib/client";
+import { passwordCallback } from "../lib/auth-flow";
 import { useStore } from "../lib/store";
 import { Heading } from "../components/ui";
 import { appDestination } from "../lib/navigation";
@@ -13,8 +19,7 @@ export default function Auth() {
   const requested = route.state?.from;
   const destination = appDestination(requested);
   const [mode, setMode] = useState<"login" | "signup" | "reset" | "update">(
-    location.hash.includes("type=recovery") ||
-      location.search.includes("recovery=1")
+    authPasswordFlow || passwordCallback(location.search, location.hash)
       ? "update"
       : "login",
   );
@@ -69,10 +74,15 @@ export default function Auth() {
           "Se houver uma conta para este e-mail, você receberá instruções.",
         );
       } else {
+        if (!store.session)
+          throw new Error(
+            "kyrven: abra um convite ou link de recuperação válido.",
+          );
         const { error } = await supabase.auth.updateUser({ password });
         if (error) throw error;
+        clearAuthPasswordFlow();
         setMessage("Senha atualizada.");
-        navigate(destination);
+        navigate("/security", { state: { from: destination }, replace: true });
       }
     });
   };
@@ -131,7 +141,8 @@ export default function Auth() {
                   : "Recuperar"}
             </button>
           ))}
-          {location.search.includes("recovery=1") && (
+          {(authPasswordFlow ||
+            passwordCallback(location.search, location.hash)) && (
             <button onClick={() => setMode("update")}>Nova senha</button>
           )}
         </div>
@@ -180,7 +191,9 @@ export default function Auth() {
             </label>
           )}
           <button
-            disabled={!configured || store.busy}
+            disabled={
+              !configured || store.busy || (mode === "update" && !store.session)
+            }
             className="button primary full"
           >
             {store.busy

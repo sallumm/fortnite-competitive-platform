@@ -1,0 +1,631 @@
+{
+  "scope": "synthetic only; no hosted Auth; no raw output or artifact export",
+  "runtime": "1.64.0",
+  "before": [
+    {
+      "name": "additional-reporter",
+      "logLeak": true,
+      "artifactLeak": false,
+      "nonzeroExit": true
+    },
+    {
+      "name": "environment-reporter",
+      "logLeak": true,
+      "artifactLeak": false,
+      "nonzeroExit": true
+    },
+    {
+      "name": "runner-debug",
+      "logLeak": true,
+      "artifactLeak": false,
+      "nonzeroExit": true
+    },
+    {
+      "name": "collection",
+      "logLeak": false,
+      "artifactLeak": false,
+      "nonzeroExit": true
+    },
+    {
+      "name": "beforeAll",
+      "logLeak": false,
+      "artifactLeak": true,
+      "nonzeroExit": true
+    },
+    {
+      "name": "setup",
+      "logLeak": false,
+      "artifactLeak": false,
+      "nonzeroExit": true
+    },
+    {
+      "name": "teardown",
+      "logLeak": false,
+      "artifactLeak": true,
+      "nonzeroExit": true
+    },
+    {
+      "name": "afterAll",
+      "logLeak": false,
+      "artifactLeak": true,
+      "nonzeroExit": true
+    }
+  ],
+  "after": [
+    {
+      "scenario": "success",
+      "exit": 0,
+      "status": "passed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": true
+        },
+        {
+          "phase": "beforeAll",
+          "ok": true
+        },
+        {
+          "phase": "setup",
+          "ok": true
+        },
+        {
+          "phase": "body",
+          "ok": true
+        },
+        {
+          "phase": "teardown",
+          "ok": true
+        },
+        {
+          "phase": "afterAll",
+          "ok": true
+        },
+        {
+          "phase": "cleanup",
+          "ok": true
+        }
+      ],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "collection",
+      "exit": 1,
+      "status": "failed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": false
+        },
+        {
+          "phase": "beforeAll",
+          "ok": true
+        },
+        {
+          "phase": "setup",
+          "ok": true
+        },
+        {
+          "phase": "body",
+          "ok": true
+        },
+        {
+          "phase": "teardown",
+          "ok": true
+        },
+        {
+          "phase": "afterAll",
+          "ok": true
+        },
+        {
+          "phase": "cleanup",
+          "ok": true
+        }
+      ],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "beforeAll",
+      "exit": 1,
+      "status": "failed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": true
+        },
+        {
+          "phase": "beforeAll",
+          "ok": false
+        },
+        {
+          "phase": "setup",
+          "ok": true
+        },
+        {
+          "phase": "body",
+          "ok": true
+        },
+        {
+          "phase": "teardown",
+          "ok": true
+        },
+        {
+          "phase": "afterAll",
+          "ok": true
+        },
+        {
+          "phase": "cleanup",
+          "ok": true
+        }
+      ],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "setup",
+      "exit": 1,
+      "status": "failed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": true
+        },
+        {
+          "phase": "beforeAll",
+          "ok": true
+        },
+        {
+          "phase": "setup",
+          "ok": false
+        },
+        {
+          "phase": "body",
+          "ok": true
+        },
+        {
+          "phase": "teardown",
+          "ok": true
+        },
+        {
+          "phase": "afterAll",
+          "ok": true
+        },
+        {
+          "phase": "cleanup",
+          "ok": true
+        }
+      ],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "body",
+      "exit": 1,
+      "status": "failed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": true
+        },
+        {
+          "phase": "beforeAll",
+          "ok": true
+        },
+        {
+          "phase": "setup",
+          "ok": true
+        },
+        {
+          "phase": "body",
+          "ok": false
+        },
+        {
+          "phase": "teardown",
+          "ok": true
+        },
+        {
+          "phase": "afterAll",
+          "ok": true
+        },
+        {
+          "phase": "cleanup",
+          "ok": true
+        }
+      ],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "teardown",
+      "exit": 1,
+      "status": "failed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": true
+        },
+        {
+          "phase": "beforeAll",
+          "ok": true
+        },
+        {
+          "phase": "setup",
+          "ok": true
+        },
+        {
+          "phase": "body",
+          "ok": true
+        },
+        {
+          "phase": "teardown",
+          "ok": false
+        },
+        {
+          "phase": "afterAll",
+          "ok": true
+        },
+        {
+          "phase": "cleanup",
+          "ok": true
+        }
+      ],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "afterAll",
+      "exit": 1,
+      "status": "failed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": true
+        },
+        {
+          "phase": "beforeAll",
+          "ok": true
+        },
+        {
+          "phase": "setup",
+          "ok": true
+        },
+        {
+          "phase": "body",
+          "ok": true
+        },
+        {
+          "phase": "teardown",
+          "ok": true
+        },
+        {
+          "phase": "afterAll",
+          "ok": false
+        },
+        {
+          "phase": "cleanup",
+          "ok": true
+        }
+      ],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "cleanup",
+      "exit": 1,
+      "status": "failed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": true
+        },
+        {
+          "phase": "beforeAll",
+          "ok": true
+        },
+        {
+          "phase": "setup",
+          "ok": true
+        },
+        {
+          "phase": "body",
+          "ok": true
+        },
+        {
+          "phase": "teardown",
+          "ok": true
+        },
+        {
+          "phase": "afterAll",
+          "ok": true
+        },
+        {
+          "phase": "cleanup",
+          "ok": false
+        }
+      ],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "timeout",
+      "exit": 1,
+      "status": "failed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": true
+        },
+        {
+          "phase": "beforeAll",
+          "ok": true
+        },
+        {
+          "phase": "setup",
+          "ok": true
+        },
+        {
+          "phase": "body",
+          "ok": false
+        },
+        {
+          "phase": "teardown",
+          "ok": true
+        },
+        {
+          "phase": "afterAll",
+          "ok": true
+        },
+        {
+          "phase": "cleanup",
+          "ok": true
+        }
+      ],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "matcher",
+      "exit": 1,
+      "status": "failed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": true
+        },
+        {
+          "phase": "beforeAll",
+          "ok": true
+        },
+        {
+          "phase": "setup",
+          "ok": true
+        },
+        {
+          "phase": "body",
+          "ok": false
+        },
+        {
+          "phase": "teardown",
+          "ok": true
+        },
+        {
+          "phase": "afterAll",
+          "ok": true
+        },
+        {
+          "phase": "cleanup",
+          "ok": true
+        }
+      ],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "console",
+      "exit": 1,
+      "status": "failed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": true
+        },
+        {
+          "phase": "beforeAll",
+          "ok": true
+        },
+        {
+          "phase": "setup",
+          "ok": true
+        },
+        {
+          "phase": "body",
+          "ok": false
+        },
+        {
+          "phase": "teardown",
+          "ok": true
+        },
+        {
+          "phase": "afterAll",
+          "ok": true
+        },
+        {
+          "phase": "cleanup",
+          "ok": true
+        }
+      ],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "attachment",
+      "exit": 1,
+      "status": "failed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": true
+        },
+        {
+          "phase": "beforeAll",
+          "ok": true
+        },
+        {
+          "phase": "setup",
+          "ok": true
+        },
+        {
+          "phase": "body",
+          "ok": false
+        },
+        {
+          "phase": "teardown",
+          "ok": true
+        },
+        {
+          "phase": "afterAll",
+          "ok": true
+        },
+        {
+          "phase": "cleanup",
+          "ok": true
+        }
+      ],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "unexpected",
+      "exit": 1,
+      "status": "failed",
+      "results": [
+        {
+          "phase": "collection",
+          "ok": true
+        },
+        {
+          "phase": "beforeAll",
+          "ok": true
+        },
+        {
+          "phase": "setup",
+          "ok": true
+        }
+      ],
+      "protocolFailed": true,
+      "temporaryRemoved": true,
+      "logLeak": false
+    },
+    {
+      "scenario": "worker-crash",
+      "exit": 1,
+      "status": "failed",
+      "results": [],
+      "protocolFailed": false,
+      "temporaryRemoved": true,
+      "logLeak": false
+    }
+  ],
+  "guard": [
+    {
+      "name": "additional-reporter",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "reporter",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "debug",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "trace",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "hosted-mode",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "PW_TEST_REPORTER",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "PW_RUNNER_DEBUG",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "PWDEBUG",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "PWDEBUGIMPL",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "PW_TEST_SOURCE_TRANSFORM",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "DEBUG",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "NODE_OPTIONS",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "NODE_DEBUG",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    },
+    {
+      "name": "KYRVEN_AUTH_TEST_CALLBACK_URL",
+      "exit": 2,
+      "blockedBeforeFixtures": true,
+      "logLeak": false
+    }
+  ],
+  "exportedMarkerLeak": false,
+  "temporaryRemoved": true
+}

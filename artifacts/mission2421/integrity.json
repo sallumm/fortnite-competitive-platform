@@ -1,0 +1,10 @@
+{
+  "base": "573c7aa9f93814a5dcfc77dad59598b6732bc9a7",
+  "historical": "30/30 byte-identical",
+  "migration031": [
+    {
+      "file": "202610120031_rpc_quotas_auth_readiness.sql",
+      "sha256": "1523a229d8e61d9bd5dcbe1c791c67c47f4f750c1c4df8759ba70004fe67b530"
+    }
+  ]
+}

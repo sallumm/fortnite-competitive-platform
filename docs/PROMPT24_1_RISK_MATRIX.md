@@ -1,0 +1,29 @@
+> Registro histórico da missão 24.1. A revisão atual da 031 e os riscos estão em [24.2.1](PROMPT24_2_1_IMPLEMENTATION.md) e [matriz atual](PROMPT24_2_1_RISK_MATRIX.md). Evidências antigas não representam automaticamente o novo HEAD.
+
+# Missão 24.1 — matriz de achados e riscos
+
+Classificações abaixo são locais; nenhuma correção está instalada no projeto hospedado. Gates de lançamento permanecem NO-GO.
+
+| ID                     | Severidade contextual                            | Estado                              | Evidência / risco residual                                                                                                           |
+| ---------------------- | ------------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| RPC-01                 | Baixa: consumo de recursos                       | Corrigido verificado local          | Retirada repetida: 2 eventos na 030, 1 na 031; outro proprietário/anon negados; revogação preservada                                 |
+| RPC-02                 | Baixa: consumo de recursos                       | Corrigido verificado local          | 121ª negada após clear; expiração e disputa da última vaga nativas; shared Academy trigger                                           |
+| RPC-03                 | Baixa: consumo de recursos                       | Corrigido verificado local          | 61ª negada após DELETE; expiração e disputa nativas; quotas IA não modificadas                                                       |
+| NULL-purge             | Robustez de confirmação                          | Corrigido verificado local          | Native admin+AAL2 NULL negado, confirmação correta aceita, AAL1 negado; sem escalada de cargo                                        |
+| NULL-version           | Robustez de CAS                                  | Corrigido local                     | Guardas em seis definições + herança restore; Native admin/development e PGlite editorial/exam/assessment; CI e positivas existentes |
+| LIFE-withdraw          | Média: integridade de participação/consentimento | Reproduzido e corrigido local       | Interleaving PostgreSQL 17 em duas conexões; base reativa application/grants, patch final withdrawn/zero grants                      |
+| LIFE-erasure           | Risco de concorrência inicialmente plausível     | Não reproduzido no cenário ensaiado | Inserção de request com FK/profile serializa caso observado; ampliar ordens/modos em revisão independente                            |
+| LIFE-admin             | Média potencial: locks concorrentes              | Pendente de investigação específica | not_selected/revoke/extend e deadlock/retry não encerrados por teste de retirada própria                                             |
+| QUOTA-retention        | Baixa: minimização operacional                   | Parcial                             | Arrays limitados; expiração lógica+prune privado+cascade testados; sem job remoto aprovado para expiração física de contas inativas  |
+| INVITE                 | Robustez de fluxo Auth                           | Corrigido verificado com mocks      | Senha antes de security; captura antes de SDK; token/e-mail/invite entregue reais pendentes                                          |
+| JWT-revocation         | Contrato de sessão                               | Pendente externo                    | Logout/refresh não implica invalidação imediata do access JWT; TTL real ainda não medido                                             |
+| KYR-038                | Média: isolamento de sessão                      | Parcial                             | Regressões locais A/B/downgrade existentes e harness duas abas preparado; prova GoTrue/JWT hospedada pendente                        |
+| KYR-022                | Média: paginação residual                        | Parcial, preservado                 | Withdraw deixa de amplificar eventos; histórico/ciclos/bolsas/goals/reviews ainda requerem paginação preservando export integral     |
+| KYR-039/040            | Média: histórico integral/teto de linhas         | Aberto, preservado                  | Contratos/fórmulas de XP/calendário/relatórios/export não alterados; etapa própria de escala                                         |
+| OBS23-002              | UI histórica                                     | Pendente                            | Não atribuir causa histórica a uma falha atual diferente; HMR de execução corrente e fixture expirado documentados separadamente     |
+| Edge-origin            | Pré-deploy                                       | Pendente externo/código futuro      | Fallback localhost em quatro handlers; exigir ALLOWED_ORIGIN HTTPS exata antes de deploy                                             |
+| Hosted-auth            | Alta para lançamento                             | Pendente externo                    | Signup fechado, SMTP, redirects, CAPTCHA, MFA, API schemas, RLS/REST/JWT, recovery e duas contas reais/sintéticas autorizadas        |
+| Hosting/restore        | Alta para lançamento                             | Pendente externo                    | Access de todas as origens, headers/TLS reais, backup pós-030 DB+Storage/config e restauração adequada/operador/alertas              |
+| Comercial/recrutamento | Operação não autorizada                          | Bloqueado por escopo                | LivePix, pagamentos, seleção pública e gates de menores/elenco continuam fechados; sem deploy/merge                                  |
+
+Próximo passo: revisão independente read-only da 031 e do SHA de código validado. Só depois discutir autorização concreta para aplicação exclusiva da 031 no ref correto, com backup/ledger/hash/recuperação. Auth, hospedagem e deploy precisam de autorizações separadas.

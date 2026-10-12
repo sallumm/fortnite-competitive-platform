@@ -1,0 +1,81 @@
+{
+  "database": "mission24_patched_1791770777753",
+  "environment": "PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.2.0, 64-bit",
+  "isolation": "Docker --network none, no ports or host data volumes; minimal auth.uid fixture, no GoTrue/PostgREST or real JWT",
+  "evidence": [
+    {
+      "scenario": "030 to 031 incremental backfill and existing function ACL equality",
+      "consumed": "Academy 1; Coach 1",
+      "existingACLs": "identical"
+    },
+    {
+      "scenario": "RPC-02: 121 after cleanup",
+      "result": "denied"
+    },
+    {
+      "scenario": "RPC-03: 61 after DELETE",
+      "result": "denied"
+    },
+    {
+      "scenario": "admin expected version NULL",
+      "result": "denied"
+    },
+    {
+      "scenario": "RPC-01 repeat withdrawal",
+      "events": 1,
+      "crossOwner": "denied"
+    },
+    {
+      "scenario": "accept/withdraw",
+      "instrumentation": "BEFORE scholarship UPDATE pg_sleep; two independent psql mutation sessions; actual pg_stat_activity barrier",
+      "final": {
+        "status": "withdrawn",
+        "live_roles": 0,
+        "live_benefits": 0
+      }
+    },
+    {
+      "scenario": "accept/erasure",
+      "instrumentation": "BEFORE scholarship UPDATE pg_sleep; two independent psql mutation sessions; actual pg_stat_activity barrier",
+      "final": {
+        "status": "withdrawn",
+        "live_roles": 0,
+        "live_benefits": 0
+      }
+    },
+    {
+      "scenario": "purge NULL/AAL1 rejected; valid AAL2 allowed",
+      "result": "pass"
+    },
+    {
+      "scenario": "academy: expiry and two-connection last-slot race",
+      "successes": 1,
+      "refusals": 1,
+      "consumed": 120
+    },
+    {
+      "scenario": "coach_proposal: expiry and two-connection last-slot race",
+      "successes": 1,
+      "refusals": 1,
+      "consumed": 60
+    },
+    {
+      "scenario": "version NULL/stale rollback and accept-after-withdraw",
+      "result": "denied; valid version accepted"
+    },
+    {
+      "scenario": "native catalog, grants and RLS",
+      "catalog": {
+        "tables": 95,
+        "policies": 131,
+        "functions": 147,
+        "unsafe_tables": 0,
+        "unsafe_definers": 0
+      }
+    },
+    {
+      "scenario": "account cascade and privileged expired-counter maintenance",
+      "result": "pass"
+    }
+  ]
+}

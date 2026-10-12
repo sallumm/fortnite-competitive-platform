@@ -18,11 +18,18 @@ HTMLDialogElement.prototype.close = function () {
   this.removeAttribute("open");
 };
 beforeEach(() => {
+  // This test exercises a dated editorial fixture, not current tournament availability.
+  // Freeze Date only: browser/userEvent timers and all freshness checks still run.
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date("2026-10-11T12:00:00Z"));
   localStorage.clear();
   sessionStorage.clear();
   window.history.replaceState({}, "", "/");
 });
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.useRealTimers();
+});
 async function demo() {
   const user = userEvent.setup(),
     data = demoPlayer();

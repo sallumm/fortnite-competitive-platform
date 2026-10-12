@@ -1,0 +1,29 @@
+{
+  "scope": "metadata only; hosted unchanged",
+  "project": "hqhkaewpkkgpagcvgfmb",
+  "ledger": "001-030; no 031",
+  "matchedContracts": 15,
+  "matchedProperties": [
+    "md5(prosrc)",
+    "owner",
+    "SECURITY DEFINER",
+    "search_path",
+    "ACL"
+  ],
+  "localUpgrade": {
+    "functionsPreserved": 145,
+    "tablesSecurityPreserved": 94
+  },
+  "localFrontend": {
+    "vitest": 400,
+    "playwrightPublic": 81,
+    "acceptanceTypes": true,
+    "build": true,
+    "stagingBuild": true,
+    "stagingArtifact": true,
+    "security": true,
+    "brand": true,
+    "npmAuditVulnerabilities": 0
+  },
+  "note": "Local frontend validation preceded the final documentation/test-harness commit; final exact-HEAD CI is recorded in the delivery package. No hosted JWT/Auth/MFA equivalence."
+}
