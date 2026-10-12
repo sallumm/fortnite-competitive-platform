@@ -1,0 +1,198 @@
+{
+  "container": "kyrven-a2423-pg",
+  "db": "a2423_1791778974570",
+  "scope": "Local synthetic SQL auth.uid/AAL settings, not JWT or hosted Auth",
+  "evidence": [
+    {
+      "case": "030 upgrade preserves owners ACLs OIDs RLS/security path",
+      "result": "PASS",
+      "functions": 145,
+      "hostedContracts": 15,
+      "historicalTablesSecurity": 94
+    },
+    {
+      "case": "A2422-01 offer first / bulk purge; another eligible owner",
+      "result": "PASS new rights retained, other eligible record purged",
+      "rows": [
+        {
+          "ok": true,
+          "output": "{\"id\": \"d6df958c-2f4a-426d-a5b2-66ba6ac53e52\"}"
+        },
+        {
+          "ok": true,
+          "output": "1"
+        }
+      ],
+      "protectedApplications": 1
+    },
+    {
+      "case": "A2422-01 grant first / bulk purge; another eligible owner",
+      "result": "PASS new rights retained, other eligible record purged",
+      "rows": [
+        {
+          "ok": true,
+          "output": "{\"id\": \"fbe6d84f-2745-40f9-bcdd-58504ceb77ba\"}"
+        },
+        {
+          "ok": true,
+          "output": "1"
+        }
+      ],
+      "protectedApplications": 1
+    },
+    {
+      "case": "A2422-01 roster first / bulk purge; another eligible owner",
+      "result": "PASS new rights retained, other eligible record purged",
+      "rows": [
+        {
+          "ok": true,
+          "output": "{}"
+        },
+        {
+          "ok": true,
+          "output": "1"
+        }
+      ],
+      "protectedApplications": 1
+    },
+    {
+      "case": "A2422-01 bulk purge first / offer",
+      "result": "PASS deleted candidate unavailable",
+      "inverse": [
+        {
+          "ok": true,
+          "output": "1"
+        },
+        {
+          "ok": false,
+          "sqlstate": "P0001",
+          "error": "ERROR:  P0001: Completed human evaluation required\nCONTEXT:  PL/pgSQL function private.esports_development_action_internal(text,uuid,integer,jsonb) line 45 at RAISE\nPL/pgSQL function public.esports_development_action(text,uuid,integer,jsonb) line 1 at RETURN\nLOCATION:  exec_stmt_raise, pl_exec.c:3897\n"
+        }
+      ]
+    },
+    {
+      "case": "A2422-01 cycle retention increased during waiting",
+      "result": "PASS current retention preserved",
+      "crows": [
+        {
+          "ok": true,
+          "output": "{\"id\": \"24220000-0000-4000-8000-000000000012\", \"mode\": \"both\", \"rules\": \"Synthetic rules\", \"title\": \"Synthetic\", \"format\": \"solo\", \"ends_at\": \"2026-09-02T04:23:10.964195+00:00\", \"is_open\": false, \"version\": 2, \"criteria\": \"Synthetic criteria\", \"published\": false, \"starts_at\": \"2026-08-13T04:23:10.964195+00:00\", \"created_at\": \"2026-10-12T04:23:10.964195+00:00\", \"allow_minors\": false, \"policy_version\": \"v1\", \"privacy_notice\": \"Synthetic privacy\", \"retention_days\": 730}"
+        },
+        {
+          "ok": true,
+          "output": "0"
+        }
+      ],
+      "kept": 1
+    },
+    {
+      "case": "A2422-01 recent activity changes while purge waits",
+      "result": "PASS current eligibility preserved",
+      "rows": [
+        {
+          "ok": true,
+          "output": ""
+        },
+        {
+          "ok": true,
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "case": "A2422-01 consent retention changes while purge waits",
+      "result": "PASS current eligibility preserved",
+      "rows": [
+        {
+          "ok": true,
+          "output": ""
+        },
+        {
+          "ok": true,
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "case": "A2422-01 two administrators / multiple eligible applications",
+      "result": "PASS serialized purges, no duplicated destructive decision",
+      "admins": [
+        {
+          "ok": true,
+          "output": "2"
+        },
+        {
+          "ok": true,
+          "output": "0"
+        }
+      ]
+    },
+    {
+      "case": "A2422-01 post-wait authority rechecked / incompatible isolation and lock upgrade rejected",
+      "result": "PASS",
+      "lost": {
+        "ok": false,
+        "sqlstate": "P0001",
+        "error": "ERROR:  P0001: Administrator required after maintenance wait\nCONTEXT:  PL/pgSQL function public.esports_purge(uuid,text) line 10 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897\n"
+      }
+    },
+    {
+      "case": "Explicit erasure versus bulk retention; null/AAL1/no-request negative",
+      "result": "PASS",
+      "explicit": "1"
+    },
+    {
+      "case": "R2422-04 grant first / physical deletion",
+      "result": "PASS maintenance drained writer before DELETE",
+      "physical": [
+        {
+          "ok": true,
+          "output": "{\"id\": \"e1e0d015-ae91-4017-ba8c-cda54175b782\"}"
+        },
+        {
+          "ok": true,
+          "output": ""
+        }
+      ]
+    },
+    {
+      "case": "R2422-04 physical deletion first / grant",
+      "result": "PASS removed profile/application grant denied",
+      "reverse": [
+        {
+          "ok": true,
+          "output": ""
+        },
+        {
+          "ok": false,
+          "sqlstate": "P0001",
+          "error": "ERROR:  P0001: Application unavailable\nCONTEXT:  PL/pgSQL function private.esports_admin_action_internal(text,uuid,integer,jsonb) line 38 at RAISE\nPL/pgSQL function public.esports_admin_action(text,uuid,integer,jsonb) line 9 at assignment\nLOCATION:  exec_stmt_raise, pl_exec.c:3897\n"
+        }
+      ]
+    },
+    {
+      "case": "R2422-04 uncoordinated session prevents NOWAIT maintenance and rolls back",
+      "result": "PASS fail-closed",
+      "blocked": {
+        "ok": false,
+        "sqlstate": "55P03",
+        "error": "ERROR:  55P03: could not obtain lock on relation \"public.profiles\"\nCONTEXT:  SQL statement \"lock table public.profiles in access exclusive mode nowait\"\nPL/pgSQL function inline_code_block line 1 at EXECUTE\nLOCATION:  RangeVarGetRelidExtended, namespace.c:598\n"
+      }
+    },
+    {
+      "case": "Partial failure rolls back 031 objects and maintenance fence",
+      "result": "PASS",
+      "fail": {
+        "ok": false,
+        "sqlstate": "22012",
+        "error": "ERROR:  22012: division by zero\nLOCATION:  int4div, int.c:870\n"
+      }
+    },
+    {
+      "case": "Environment",
+      "result": "COMPLETE",
+      "mode": "corrected2423",
+      "postgres": "PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.2.0, 64-bit"
+    }
+  ]
+}

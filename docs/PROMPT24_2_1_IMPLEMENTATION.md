@@ -1,5 +1,7 @@
 # KYRVEN — correções da auditoria 24.2
 
+> Registro histórico, sucedido por [24.2.3](PROMPT24_2_3_IMPLEMENTATION.md) e sua [matriz de riscos](PROMPT24_2_3_RISK_MATRIX.md). O SHA anterior da 031 e a proteção Auth descrita aqui não representam a revisão vigente. Auth hospedado permanece desabilitado.
+
 Missão 24.2.1; base `573c7aa9f93814a5dcfc77dad59598b6732bc9a7`, branch exclusiva `feat/rpc-quotas-auth-readiness`, PR #23 draft. O HEAD auditado `6d0c547258ac595163475a0d944cc6aa8d6cf214` e a 031 original continuam preservados. A 031 foi revisada porque não foi instalada hospedada; 001–030 não foram alteradas.
 
 ## Correções e cobertura

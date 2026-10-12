@@ -1,4 +1,4 @@
-> Registro histórico da missão 24.1. A revisão atual da 031 e os riscos estão em [24.2.1](PROMPT24_2_1_IMPLEMENTATION.md) e [matriz atual](PROMPT24_2_1_RISK_MATRIX.md). Evidências antigas não representam automaticamente o novo HEAD.
+> Registro histórico. A política vigente está em [24.2.3](PROMPT24_2_3_IMPLEMENTATION.md) e na [matriz 24.2.3](PROMPT24_2_3_RISK_MATRIX.md). O runner Auth hospedado está desabilitado; somente o launcher sintético isolado está autorizado. Instruções históricas abaixo não autorizam sua reativação. Evidências antigas não representam o novo HEAD.
 
 # Auth privado — preparação posterior à Missão 24.1
 

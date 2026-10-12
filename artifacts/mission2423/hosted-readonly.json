@@ -1,0 +1,296 @@
+{
+  "checkedAt": "2026-10-12",
+  "scope": "Read-only project metadata, migration ledger and function catalogs; no hosted mutations or Auth/data access",
+  "project": {
+    "id": "hqhkaewpkkgpagcvgfmb",
+    "ref": "hqhkaewpkkgpagcvgfmb",
+    "organization_id": "hdmpqaxbbfzxzitcjpub",
+    "organization_slug": "hdmpqaxbbfzxzitcjpub",
+    "name": "kyrven-staging2",
+    "region": "sa-east-1",
+    "status": "ACTIVE_HEALTHY",
+    "database": {
+      "host": "db.hqhkaewpkkgpagcvgfmb.supabase.co",
+      "version": "17.11.0.003",
+      "postgres_engine": "17",
+      "release_channel": "ga"
+    },
+    "created_at": "2026-10-11T19:45:43.932529Z"
+  },
+  "migrations": {
+    "migrations": [
+      {
+        "version": "202610100001",
+        "name": "core"
+      },
+      {
+        "version": "202610100002",
+        "name": "seed"
+      },
+      {
+        "version": "202610100003",
+        "name": "performance"
+      },
+      {
+        "version": "202610100004",
+        "name": "coach"
+      },
+      {
+        "version": "202610100005",
+        "name": "competitive"
+      },
+      {
+        "version": "202610100006",
+        "name": "competitive_seed"
+      },
+      {
+        "version": "202610100007",
+        "name": "training"
+      },
+      {
+        "version": "202610100008",
+        "name": "training_seed"
+      },
+      {
+        "version": "202610100009",
+        "name": "intelligence"
+      },
+      {
+        "version": "202610100010",
+        "name": "training_research"
+      },
+      {
+        "version": "202610100011",
+        "name": "training_research_seed"
+      },
+      {
+        "version": "202610100012",
+        "name": "curriculum"
+      },
+      {
+        "version": "202610100013",
+        "name": "mastery_seed"
+      },
+      {
+        "version": "202610100014",
+        "name": "meta"
+      },
+      {
+        "version": "202610100015",
+        "name": "meta_seed"
+      },
+      {
+        "version": "202610100016",
+        "name": "meta_editorial"
+      },
+      {
+        "version": "202610100017",
+        "name": "academy_study"
+      },
+      {
+        "version": "202610100018",
+        "name": "academy_questions"
+      },
+      {
+        "version": "202610100019",
+        "name": "academy_paths"
+      },
+      {
+        "version": "202610100020",
+        "name": "skill_maxing"
+      },
+      {
+        "version": "202610100021",
+        "name": "meta_training"
+      },
+      {
+        "version": "202610100022",
+        "name": "training_teams"
+      },
+      {
+        "version": "202610100023",
+        "name": "road_to_competitive"
+      },
+      {
+        "version": "202610100024",
+        "name": "fortnite_knowledge"
+      },
+      {
+        "version": "202610110025",
+        "name": "esports_recruitment"
+      },
+      {
+        "version": "202610110026",
+        "name": "esports_assessments"
+      },
+      {
+        "version": "202610110027",
+        "name": "esports_development"
+      },
+      {
+        "version": "202610110028",
+        "name": "esports_lifecycle_controls"
+      },
+      {
+        "version": "202610110029",
+        "name": "security_hardening"
+      },
+      {
+        "version": "202610110030",
+        "name": "post_audit_reads"
+      }
+    ]
+  },
+  "contracts": [
+    {
+      "signature": "esports_admin_action(text,uuid,integer,jsonb)",
+      "source_md5": "87844b9edbd219fbcbe9bd120c26f8da",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,service_role=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_answer_exam(uuid,text,integer,jsonb)",
+      "source_md5": "561c3c4d0d2313a2f787464df01e17dc",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,service_role=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_development_action(text,uuid,integer,jsonb)",
+      "source_md5": "26bc3455776205b473f534f0515f0f8c",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,service_role=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_expire_assessments()",
+      "source_md5": "83a778d1ae377c8b9afc6b8d0e7a2148",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,service_role=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_purge(uuid,text)",
+      "source_md5": "14f90d00c39afc133ef1b1f6085ae975",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,service_role=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_request_erasure()",
+      "source_md5": "f33d6fb9f96a0de56649dad528920426",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,service_role=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_start_exam(uuid,uuid,boolean)",
+      "source_md5": "60c62f6db4baa157f1f639bf08ea70bb",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,service_role=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_submit(uuid,jsonb,uuid)",
+      "source_md5": "19c14a28b3414de8cfda6bfa40116178",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,service_role=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "esports_withdraw(uuid)",
+      "source_md5": "24e995b61a03f9d9c2b2a8a8e9279691",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,service_role=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "private.esports_admin_action_internal(text,uuid,integer,jsonb)",
+      "source_md5": "b84c75103d4f6c84d1ffe1dbc6a35964",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,service_role=X/postgres}"
+    },
+    {
+      "signature": "private.esports_assessment_action_internal(text,uuid,integer,jsonb)",
+      "source_md5": "1cb5c16ac8c0b32c0af8a5ff60f28a50",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,service_role=X/postgres}"
+    },
+    {
+      "signature": "private.esports_development_action_internal(text,uuid,integer,jsonb)",
+      "source_md5": "295bc1eb73e33f647138e92b7c724a08",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,service_role=X/postgres}"
+    },
+    {
+      "signature": "private.esports_write_limit()",
+      "source_md5": "3143ebdf0206930ad62586b068054275",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "publish_meta_draft(uuid,integer,boolean)",
+      "source_md5": "7393b9ad568db3e79647ce40f9e4af40",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}"
+    },
+    {
+      "signature": "save_meta_draft(jsonb,text,uuid,integer)",
+      "source_md5": "7839f87db7fa856eaa1655f493628c0b",
+      "owner": "postgres",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "acl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}"
+    }
+  ]
+}

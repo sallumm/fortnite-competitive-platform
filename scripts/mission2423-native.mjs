@@ -96,6 +96,75 @@ function record(item) {
   );
   console.log(item.case);
 }
+// Hold a real transaction until the controller explicitly commits it. Observe
+// the final sentinel query, not a scheduling-dependent fixed sleep interval.
+async function hold(q, name, id = null) {
+  const p = spawn(
+    "docker",
+    [
+      "exec",
+      "-i",
+      container,
+      "psql",
+      "-X",
+      "-qAt",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-v",
+      "VERBOSITY=verbose",
+      "-U",
+      "postgres",
+      "-h",
+      "127.0.0.1",
+      "-d",
+      db,
+    ],
+    { windowsHide: true },
+  );
+  let output = "",
+    error = "";
+  p.stdout.on("data", (b) => (output += b));
+  p.stderr.on("data", (b) => (error += b));
+  p.stdin.on("error", () => {});
+  const done = outcome(
+    new Promise((res, rej) => {
+      p.on("error", rej);
+      p.on("close", (code) =>
+        code
+          ? rej(Error(error))
+          : res(
+              output
+                .trim()
+                .replace(/\n?HOLD_READY$/, "")
+                .trim(),
+            ),
+      );
+    }),
+  );
+  const identity = id
+    ? `set local role authenticated;set local "request.jwt.claim.sub"='${id}';set local "request.jwt.claims"='{"aal":"${id === adm || id === adm2 ? "aal2" : "aal1"}"}';`
+    : "";
+  p.stdin.write(
+    `begin isolation level read committed;set local statement_timeout='20s';set local idle_in_transaction_session_timeout='30s';set local application_name='${name}';${identity}${q};select 'HOLD_READY';\n`,
+  );
+  let ready = false;
+  for (let i = 0; i < 130; i++) {
+    if (
+      (await sql(
+        `select exists(select 1 from pg_stat_activity where datname=current_database() and application_name='${name}' and state='idle in transaction' and wait_event='ClientRead' and query like '%HOLD_READY%')`,
+      )) === "t"
+    ) {
+      ready = true;
+      break;
+    }
+    await new Promise((r) => setTimeout(r, 25));
+  }
+  if (!ready) {
+    p.stdin.end("rollback;\n");
+    throw Error("Held transaction not ready " + name);
+  }
+  return { done, release: () => p.stdin.end("commit;\n") };
+}
 async function installBase(d) {
   await sql(
     "create schema auth;create table auth.users(id uuid primary key);create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;grant usage on schema public,auth to anon,authenticated;grant execute on function auth.uid() to anon,authenticated;",
@@ -133,6 +202,11 @@ for (const h of hosted) {
     await sql("grant execute on function " + h.signature + " to service_role");
 }
 const before = await catalog();
+const securityCatalog = () =>
+  sql(
+    "select json_agg(json_build_object('name',n.nspname||'.'||c.relname,'owner',pg_get_userbyid(c.relowner),'acl',c.relacl::text,'rls',c.relrowsecurity,'forceRls',c.relforcerowsecurity,'policies',(select json_agg(json_build_object('name',p.polname,'roles',p.polroles,'command',p.polcmd,'permissive',p.polpermissive,'qual',pg_get_expr(p.polqual,p.polrelid),'check',pg_get_expr(p.polwithcheck,p.polrelid)) order by p.polname) from pg_policy p where p.polrelid=c.oid)) order by n.nspname,c.relname) from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname in ('public','private') and c.relkind='r'",
+  ).then(JSON.parse);
+const tableSecurityBefore = await securityCatalog();
 const file = resolve(
     repo,
     baseline
@@ -150,6 +224,14 @@ if (baseline)
   );
 await sql(migration);
 const after = await catalog();
+const tableSecurityAfter = await securityCatalog();
+for (const table of tableSecurityBefore)
+  assert.deepEqual(
+    tableSecurityAfter.find((x) => x.name === table.name),
+    table,
+  );
+for (const f of after.filter((x) => x.definer))
+  assert.deepEqual(f.config, ['search_path=""']);
 for (const f of before) {
   const n = after.find((x) => x.oid === f.oid);
   assert(n);
@@ -161,6 +243,7 @@ record({
   result: "PASS",
   functions: before.length,
   hostedContracts: hosted.length,
+  historicalTablesSecurity: tableSecurityBefore.length,
 });
 await sql(
   "insert into auth.users values('" +
@@ -228,20 +311,13 @@ for (const action of ["offer", "grant", "roster"]) {
         : "select public.esports_development_action('roster_decision','" +
           a +
           "',1,jsonb_build_object('kind','academy_player','requirements_confirmed',true,'ends_at',now()+interval '2 days','reason','Synthetic roster','formalization_reference','Synthetic proof'))";
-  const writing = outcome(
-    auth(
-      "set local application_name='rights_first';" +
-        mutation +
-        ";select pg_sleep(1)",
-      adm,
-    ),
-  );
-  await barrier("rights_first");
+  const writing = await hold(mutation, "rights_first", adm);
   const purging = outcome(
     auth("set local application_name='retention_wait';" + purge, adm2),
   );
   await barrier("retention_wait", baseline ? "transactionid" : "advisory");
-  const rows = await Promise.all([writing, purging]);
+  writing.release();
+  const rows = await Promise.all([writing.done, purging]);
   assert(rows.every((x) => x.ok));
   const left = await sql(
     "select count(*) from public.esports_applications where id='" + a + "'",
@@ -259,15 +335,13 @@ for (const action of ["offer", "grant", "roster"]) {
 }
 await sql("update private.esports_launch_gate set roster_reviewed=false");
 await retired();
-const deleting = outcome(
-  auth(
-    "set local application_name='purge_first';" + purge + ";select pg_sleep(1)",
-    adm2,
-  ),
+const deleting = await hold(purge, "purge_first", adm2);
+const later = outcome(
+  auth("set application_name='offer_second';" + offer, adm),
 );
-await barrier("purge_first");
-const later = outcome(auth(offer, adm));
-const inverse = await Promise.all([deleting, later]);
+await barrier("offer_second", baseline ? "transactionid" : "advisory");
+deleting.release();
+const inverse = await Promise.all([deleting.done, later]);
 assert(inverse[0].ok && !inverse[1].ok);
 assert(!inverse.some((x) => x.sqlstate === "40P01"));
 record({
@@ -284,23 +358,24 @@ const cyclePayload = (
       "'",
   )
 ).replaceAll("'", "''");
-const cycleChange = outcome(
-  auth(
-    "set local application_name='cycle_first';select public.esports_admin_action('cycle','" +
-      cy +
-      "',1,'" +
-      cyclePayload +
-      "'::jsonb);select pg_sleep(1)",
-    adm,
-  ),
+const cycleChange = await hold(
+  "select public.esports_admin_action('cycle','" +
+    cy +
+    "',1,'" +
+    cyclePayload +
+    "'::jsonb)",
+  "cycle_first",
+  adm,
 );
-try {
-  await barrier("cycle_first");
-} catch (e) {
-  throw Error(JSON.stringify(await cycleChange));
-}
-const cyclePurge = outcome(auth(purge, adm2));
-const crows = await Promise.all([cycleChange, cyclePurge]);
+const cyclePurge = outcome(
+  auth("set application_name='cycle_purge';" + purge, adm2),
+);
+// Historical purge can complete without waiting on the cycle; corrected purge
+// must wait for the participating writer before reading its changed retention.
+if (!baseline) await barrier("cycle_purge", "advisory");
+else await cyclePurge;
+cycleChange.release();
+const crows = await Promise.all([cycleChange.done, cyclePurge]);
 assert(crows.every((x) => x.ok));
 const kept = await sql(
   "select count(*) from public.esports_applications where id='" + a + "'",
@@ -324,21 +399,20 @@ for (const [name, mutation] of [
   ["consent retention", "consent_snapshot='{\"retention_days\":730}'::jsonb"],
 ]) {
   await retired();
-  const writer = outcome(
-    sql(
-      "begin;set application_name='eligibility_writer';select pg_advisory_xact_lock_shared(2423,31);update public.esports_applications set " +
-        mutation +
-        " where id='" +
-        a +
-        "';select pg_sleep(1);commit;",
-    ),
+  const writer = await hold(
+    "select pg_advisory_xact_lock_shared(2423,31);update public.esports_applications set " +
+      mutation +
+      " where id='" +
+      a +
+      "'",
+    "eligibility_writer",
   );
-  await barrier("eligibility_writer");
   const consumer = outcome(
     auth("set application_name='eligibility_purge';" + purge, adm2),
   );
   await barrier("eligibility_purge", baseline ? "transactionid" : "advisory");
-  const rows = await Promise.all([writer, consumer]);
+  writer.release();
+  const rows = await Promise.all([writer.done, consumer]);
   assert(rows.every((x) => x.ok));
   assert.equal(
     await sql(
@@ -363,17 +437,13 @@ if (!baseline) {
       cy +
       "','not_selected','{}','{}',now()-interval '35 days')",
   );
-  const firstAdmin = outcome(
-    auth(
-      "set application_name='bulk_admin_first';" +
-        purge +
-        ";select pg_sleep(1)",
-      adm,
-    ),
+  const firstAdmin = await hold(purge, "bulk_admin_first", adm);
+  const secondAdmin = outcome(
+    auth("set application_name='bulk_admin_second';" + purge, adm2),
   );
-  await barrier("bulk_admin_first");
-  const secondAdmin = outcome(auth(purge, adm2));
-  const admins = await Promise.all([firstAdmin, secondAdmin]);
+  await barrier("bulk_admin_second", "advisory");
+  firstAdmin.release();
+  const admins = await Promise.all([firstAdmin.done, secondAdmin]);
   assert(admins.every((x) => x.ok));
   assert.equal(
     await sql("select count(*) from public.esports_applications"),
@@ -399,14 +469,18 @@ if (!baseline) {
   );
   // Revoke the responsible actor while its purge waits for the maintenance fence.
   await retired();
-  const revoking = sql(
-    "begin;set application_name='revoke_actor';select pg_advisory_xact_lock_shared(2423,31);delete from private.user_roles where user_id='" +
+  const revoking = await hold(
+    "select pg_advisory_xact_lock_shared(2423,31);delete from private.user_roles where user_id='" +
       adm +
-      "';select pg_sleep(1);commit;",
+      "'",
+    "revoke_actor",
   );
-  await barrier("revoke_actor");
-  const lost = outcome(auth(purge, adm));
-  const revoked = await Promise.all([revoking, lost]);
+  const lost = outcome(
+    auth("set application_name='revoked_purge';" + purge, adm),
+  );
+  await barrier("revoked_purge", "advisory");
+  revoking.release();
+  const revoked = await Promise.all([revoking.done, lost]);
   assert(!revoked[1].ok && /after maintenance wait/.test(revoked[1].error));
   assert.equal(
     await sql(
@@ -465,7 +539,7 @@ const maintenance =
   "select pg_advisory_xact_lock(2423,31);do $locks$ declare r record;begin if exists(select 1 from pg_locks where locktype='advisory' and classid=2423 and objid=31 and objsubid=2 and mode='ShareLock' and granted and pid<>pg_backend_pid()) then raise exception 'Writers not drained';end if; for r in select n.nspname,c.relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname in('public','private') and c.relkind='r' order by n.nspname,c.relname loop execute format('lock table %I.%I in access exclusive mode nowait',r.nspname,r.relname);end loop;end;$locks$;";
 await retired("trial_invited");
 await sql(
-  "create function public.a2423_grant_pause() returns trigger language plpgsql as $$begin if current_setting('application_name')='grant_first' then perform pg_sleep(2);end if;return new;end;$$;create trigger a2423_grant_pause before insert on private.esports_role_grants for each row execute function public.a2423_grant_pause();",
+  "create function public.a2423_grant_pause() returns trigger language plpgsql as $$begin if current_setting('application_name')='grant_first' then perform pg_advisory_xact_lock(2423,32);end if;return new;end;$$;create trigger a2423_grant_pause before insert on private.esports_role_grants for each row execute function public.a2423_grant_pause();",
 );
 const grant =
   "select public.esports_admin_action('grant_role','" +
@@ -473,10 +547,14 @@ const grant =
   "',0,jsonb_build_object('user_id','" +
   u +
   "','role','trialist','ends_at',now()+interval '1 day','reason','Synthetic grant'))";
+const grantController = await hold(
+  "select pg_advisory_xact_lock(2423,32)",
+  "grant_controller",
+);
 const grantFirst = outcome(
   auth("set local application_name='grant_first';" + grant, adm),
 );
-await barrier("grant_first");
+await barrier("grant_first", "advisory");
 const deleteSecond = outcome(
   sql(
     "begin;set local statement_timeout='10s';set local application_name='physical_delete';" +
@@ -487,6 +565,8 @@ const deleteSecond = outcome(
   ),
 );
 await barrier("physical_delete", baseline ? "transactionid" : "advisory");
+grantController.release();
+assert((await grantController.done).ok);
 const physical = await Promise.all([grantFirst, deleteSecond]);
 if (baseline) assert(physical.some((x) => x.sqlstate === "40P01"));
 else assert(physical.every((x) => x.ok));
@@ -498,18 +578,19 @@ record({
   physical,
 });
 await retired("trial_invited");
-const deleteFirst = outcome(
-  sql(
-    "begin;set local application_name='delete_first';" +
-      (baseline ? "" : maintenance) +
-      "delete from public.profiles where id='" +
-      u +
-      "';select pg_sleep(1);commit;",
-  ),
+const deleteFirst = await hold(
+  (baseline ? "" : maintenance) +
+    "delete from public.profiles where id='" +
+    u +
+    "'",
+  "delete_first",
 );
-await barrier("delete_first");
-const grantSecond = outcome(auth(grant, adm));
-const reverse = await Promise.all([deleteFirst, grantSecond]);
+const grantSecond = outcome(
+  auth("set application_name='grant_second';" + grant, adm),
+);
+await barrier("grant_second", baseline ? "transactionid" : "advisory");
+deleteFirst.release();
+const reverse = await Promise.all([deleteFirst.done, grantSecond]);
 assert(
   reverse[0].ok &&
     !reverse[1].ok &&
@@ -526,10 +607,10 @@ await sql(
 if (!baseline) {
   // Any unrelated SQL reader/writer prevents exclusive NOWAIT maintenance; no deletion.
   await retired("trial_invited");
-  const active = sql(
-    "begin;set application_name='uncoordinated';select 1 from public.profiles limit 1;select pg_sleep(1);commit",
+  const active = await hold(
+    "select 1 from public.profiles limit 1",
+    "uncoordinated",
   );
-  await barrier("uncoordinated");
   const blocked = await outcome(
     sql(
       "begin;" +
@@ -540,7 +621,8 @@ if (!baseline) {
     ),
   );
   assert(!blocked.ok && blocked.sqlstate === "55P03");
-  await active;
+  active.release();
+  assert((await active.done).ok);
   assert.equal(
     await sql("select count(*) from public.profiles where id='" + u + "'"),
     "1",
