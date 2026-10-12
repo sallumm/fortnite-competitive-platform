@@ -126,10 +126,11 @@ await sql(`create database ${database}`, "postgres");
 await sql(
   "create schema auth;create table auth.users(id uuid primary key);create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;grant usage on schema public,auth to anon,authenticated;grant execute on function auth.uid() to anon,authenticated;",
 );
-for (const f of readdirSync("supabase/migrations")
+const migrations = readdirSync("supabase/migrations")
   .filter((f) => f.endsWith(".sql"))
-  .sort()) {
-  if (baseline && f.slice(8, 12) > "0030") continue;
+  .sort();
+for (const f of migrations) {
+  if (f.slice(8, 12) > "0030") continue;
   await sql(readFileSync("supabase/migrations/" + f, "utf8"));
 }
 await sql(`insert into auth.users values('${user}'),('${other}'),('${admin}');insert into public.profiles(id,display_name,mode,level,objective,minutes,input) select id,'Synthetic','build','beginner','aim',30,'kbm' from auth.users;insert into private.user_roles values('${admin}','admin');
@@ -138,6 +139,37 @@ lesson = await sql(
   "select id from public.articles where kind='lesson' and curriculum is not null and published and published_at<=now() order by id limit 1",
 );
 assert(lesson);
+if (!baseline) {
+  // Exercise an incremental upgrade with visible pre-031 consumption, not only a fresh install.
+  await as(`select public.record_academy_study('${lesson}','started')`, other);
+  await as(propose, other);
+  const beforeACL = await sql(
+    "select string_agg(p.oid::regprocedure::text||coalesce(p.proacl::text,''),E'\\n' order by p.oid::regprocedure::text) from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in ('public','private')",
+  );
+  await sql(
+    readFileSync(
+      "supabase/migrations/" +
+        migrations.find((f) => f.slice(8, 12) === "0031"),
+      "utf8",
+    ),
+  );
+  assert.equal(
+    await sql(
+      `select string_agg(cardinality(consumed_at)::text,',' order by kind) from private.resource_quota where user_id='${other}'`,
+    ),
+    "1,1",
+  );
+  const afterACL = await sql(
+    "select string_agg(p.oid::regprocedure::text||coalesce(p.proacl::text,''),E'\\n' order by p.oid::regprocedure::text) from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in ('public','private') and p.proname not in ('resource_quota_insert','prune_resource_quota')",
+  );
+  assert.equal(afterACL, beforeACL);
+  evidence.push({
+    scenario:
+      "030 to 031 incremental backfill and existing function ACL equality",
+    consumed: "Academy 1; Coach 1",
+    existingACLs: "identical",
+  });
+}
 await as(
   `do $$begin for i in 1..120 loop perform public.record_academy_study('${lesson}','started');end loop;end;$$`,
 );
@@ -170,9 +202,14 @@ evidence.push({
 });
 await fixture();
 const noteNull = `select public.esports_admin_action('note','${app}',null,'{"note":"Synthetic local review"}')`;
-if (baseline) await as(noteNull, admin, 'aal2');
-else await denied(noteNull, /Version conflict/, admin, 'aal2');
-evidence.push({ scenario: 'admin expected version NULL', result: baseline ? 'version bypass reproduced; AAL2 still required' : 'denied' });
+if (baseline) await as(noteNull, admin, "aal2");
+else await denied(noteNull, /Version conflict/, admin, "aal2");
+evidence.push({
+  scenario: "admin expected version NULL",
+  result: baseline
+    ? "version bypass reproduced; AAL2 still required"
+    : "denied",
+});
 await as(
   `select public.esports_withdraw('${app}');select public.esports_withdraw('${app}')`,
 );
@@ -348,7 +385,8 @@ if (baseline) {
     result: "pass",
   });
 }
-const evidenceDir = process.env.KYRVEN_NATIVE_EVIDENCE_DIR || "artifacts/mission24";
+const evidenceDir =
+  process.env.KYRVEN_NATIVE_EVIDENCE_DIR || "artifacts/mission24";
 mkdirSync(evidenceDir, { recursive: true });
 writeFileSync(
   `${evidenceDir}/native-${baseline ? "baseline" : "patched"}.json`,

@@ -10,7 +10,15 @@ function env(name: string) {
 }
 function client() {
   const key = env("KYRVEN_AUTH_TEST_PUBLIC_KEY");
-  if (key.startsWith("sb_secret_") || key.includes("service_role"))
+  let legacyPublic = false;
+  try {
+    legacyPublic =
+      JSON.parse(atob(key.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")))
+        .role === "anon";
+  } catch {
+    /* A publishable key is not a JWT. */
+  }
+  if (!key.startsWith("sb_publishable_") && !legacyPublic)
     throw new Error("Public client key required");
   return createClient(`https://${ref}.supabase.co`, key, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -102,7 +110,11 @@ test("valid invite or recovery displays password setup before security redirect"
   const context = await browser.newContext();
   try {
     const page = await context.newPage();
-    await page.goto(url.href);
+    try {
+      await page.goto(url.href);
+    } catch {
+      throw new Error("Private callback navigation failed; URL omitted");
+    }
     await expect(
       page.getByRole("heading", { name: "Nova senha" }),
     ).toBeVisible();

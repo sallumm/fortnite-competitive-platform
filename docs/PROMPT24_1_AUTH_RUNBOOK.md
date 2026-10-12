@@ -1,0 +1,19 @@
+# Auth privado — preparação posterior à Missão 24.1
+
+Nenhuma etapa hospedada abaixo foi executada. Exige autorizações próprias; não iniciar pelo simples aceite da PR. Alvo futuro exclusivo: hqhkaewpkkgpagcvgfmb / hdmpqaxbbfzxzitcjpub.
+
+1. Revisar patch SQL e CI do SHA exato. Aplicação 031 depende de backup pós-030, ledger, catálogo e autorização específica. Não repetir migrations anteriores.
+2. Identificar origem HTTPS privada aprovada e proteger todos os hostnames, inclusive pages.dev principal, previews e aliases, antes de publicar. Access no frontend não protege a API Supabase.
+3. Configurar signup público/anonymous fechados no servidor, confirmação de e-mail ativa, redirects exatos /auth, /auth?invite=1 e /auth?recovery=1. Nunca wildcard amplo ou conta auto-confirmada como atalho. Rever templates usando RedirectTo conforme documentação oficial.
+4. Escolher/autorizar SMTP e destinatários sintéticos, verificar sender/DNS separadamente. Não enviar credenciais ou links ao chat/logs/Git. Testar entrega, token expirado/reutilizado e redirect fora da allowlist.
+5. Autorizar CAPTCHA server-side e TOTP, fatores/contas A/B sintéticas, com limites de chamadas. A terá cargo de plataforma admin e fator já validado para testar AAL1 negativa/AAL2 positiva; B será conta comum. Não habilitar recrutamento nem outros gates para preparar essas fixtures.
+6. Preparar storageState privado de A pelo operador após CAPTCHA/Access; jamais incluir no repositório/artefatos. Para SDK, fornecer senhas/chave pública/factor ID/TOTP/CAPTCHA somente no processo privado. Não usar service_role. O harness não faz enrollment/unenrollment/criação de contas/envio de e-mail.
+7. Executar somente após aprovação explícita, com `npx playwright test --config acceptance/auth.config.ts`. O config exige KYRVEN_AUTH_TEST_APPROVED igual ao ref e KYRVEN_AUTH_TEST_ORIGIN igual à origem HTTPS exata. Isso é uma trava técnica, não substitui autorização humana. Não definir variáveis aprovadas nesta missão.
+
+Nomes esperados pelo harness: KYRVEN_AUTH_TEST_PUBLIC_KEY; KYRVEN_AUTH_TEST_A_EMAIL/PASSWORD/CAPTCHA; B_EMAIL/PASSWORD/CAPTCHA; A_FACTOR_ID; A_TOTP; A_STATE_PATH; CALLBACK_URL; NEW_PASSWORD. Valores nunca em arquivos versionados. CAPTCHA deve ser novo/limitado à ação e hostname do ensaio; não reutilizar prova para contornar limite. CALLBACK_URL só /auth da origem aprovada e link único obtido pelo operador. Confirmar configuração de CAPTCHA/Access compatível antes do SDK; erro deve bloquear, sem dispensa de controle.
+
+O harness atual testa leitura cruzada profiles, RPC administrativa negativa AAL1, security_status AAL2, logout SDK, perda da tela privada em segunda aba e password callback. Validações restantes não podem ser declaradas automáticas: replay/expiração do convite/recovery, remoção/perda de fator e refresh/downgrade, signup fechado por HTTP direto, writes RLS A→B negativos com estado antes/depois, sessão antiga/JWT TTL após logout, auth troca A→B com respostas atrasadas, reauth/export/exclusão, SMTP real, CAPTCHA replay/hostname/action, Data API schemas e Access anônimo. Expandir os casos sob orçamento/autorização de cada mutação; não correr load tests ou scanners ativos.
+
+Registro de evidência: SHA/artefato/ref, timestamp Brasília+UTC, versão SDK/PG, cenário, resultado esperado/observado, status HTTP/contagens/latência, limitação. Não registrar Authorization/apikey/cookies/TOTP/QR/link/payload privado; não habilitar trace de rede/screenshot com sessão real. Logout não prova revogação instantânea de access JWT. Medir TTL em experimento específico aprovado.
+
+Antes de cada futuro Edge deploy, exigir ALLOWED_ORIGIN HTTPS exata e secrets exclusivamente server-side. Fallbacks localhost existentes continuam pendentes; nenhuma função foi implantada. OPENAI_API_KEY/LivePix/recrutamento permanecem desativados.

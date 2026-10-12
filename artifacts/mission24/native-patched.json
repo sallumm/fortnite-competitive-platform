@@ -1,14 +1,23 @@
 {
-  "database": "mission24_patched_1791765799325",
+  "database": "mission24_patched_1791766555017",
   "environment": "PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.2.0, 64-bit",
   "isolation": "Docker --network none, no ports or host data volumes; minimal auth.uid fixture, no GoTrue/PostgREST or real JWT",
   "evidence": [
+    {
+      "scenario": "030 to 031 incremental backfill and existing function ACL equality",
+      "consumed": "Academy 1; Coach 1",
+      "existingACLs": "identical"
+    },
     {
       "scenario": "RPC-02: 121 after cleanup",
       "result": "denied"
     },
     {
       "scenario": "RPC-03: 61 after DELETE",
+      "result": "denied"
+    },
+    {
+      "scenario": "admin expected version NULL",
       "result": "denied"
     },
     {
