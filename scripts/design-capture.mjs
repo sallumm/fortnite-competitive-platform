@@ -1,0 +1,10 @@
+import { chromium } from '@playwright/test';
+import fs from 'node:fs';
+const phase=process.argv[2]||'before';
+const browser=await chromium.launch({channel:'msedge',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+await page.goto('http://127.0.0.1:4174/');
+await page.locator('h1').first().waitFor();
+fs.mkdirSync(`artifacts/design/${phase}`,{recursive:true});
+await page.screenshot({path:`artifacts/design/${phase}/landing-desktop.png`,fullPage:true});
+await browser.close();
