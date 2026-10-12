@@ -22,6 +22,8 @@ function sql(query, db = database) {
         "ON_ERROR_STOP=1",
         "-U",
         "postgres",
+        "-h",
+        "127.0.0.1",
         "-d",
         db,
       ],
@@ -167,6 +169,10 @@ evidence.push({
   result: baseline ? "bypass reproduced" : "denied",
 });
 await fixture();
+const noteNull = `select public.esports_admin_action('note','${app}',null,'{"note":"Synthetic local review"}')`;
+if (baseline) await as(noteNull, admin, 'aal2');
+else await denied(noteNull, /Version conflict/, admin, 'aal2');
+evidence.push({ scenario: 'admin expected version NULL', result: baseline ? 'version bypass reproduced; AAL2 still required' : 'denied' });
 await as(
   `select public.esports_withdraw('${app}');select public.esports_withdraw('${app}')`,
 );
@@ -342,9 +348,10 @@ if (baseline) {
     result: "pass",
   });
 }
-mkdirSync("artifacts/mission24", { recursive: true });
+const evidenceDir = process.env.KYRVEN_NATIVE_EVIDENCE_DIR || "artifacts/mission24";
+mkdirSync(evidenceDir, { recursive: true });
 writeFileSync(
-  `artifacts/mission24/native-${baseline ? "baseline" : "patched"}.json`,
+  `${evidenceDir}/native-${baseline ? "baseline" : "patched"}.json`,
   JSON.stringify(
     {
       database,

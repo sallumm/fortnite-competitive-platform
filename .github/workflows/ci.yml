@@ -28,6 +28,8 @@ jobs:
       - run: npm run check:staging-artifact
   native-sql:
     runs-on: ubuntu-latest
+    env:
+      KYRVEN_NATIVE_EVIDENCE_DIR: /tmp/kyrven-m24-evidence
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -40,7 +42,7 @@ jobs:
         if: always()
         with:
           name: mission24-native-evidence
-          path: artifacts/mission24/native-*.json
+          path: /tmp/kyrven-m24-evidence/native-*.json
           retention-days: 7
       - run: docker rm -f kyrven-m24-1-pg
         if: always()
