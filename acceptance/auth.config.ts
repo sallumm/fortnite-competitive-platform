@@ -1,33 +1,6 @@
-import { defineConfig } from "@playwright/test";
 import { requirePrivateReporting } from "./privacy-config";
 requirePrivateReporting();
 // Retired private Test runner: its late hook/fixture errors can write raw error-context.
-throw new Error("Hosted Auth runner disabled pending independent privacy approval; use the synthetic private launcher.");
-// Verified against the locked Playwright runtime: suppress error-context page snapshots.
-process.env.PLAYWRIGHT_NO_COPY_PROMPT = "1";
-const origin = process.env.KYRVEN_AUTH_TEST_ORIGIN;
-let exactHTTPSOrigin = false;
-try {
-  exactHTTPSOrigin =
-    !!origin &&
-    new URL(origin).protocol === "https:" &&
-    new URL(origin).origin === origin;
-} catch {
-  /* Do not expose malformed private URLs. */
-}
-if (
-  process.env.KYRVEN_AUTH_TEST_APPROVED !== "hqhkaewpkkgpagcvgfmb" ||
-  !exactHTTPSOrigin
-)
-  throw new Error(
-    "Hosted Auth tests require separate explicit authorization and exact private HTTPS origin.",
-  );
-export default defineConfig({
-  testDir: ".",
-  testMatch: "auth.spec.ts",
-  workers: 1,
-  retries: 0,
-  reporter: [["./safe-reporter.ts"]],
-  timeout: 60000,
-  use: { baseURL: origin, trace: "off", screenshot: "off", video: "off" },
-});
+throw new Error(
+  "Hosted Auth runner disabled pending independent privacy approval; use the synthetic private launcher.",
+);

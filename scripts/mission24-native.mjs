@@ -3,7 +3,7 @@ import { readFileSync, readdirSync, mkdirSync, writeFileSync } from "node:fs";
 import assert from "node:assert/strict";
 
 // No database URL, hosted connection, credentials or network. Only this disposable container.
-const container = "kyrven-m24-1-pg";
+const container = process.env.KYRVEN_LOCAL_CONTAINER || "kyrven-m24-1-pg";
 const baseline = process.argv.includes("--baseline");
 const database = `mission24_${baseline ? "baseline" : "patched"}_${Date.now()}`;
 const evidence = [];

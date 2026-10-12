@@ -41,6 +41,8 @@ jobs:
       - run: node scripts/mission24-native.mjs
       - run: node scripts/mission2421-native.mjs --baseline-031
       - run: node scripts/mission2421-native.mjs
+      - run: node scripts/mission2423-native.mjs --baseline-2422
+      - run: node scripts/mission2423-native.mjs
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -60,6 +62,13 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npx playwright install --with-deps chromium
       - run: KYRVEN_NATIVE_EVIDENCE_DIR=/tmp/kyrven-auth-redaction node scripts/mission2421-redaction.mjs
+      - run: KYRVEN_NATIVE_EVIDENCE_DIR=/tmp/kyrven-private-auth node scripts/mission2423-auth.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: private-auth-synthetic-validation
+          path: /tmp/kyrven-private-auth/auth-privacy.json
+          retention-days: 7
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -73,5 +82,5 @@ jobs:
           name: browser-validation
           path: |
             playwright-report/
-            test-results/
+            test-results/e2e-public/
           retention-days: 7

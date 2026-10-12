@@ -3,7 +3,7 @@ import { readFileSync, readdirSync, writeFileSync, mkdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import assert from "node:assert/strict";
 const db = `audit2421_${Date.now()}`,
-  container = "kyrven-m24-1-pg",
+  container = process.env.KYRVEN_LOCAL_CONTAINER || "kyrven-m24-1-pg",
   evidence = [];
 const baseline = process.argv.includes("--baseline-031");
 const dir = process.env.KYRVEN_NATIVE_EVIDENCE_DIR || "artifacts/mission2421";
