@@ -1,8 +1,8 @@
 import { defineConfig } from "@playwright/test";
+import { requirePrivateReporting } from "./privacy-config";
+requirePrivateReporting();
 // Verified against the locked Playwright runtime: suppress error-context page snapshots.
 process.env.PLAYWRIGHT_NO_COPY_PROMPT = "1";
-delete process.env.DEBUG;
-delete process.env.PWDEBUG;
 const origin = process.env.KYRVEN_AUTH_TEST_ORIGIN;
 let exactHTTPSOrigin = false;
 try {

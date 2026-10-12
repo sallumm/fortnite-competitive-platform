@@ -58,6 +58,29 @@ function inspect(dir) {
   }
 }
 inspect("test-results/auth-redaction");
+const override = await new Promise((resolve, reject) => {
+  const p = spawn(
+    process.execPath,
+    [
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "--config=acceptance/redaction.config.ts",
+      "--reporter=list",
+    ],
+    {
+      windowsHide: true,
+      env: { ...process.env, KYRVEN_FAKE_REDACTION_MARKER: marker },
+    },
+  );
+  let logs = "";
+  p.stdout.on("data", (b) => (logs += b));
+  p.stderr.on("data", (b) => (logs += b));
+  p.on("error", reject);
+  p.on("close", (code) => resolve({ code, logs }));
+});
+assert.notEqual(override.code, 0);
+assert(override.logs.includes("overrides are blocked"));
+assert(!override.logs.includes(marker));
 const dir = process.env.KYRVEN_NATIVE_EVIDENCE_DIR || "artifacts/mission2421";
 mkdirSync(dir, { recursive: true });
 writeFileSync(dir + "/auth-redaction.log", result.logs);
@@ -71,6 +94,7 @@ writeFileSync(
         intentionalFailures: 5,
         nonzeroExit: true,
         logsAndArtifactsLeak: false,
+        unsafeReporterOverrideBlocked: true,
       },
       result: "PASS",
     },

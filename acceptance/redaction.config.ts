@@ -1,8 +1,8 @@
 // Strictly offline adversarial suite. Never loads hosted Auth config or operator fixtures.
 import { defineConfig } from "@playwright/test";
+import { requirePrivateReporting } from "./privacy-config";
+requirePrivateReporting();
 process.env.PLAYWRIGHT_NO_COPY_PROMPT = "1";
-delete process.env.DEBUG;
-delete process.env.PWDEBUG;
 export default defineConfig({
   testDir: ".",
   testMatch: "redaction.spec.ts",

@@ -6,7 +6,8 @@
   "after": {
     "intentionalFailures": 5,
     "nonzeroExit": true,
-    "logsAndArtifactsLeak": false
+    "logsAndArtifactsLeak": false,
+    "unsafeReporterOverrideBlocked": true
   },
   "result": "PASS"
 }
