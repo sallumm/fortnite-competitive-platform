@@ -60,7 +60,7 @@ const auth = (q, id = u) =>
     `begin;set local role authenticated;set local "request.jwt.claim.sub"='${id}';set local "request.jwt.claims"='{"aal":"${id === adm ? "aal2" : "aal1"}"}';set local statement_timeout='10s';${q};commit;`,
   );
 const names =
-  "'save_meta_draft','publish_meta_draft','esports_admin_action_internal','esports_answer_exam','esports_assessment_action_internal','esports_development_action_internal','esports_withdraw','esports_purge','esports_development_action','esports_request_erasure'";
+  "'save_meta_draft','publish_meta_draft','esports_admin_action_internal','esports_answer_exam','esports_assessment_action_internal','esports_development_action_internal','esports_withdraw','esports_purge','esports_development_action','esports_request_erasure','esports_admin_action','esports_write_limit'";
 async function functions() {
   return JSON.parse(
     await sql(
@@ -71,7 +71,7 @@ async function functions() {
 const record = () =>
   `select public.record_academy_study('${lesson}','started')`;
 const propose =
-  'select public.coach_propose(\'{"kind":"create","items":[{"title":"Synthetic rest","kind":"rest","duration_minutes":10,"starts_at":"2027-01-15T12:00:00Z"}]}\')';
+  "select public.coach_propose(jsonb_build_object('kind','create','items',jsonb_build_array(jsonb_build_object('title','Synthetic rest','kind','rest','duration_minutes',10,'starts_at',now()+interval '2 days'))))";
 async function fixture() {
   await sql(
     `delete from public.esports_applications where id='${app}';insert into public.esports_applications(id,user_id,cycle_id,status,payload,consent_snapshot) values('${app}','${u}','${cy}','development_offered','{"age_band":"adult"}','{}');insert into private.esports_scholarships(id,application_id,user_id,title,terms,benefits,starts_at,ends_at) values('${sch}','${app}','${u}','Synthetic offer','Synthetic terms for isolated audit','["materials"]',now()-interval '1 hour',now()+interval '1 day');`,
@@ -81,7 +81,7 @@ async function barrier(name, event = "PgSleep") {
   for (let i = 0; i < 100; i++) {
     if (
       (await sql(
-        `select exists(select 1 from pg_stat_activity where application_name='${name}' and wait_event='${event}')`,
+        `select exists(select 1 from pg_stat_activity where datname=current_database() and application_name='${name}' and wait_event='${event}')`,
       )) === "t"
     )
       return;
@@ -93,7 +93,7 @@ async function barrierDB(name, d) {
   for (let i = 0; i < 100; i++) {
     if (
       (await sql(
-        `select exists(select 1 from pg_stat_activity where application_name='${name}' and wait_event='PgSleep')`,
+        `select exists(select 1 from pg_stat_activity where datname=current_database() and application_name='${name}' and wait_event='PgSleep')`,
         d,
       )) === "t"
     )
@@ -144,7 +144,15 @@ const hosted = JSON.parse(
 for (const h of hosted) {
   const local = (await functions()).find((x) => x.signature === h.signature);
   assert.equal(local.definition, h.definition);
-  await sql(`grant execute on function ${h.signature} to service_role`);
+  if (h.acl.includes("service_role=X/postgres"))
+    await sql(`grant execute on function ${h.signature} to service_role`);
+  const normalized = (x) => x.replace(/[{}]/g, "").split(",").sort();
+  assert.deepEqual(
+    normalized(
+      (await functions()).find((x) => x.signature === h.signature).acl,
+    ),
+    normalized(h.acl),
+  );
 }
 // Model observed public defaults/ACLs without granting anything in the hosted project.
 await sql(
@@ -318,7 +326,7 @@ for (const action of baseline ? ["revoke"] : ["revoke", "end", "extend"])
     const expected = action === "extend" ? 2 : 1;
     const payload = JSON.stringify({
       reason: "Synthetic local decision",
-      ends_at: "2027-02-15T12:00:00Z",
+      ends_at: new Date(Date.now() + 2 * 864e5).toISOString(),
     }).replaceAll("'", "''");
     let results;
     if (direction === "admin-first") {
@@ -395,7 +403,7 @@ await sql(
 );
 const rosterFirst = outcome(
   auth(
-    `set local application_name='a242_roster_first';select public.esports_development_action('roster_decision','${app}',2,'{"kind":"academy_player","requirements_confirmed":true,"ends_at":"2027-02-15T12:00:00Z","reason":"Synthetic decision","formalization_reference":"Synthetic reference"}')`,
+    `set local application_name='a242_roster_first';select public.esports_development_action('roster_decision','${app}',2,'{"kind":"academy_player","requirements_confirmed":true,"ends_at":"${new Date(Date.now() + 2 * 864e5).toISOString()}","reason":"Synthetic decision","formalization_reference":"Synthetic reference"}')`,
     adm,
   ),
 );
@@ -503,7 +511,7 @@ if (!baseline) {
       roster_decision: {
         kind: "academy_player",
         requirements_confirmed: true,
-        ends_at: "2027-02-15T12:00:00Z",
+        ends_at: new Date(Date.now() + 2 * 864e5).toISOString(),
         reason: "Synthetic reason",
         formalization_reference: "Synthetic reference",
       },
@@ -550,6 +558,67 @@ if (!baseline) {
       outcomes,
       result:
         "PASS; no reactivation; review/goal may retain administrative history",
+    });
+  }
+  // A direct trialist grant must not commit live after a consent withdrawal.
+  for (const direction of ["admin-first", "withdraw-first"]) {
+    await fixture();
+    await sql(
+      `update public.esports_applications set status='trial_invited' where id='${app}'`,
+    );
+    const wd = await sql(
+      "select pg_get_functiondef('public.esports_withdraw(uuid)'::regprocedure)",
+    );
+    if (direction === "withdraw-first")
+      await sql(
+        wd.replace(
+          "update private.esports_scholarships",
+          "perform pg_sleep(2);update private.esports_scholarships",
+        ),
+      );
+    else
+      await sql(
+        "create function public.a242_trialist_pause() returns trigger language plpgsql as $$begin if current_setting('application_name')='a242_trialist_admin' then perform pg_sleep(2);end if;return new;end;$$;create trigger a242_trialist_pause before insert on private.esports_role_grants for each row execute function public.a242_trialist_pause()",
+      );
+    const grant = () =>
+      outcome(
+        auth(
+          `set local application_name='a242_trialist_admin';select public.esports_admin_action('grant_role','${app}',0,'{"user_id":"${u}","role":"trialist","ends_at":"${new Date(Date.now() + 864e5).toISOString()}","reason":"Synthetic trial invitation"}')`,
+          adm,
+        ),
+      );
+    const withdraw = () =>
+      outcome(
+        auth(
+          `set local application_name='a242_trialist_owner';select public.esports_withdraw('${app}')`,
+        ),
+      );
+    const first = direction === "admin-first" ? grant() : withdraw();
+    await barrier(
+      direction === "admin-first"
+        ? "a242_trialist_admin"
+        : "a242_trialist_owner",
+    );
+    const second = direction === "admin-first" ? withdraw() : grant();
+    await barrier(
+      direction === "admin-first"
+        ? "a242_trialist_owner"
+        : "a242_trialist_admin",
+      "transactionid",
+    );
+    const outcomes = await Promise.all([first, second]);
+    assert(outcomes[direction === "admin-first" ? 1 : 0].ok);
+    assert(!outcomes.some((x) => x.deadlock));
+    assert.equal((await state()).roles, 0);
+    if (direction === "admin-first")
+      await sql(
+        "drop trigger a242_trialist_pause on private.esports_role_grants;drop function public.a242_trialist_pause()",
+      );
+    else await sql(wd);
+    evidence.push({
+      case: `trialist grant / withdrawal ${direction}`,
+      result: "PASS; no live grant after withdrawal",
+      outcomes,
     });
   }
   // Two applications in separate cycles: erasure locks their UUIDs in order.

@@ -98,5 +98,27 @@
       "search_path=\"\""
     ],
     "definition": "CREATE OR REPLACE FUNCTION public.save_meta_draft(p_payload jsonb, p_status text, p_id uuid DEFAULT NULL::uuid, p_expected integer DEFAULT 0)\n RETURNS meta_drafts\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare d public.meta_drafts;begin\n perform private.meta_editor_gate();perform private.validate_meta_content(p_payload,p_status='review');\n if p_status not in ('draft','review') then raise exception 'Invalid workflow transition';end if;\n if p_id is null then\n  insert into public.meta_drafts(payload,status,editor_id,published_entry_id) values(p_payload,p_status,auth.uid(),(select id from public.meta_entries where subject_key=p_payload->>'subject_key' and context_id=p_payload->>'context_id' order by revision desc limit 1)) returning * into d;\n else\n  select * into d from public.meta_drafts where id=p_id for update;\n  if not found or d.version<>p_expected then raise exception 'Draft changed; reload before saving';end if;\n  if d.payload->>'subject_key'<>p_payload->>'subject_key' or d.payload->>'context_id'<>p_payload->>'context_id' then raise exception 'Stable identity cannot change; create another context edition';end if;\n  update public.meta_drafts set payload=p_payload,status=p_status,editor_id=auth.uid(),version=version+1,updated_at=clock_timestamp() where id=p_id returning * into d;\n end if;\n insert into public.meta_draft_history(draft_id,payload,version,status,actor_id) values(d.id,d.payload,d.version,d.status,auth.uid());return d;\nend;$function$\n"
+  },
+  {
+    "signature": "esports_admin_action(text,uuid,integer,jsonb)",
+    "owner": "postgres",
+    "acl": "{postgres=X/postgres,service_role=X/postgres,authenticated=X/postgres}",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "body_md5": "87844b9edbd219fbcbe9bd120c26f8da",
+    "definition": "CREATE OR REPLACE FUNCTION public.esports_admin_action(p_action text, p_id uuid DEFAULT NULL::uuid, p_expected integer DEFAULT 0, p_payload jsonb DEFAULT '{}'::jsonb)\n RETURNS jsonb\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n declare result jsonb;\n begin\n perform private.esports_write_limit();\n if p_action='status' and (p_payload->>'status' in('development_offered','development_active','academy_selected') or exists(select 1 from private.esports_scholarships where application_id=p_id and status in('offered','accepted') and ends_at>now()) and p_payload->>'status'='trial_completed') then raise exception 'Use explicit scholarship or roster workflow';end if;\n result:=private.esports_admin_action_internal(p_action,p_id,p_expected,p_payload);\n if p_action='status' and p_payload->>'status'='not_selected' then\n update private.esports_role_grants set revoked_at=now() where application_id=p_id and revoked_at is null;\n update private.esports_benefit_grants set revoked_at=now() where scholarship_id in(select id from private.esports_scholarships where application_id=p_id);\n update private.esports_scholarships set status='revoked',version=version+1 where application_id=p_id and status in('offered','accepted');\n end if;\n if p_action='revoke_authorization' then\n update private.esports_role_grants r set revoked_at=now() from public.esports_applications a where r.application_id=a.id and a.cycle_id=p_id and a.user_id=(p_payload->>'user_id')::uuid and a.payload->>'age_band'='adolescent' and r.revoked_at is null;\n update private.esports_benefit_grants set revoked_at=now() where scholarship_id in(select s.id from private.esports_scholarships s join public.esports_applications a on a.id=s.application_id where a.cycle_id=p_id and a.user_id=(p_payload->>'user_id')::uuid and a.payload->>'age_band'='adolescent');\n end if;\n return result;\n end;$function$\n"
+  },
+  {
+    "signature": "private.esports_write_limit()",
+    "owner": "postgres",
+    "acl": "{postgres=X/postgres}",
+    "prosecdef": true,
+    "proconfig": [
+      "search_path=\"\""
+    ],
+    "body_md5": "3143ebdf0206930ad62586b068054275",
+    "definition": "CREATE OR REPLACE FUNCTION private.esports_write_limit()\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n begin\n if auth.uid() is null then raise exception 'Authentication required';end if;\n perform 1 from public.profiles where id=auth.uid() for update;\n if (select count(*) from private.esports_audit where actor_id=auth.uid() and created_at>now()-interval '1 minute')>=120 then raise exception 'Esports write rate limit';end if;\n end;$function$\n"
   }
 ]

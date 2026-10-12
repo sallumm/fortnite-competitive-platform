@@ -150,6 +150,15 @@ do $$declare signature text;definition text;before_text text;begin
  definition:=replace(definition,'insert into public.esports_status_events(application_id,status,message) values(s.application_id,''trial_completed'',''Bolsa encerrada ou revogada. Assinaturas pessoais não são alteradas.'');end if;',
  'if found then insert into public.esports_status_events(application_id,status,message) values(s.application_id,''trial_completed'',''Bolsa encerrada ou revogada. Assinaturas pessoais não são alteradas.'');end if;end if;');
  execute definition;
+ -- Trial-role grants must recheck participation after the same application lock.
+ definition:=pg_get_functiondef('private.esports_admin_action_internal(text,uuid,integer,jsonb)'::regprocedure);
+ before_text:='elsif p_action=''grant_role'' then';
+ if position(before_text in definition)=0 then raise exception 'Expected role grant boundary missing';end if;
+ execute replace(definition,before_text,before_text||'
+ if p_payload->>''role''=''trialist'' then
+ perform 1 from public.esports_applications where id=p_id and user_id=(p_payload->>''user_id'')::uuid for update;
+ if not found then raise exception ''Application unavailable'';end if;
+ end if;');
  -- Purge must lock applications before deleting their audit/child rows.
  definition:=pg_get_functiondef('public.esports_purge(uuid,text)'::regprocedure);
  execute replace(definition,'-- Audit targets associated',
