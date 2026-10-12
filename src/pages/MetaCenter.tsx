@@ -256,7 +256,7 @@ export default function MetaCenter() {
           Gerenciar Meta
         </Link>
       )}
-      <div className="panel meta-context">
+      <div className="panel meta-context context-register">
         <Badge>Pesquisa inicial · 10/10/2026</Badge>
         <h2>{version?.season || "Selecione um contexto"}</h2>
         <p>
@@ -402,7 +402,7 @@ export default function MetaCenter() {
           verificação está pendente.
         </Empty>
       )}
-      <div className="meta-grid">
+      <div className="meta-grid meta-ledger">
         {rows.map((e) => {
           const status = metaStatus(
             e,
@@ -411,7 +411,7 @@ export default function MetaCenter() {
             now,
           );
           return (
-            <article className="panel meta-record" key={e.id}>
+            <article className="panel meta-record meta-ledger-entry" key={e.id}>
               <div className="row between">
                 <Badge tone={status === "confirmed" ? "green" : "neutral"}>
                   {metaStates[status]}

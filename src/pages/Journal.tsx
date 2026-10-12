@@ -48,7 +48,7 @@ function JournalEntry({ id }: { id: string | undefined }) {
           </Link>
         }
       />
-      <section className="panel journal">
+      <section className="panel journal reflection-notebook">
         <Badge>Relato pessoal · sem pontuação de habilidade</Badge>
         <form
           onSubmit={(e) => {
@@ -56,7 +56,7 @@ function JournalEntry({ id }: { id: string | undefined }) {
             s.run(() => s.save("journals", row));
           }}
         >
-          <div className="two-grid">
+          <div className="reflection-grid">
             {(
               [
                 ["practiced", "O que pratiquei?"],

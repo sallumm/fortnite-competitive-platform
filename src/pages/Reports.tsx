@@ -163,7 +163,7 @@ export default function Reports() {
         onChange={setPeriod}
         items={[7, 30, 90].map((n) => ({ value: n, label: `${n} dias` }))}
       />
-      <div className="metrics-grid">
+      <div className="metrics-grid report-statline">
         <article className="metric">
           <StatCounter value={metrics.count} />
           <span>Sessões concluídas</span>
@@ -186,7 +186,7 @@ export default function Reports() {
         </article>
       </div>
       {chart.length > 0 && (
-        <details className="panel chart-data">
+        <details className="panel chart-data report-data-register">
           <summary>Consultar dados dos gráficos</summary>
           <table>
             <caption>
@@ -582,7 +582,7 @@ export function Progression() {
         title="Cada registro conta."
         description="Progressão interna de participação. Sem equivalência com habilidade, PR ou rank do Fortnite."
       />
-      <section className="panel progression-hero">
+      <section className="panel progression-hero participation-summary">
         <div className="rank-shape big">{Math.floor(xp / 500) + 1}</div>
         <div>
           <span className="eyebrow">SEU RANK INTERNO</span>

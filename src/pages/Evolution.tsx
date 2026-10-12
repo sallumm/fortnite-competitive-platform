@@ -115,7 +115,7 @@ export default function Evolution() {
           </button>
         }
       />
-      <section className="panel evolution-profile">
+      <section className="panel evolution-profile performance-context">
         <div>
           <Badge>
             {labels[p.mode]} · {labels[p.input]}
@@ -207,7 +207,7 @@ export default function Evolution() {
               em regras. Hipóteses causais não são inferidas de pontuação,
               volume ou autorrelato.
             </p>
-            <div className="diagnostic-grid">
+            <div className="diagnostic-grid observation-register">
               {report.diagnostics.map((d) => (
                 <article className="diagnostic-card" key={d.key}>
                   <Badge>

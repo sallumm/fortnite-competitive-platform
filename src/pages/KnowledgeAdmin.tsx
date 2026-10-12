@@ -139,7 +139,7 @@ export default function KnowledgeAdmin() {
           ? "Rascunho com versão pública anterior"
           : "Rascunho";
   return (
-    <div className="knowledge-page">
+    <div className="knowledge-page knowledge-admin-workbench">
       <Heading
         title="Inteligência Artificial"
         description="Fortnite Knowledge: ensinar, revisar, testar e publicar. As mensagens administrativas não viram fatos automaticamente."
@@ -189,7 +189,7 @@ export default function KnowledgeAdmin() {
         <>
           {tab === "teach" && (
             <>
-              <section className="card">
+              <section className="card knowledge-admin-record">
                 <h2>Ensinar à IA</h2>
                 <p>
                   Explique o conceito ou a mudança. A organização inicial é

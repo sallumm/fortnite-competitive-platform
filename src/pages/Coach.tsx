@@ -340,7 +340,7 @@ export default function Coach() {
         }
       />
       {settings && (
-        <section className="panel coach-settings">
+        <section className="panel coach-settings consultation-settings">
           <h2>Você controla o contexto</h2>
           <p>
             Os registros são consultados por assunto. Nome, e-mail, XP e dados
@@ -440,7 +440,7 @@ export default function Coach() {
           )}
         </section>
       )}
-      <div className="coach-layout">
+      <div className="coach-layout consultation-desk">
         <aside className="coach-conversations panel" aria-label="Conversas">
           <button
             className="button"

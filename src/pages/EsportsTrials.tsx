@@ -261,7 +261,7 @@ function ExamRunner({
         value={Object.keys(answers).length}
         max={attempt.questions.length}
       />
-      <nav className="question-nav" aria-label="Navegar entre questões">
+      <nav className="question-nav assessment-index" aria-label="Navegar entre questões">
         {attempt.questions.map((item, n) => (
           <button
             key={item.id}
@@ -274,7 +274,7 @@ function ExamRunner({
           </button>
         ))}
       </nav>
-      <section className="exam-question">
+      <section className="exam-question assessment-sheet">
         <span className="eyebrow">
           {q.category} / {q.difficulty} · Peso {q.weight}
         </span>

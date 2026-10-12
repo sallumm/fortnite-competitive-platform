@@ -122,7 +122,7 @@ export default function Road() {
     );
   }
   return (
-    <div className="road-page">
+    <div className="road-page learning-journey">
       <Heading
         eyebrow="KYRVEN ACADEMY · APRENDER E PRATICAR"
         title="Road to Competitive"
@@ -278,7 +278,7 @@ export default function Road() {
           </section>
           <section
             aria-label="Roadmap de aprendizagem"
-            className="roadmap-grid"
+            className="roadmap-grid journey-stages"
           >
             {progress.stages.map((m) => (
               <section className="panel" key={m.stage}>

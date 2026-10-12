@@ -125,7 +125,7 @@ export default function EsportsAssessmentsAdmin() {
                     .includes(filter.toLowerCase()),
                 )
                 .map((q) => (
-                  <article className="application-card" key={q.id}>
+                  <article className="application-card assessment-admin-record" key={q.id}>
                     <Badge>{q.published ? "Publicada" : "Rascunho"}</Badge>
                     <h3>{q.prompt}</h3>
                     <p>

@@ -83,7 +83,7 @@ export default function Knowledge() {
     }
   }
   return (
-    <div className="knowledge-page">
+    <div className="knowledge-page knowledge-desk">
       <Heading
         title="Fortnite Knowledge"
         description="Entenda conceitos, encontre fontes e escolha o que estudar. Para analisar seus registros e organizar a agenda, use o kyrven coach."
@@ -103,7 +103,7 @@ export default function Knowledge() {
         </div>
       ) : (
         <>
-          <section className="card">
+          <section className="card knowledge-question">
             <p className="eyebrow">
               Conhecimento especializado · fontes selecionadas
             </p>

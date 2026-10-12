@@ -167,7 +167,7 @@ export function Layout() {
   }, [open]);
   const themeButton = (
     <button
-      className="icon-button"
+      className="icon-button theme-toggle"
       aria-label={theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"}
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >

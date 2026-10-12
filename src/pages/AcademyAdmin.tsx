@@ -28,7 +28,7 @@ export default function AcademyAdmin() {
       />
       <Link to="/admin">Editar aulas, perguntas e fontes</Link>
       {error && <p role="alert">{error}</p>}
-      <div className="two-grid">
+      <div className="academy-admin-workbench">
         <section className="panel">
           <h2>Trilhas</h2>
           <button

@@ -124,7 +124,7 @@ export default function MetaTraining() {
     );
   }
   return (
-    <div className="meta-training">
+    <div className="meta-training context-workbench">
       <Heading
         eyebrow="CONTEXTO → PRÁTICA → REVISÃO"
         title="Meta Training Center"
@@ -374,7 +374,7 @@ export default function MetaTraining() {
                 </p>
                 {relations.map((r) => (
                   <p
-                    className="context-evidence"
+                    className="context-evidence evidence-note"
                     key={r.entry.id + ":" + r.reason}
                   >
                     {r.entry.title}: {r.reason}{" "}

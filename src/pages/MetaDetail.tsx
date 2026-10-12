@@ -116,7 +116,7 @@ export default function MetaDetail() {
         </p>
       )}
       <MetaContent content={content} catalog={c} assets={assets} />
-      <section className="panel">
+      <section className="panel revision-register">
         <h2>Histórico contextual</h2>
         <ul>
           {c.entries

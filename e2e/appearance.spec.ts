@@ -1,0 +1,26 @@
+import { test, expect } from '@playwright/test';
+test('appearance persists third theme, density and motion, then resets', async ({page}) => {
+  await page.goto('/');
+  await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
+  await page.getByRole('button',{name:'Personalizar aparência'}).click();
+  await page.getByRole('button',{name:'Maré',exact:true}).click();
+  await page.getByLabel('Densidade de listas e tabelas').selectOption('compact');
+  await page.getByLabel(/Intensidade de movimento/).selectOption('essential');
+  await expect(page.locator('html')).toHaveAttribute('data-theme','tidal');
+  await expect(page.locator('html')).toHaveAttribute('data-density','compact');
+  await page.getByRole('button',{name:'Fechar janela'}).click();
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme','tidal');
+  await expect(page.locator('html')).toHaveAttribute('data-motion','essential');
+  await page.getByRole('button',{name:'Personalizar aparência'}).click();
+  await page.getByRole('button',{name:'Sistema',exact:true}).click();
+  await page.emulateMedia({colorScheme:'light',reducedMotion:'reduce'});
+  await expect(page.locator('html')).toHaveAttribute('data-theme','light');
+  await page.getByRole('button',{name:'Restaurar aparência padrão'}).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
+  await expect(page.locator('html')).toHaveAttribute('data-density','comfortable');
+  await expect(page.locator('html')).toHaveAttribute('data-motion','reduced');
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'Personalizar aparência'})).toBeFocused();
+});

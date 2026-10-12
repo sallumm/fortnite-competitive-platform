@@ -48,9 +48,7 @@ export default function TrainingCenter() {
     s.data.plans.find((x) => x.favorite && !x.archived) ||
     s.data.plans.find((x) => !x.archived);
   return (
-    <>
-      <JourneyNav />
-      <RoadAccess />
+    <div className="surface-training">
       <Heading
         eyebrow="SKILL MAXING"
         title="Training Center"
@@ -61,7 +59,9 @@ export default function TrainingCenter() {
           </Link>
         }
       />
-      <Link className="button primary" to="/app/evolution-plan">
+      <JourneyNav />
+      <div className="module-toolbar">
+      <Link className="button" to="/app/evolution-plan">
         Criar meu plano de evolução
       </Link>
       <Link className="button" to="/app/meta-training">
@@ -70,7 +70,8 @@ export default function TrainingCenter() {
       <Link className="button" to="/app/teams">
         Minhas equipes
       </Link>
-      <div className="three-grid">
+      </div>
+      <div className="training-overview">
         <article className="panel">
           <h2>Seu próximo passo</h2>
           {active ? (
@@ -123,6 +124,7 @@ export default function TrainingCenter() {
           </Link>
         </article>
       </div>
+      <RoadAccess />
       <section className="panel">
         <h2>Habilidades e exercícios recentes</h2>
         <div className="row wrap">
@@ -490,6 +492,6 @@ export default function TrainingCenter() {
           </form>
         </Modal>
       )}
-    </>
+    </div>
   );
 }

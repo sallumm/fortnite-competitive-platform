@@ -32,7 +32,7 @@ export default function EsportsWorkspace() {
         </Empty>
       ) : (
         <>
-          <div className="panel">
+          <div className="panel candidate-dossier">
             <h2>Meus acessos</h2>
             {workspace.roles.length ? (
               workspace.roles.map((r) => (

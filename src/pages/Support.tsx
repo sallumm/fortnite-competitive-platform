@@ -45,7 +45,7 @@ export function Help() {
           />
         </label>
       </div>
-      <div className="two-grid">
+      <div className="support-index">
         {all.map((a) => (
           <Link
             className="panel"
@@ -181,11 +181,11 @@ export function ProfilePage() {
         title="Seu perfil, suas preferências."
         description="Ajuste o plano ao seu momento. Você mantém o controle dos seus dados."
       />
-      <section className="panel motion-settings">
+      <section className="panel motion-settings appearance-section">
         <h2>Uma experiência no seu ritmo</h2>
         <AppearanceSettings />
       </section>
-      <section className="panel profile-form">
+      <section className="panel profile-form profile-details">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -371,7 +371,7 @@ export function ProfilePage() {
 export function Legal() {
   const { type } = useParams();
   return (
-    <article className="reading-page article-body">
+    <article className="reading-page article-body legal-reading">
       <Heading
         title={
           type === "privacy"

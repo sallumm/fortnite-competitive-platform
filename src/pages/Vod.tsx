@@ -62,6 +62,23 @@ export default function Vod() {
     .filter((x) => x.count >= 2);
   return (
     <>
+      <Heading
+        eyebrow="VOD REVIEW CENTER"
+        title="Reveja decisões, registre contexto."
+        description="Revisões manuais e privadas. Não há análise automática, upload ou processamento de vídeo por IA."
+        action={
+          <button
+            className="button primary"
+            onClick={() => {
+              setEditing(null);
+              setOpen(true);
+            }}
+          >
+            Criar revisão de VOD
+          </button>
+        }
+      />
+      <div className="panel form-grid vod-filterbar">
       <label>
         Contexto das revisões
         <select
@@ -83,23 +100,7 @@ export default function Vod() {
           ))}
         </select>
       </label>
-      <Heading
-        eyebrow="VOD REVIEW CENTER"
-        title="Reveja decisões, registre contexto."
-        description="Revisões manuais e privadas. Não há análise automática, upload ou processamento de vídeo por IA."
-        action={
-          <button
-            className="button primary"
-            onClick={() => {
-              setEditing(null);
-              setOpen(true);
-            }}
-          >
-            Criar revisão de VOD
-          </button>
-        }
-      />
-      <div className="panel form-grid">
+
         <label>
           Pesquisar revisões
           <input
@@ -144,7 +145,7 @@ export default function Vod() {
         </section>
       )}
       {rows.map((r) => (
-        <article className="panel" key={r.id}>
+        <article className="panel vod-review-record" key={r.id}>
           <div className="section-title">
             <h2>{r.title}</h2>
             <Badge>Revisão manual</Badge>

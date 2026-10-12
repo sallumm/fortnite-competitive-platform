@@ -262,7 +262,7 @@ export default function EvolutionPlanner() {
     setStep(0);
   }
   return (
-    <div className="evolution-planner">
+    <div className="evolution-planner surface-skillmax">
       <Link className="text-link" to="/app/planner">
         Voltar ao planejador
       </Link>
@@ -357,7 +357,7 @@ export default function EvolutionPlanner() {
       ) : (
         <>
       <JourneyNav />
-          <nav className="row" aria-label="Etapas do plano de evolução">
+          <nav className="plan-step-index" aria-label="Etapas do plano de evolução">
             {[
               "Perfil e habilidades",
               "Disponibilidade",
