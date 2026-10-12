@@ -24,6 +24,8 @@ Os testes usam duas conexões psql de mutação independentes e uma conexão obs
 
 Limite: advisory locks são cooperativos. SQL privilegiado, jobs externos ou futuras RPCs que escrevam sem adquirir a barreira não ficam automaticamente protegidos. Devem entrar no protocolo ou ser suspensos durante manutenção. A revisão independente deve inventariar todos os escritores. A barreira global pode aumentar a espera; não é uma prova de desempenho sob carga.
 
+Pré-condição de eventual instalação: suspender e drenar também todos os escritores eSports antigos antes de instalar a 031. Uma chamada já executando o corpo da 030 não adquire retroativamente a nova barreira. O lock de Academy/Coach para backfill não comprova essa drenagem de eSports. O upgrade local realizado parte de sessões controladas e não valida rollout com chamadas antigas ainda em execução. Essa janela e a verificação das sessões são requisitos de revisão/autorizações futuras, sem executar manutenção remota nesta missão.
+
 ## A2422-02 e A2422-03 — saída privada e ciclo de vida
 
 Reproduzimos `--add-reporter=list`, `PW_TEST_REPORTER=list` e `PW_RUNNER_DEBUG=1` contra cópias da versão auditada, no runtime Playwright 1.64.0 fixado pelo lockfile. Também reproduzimos `error-context.md` com marcadores fictícios em beforeAll, teardown e afterAll. Os wrappers e flags anteriores não bastavam: Playwright Test pode criar artefatos fora do corpo protegido pelo teste. Os caminhos de reporter/debug são resolvidos pelo runner; erros tardios de hooks/fixtures chegam à criação do contexto de erro. O pacote anterior contém os snapshots do runtime examinados; as novas reproduções executam o runtime real instalado.
