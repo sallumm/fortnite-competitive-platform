@@ -167,7 +167,7 @@ do $$declare signature text;definition text;before_text text;begin
  definition:=pg_get_functiondef('private.esports_write_limit()'::regprocedure);
  execute replace(definition,'perform 1 from public.profiles where id=auth.uid() for update;',
  'perform 1 from public.profiles where id=auth.uid() for no key update;');
-end;$;
+end;$$;
 
 -- Same owner actor lock; all applications in UUID order precede children and request.
 -- Pending erasure never leaves an active scholarship status or live grants behind.
