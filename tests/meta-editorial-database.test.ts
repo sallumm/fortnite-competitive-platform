@@ -198,6 +198,15 @@ it("persists season, mode, version, reviewed item, media, video/drop/article lin
     },
   ];
   let d = await save(p, "draft");
+  await expect(
+    db.query("select public.save_meta_draft($1,'draft',$2,null)", [
+      JSON.stringify(p),
+      d.id,
+    ]),
+  ).rejects.toThrow("Draft changed");
+  await expect(
+    db.query("select public.publish_meta_draft($1,null)", [d.id]),
+  ).rejects.toThrow("Draft changed");
   await expect(publish(d.id, 1)).rejects.toThrow("Review");
   d = await save(p, "review", d.id, 1);
   const first = await publish(d.id, d.version);

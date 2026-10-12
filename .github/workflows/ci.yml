@@ -14,6 +14,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm audit --audit-level=high
       - run: npm run check:security
+      - run: node scripts/mission24-integrity.mjs
       - run: node scripts/security-database-inventory.mjs > /tmp/kyrven-database-catalog.json
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
@@ -25,6 +26,24 @@ jobs:
       - run: npm run build
       - run: npm run build:staging
       - run: npm run check:staging-artifact
+  native-sql:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+      - run: docker run -d --name kyrven-m24-1-pg --network none -e POSTGRES_HOST_AUTH_METHOD=trust public.ecr.aws/supabase/postgres@sha256:06ddc7962e11ab0f4f0334fd05671e97c30ea202f6e6a7113800bd3d6e416108
+      - run: node scripts/mission24-native.mjs --baseline
+      - run: node scripts/mission24-native.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: mission24-native-evidence
+          path: artifacts/mission24/native-*.json
+          retention-days: 7
+      - run: docker rm -f kyrven-m24-1-pg
+        if: always()
   browser:
     runs-on: ubuntu-latest
     steps:

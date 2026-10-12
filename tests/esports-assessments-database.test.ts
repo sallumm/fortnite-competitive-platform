@@ -117,6 +117,12 @@ it("protects question bank and validates authoritative review metadata", async (
     reviewed_at: new Date().toISOString(),
   };
   question = (await action("question", null, 0, base)).id;
+  await expect(
+    rpc("public.esports_assessment_action('question',$1,null,$2)", [
+      question,
+      base,
+    ]),
+  ).rejects.toThrow("Version conflict");
   discursive = (
     await action("question", null, 0, {
       ...base,
@@ -206,6 +212,9 @@ it("freezes versions and reproduces selection without leaking answers", async ()
 });
 it("saves with CAS, isolates accounts and rejects unknown or invalid answers", async () => {
   await as(learner);
+  await expect(
+    rpc("public.esports_answer_exam($1,'save',null,'{}')", [attempt.id]),
+  ).rejects.toThrow("Version conflict");
   await expect(
     rpc("public.esports_answer_exam($1,'save',$2,$3)", [
       attempt.id,
@@ -336,6 +345,12 @@ it("requires practical review and explicit offer, blocks unavailable Pro benefit
     dev("accept", scholarship, 1, { accepted: true }),
   ).rejects.toThrow();
   await as(learner);
+  await expect(
+    rpc("public.esports_development_action('accept',$1,null,$2)", [
+      scholarship,
+      { accepted: true },
+    ]),
+  ).rejects.toThrow("Version conflict");
   await dev("accept", scholarship, 1, { accepted: true });
   expect(
     (await rpc("public.esports_benefits()")).map((b: any) => b.capability),
