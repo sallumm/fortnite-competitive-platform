@@ -23,6 +23,7 @@ jobs:
           retention-days: 7
       - run: npm run check:brand
       - run: npm test
+      - run: npx tsc -p tsconfig.acceptance.json
       - run: npm run build
       - run: npm run build:staging
       - run: npm run check:staging-artifact
@@ -38,6 +39,8 @@ jobs:
       - run: docker run -d --name kyrven-m24-1-pg --network none -e POSTGRES_HOST_AUTH_METHOD=trust public.ecr.aws/supabase/postgres@sha256:06ddc7962e11ab0f4f0334fd05671e97c30ea202f6e6a7113800bd3d6e416108
       - run: node scripts/mission24-native.mjs --baseline
       - run: node scripts/mission24-native.mjs
+      - run: node scripts/mission2421-native.mjs --baseline-031
+      - run: node scripts/mission2421-native.mjs
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -56,6 +59,13 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts
       - run: npx playwright install --with-deps chromium
+      - run: KYRVEN_NATIVE_EVIDENCE_DIR=/tmp/kyrven-auth-redaction node scripts/mission2421-redaction.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: auth-redaction-validation
+          path: /tmp/kyrven-auth-redaction/
+          retention-days: 7
       - run: npm run test:e2e
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()

@@ -1,0 +1,22 @@
+{
+  "db": "audit2421_1791771577830",
+  "evidence": [
+    {
+      "case": "A242-01 Academy + Coach concurrent API writers during backfill",
+      "counters": "1,1",
+      "committed": "2,2",
+      "writerElapsedMs": 2247,
+      "result": "FAIL reproduced: undercount"
+    },
+    {
+      "case": "upgrade with existing data and observed hosted function/table ACLs",
+      "functions": 10,
+      "result": "PASS; OID/owner/ACL/security/path retained"
+    },
+    {
+      "case": "A242-02 prune after upsert before timestamp filtering",
+      "counterRows": "0",
+      "result": "FAIL reproduced: committed unmetered action"
+    }
+  ]
+}

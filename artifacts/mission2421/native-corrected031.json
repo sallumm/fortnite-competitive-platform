@@ -1,0 +1,214 @@
+{
+  "mode": "corrected031",
+  "db": "audit2421_1791771354809",
+  "environment": "PostgreSQL 17.11 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.2.0, 64-bit",
+  "scope": "isolated native PostgreSQL; synthetic UID/AAL; no hosted Auth",
+  "evidence": [
+    {
+      "case": "A242-01 Academy + Coach concurrent API writers during backfill",
+      "counters": "2,2",
+      "committed": "2,2",
+      "writerElapsedMs": 2299,
+      "result": "PASS: both blocked then counted"
+    },
+    {
+      "case": "upgrade with existing data and observed hosted function/table ACLs",
+      "functions": 10,
+      "result": "PASS; OID/owner/ACL/security/path retained"
+    },
+    {
+      "case": "A242-02 prune after upsert before timestamp filtering",
+      "counterRows": "1",
+      "result": "PASS: prune waits, reevaluates, retains live row"
+    },
+    {
+      "case": "prune-first recreation, rollback/error, forced missing RETURNING fail-closed, ACL isolation",
+      "result": "PASS"
+    },
+    {
+      "case": "A242-03 revoke / withdrawal admin-first",
+      "results": [
+        {
+          "ok": true
+        },
+        {
+          "ok": true
+        }
+      ],
+      "final": {
+        "application": "withdrawn",
+        "scholarship": "revoked",
+        "roles": 0,
+        "benefits": 0
+      },
+      "result": "PASS: withdrawal committed; stale admin decision rejected if needed; no retry"
+    },
+    {
+      "case": "A242-03 revoke / withdrawal withdraw-first",
+      "results": [
+        {
+          "ok": false,
+          "deadlock": false,
+          "version": true
+        },
+        {
+          "ok": true
+        }
+      ],
+      "final": {
+        "application": "withdrawn",
+        "scholarship": "revoked",
+        "roles": 0,
+        "benefits": 0
+      },
+      "result": "PASS: withdrawal committed; stale admin decision rejected if needed; no retry"
+    },
+    {
+      "case": "A242-03 end / withdrawal admin-first",
+      "results": [
+        {
+          "ok": true
+        },
+        {
+          "ok": true
+        }
+      ],
+      "final": {
+        "application": "withdrawn",
+        "scholarship": "ended",
+        "roles": 0,
+        "benefits": 0
+      },
+      "result": "PASS: withdrawal committed; stale admin decision rejected if needed; no retry"
+    },
+    {
+      "case": "A242-03 end / withdrawal withdraw-first",
+      "results": [
+        {
+          "ok": false,
+          "deadlock": false,
+          "version": true
+        },
+        {
+          "ok": true
+        }
+      ],
+      "final": {
+        "application": "withdrawn",
+        "scholarship": "revoked",
+        "roles": 0,
+        "benefits": 0
+      },
+      "result": "PASS: withdrawal committed; stale admin decision rejected if needed; no retry"
+    },
+    {
+      "case": "A242-03 extend / withdrawal admin-first",
+      "results": [
+        {
+          "ok": true
+        },
+        {
+          "ok": true
+        }
+      ],
+      "final": {
+        "application": "withdrawn",
+        "scholarship": "revoked",
+        "roles": 0,
+        "benefits": 0
+      },
+      "result": "PASS: withdrawal committed; stale admin decision rejected if needed; no retry"
+    },
+    {
+      "case": "A242-03 extend / withdrawal withdraw-first",
+      "results": [
+        {
+          "ok": false,
+          "deadlock": false,
+          "version": true
+        },
+        {
+          "ok": true
+        }
+      ],
+      "final": {
+        "application": "withdrawn",
+        "scholarship": "revoked",
+        "roles": 0,
+        "benefits": 0
+      },
+      "result": "PASS: withdrawal committed; stale admin decision rejected if needed; no retry"
+    },
+    {
+      "case": "terminal scholarship history, idempotence, ownership, AAL1 negative, accept/repeated erasure",
+      "result": "PASS",
+      "final": {
+        "application": "withdrawn",
+        "scholarship": "revoked",
+        "roles": 0,
+        "benefits": 0
+      }
+    },
+    {
+      "case": "withdraw-first / review",
+      "outcomes": [
+        {
+          "ok": true
+        },
+        {
+          "ok": true
+        }
+      ],
+      "result": "PASS; no reactivation; review/goal may retain administrative history"
+    },
+    {
+      "case": "withdraw-first / goal",
+      "outcomes": [
+        {
+          "ok": true
+        },
+        {
+          "ok": true
+        }
+      ],
+      "result": "PASS; no reactivation; review/goal may retain administrative history"
+    },
+    {
+      "case": "withdraw-first / roster_decision",
+      "outcomes": [
+        {
+          "ok": true
+        },
+        {
+          "ok": false,
+          "deadlock": false,
+          "version": false
+        }
+      ],
+      "result": "PASS; no reactivation; review/goal may retain administrative history"
+    },
+    {
+      "case": "withdraw-first / progress",
+      "outcomes": [
+        {
+          "ok": true
+        },
+        {
+          "ok": false,
+          "deadlock": false,
+          "version": false
+        }
+      ],
+      "result": "PASS; no reactivation; review/goal may retain administrative history"
+    },
+    {
+      "case": "multiple applications/scholarships: admin second application / erasure all applications",
+      "result": "PASS; no active scholarships; no deadlock"
+    },
+    {
+      "case": "unexpected 030 body drift, migration rollback, earlier writer 5s timeout and subsequent successful upgrade",
+      "timeoutElapsedMs": 5639,
+      "result": "PASS; no partial counter/triggers on failed upgrade"
+    }
+  ]
+}
