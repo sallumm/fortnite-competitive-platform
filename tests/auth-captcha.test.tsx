@@ -13,7 +13,12 @@ const auth = vi.hoisted(() => ({
   signUp: vi.fn(async () => ({ error: null })),
   resetPasswordForEmail: vi.fn(async () => ({ error: null })),
 }));
-vi.mock("../src/lib/client", () => ({ configured: true, supabase: { auth } }));
+vi.mock("../src/lib/client", () => ({
+  configured: true,
+  authPasswordFlow: false,
+  clearAuthPasswordFlow() {},
+  supabase: { auth },
+}));
 vi.mock("../src/lib/store", () => ({
   useStore: () => ({
     session: null,
