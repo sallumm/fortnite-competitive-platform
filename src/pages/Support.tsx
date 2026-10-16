@@ -1,5 +1,5 @@
+import { AppearanceSettings } from "../components/experience/Appearance";
 import { KnowledgeAccess } from "../components/KnowledgeAccess";
-import { MotionPreferences } from "../components/experience/MotionSystem";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
@@ -45,7 +45,7 @@ export function Help() {
           />
         </label>
       </div>
-      <div className="two-grid">
+      <div className="support-index">
         {all.map((a) => (
           <Link
             className="panel"
@@ -109,7 +109,7 @@ export function Help() {
   );
 }
 export function Community() {
-  const invite = import.meta.env.VITE_DISCORD_INVITE;
+  const invite = import.meta.env.VITE_DISCORD_INVITE || "https://discord.gg/9WBqfSftrw";
   const valid =
     invite && /^https:\/\/(discord\.gg\/|discord\.com\/invite\/)/.test(invite);
   return (
@@ -181,11 +181,11 @@ export function ProfilePage() {
         title="Seu perfil, suas preferências."
         description="Ajuste o plano ao seu momento. Você mantém o controle dos seus dados."
       />
-      <section className="panel motion-settings">
+      <section className="panel motion-settings appearance-section">
         <h2>Uma experiência no seu ritmo</h2>
-        <MotionPreferences />
+        <AppearanceSettings />
       </section>
-      <section className="panel profile-form">
+      <section className="panel profile-form profile-details">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -371,7 +371,7 @@ export function ProfilePage() {
 export function Legal() {
   const { type } = useParams();
   return (
-    <article className="reading-page article-body">
+    <article className="reading-page article-body legal-reading">
       <Heading
         title={
           type === "privacy"

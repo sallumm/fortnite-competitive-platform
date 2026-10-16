@@ -2,6 +2,8 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { demoPlayer } from "../src/lib/seed";
 async function start(page: import("@playwright/test").Page) {
+  // Keep the dated planning and review fixtures reproducible without freezing timers.
+  await page.clock.setFixedTime(new Date("2026-10-10T12:00:00Z"));
   const d = demoPlayer();
   d.profile!.onboarded = true;
   d.profile!.level = "beginner";

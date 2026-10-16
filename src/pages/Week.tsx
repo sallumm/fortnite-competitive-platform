@@ -71,7 +71,7 @@ export default function Week() {
           </button>
         }
       />
-      <div className="panel week-controls">
+      <div className="panel week-controls review-period">
         <button
           className="button"
           onClick={() => {
@@ -130,7 +130,7 @@ export default function Week() {
           </button>
         )}
       </div>
-      <section className="panel weekly-summary">
+      <section className="panel weekly-summary weekly-notebook">
         <Badge tone="green">
           {saved && !live
             ? "RESUMO SALVO · " + dateLabel(saved.generated_at, p.timezone)

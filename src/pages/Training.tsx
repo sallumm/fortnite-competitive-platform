@@ -244,7 +244,7 @@ export default function Training() {
       <p role="status" className="muted">
         {syncState}
       </p>
-      <section className="session-toolbar panel">
+      <section className="session-toolbar panel active-session-controls">
         <div>
           <span className="eyebrow">TEMPO ATIVO REGISTRADO</span>
           <strong className="timer" aria-live="off">
@@ -277,7 +277,7 @@ export default function Training() {
         </div>
       </section>
       <SessionReadiness sessionId={session.id} />
-      <nav className="session-navigation panel" aria-label="Etapas da sessão">
+      <nav className="session-navigation panel session-route" aria-label="Etapas da sessão">
         <div className="row between">
           <h2>Seu percurso</h2>
           <button
@@ -337,7 +337,7 @@ export default function Training() {
           ))}
         </div>
       </nav>
-      <div className="session-steps">
+      <div className="session-steps practice-workspace">
         {session.steps.map((step, i) => {
           const e =
             step.exercise ||

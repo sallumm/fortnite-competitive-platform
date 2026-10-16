@@ -64,13 +64,7 @@ export default function Planner() {
     });
   const schedule = (plan: Plan) => setAgendaIntent(plan);
   return (
-    <>
-      <JourneyNav />
-      <CoachAccess
-        question="Ajude a organizar meus treinos nesta semana."
-        label="Ajudar a organizar"
-      />
-      <RoadAccess />
+    <div className="surface-planner">
       {intentError && (
         <p role="alert">
           {intentError} <Link to="/library">Abrir biblioteca</Link>
@@ -87,9 +81,14 @@ export default function Planner() {
           </button>
         }
       />
-      <Link className="button primary" to="/app/evolution-plan">
+      <JourneyNav />
+      <div className="module-toolbar">
+      <Link className="button" to="/app/evolution-plan">
         Criar meu plano de evolução
       </Link>
+      <CoachAccess question="Ajude a organizar meus treinos nesta semana." label="Ajudar a organizar" />
+      <RoadAccess />
+      </div>
       <TeamCalendar />
       <PlanningAssistant onSchedule={schedule} />
       <div className="template-strip panel">
@@ -330,6 +329,6 @@ export default function Planner() {
           </button>
         </Modal>
       )}
-    </>
+    </div>
   );
 }

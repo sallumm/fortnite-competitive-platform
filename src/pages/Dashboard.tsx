@@ -118,10 +118,7 @@ export default function Dashboard() {
       } else navigate("/app/planner");
     });
   return (
-    <>
-      <Link className="button" to="/app/evolution">
-        Abrir Minha Evolução
-      </Link>
+    <div className="surface-dashboard">
       <Heading
         eyebrow={`${dateLabel(today)} · ${p.timezone}`}
         title="Meu Dia"
@@ -132,8 +129,6 @@ export default function Dashboard() {
           </Link>
         }
       />
-      <RoadAccess />
-      <CoachSummary />
       <div className="dashboard-top">
         <AnimatedCard className="next-training">
           <div className="row between">
@@ -227,6 +222,8 @@ export default function Dashboard() {
           </Link>
         )}
       </div>
+      <CoachSummary />
+      <RoadAccess />
       <DevelopmentOverview />
       <div className="two-grid">
         <AnimatedCard className="panel">
@@ -387,6 +384,6 @@ export default function Dashboard() {
           Recursos educativos <ArrowUpRight size={14} />
         </Link>
       </div>
-    </>
+    </div>
   );
 }

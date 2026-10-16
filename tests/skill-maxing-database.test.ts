@@ -5,6 +5,7 @@ import { uid, demoPlayer, seed } from "../src/lib/seed";
 import { defaultEvolutionConfig } from "../src/lib/skill-maxing/config";
 import { generateEvolution } from "../src/lib/skill-maxing/engine";
 import { approvalPayload } from "../src/lib/skill-maxing/service";
+import { dateInZone, shiftDate, weekStart } from "../src/lib/calendar";
 let db: PGlite;
 const owner = uid(9801),
   other = uid(9802);
@@ -22,9 +23,9 @@ const p = generateEvolution(
   c,
   d,
   seed,
-  "2026-10-12",
+  shiftDate(weekStart(dateInZone(new Date(), "UTC")), 7),
   1,
-  new Date("2026-10-10T12:00:00Z"),
+  new Date(),
 );
 const payload = approvalPayload(p);
 async function asUser(id: string | null, role = "authenticated") {
@@ -143,7 +144,7 @@ it("rolls back an earlier valid session when a later session is invalid", async 
   });
   body.p_sessions.push({
     ...structuredClone(body.p_sessions[0]),
-    date: "2026-10-14",
+    date: shiftDate(payload.p_from, 2),
   });
   body.p_sessions[1].plan.steps[0].minutes = 121;
   await expect(confirm(uid(9831), body)).rejects.toThrow();

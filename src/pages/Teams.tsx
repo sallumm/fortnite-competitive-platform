@@ -122,7 +122,7 @@ export default function Teams() {
         <>
           {error && <p role="alert">{error}</p>}
           {loading && <p aria-live="polite">Carregando minhas equipes…</p>}
-          <section className="panel">
+          <section className="panel team-workspace">
             <h2>Criar um grupo</h2>
             <div className="form-grid">
               <label>

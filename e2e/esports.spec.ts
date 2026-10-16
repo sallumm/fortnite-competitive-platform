@@ -27,7 +27,19 @@ test("esports public surfaces stay closed and accessible in both themes", async 
       fullPage: true,
     });
   }
-  await page.getByRole("button", { name: "Ativar tema claro" }).click();
+  const appearance = page.getByRole("button", { name: "Personalizar aparência" });
+  await appearance.click();
+  const appearanceDialog = page.getByRole("dialog", { name: "Seu ambiente" });
+  await appearanceDialog.getByRole("button", { name: "Papel", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.keyboard.press("Escape");
+  await expect(appearanceDialog).toHaveCount(0);
+  await expect(appearance).toBeFocused();
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(appearanceDialog).toHaveCount(0);
+  await expect(page.getByText(/Recrutamento público fechado/)).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(
     (
       await new AxeBuilder({ page })

@@ -5,7 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { LazyMotion, MotionConfig, useReducedMotion } from "motion/react";
+import { LazyMotion, MotionConfig } from "motion/react";
 export type MotionLevel = "full" | "reduced" | "essential";
 const Context = createContext({
   level: "full" as MotionLevel,
@@ -14,7 +14,16 @@ const Context = createContext({
 });
 const features = () => import("./features").then((module) => module.default);
 export function MotionSystem({ children }: { children: ReactNode }) {
-  const systemReduced = useReducedMotion();
+  const [systemReduced, setSystemReduced] = useState(() =>
+    typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setSystemReduced(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
   const [level, updateLevel] = useState<MotionLevel>(() => {
     try {
       const saved = localStorage.getItem("clutchfolio-motion");

@@ -318,7 +318,7 @@ export default function EsportsDevelopment() {
                         max={gs.length || 1}
                       />
                       {gs.map((g) => (
-                        <article className="application-card" key={g.id}>
+                        <article className="application-card development-goal" key={g.id}>
                           <Badge>{goalLabels[g.kind]}</Badge>
                           <h4>{g.title}</h4>
                           <p className="preserve-lines">{g.description}</p>
@@ -378,7 +378,7 @@ export default function EsportsDevelopment() {
                       ))}
                       <h3>Calendário do programa</h3>
                       {gs.filter((g) => g.due_at).length ? (
-                        <ol className="status-timeline">
+                        <ol className="status-timeline development-history">
                           {gs
                             .filter((g) => g.due_at)
                             .map((g) => (

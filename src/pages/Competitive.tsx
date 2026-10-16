@@ -78,7 +78,7 @@ export default function Competitive() {
     setPhaseKey(undefined);
   };
   const card = (t: Tournament) => (
-    <article className="tournament-card panel" key={t.id}>
+    <article className="tournament-card panel competition-row" key={t.id}>
       <div className="event-art">
         <Trophy size={34} />
         <span>{t.category}</span>
@@ -164,7 +164,7 @@ export default function Competitive() {
         />
         <div className="detail-grid">
           <article className="panel article-body">
-            <div className="event-art large">
+            <div className="event-art large compact-event-art">
               <Trophy size={60} />
               <span>{selected.category}</span>
               <small>
@@ -346,7 +346,7 @@ export default function Competitive() {
       <Link className="button" to="/competitive/meta">
         Meta Center: contexto, versões e treinamento
       </Link>
-      <div className="competitive-hero panel">
+      <div className="competitive-hero panel competitive-desk">
         <div>
           <Badge tone="green">FNCS · CONTEXTO 2026</Badge>
           <h2>

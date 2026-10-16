@@ -58,14 +58,14 @@ export default function Security() {
     );
   }, []);
   return (
-    <section className="panel">
+    <section className="panel security-workspace">
       <Heading
         title="Segurança da conta"
         description="A administração exige autenticação em duas etapas. Use um aplicativo autenticador."
       />
       {error && <p role="alert">{error}</p>}
       {!ready && (
-        <button disabled={busy} onClick={() => run(load)}>
+        <button className="button" disabled={busy} onClick={() => run(load)}>
           Tentar novamente
         </button>
       )}
@@ -93,6 +93,7 @@ export default function Security() {
           )}
           {!qr && (
             <button
+              className="button"
               disabled={busy}
               onClick={() =>
                 run(async () => {

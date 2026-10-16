@@ -1,3 +1,4 @@
+import { AppearanceProvider } from "./components/experience/Appearance";
 import { MotionSystem } from "./components/experience/MotionSystem";
 import { lazy, Suspense, type ReactNode } from "react";
 import {
@@ -427,10 +428,10 @@ function Application() {
 }
 export default function App() {
   return (
-    <MotionSystem>
+    <AppearanceProvider><MotionSystem>
       <Provider>
         <Application />
       </Provider>
-    </MotionSystem>
+    </MotionSystem></AppearanceProvider>
   );
 }

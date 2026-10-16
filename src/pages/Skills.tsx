@@ -51,7 +51,7 @@ export default function Skills() {
         description="Objetivos, exercícios e avaliações autodeclaradas. Sem notas artificiais de habilidade."
       />
       <div className="skill-layout">
-        <nav className="panel skill-nav" aria-label="Selecionar habilidade">
+        <nav className="panel skill-nav skill-selector" aria-label="Selecionar habilidade">
           {Object.entries(skills).map(([key, title]) => (
             <button
               className="button"
@@ -68,7 +68,7 @@ export default function Skills() {
           ))}
         </nav>
         <TrainingStepTransition identity={skill}>
-          <div className="skill-body">
+          <div className="skill-body skill-notebook">
             <section className="panel">
               <div className="section-title">
                 <h2>{skills[skill]}</h2>

@@ -85,11 +85,11 @@ export default function Onboarding() {
       navigate(appDestination(route.state?.from));
     });
   return (
-    <div className="onboarding panel">
-      <span className="eyebrow">BEM-VINDO À KYRVEN</span>
+    <div className="onboarding panel surface-onboarding">
+      <div className="onboarding-caption"><span>Seu ponto de partida</span><span>Etapa {step + 1} de 4</span></div>
       <div className="onboarding-steps">
         {[Layers, Trophy, Target, Clock].map((Icon, i) => (
-          <span className={i <= step ? "active" : ""} key={i}>
+          <span className={i <= step ? "active" : ""} key={i} aria-current={i === step ? "step" : undefined}>
             <Icon size={18} />
             {i + 1}
           </span>

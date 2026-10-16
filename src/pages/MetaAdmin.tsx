@@ -293,7 +293,7 @@ export default function MetaAdmin() {
           await refresh();
         }}
       />
-      <div className="meta-admin-layout">
+      <div className="meta-admin-layout publishing-workbench">
         <aside className="panel">
           <h2>Conteúdos</h2>
           <button
@@ -1091,7 +1091,7 @@ export default function MetaAdmin() {
                   </section>
                 </>
               )}
-              <div className="meta-editor-actions">
+              <div className="meta-editor-actions publishing-actions">
                 <button
                   disabled={busy}
                   className="button"

@@ -233,7 +233,7 @@ export default function Admin() {
       <Link className="button" to="/admin/meta">
         Gerenciar Meta
       </Link>
-      <div className="tabs page-tabs">
+      <div className="tabs page-tabs admin-section-index">
         {(["exercises", "articles", "tournaments"] as Table[]).map((t) => (
           <button
             key={t}
@@ -296,7 +296,7 @@ export default function Admin() {
               reviewPending(row as Exercise),
           )
           .map((row) => (
-            <div className="list-row" key={row.id}>
+            <div className="list-row editorial-admin-record" key={row.id}>
               <div>
                 <strong>{row.title}</strong>
                 <small>

@@ -64,14 +64,13 @@ export default function Academy() {
     "Estudo progressivo de Fortnite com fontes, avaliações conceituais e aplicação em treinos.",
   );
   return (
-    <div className="academy-page">
-      <KnowledgeAccess />
+    <div className="academy-page surface-academy">
       <Heading
         eyebrow="MASTERY ACADEMY"
         title="Compreenda uma decisão. Aplique. Revise."
         description="Uma sequência flexível de estudo e prática. Conclusão de aula, avaliação conceitual e desempenho em treino são registros diferentes."
       />
-      <div className="row">
+      <div className="module-toolbar">
         <RoadAccess />
         <Link className="button" to="/academy/curriculum">
           Buscar todas as aulas
@@ -86,7 +85,7 @@ export default function Academy() {
           Resultados práticos
         </Link>
       </div>
-      <section className="panel">
+      <section className="study-start">
         <h2>Seu ponto de partida</h2>
         <label>
           O que você quer estudar?
@@ -120,6 +119,7 @@ export default function Academy() {
           </p>
         )}
       </section>
+      <KnowledgeAccess />
       <section className="panel">
         <h2>Meu percurso</h2>
         {study.enabled ? (

@@ -48,7 +48,7 @@ export default function Esports() {
         title="Desenvolvimento com contexto"
         description="A proposta é avaliar aprendizagem, consistência, decisões e comunicação. Diferentes experiências podem ter espaço conforme os critérios de cada ciclo."
       />
-      <div className="three-grid">
+      <div className="esports-divisions">
         {[
           [
             GraduationCap,
@@ -68,8 +68,8 @@ export default function Esports() {
         ].map(([Icon, title, text]) => {
           const I = Icon as typeof Target;
           return (
-            <AnimatedCard key={String(title)}>
-              <I size={25} />
+            <AnimatedCard key={String(title)} className="division-row">
+              <I size={18} aria-hidden="true" />
               <h2>{String(title)}</h2>
               <p>{String(text)}</p>
             </AnimatedCard>

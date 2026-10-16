@@ -87,9 +87,9 @@ export default function Auth() {
     });
   };
   return (
-    <div className="auth-layout">
+    <div className="auth-layout surface-auth">
       <div className="auth-story">
-        <span className="eyebrow">SEU PRÓXIMO CAPÍTULO</span>
+        <span className="auth-index">kyrven / seu espaço</span>
         <h1>
           Menos improviso.
           <br />
@@ -116,7 +116,7 @@ export default function Auth() {
                   ? "Nova senha"
                   : "Bom ter você por aqui"
           }
-          description="Seu plano de jogo começa aqui."
+          description="Acesse sua conta ou escolha uma das opções abaixo."
         />
         {!configured && (
           <div className="alert">

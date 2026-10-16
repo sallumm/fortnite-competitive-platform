@@ -55,7 +55,7 @@ export default function Curriculum() {
           Consultar ciência, evidências e limites
         </Link>
       </div>
-      <div className="filters panel">
+      <div className="filters panel curriculum-filters">
         <label>
           Buscar aula
           <input
@@ -110,7 +110,7 @@ export default function Curriculum() {
         {list.length} aulas encontradas · {lessons.length} aulas curriculares
         disponíveis
       </p>
-      <div className="two-grid">
+      <div className="curriculum-index">
         {list.map((a) => (
           <article className="panel" key={a.id}>
             <span className="eyebrow">

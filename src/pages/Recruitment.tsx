@@ -32,7 +32,7 @@ export default function Recruitment() {
             : "Recrutamento público fechado"}
         </Badge>
       </SectionReveal>
-      <div className="three-grid">
+      <div className="recruitment-process">
         {[
           [
             "01",
@@ -50,7 +50,7 @@ export default function Recruitment() {
             "A direção pode oferecer uma bolsa temporária. Elenco exige uma decisão posterior.",
           ],
         ].map(([n, t, d]) => (
-          <article className="path-card" key={n}>
+          <article className="path-card recruitment-step" key={n}>
             <span className="path-number">{n}</span>
             <h2>{t}</h2>
             <p>{d}</p>

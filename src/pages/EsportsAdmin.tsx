@@ -212,12 +212,12 @@ export default function EsportsAdmin() {
                 </label>
                 <button className="button">Pesquisar</button>
               </form>
-              <div className="esports-list">
+              <div className="esports-list recruitment-register">
                 {data.applications.length ? (
                   data.applications.map((a) => (
                     <button
                       key={a.id}
-                      className="application-card"
+                      className="application-card recruitment-record"
                       onClick={() => setApp(a)}
                     >
                       <strong>{a.payload.nickname}</strong>

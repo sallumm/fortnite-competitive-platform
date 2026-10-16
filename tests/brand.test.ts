@@ -10,7 +10,7 @@ it("retains historical local preference and deployment keys", () => {
   expect(
     readFileSync("src/components/experience/MotionSystem.tsx", "utf8"),
   ).toContain("clutchfolio-motion");
-  expect(readFileSync("src/components/Layout.tsx", "utf8")).toContain(
+  expect(readFileSync("src/components/experience/Appearance.tsx", "utf8")).toContain(
     "clutchfolio-theme",
   );
   expect(readFileSync("supabase/config.toml", "utf8")).toContain(
