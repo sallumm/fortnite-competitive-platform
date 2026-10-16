@@ -76,6 +76,7 @@ td,th { padding-block:var(--row-space); }
 .workspace { max-width:1760px; }
 .app-footer,.public-footer { border-top:1px solid var(--border); }
 .mobile-dock { display:none; }
+.mobile-menu-close { display:none; }
 .appearance-settings { display:grid; gap:24px; }
 .appearance-settings fieldset { border:0; padding:0; margin:0; }
 .appearance-settings legend { margin-bottom:12px; font-weight:600; }
@@ -318,6 +319,14 @@ td,th { padding-block:var(--row-space); }
   .surface-training .training-overview { grid-template-columns:1fr; }
   .training-overview > .panel { border-right:0; border-bottom:1px solid var(--border); }
   .surface-dashboard .dashboard-top { grid-template-columns:1fr; }
+}
+@media(max-width:680px) {
+  /* Keep the drawer and its backdrop above the dock while navigation is open. */
+  .sidebar { height:100dvh; bottom:auto; padding-bottom:calc(20px + env(safe-area-inset-bottom)); }
+  .sidebar.open { z-index:40; }
+  .menu-backdrop.visible { z-index:36; }
+  .mobile-menu-close { display:inline-flex; align-self:flex-end; flex-shrink:0; margin:-12px 0 8px; }
+  .sidebar.collapsed .sidebar-bottom { display:block; }
 }
 @media(max-width:640px) {
   .reinvention-landing { padding-inline:22px; }

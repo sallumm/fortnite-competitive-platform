@@ -105,7 +105,14 @@ test("beginner ecosystem: onboarding, study, exercise intent, confirmed schedule
   await page.getByText(/^Prática: Edit Course ·/).click();
   await expect(page.getByText(/Resultado: 45 segundos/)).toBeVisible();
   await page.goto("/app");
-  await page.getByRole("button", { name: "Ativar tema claro" }).click();
+  const appearance = page.getByRole("button", { name: "Personalizar aparência" });
+  await appearance.click();
+  const appearanceDialog = page.getByRole("dialog", { name: "Seu ambiente" });
+  await appearanceDialog.getByRole("button", { name: "Papel", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await appearanceDialog.getByRole("button", { name: "Fechar janela" }).click();
+  await expect(appearanceDialog).toHaveCount(0);
+  await expect(appearance).toBeFocused();
   await overview
     .getByText("Ferramentas para cada etapa do seu desenvolvimento")
     .click();
@@ -124,6 +131,8 @@ test("beginner ecosystem: onboarding, study, exercise intent, confirmed schedule
     fullPage: true,
   });
   await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(appearanceDialog).toHaveCount(0);
   await expect(
     overview.getByText(/1 de \d+ aulas com estudo registrado/),
   ).toBeVisible();

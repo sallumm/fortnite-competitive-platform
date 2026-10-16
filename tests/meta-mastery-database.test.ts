@@ -5,6 +5,7 @@ import { uid, demoPlayer, seed } from "../src/lib/seed";
 import { defaultEvolutionConfig } from "../src/lib/skill-maxing/config";
 import { generateEvolution } from "../src/lib/skill-maxing/engine";
 import { approvalPayload } from "../src/lib/skill-maxing/service";
+import { dateInZone, shiftDate, weekStart } from "../src/lib/calendar";
 let db: PGlite;
 const users = [uid(9701), uid(9702), uid(9703), uid(9704)];
 let team: string, trio: string, invite: string, session: string;
@@ -133,9 +134,9 @@ it("binds context to atomic calendar approval with idempotency and rollbacks", a
       c,
       d,
       seed,
-      "2026-10-12",
+      shiftDate(weekStart(dateInZone(new Date(), "UTC")), 7),
       1,
-      new Date("2026-10-10T12:00:00Z"),
+      new Date(),
     ),
   );
   const args = [

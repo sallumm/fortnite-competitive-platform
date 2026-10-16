@@ -9,7 +9,7 @@ import {
   NotificationToast,
   LoadingSkeleton,
 } from "./experience/primitives";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import {
   Link,
   NavLink,
@@ -80,7 +80,9 @@ function RouteFocus() {
   const location = useLocation();
   useEffect(() => {
     // This effect commits only after the lazy page inside Suspense is ready.
-    document.getElementById("main")?.focus({ preventScroll: true });
+    // A lazy page can finish loading after the user has opened the drawer.
+    if (!document.querySelector("#main-navigation.open"))
+      document.getElementById("main")?.focus({ preventScroll: true });
     if (location.hash) {
       try {
         document
@@ -99,6 +101,7 @@ export function Layout() {
   const {theme, setTheme} = useAppearance();
   const menu = useRef<HTMLElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
+  const menuTrigger = useRef<HTMLButtonElement | null>(null);
   const [online, setOnline] = useState(() => navigator.onLine);
   useEffect(() => {
     const update = () => setOnline(navigator.onLine);
@@ -111,6 +114,17 @@ export function Layout() {
   }, []);
   const [collapsed, setCollapsed] = useState(false);
   const [open, setOpen] = useState(false);
+  const openMenu = (trigger: HTMLButtonElement) => {
+    menuTrigger.current = trigger;
+    setOpen(true);
+  };
+  const closeMenu = useCallback(() => {
+    setOpen(false);
+    const trigger = menuTrigger.current?.getClientRects().length
+      ? menuTrigger.current
+      : toggle.current;
+    trigger?.focus({ preventScroll: true });
+  }, []);
   const location = useLocation();
   const navigate = useNavigate();
   const landing = location.pathname === "/";
@@ -135,20 +149,26 @@ export function Layout() {
   }, [location.pathname]);
   useEffect(() => {
     if (!open) return;
+    const mobile = window.matchMedia("(max-width: 680px)");
+    if (!mobile.matches) {
+      setOpen(false);
+      return;
+    }
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    menu.current?.querySelector<HTMLElement>("a,button")?.focus();
+    if (menu.current) menu.current.scrollTop = 0;
+    menu.current?.querySelector<HTMLElement>("a,button")?.focus({ preventScroll: true });
     const keyboard = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setOpen(false);
-        toggle.current?.focus();
+        e.preventDefault();
+        closeMenu();
       }
       if (e.key !== "Tab") return;
       const nodes = Array.from(
         menu.current?.querySelectorAll<HTMLElement>(
           "a[href],button:not([disabled])",
         ) || [],
-      );
+      ).filter((node) => node.getClientRects().length > 0);
       const first = nodes[0],
         last = nodes.at(-1);
       if (e.shiftKey && document.activeElement === first) {
@@ -159,12 +179,20 @@ export function Layout() {
         first?.focus();
       }
     };
+    const resize = () => {
+      if (mobile.matches) return;
+      setOpen(false);
+      // The mobile close button becomes hidden before this media event fires.
+      menu.current?.querySelector<HTMLElement>("nav a[href]")?.focus({ preventScroll: true });
+    };
+    mobile.addEventListener("change", resize);
     document.addEventListener("keydown", keyboard);
     return () => {
       document.body.style.overflow = previous;
       document.removeEventListener("keydown", keyboard);
+      mobile.removeEventListener("change", resize);
     };
-  }, [open]);
+  }, [open, closeMenu]);
   const themeButton = (
     <button
       className="icon-button theme-toggle"
@@ -214,7 +242,21 @@ export function Layout() {
             id="main-navigation"
             ref={menu}
             className={`sidebar ${open ? "open" : ""} ${collapsed ? "collapsed" : ""}`}
+            onClick={(event) => {
+              if (open && event.target instanceof Element && event.target.closest("a[href]")) {
+                setOpen(false);
+                document.getElementById("main")?.focus({ preventScroll: true });
+              }
+            }}
           >
+            <button
+              type="button"
+              className="icon-button mobile-menu-close"
+              aria-label="Fechar menu de navegação"
+              onClick={closeMenu}
+            >
+              <X size={20} />
+            </button>
             <Link to="/" className="brand">
               <Brand />
             </Link>
@@ -323,7 +365,7 @@ export function Layout() {
           <button
             className={`menu-backdrop ${open ? "visible" : ""}`}
             aria-label="Fechar menu"
-            onClick={() => setOpen(false)}
+            onClick={closeMenu}
           />
           <header className={`app-header ${collapsed ? "compact" : ""}`}>
             <div className="row">
@@ -333,7 +375,7 @@ export function Layout() {
                 aria-expanded={open}
                 className="icon-button mobile-menu"
                 aria-label={open ? "Fechar menu" : "Abrir menu"}
-                onClick={() => setOpen(!open)}
+                onClick={(event) => open ? closeMenu() : openMenu(event.currentTarget)}
               >
                 {open ? <X /> : <Menu />}
               </button>
@@ -422,7 +464,7 @@ export function Layout() {
           </PageTransition>
         </Suspense>
       </main>
-      {!landing && <nav className="mobile-dock" aria-label="Acesso rápido mobile"><NavLink to="/app" end><Home size={19}/>Hoje</NavLink><NavLink to="/app/training"><Target size={19}/>Treinar</NavLink><NavLink to="/app/planner"><CalendarDays size={19}/>Agenda</NavLink><NavLink to="/academy"><GraduationCap size={19}/>Estudar</NavLink><button onClick={() => setOpen(true)} aria-label="Mais destinos"><Menu size={19}/>Mais</button></nav>}
+      {!landing && <nav className="mobile-dock" aria-label="Acesso rápido mobile"><NavLink to="/app" end><Home size={19}/>Hoje</NavLink><NavLink to="/app/training"><Target size={19}/>Treinar</NavLink><NavLink to="/app/planner"><CalendarDays size={19}/>Agenda</NavLink><NavLink to="/academy"><GraduationCap size={19}/>Estudar</NavLink><button onClick={(event) => openMenu(event.currentTarget)} aria-label="Mais destinos" aria-controls="main-navigation" aria-expanded={open}><Menu size={19}/>Mais</button></nav>}
       <footer
         className={
           landing ? "public-footer" : `app-footer ${collapsed ? "compact" : ""}`
